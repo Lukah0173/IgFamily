@@ -15,10 +15,11 @@
 #include "fpf_filesystem.h"
 
 
+
 namespace fpf_report {
 	typedef std::string string_type;
 	typedef size_t size_type;
-	typedef fpf_data::c_genefamily_data c_genefamily_data_type;
+	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data_type;
 	typedef fpf_filesystem::s_filesystem s_filesystem_type;
 	typedef fpf_filesystem::s_report s_report_type;
 	typedef fpf_filesystem::s_blastp s_blastp_type;

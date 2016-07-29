@@ -23,7 +23,7 @@ namespace fpf_dirichlet_mixture_model {
 
 	typedef size_t size_type;
 	typedef std::string string_type;
-	typedef fpf_data::c_genefamily_data c_genefamily_data;
+	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data;
 
 	struct def_s_model_data;
 	struct def_s_model_parameters;
@@ -64,13 +64,13 @@ namespace fpf_dirichlet_mixture_model {
 	}
 
 	//def_s_model_data create_s_model_data(std::vector<s_filesystem_blastp> par_v_blastp_filesystem_data, 
-	//									 std::vector<c_genefamily_data> par_v_c_genefamily_data) {
+	//									 std::vector<s_multinomial_element_data> par_v_s_multinomial_element_data) {
 	//	def_s_model_data con_s_model_data;
 	//	con_s_model_data.st_N = par_v_blastp_filesystem_data.size();
-	//	con_s_model_data.st_S = par_v_c_genefamily_data.size();
+	//	con_s_model_data.st_S = par_v_s_multinomial_element_data.size();
 	//	std::vector<std::vector<double>> con_v2_d_mnom_val(con_s_model_data.st_S, std::vector<double>(con_s_model_data.st_N));
-	//	for (auto itr_v_c_genefamily_data : par_v_c_genefamily_data) {
-	//		con_s_model_data.v_str_mnom_ylabel.push_back(itr_v_c_genefamily_data.return_str_genefamily());
+	//	for (auto itr_v_s_multinomial_element_data : par_v_s_multinomial_element_data) {
+	//		con_s_model_data.v_str_mnom_ylabel.push_back(itr_v_s_multinomial_element_data.return_str_genefamily());
 	//	}
 	//	for (auto itr_v_blastp_filesystem_data : par_v_blastp_filesystem_data) {
 	//		con_s_model_data.v_str_mnom_xlabel.push_back(itr_v_blastp_filesystem_data.str_blastp_file);

@@ -1,4 +1,4 @@
-// * * IgFamily v0.5.4 * * 
+// * * IgFamily v0.5.6 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -54,8 +54,8 @@ int main() {
 
 	std::cout << "\n\n\n * parsing FASTA file";
 
-	std::vector<fpf_data::c_genefamily_data> main_v_c_analysis = fpf_data::create_v_c_analysis(main_v_c_parse_FASTA);
-	std::vector<fpf_data::c_genefamily_data> main_v_c_analysis_distinct = fpf_data::create_v_c_analysis_distinct(main_v_c_analysis);
+	std::vector<fpf_data::s_multinomial_element_data> main_v_s_multinomial_element_data = fpf_data::create_v_s_multinomial_element_data(main_v_c_parse_FASTA);
+	std::vector<fpf_data::s_multinomial_element_data> main_v_s_multinomial_element_data_distinct = fpf_data::create_v_s_multinomial_element_data_distinct(main_v_s_multinomial_element_data);
 
 	if (!IgFamily::FILESYSTEM_MODE) {
 		fpf_filesystem::s_filesystem one_iteration;
@@ -93,43 +93,43 @@ int main() {
 			std::vector<fpf_data::s_peptide_data> main_v_c_proteinpeptides_data_filtered_distinct = fpf_data::create_v_s_peptide_data_filtered_distinct(main_v_c_proteinpeptides_data_filtered);
 
 			if (SIMPLE_SCORE) {
-				create_global_score_mean(main_v_c_analysis);
+				create_global_score_mean(main_v_s_multinomial_element_data);
 				std::cout << "\n\n ...assigning peptides to gene families";
-				fpf_data::create_v_c_analysis_v_s_peptide_data(main_v_c_analysis, main_v_c_proteinpeptides_data);
-				fpf_data::create_v_c_analysis_v_s_peptide_data_distinct_filtered(main_v_c_analysis, main_v_c_proteinpeptides_data_filtered_distinct);
-				fpf_data::create_v_c_analysis_str_alignment(main_v_c_analysis);
+				fpf_data::create_v_s_multinomial_element_data_v_s_peptide_data(main_v_s_multinomial_element_data, main_v_c_proteinpeptides_data);
+				fpf_data::create_v_s_multinomial_element_data_v_s_peptide_data_distinct_filtered(main_v_s_multinomial_element_data, main_v_c_proteinpeptides_data_filtered_distinct);
+				fpf_data::create_v_s_multinomial_element_data_str_alignment(main_v_s_multinomial_element_data);
 				std::cout << "\n\n ...determining sequence coverage and total spectral count";
-				fpf_data::create_v_c_analysis_st_totalspectralcount(main_v_c_analysis);
-				fpf_data::create_v_c_analysis_d_coverage(main_v_c_analysis);
+				fpf_data::create_v_s_multinomial_element_data_st_totalspectralcount(main_v_s_multinomial_element_data);
+				fpf_data::create_v_s_multinomial_element_data_d_coverage(main_v_s_multinomial_element_data);
 				std::cout << "\n\n ...determining peptide association co-occurence";
-				fpf_data::create_v_c_peptide_v_p_peptideassociation(main_v_c_analysis, main_v_c_proteinpeptides_data);
+				fpf_data::create_v_c_peptide_v_p_peptideassociation(main_v_s_multinomial_element_data, main_v_c_proteinpeptides_data);
 				fpf_data::create_v_c_peptide_v_str_peptideassociation_distinct(main_v_c_proteinpeptides_data);
-				fpf_data::create_v_c_peptide_v_p_peptideassociation_distinct(main_v_c_analysis_distinct, main_v_c_proteinpeptides_data);
-				fpf_data::create_v_c_analysis_v_s_peptide_data(main_v_c_analysis, main_v_c_proteinpeptides_data);
+				fpf_data::create_v_c_peptide_v_p_peptideassociation_distinct(main_v_s_multinomial_element_data_distinct, main_v_c_proteinpeptides_data);
+				fpf_data::create_v_s_multinomial_element_data_v_s_peptide_data(main_v_s_multinomial_element_data, main_v_c_proteinpeptides_data);
 				std::cout << "\n\n ...calculating score";
-				fpf_data::create_v_c_analysis_d_score(main_v_c_proteinpeptides_data, main_v_c_analysis, main_v_c_analysis_distinct);
-				fpf_data::create_v_c_analysis_v_s_peptide_data(main_v_c_analysis, main_v_c_proteinpeptides_data);
+				fpf_data::create_v_s_multinomial_element_data_d_score(main_v_c_proteinpeptides_data, main_v_s_multinomial_element_data, main_v_s_multinomial_element_data_distinct);
+				fpf_data::create_v_s_multinomial_element_data_v_s_peptide_data(main_v_s_multinomial_element_data, main_v_c_proteinpeptides_data);
 				std::cout << "\n\n ...training score";
-				fpf_data::train_v_c_analysis_d_score(main_v_c_proteinpeptides_data, main_v_c_analysis, main_v_c_analysis_distinct);
+				fpf_data::train_v_s_multinomial_element_data_d_score(main_v_c_proteinpeptides_data, main_v_s_multinomial_element_data, main_v_s_multinomial_element_data_distinct);
 				std::cout << "\n\n ...formatting output";
 				fpf_data::sort_v_s_peptide_data_str_peptide(main_v_c_proteinpeptides_data);
 				fpf_data::sort_v_s_peptide_data_str_peptide(main_v_c_proteinpeptides_data_filtered_distinct);
-				fpf_data::create_v_c_analysis_v_s_peptide_data(main_v_c_analysis, main_v_c_proteinpeptides_data);
-				fpf_data::update_v_c_analysis_distinct(main_v_c_analysis_distinct);
+				fpf_data::create_v_s_multinomial_element_data_v_s_peptide_data(main_v_s_multinomial_element_data, main_v_c_proteinpeptides_data);
+				fpf_data::update_v_s_multinomial_element_distinctpolymorphism_data(main_v_s_multinomial_element_data_distinct);
 
-				std::vector<fpf_data::c_genefamily_data*> map_main_v_c_analysis = map_v_c_analysis_by_score(main_v_c_analysis);
-				std::vector<fpf_data::c_genefamily_data*> map_main_v_c_analysis_distict = map_v_c_analysis_by_score(main_v_c_analysis_distinct);
+				std::vector<fpf_data::s_multinomial_element_data*> map_main_v_s_multinomial_element_data = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data);
+				std::vector<fpf_data::s_multinomial_element_data*> map_main_v_s_multinomial_element_data_distict = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data_distinct);
 
-				bool b_map_main_v_c_analysis_distict = true;
-				std::vector<fpf_data::c_genefamily_data*> con_map_main_v_c_analysis;
-				if (b_map_main_v_c_analysis_distict) {
-					con_map_main_v_c_analysis = map_main_v_c_analysis_distict;
+				bool b_map_main_v_s_multinomial_element_data_distict = true;
+				std::vector<fpf_data::s_multinomial_element_data*> con_map_main_v_s_multinomial_element_data;
+				if (b_map_main_v_s_multinomial_element_data_distict) {
+					con_map_main_v_s_multinomial_element_data = map_main_v_s_multinomial_element_data_distict;
 				}
 				else {
-					con_map_main_v_c_analysis = map_main_v_c_analysis;
+					con_map_main_v_s_multinomial_element_data = map_main_v_s_multinomial_element_data;
 				}
 
-				fpf_data::output(main_v_c_parse_csv_proteinpeptides_data.begin()->str_parse_peptides_csv_file, map_main_v_c_analysis_distict, con_map_main_v_c_analysis);
+				fpf_data::output(main_v_c_parse_csv_proteinpeptides_data.begin()->str_parse_peptides_csv_file, map_main_v_s_multinomial_element_data_distict, con_map_main_v_s_multinomial_element_data);
 				std::cout << "\n\n  * file " << main_v_c_parse_csv_proteinpeptides_data.begin()->str_parse_peptides_csv_file + "_output.txt" << " output";
 
 				IgFamily::GLOBAL_ITERATOR = size_type();
@@ -150,8 +150,8 @@ int main() {
 				itr_v_s_filesystem.v_s_peptide_data_filtered = main_v_c_denovopeptides_data_filtered;
 				itr_v_s_filesystem.v_s_peptide_data_distinct = main_v_c_denovopeptides_data_distinct;
 				itr_v_s_filesystem.v_s_peptide_data_filtered_distinct = main_v_c_denovopeptides_data_filtered_distinct;
-				itr_v_s_filesystem.v_c_analysis_data = main_v_c_analysis;
-				itr_v_s_filesystem.v_c_analysis_distinct_data = main_v_c_analysis_distinct;
+				itr_v_s_filesystem.v_c_analysis_data = main_v_s_multinomial_element_data;
+				itr_v_s_filesystem.v_c_analysis_distinct_data = main_v_s_multinomial_element_data_distinct;
 			}
 		}
 	}
@@ -197,7 +197,7 @@ int main() {
 		for (auto itr_v_s_filesystem : v_s_filesystem) {
 			fpf_filesystem::fout_filesystem(itr_v_s_filesystem);
 		}
-		//fpf_dirichlet_mixture_model::def_s_model_data s_model_data = fpf_dirichlet_mixture_model::create_s_model_data(v_s_filesystem_blastp_data, main_v_c_analysis);
+		//fpf_dirichlet_mixture_model::def_s_model_data s_model_data = fpf_dirichlet_mixture_model::create_s_model_data(v_s_filesystem_blastp_data, main_v_s_multinomial_element_data);
 	}
 
 	

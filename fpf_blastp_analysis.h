@@ -22,7 +22,7 @@
 namespace fpf_blastp_analysis {
 
 	typedef std::string string_type;
-	typedef fpf_data::c_genefamily_data c_genefamily_data_type;
+	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data_type;
 	typedef fpf_filesystem::s_filesystem s_filesystem_type;
 	typedef std::vector<fpf_filesystem::s_filesystem> v_s_filesystem_type;
 	typedef fpf_filesystem::s_blastp s_blastp_type;
@@ -83,12 +83,12 @@ namespace fpf_blastp_analysis {
 		std::ofstream fout_blastp_database_FASTA;
 		fout_blastp_database_FASTA.open(output_blastp_database_FASTA);
 		for (auto itr_v_c_analysis_distinct_data : par_s_filesystem.v_c_analysis_distinct_data) {
-			fout_blastp_database_FASTA << ">" << itr_v_c_analysis_distinct_data.return_str_genefamily() << "\n";
-			for (size_type i = 0; i < itr_v_c_analysis_distinct_data.return_str_protein().length(); ++i) {
+			fout_blastp_database_FASTA << ">" << itr_v_c_analysis_distinct_data.str_multinomial_element_name << "\n";
+			for (size_type i = 0; i < itr_v_c_analysis_distinct_data.str_protein.length(); ++i) {
 				if ((i % 60 == 0) && (i != 0)) {
 					fout_blastp_database_FASTA << "\n";
 				}
-				fout_blastp_database_FASTA << itr_v_c_analysis_distinct_data.return_str_protein().at(i);
+				fout_blastp_database_FASTA << itr_v_c_analysis_distinct_data.str_protein.at(i);
 			}
 			fout_blastp_database_FASTA << "\n";
 		}
@@ -141,10 +141,10 @@ namespace fpf_blastp_analysis {
 						con_s_blastp.str_blastp_subject_accession = con_str_parse_blastp;
 					}
 					if (st_csv_blastp % 10 == 5) {
-						con_s_blastp.str_blastp_query_alignment_index = std::stoi(con_str_parse_blastp);
+						con_s_blastp.st_blastp_query_alignment_index = std::stoi(con_str_parse_blastp);
 					}
 					if (st_csv_blastp % 10 == 6) {
-						con_s_blastp.str_blastp_subject_alignment_index = std::stoi(con_str_parse_blastp);
+						con_s_blastp.st_blastp_subject_alignment_index = std::stoi(con_str_parse_blastp);
 					}
 					con_str_parse_blastp.clear();
 					++st_csv_blastp;
@@ -161,8 +161,8 @@ namespace fpf_blastp_analysis {
 	void create_str_protein(s_filesystem_type& par_s_filesystem) {
 		for (auto& itr_v_s_blastp : par_s_filesystem.v_s_blastp) {
 			auto find_str_genefamily = std::find_if(par_s_filesystem.v_c_analysis_data.begin(), par_s_filesystem.v_c_analysis_data.end(),
-				[itr_v_s_blastp](c_genefamily_data_type par_c_genefamily_data) {
-				return par_c_genefamily_data.str_genefamily == itr_v_s_blastp.str_blastp_subject_accession;
+				[itr_v_s_blastp](s_multinomial_element_data_type par_s_multinomial_element_data) {
+				return par_s_multinomial_element_data.str_multinomial_element_name == itr_v_s_blastp.str_blastp_subject_accession;
 			});
 			if (find_str_genefamily == par_s_filesystem.v_c_analysis_data.end()) {
 				std::cout << "\n\n error - std::find_if returns nullptr";
@@ -179,15 +179,15 @@ namespace fpf_blastp_analysis {
 		size_type st_index_match = 1;
 		for (auto& itr_v_s_blastp : par_s_filesystem.v_s_blastp) {			
 			for (auto itr_str_protein : itr_v_s_blastp.str_protein) {
-				if (st_index_match == itr_v_s_blastp.str_blastp_subject_alignment_index) {
-					if (con_str_query_alignment.length() >= itr_v_s_blastp.str_blastp_query_alignment_index) {
-						con_str_query_alignment.resize(con_str_query_alignment.length() - itr_v_s_blastp.str_blastp_query_alignment_index + 1);
+				if (st_index_match == itr_v_s_blastp.st_blastp_subject_alignment_index) {
+					if (con_str_query_alignment.length() >= itr_v_s_blastp.st_blastp_query_alignment_index) {
+						con_str_query_alignment.resize(con_str_query_alignment.length() - itr_v_s_blastp.st_blastp_query_alignment_index + 1);
 					}
 					else {
 						con_str_query_alignment.resize(0);
 					}
 					con_str_query_alignment += itr_v_s_blastp.str_blastp_query;
-					for (auto i = 0; i < (itr_v_s_blastp.str_blastp_query_alignment_index - 1); ++i) {
+					for (auto i = 0; i < (itr_v_s_blastp.st_blastp_query_alignment_index - 1); ++i) {
 						con_str_query_alignment += ".";
 					}
 				}

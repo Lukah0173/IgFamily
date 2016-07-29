@@ -37,9 +37,9 @@ namespace fpf_filesystem_analysis {
 		fout_v_c_analysis << "-- IgFamily " << IgFamily::version << " --\n\n\n";
 		fout_v_c_analysis << "Input file : " << IgFamily::INPUT_CSV << "\n\n\n";
 
-		std::vector<fpf_data::c_genefamily_data*> con_map_main_v_c_analysis;
-		std::vector<fpf_data::c_genefamily_data*> map_main_v_c_analysis = map_v_c_analysis_by_score(par_s_filesystem.v_c_analysis_data);
-		std::vector<fpf_data::c_genefamily_data*> map_main_v_c_analysis_distict = map_v_c_analysis_by_score(par_s_filesystem.v_c_analysis_distinct_data);
+		std::vector<fpf_data::s_multinomial_element_data*> con_map_main_v_c_analysis;
+		std::vector<fpf_data::s_multinomial_element_data*> map_main_v_c_analysis = map_v_s_multinomial_element_data_by_score(par_s_filesystem.v_c_analysis_data);
+		std::vector<fpf_data::s_multinomial_element_data*> map_main_v_c_analysis_distict = map_v_s_multinomial_element_data_by_score(par_s_filesystem.v_c_analysis_distinct_data);
 		if (IgFamily::MAP_FOUT_BY_SCORE == 0) {
 			if (IgFamily::MAP_FOUT_BY_DISTINCT == 1) {
 				//con_map_main_v_c_analysis = par_s_filesystem.v_c_analysis_data;
@@ -57,25 +57,25 @@ namespace fpf_filesystem_analysis {
 			}
 		}
 
-		for (std::vector<fpf_data::c_genefamily_data*>::iterator itr_v_c_analysis_distinct = con_map_main_v_c_analysis.begin(); itr_v_c_analysis_distinct != con_map_main_v_c_analysis.end(); ++itr_v_c_analysis_distinct) {
+		for (std::vector<fpf_data::s_multinomial_element_data*>::iterator itr_v_c_analysis_distinct = con_map_main_v_c_analysis.begin(); itr_v_c_analysis_distinct != con_map_main_v_c_analysis.end(); ++itr_v_c_analysis_distinct) {
 			if (itr_v_c_analysis_distinct == con_map_main_v_c_analysis.begin()) {
 				fout_v_c_analysis << "\nTop gene families - " << "     Score mean - " << std::fixed << std::setprecision(2) << IgFamily::SCORE_MEAN;
 				fout_v_c_analysis << "\n\n";
 			}
-			if ((itr_v_c_analysis_distinct == con_map_main_v_c_analysis.end()) || ((*itr_v_c_analysis_distinct)->return_d_score() < double{ 0.01 })) {
+			if ((itr_v_c_analysis_distinct == con_map_main_v_c_analysis.end()) || ((*itr_v_c_analysis_distinct)->d_score < double{ 0.01 })) {
 				break;
 			}
-			fout_v_c_analysis << "\n  *  " << (*itr_v_c_analysis_distinct)->return_str_genefamily();
-			for (size_type itr_s_genefamily_output = (*itr_v_c_analysis_distinct)->return_str_genefamily().length(); itr_s_genefamily_output < 20; ++itr_s_genefamily_output) {
+			fout_v_c_analysis << "\n  *  " << (*itr_v_c_analysis_distinct)->str_multinomial_element_name;
+			for (size_type itr_s_genefamily_output = (*itr_v_c_analysis_distinct)->str_multinomial_element_name.length(); itr_s_genefamily_output < 20; ++itr_s_genefamily_output) {
 				fout_v_c_analysis << " ";
 			}
-			fout_v_c_analysis << "   Score - " << std::fixed << std::setprecision(2) << (*itr_v_c_analysis_distinct)->return_d_score();
-			std::vector<fpf_data::s_peptide_data*> con_itr_v_s_peptide_data = (*itr_v_c_analysis_distinct)->return_v_s_peptide_data();
+			fout_v_c_analysis << "   Score - " << std::fixed << std::setprecision(2) << (*itr_v_c_analysis_distinct)->d_score;
+			std::vector<fpf_data::s_peptide_data*> con_itr_v_s_peptide_data = (*itr_v_c_analysis_distinct)->v_s_peptide_data;
 			double d_peptide_1genefamily = double();
 			double d_peptide_2genefamily = double();
 			double d_peptide_3genefamily = double();
 			for (std::vector<fpf_data::s_peptide_data*>::const_iterator itr_v_s_peptide_data = con_itr_v_s_peptide_data.begin(); itr_v_s_peptide_data != con_itr_v_s_peptide_data.end(); ++itr_v_s_peptide_data) {
-				string_type con_s_genefamily = (*itr_v_c_analysis_distinct)->return_str_genefamily();
+				string_type con_s_genefamily = (*itr_v_c_analysis_distinct)->str_multinomial_element_name;
 				size_type sw_s_peptideassociation_distinct = size_type();
 				string_type con_s_genefamily_distinct = string_type();
 				for (unsigned itr_s_genefamily = 0; itr_s_genefamily < con_s_genefamily.length(); ++itr_s_genefamily) {
@@ -91,10 +91,10 @@ namespace fpf_filesystem_analysis {
 				double con_d_parameter_gene_family_train = double();
 				double con_d_parameter_gene_family_weight = double();
 				double con_d_parameter_IgP = double();
-				con_d_parameter_gene_family_train = pow((((*itr_v_c_analysis_distinct)->return_d_score() + (double{ 100 } *IgFamily::SCORE_MEAN)) / (double{ 100 } *IgFamily::SCORE_MEAN)), double{ 1.6 });
+				con_d_parameter_gene_family_train = pow((((*itr_v_c_analysis_distinct)->d_score + (double{ 100 } *IgFamily::SCORE_MEAN)) / (double{ 100 } *IgFamily::SCORE_MEAN)), double{ 1.6 });
 				con_d_parameter_gene_family_train = 1;
-				for (std::vector<std::pair<fpf_data::c_genefamily_data*, double>>::iterator itr_v_p_peptideassociation_distinct = (*itr_v_s_peptide_data)->v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != (*itr_v_s_peptide_data)->v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
-					if (std::get<0>(*itr_v_p_peptideassociation_distinct)->return_str_genefamily() == con_s_genefamily_distinct) {
+				for (std::vector<std::pair<fpf_data::s_multinomial_element_data*, double>>::iterator itr_v_p_peptideassociation_distinct = (*itr_v_s_peptide_data)->v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != (*itr_v_s_peptide_data)->v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
+					if (std::get<0>(*itr_v_p_peptideassociation_distinct)->str_multinomial_element_name == con_s_genefamily_distinct) {
 						con_d_parameter_gene_family_weight = std::get<1>(*itr_v_p_peptideassociation_distinct);
 					}
 				}
@@ -112,10 +112,10 @@ namespace fpf_filesystem_analysis {
 				}
 				con_s_genefamily_distinct.clear();
 			}
-			d_peptide_1genefamily /= (*itr_v_c_analysis_distinct)->return_d_score();
-			d_peptide_2genefamily /= (*itr_v_c_analysis_distinct)->return_d_score();
-			d_peptide_3genefamily /= (*itr_v_c_analysis_distinct)->return_d_score();
-			for (size_type itr_v_s_peptide_data_output = ((log10((*itr_v_c_analysis_distinct)->return_d_score()) >= double{ 1 }) ? (size_type(log10((*itr_v_c_analysis_distinct)->return_d_score())) + size_type(1)) : size_type(1)); itr_v_s_peptide_data_output < 6; ++itr_v_s_peptide_data_output) {
+			d_peptide_1genefamily /= (*itr_v_c_analysis_distinct)->d_score;
+			d_peptide_2genefamily /= (*itr_v_c_analysis_distinct)->d_score;
+			d_peptide_3genefamily /= (*itr_v_c_analysis_distinct)->d_score;
+			for (size_type itr_v_s_peptide_data_output = ((log10((*itr_v_c_analysis_distinct)->d_score) >= double{ 1 }) ? (size_type(log10((*itr_v_c_analysis_distinct)->d_score)) + size_type(1)) : size_type(1)); itr_v_s_peptide_data_output < 6; ++itr_v_s_peptide_data_output) {
 				fout_v_c_analysis << " ";
 			}
 			fout_v_c_analysis << "( 1GF - " << std::fixed << std::setprecision(2) << d_peptide_1genefamily;
@@ -125,44 +125,44 @@ namespace fpf_filesystem_analysis {
 			d_peptide_1genefamily = 0;
 			d_peptide_2genefamily = 0;
 			d_peptide_3genefamily = 0;
-			//for (std::vector<fpf_data::c_genefamily_data*>::iterator itr_v_c_analysis_distinct_v_c_polyassociation = (itr_v_c_analysis_distinct + i)->ref_v_c_analysis_polyassociation().begin(); itr_v_c_analysis_distinct_v_c_polyassociation != (itr_v_c_analysis_distinct + i)->ref_v_c_analysis_polyassociation().end(); ++itr_v_c_analysis_distinct_v_c_polyassociation) {
-			//	fout_v_c_analysis << "\n - - * " << (*itr_v_c_analysis_distinct_v_c_polyassociation)->return_str_genefamily();
-			//	for (size_type itr_s_genefamily_output = (itr_v_c_analysis_distinct + i)->return_str_genefamily().length(); itr_s_genefamily_output < 20; ++itr_s_genefamily_output) {
+			//for (std::vector<fpf_data::s_multinomial_element_data*>::iterator itr_v_c_analysis_distinct_v_c_polyassociation = (itr_v_c_analysis_distinct + i)->ref_v_c_analysis_polyassociation().begin(); itr_v_c_analysis_distinct_v_c_polyassociation != (itr_v_c_analysis_distinct + i)->ref_v_c_analysis_polyassociation().end(); ++itr_v_c_analysis_distinct_v_c_polyassociation) {
+			//	fout_v_c_analysis << "\n - - * " << (*itr_v_c_analysis_distinct_v_c_polyassociation)->str_multinomial_element_name;
+			//	for (size_type itr_s_genefamily_output = (itr_v_c_analysis_distinct + i)->str_multinomial_element_name.length(); itr_s_genefamily_output < 20; ++itr_s_genefamily_output) {
 			//		fout_v_c_analysis << " ";
 			//	}
-			//	fout_v_c_analysis << " - " << (*itr_v_c_analysis_distinct_v_c_polyassociation)->return_d_score();
+			//	fout_v_c_analysis << " - " << (*itr_v_c_analysis_distinct_v_c_polyassociation)->d_score;
 			//}
 		}
 
-		for (std::vector<fpf_data::c_genefamily_data*>::iterator itr_v_c_analysis = map_main_v_c_analysis_distict.begin(); itr_v_c_analysis != map_main_v_c_analysis_distict.end(); ++itr_v_c_analysis) {
-			fpf_data::sort_c_analysis_v_s_peptide_data_s_peptide((*itr_v_c_analysis)->return_v_s_peptide_data());
+		for (std::vector<fpf_data::s_multinomial_element_data*>::iterator itr_v_c_analysis = map_main_v_c_analysis_distict.begin(); itr_v_c_analysis != map_main_v_c_analysis_distict.end(); ++itr_v_c_analysis) {
+			fpf_data::sort_c_analysis_v_s_peptide_data_s_peptide((*itr_v_c_analysis)->v_s_peptide_data);
 			IgFamily::SCORE_THRESHOLD = (IgFamily::SCORE_MEAN / double{ 2 });
-			if (((*itr_v_c_analysis)->return_v_s_peptide_data().size() != 0) && ((*itr_v_c_analysis)->return_d_score() >= 0.01)) {
-				fout_v_c_analysis << "\n\n\n\n\n" << (*itr_v_c_analysis)->return_str_genefamily();
+			if (((*itr_v_c_analysis)->v_s_peptide_data.size() != 0) && ((*itr_v_c_analysis)->d_score >= 0.01)) {
+				fout_v_c_analysis << "\n\n\n\n\n" << (*itr_v_c_analysis)->str_multinomial_element_name;
 				fout_v_c_analysis << "   (top: ";
 				double test2 = double();
 				string_type test3 = string_type();
-				for (std::vector<fpf_data::c_genefamily_data*>::iterator itr_v_c_polyassociation = (*itr_v_c_analysis)->ref_v_c_analysis_polyassociation().begin(); itr_v_c_polyassociation != (*itr_v_c_analysis)->ref_v_c_analysis_polyassociation().end(); ++itr_v_c_polyassociation) {
-					if ((*itr_v_c_polyassociation)->return_d_score() > test2) {
-						test2 = (*itr_v_c_polyassociation)->return_d_score();
-						test3 = (*itr_v_c_polyassociation)->return_str_genefamily();
+				for (std::vector<fpf_data::s_multinomial_element_data*>::iterator itr_v_c_polyassociation = (*itr_v_c_analysis)->v_s_multinomial_element_polyassociation.begin(); itr_v_c_polyassociation != (*itr_v_c_analysis)->v_s_multinomial_element_polyassociation.end(); ++itr_v_c_polyassociation) {
+					if ((*itr_v_c_polyassociation)->d_score > test2) {
+						test2 = (*itr_v_c_polyassociation)->d_score;
+						test3 = (*itr_v_c_polyassociation)->str_multinomial_element_name;
 					}
 				}
 				fout_v_c_analysis << test3 << ")";
-				fout_v_c_analysis << "   #SC - " << (*itr_v_c_analysis)->return_st_totalspectralcount();
-				fout_v_c_analysis << "   % - " << std::fixed << std::setprecision(2) << (*itr_v_c_analysis)->return_d_coverage();
-				fout_v_c_analysis << "     Score - " << std::fixed << std::setprecision(2) << (*itr_v_c_analysis)->return_d_score();
-				fout_v_c_analysis << "\n\n" << (*itr_v_c_analysis)->return_str_protein();
-				fout_v_c_analysis << "\n" << (*itr_v_c_analysis)->return_str_alignment();
+				fout_v_c_analysis << "   #SC - " << (*itr_v_c_analysis)->st_totalspectralcount;
+				fout_v_c_analysis << "   % - " << std::fixed << std::setprecision(2) << (*itr_v_c_analysis)->d_coverage;
+				fout_v_c_analysis << "     Score - " << std::fixed << std::setprecision(2) << (*itr_v_c_analysis)->d_score;
+				fout_v_c_analysis << "\n\n" << (*itr_v_c_analysis)->str_protein;
+				fout_v_c_analysis << "\n" << (*itr_v_c_analysis)->str_alignment;
 				fout_v_c_analysis << "\n";
-				std::vector<fpf_data::s_peptide_data*> con_itr_v_s_peptide_data = (*itr_v_c_analysis)->return_v_s_peptide_data();
+				std::vector<fpf_data::s_peptide_data*> con_itr_v_s_peptide_data = (*itr_v_c_analysis)->v_s_peptide_data;
 				for (std::vector<fpf_data::s_peptide_data*>::const_iterator itr_v_s_peptide_data = con_itr_v_s_peptide_data.begin(); itr_v_s_peptide_data != con_itr_v_s_peptide_data.end(); ++itr_v_s_peptide_data) {
 					fout_v_c_analysis << "\n * " << (*itr_v_s_peptide_data)->str_peptide;
 					for (size_type itr_v_s_peptide_data_output = (*itr_v_s_peptide_data)->str_peptide.length(); itr_v_s_peptide_data_output < 50; ++itr_v_s_peptide_data_output) {
 						fout_v_c_analysis << " ";
 					}
 
-					string_type con_s_genefamily = (*itr_v_c_analysis)->return_str_genefamily();
+					string_type con_s_genefamily = (*itr_v_c_analysis)->str_multinomial_element_name;
 					size_type sw_s_peptideassociation_distinct = size_type();
 					string_type con_s_genefamily_distinct = string_type();
 					for (unsigned itr_s_genefamily = 0; itr_s_genefamily < con_s_genefamily.length(); ++itr_s_genefamily) {
@@ -178,7 +178,7 @@ namespace fpf_filesystem_analysis {
 					double con_d_parameter_gene_family_weight = double();
 					double con_d_parameter_IgP = double();
 					for (auto itr_v_p_peptideassociation_distinct = (*itr_v_s_peptide_data)->v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != (*itr_v_s_peptide_data)->v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
-						if (std::get<0>(*itr_v_p_peptideassociation_distinct)->return_str_genefamily() == con_s_genefamily_distinct) {
+						if (std::get<0>(*itr_v_p_peptideassociation_distinct)->str_multinomial_element_name == con_s_genefamily_distinct) {
 							con_d_parameter_gene_family_weight = std::get<1>(*itr_v_p_peptideassociation_distinct);
 						}
 					}
@@ -257,9 +257,9 @@ namespace fpf_filesystem_analysis {
 						fout_v_c_analysis << " ";
 					}
 					fout_v_c_analysis << "   " << "Member of " << (*itr_v_s_peptide_data)->v_p_peptideassociation_distinct.size() << " gene families - ";
-					std::vector<std::pair<fpf_data::c_genefamily_data*, double>> con_itr_v_p_peptideassociation_distinct = (*itr_v_s_peptide_data)->v_p_peptideassociation_distinct;
-					for (std::vector<std::pair<fpf_data::c_genefamily_data*, double>>::iterator itr_v_p_peptideassociation_distinct = con_itr_v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != con_itr_v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
-						fout_v_c_analysis << std::get<0>(*itr_v_p_peptideassociation_distinct)->return_str_genefamily();
+					std::vector<std::pair<fpf_data::s_multinomial_element_data*, double>> con_itr_v_p_peptideassociation_distinct = (*itr_v_s_peptide_data)->v_p_peptideassociation_distinct;
+					for (std::vector<std::pair<fpf_data::s_multinomial_element_data*, double>>::iterator itr_v_p_peptideassociation_distinct = con_itr_v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != con_itr_v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
+						fout_v_c_analysis << std::get<0>(*itr_v_p_peptideassociation_distinct)->str_multinomial_element_name;
 						fout_v_c_analysis << "(" << std::get<1>(*itr_v_p_peptideassociation_distinct) << ")";
 						if ((itr_v_p_peptideassociation_distinct + 1) != con_itr_v_p_peptideassociation_distinct.end()) {
 							fout_v_c_analysis << ", ";
@@ -341,9 +341,9 @@ namespace fpf_filesystem_analysis {
 				}
 			}
 			fout_file_peptide_summary << "   " << "Member of " << itr_v_s_peptide_data->v_p_peptideassociation_distinct.size() << " gene families - ";
-			std::vector<std::pair<fpf_data::c_genefamily_data*, double>> con_itr_v_p_peptideassociation_distinct = itr_v_s_peptide_data->v_p_peptideassociation_distinct;
+			std::vector<std::pair<fpf_data::s_multinomial_element_data*, double>> con_itr_v_p_peptideassociation_distinct = itr_v_s_peptide_data->v_p_peptideassociation_distinct;
 			for (auto itr_v_p_peptideassociation_distinct = con_itr_v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != con_itr_v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
-				fout_file_peptide_summary << std::get<0>(*itr_v_p_peptideassociation_distinct)->return_str_genefamily();
+				fout_file_peptide_summary << std::get<0>(*itr_v_p_peptideassociation_distinct)->str_multinomial_element_name;
 				fout_file_peptide_summary << "(" << std::fixed << std::setprecision(2) << std::get<1>(*itr_v_p_peptideassociation_distinct) << ")";
 				if ((itr_v_p_peptideassociation_distinct + 1) != con_itr_v_p_peptideassociation_distinct.end()) {
 					fout_file_peptide_summary << ", ";

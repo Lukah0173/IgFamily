@@ -28,7 +28,7 @@ namespace fpf_filesystem {
 
 	typedef std::string string_type;
 	typedef size_t size_type;
-	typedef fpf_data::c_genefamily_data c_genefamily_data;
+	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data;
 	typedef fpf_data::s_peptide_data s_peptide_data;
 
 	struct s_blastp {
@@ -37,8 +37,8 @@ namespace fpf_filesystem {
 		string_type str_blastp_query_aligned;
 		string_type str_blastp_subject;
 		string_type str_blastp_subject_accession;
-		int str_blastp_query_alignment_index;
-		int str_blastp_subject_alignment_index;
+		size_type st_blastp_query_alignment_index;
+		size_type st_blastp_subject_alignment_index;
 		string_type str_protein;
 		string_type str_blastp_query_alignment;
 		double d_blastp_evalue;
@@ -74,8 +74,8 @@ namespace fpf_filesystem {
 		string_type str_filename;
 		string_type str_fileversion;
 		string_type str_patientstatus;
-		std::vector<c_genefamily_data> v_c_analysis_data;
-		std::vector<c_genefamily_data> v_c_analysis_distinct_data;
+		std::vector<s_multinomial_element_data> v_c_analysis_data;
+		std::vector<s_multinomial_element_data> v_c_analysis_distinct_data;
 		std::vector<s_peptide_data> v_s_peptide_data;
 		std::vector<s_peptide_data> v_s_peptide_data_filtered;
 		std::vector<s_peptide_data> v_s_peptide_data_distinct;
