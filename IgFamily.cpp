@@ -24,6 +24,7 @@ int main() {
 
 	typedef size_t size_type;
 	typedef std::string string_type;
+	typedef char char_type;
 
 	std::cout << "-- IgFamily " << IgFamily::version << " --\n\n\n";
 
