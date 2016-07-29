@@ -15,7 +15,7 @@
 #include "fpf_data.h"
 #include "fpf_filesystem.h"
 
-
+int test;
 
 namespace fpf_report {
 

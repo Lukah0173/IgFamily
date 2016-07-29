@@ -32,8 +32,6 @@ namespace fpf_data {
 
 	typedef std::string string_type;
 	typedef size_t size_type;
-	typedef s_blastp s_blastp_type;
-	typedef s_proteinconstruct_from_denovo s_proteinconstruct_from_denovo_type;
 
 	struct s_multinomial_element_data {
 	public:
@@ -112,18 +110,18 @@ namespace fpf_data {
 
 	struct s_report {
 	public:
-		std::vector<s_blastp_type> v_s_blastp;
+		std::vector<s_blastp> v_s_blastp;
 		string_type str_protein_accession;
 		string_type str_protein;
-		std::vector<s_proteinconstruct_from_denovo_type> s_proteinconstruct_from_denovo;
+		std::vector<s_proteinconstruct_from_denovo> s_proteinconstruct_from_denovo;
 		double d_score;
 		std::vector<double> v_d_aminoacid_scores;
 	};
 
 	std::vector<s_multinomial_element_data> create_v_s_multinomial_element_data(std::vector<fpf_parse::c_parse_FASTA> par_v_c_parse_FASTA) {
 
-		// NOTE: Vector reallocation will invalidate all pointers to s_multinomial_element_data references.
-		//		 Do not reallocate after return!
+		// Vector reallocation will invalidate all pointers to s_multinomial_element_data references.
+		// Do not reallocate after return!
 
 		std::vector<s_multinomial_element_data> con_v_s_multinomial_element_data;
 		s_multinomial_element_data con_c_analysis;
