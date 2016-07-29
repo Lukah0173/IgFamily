@@ -21,7 +21,7 @@ namespace IgFamily {
 	typedef double value_type;
 	typedef size_t size_type;
 
-	string_type version = "v0.5.4";
+	string_type version = "v0.5.7";
 
 	bool FILESYSTEM_MODE = true;
 	bool FILESYSTEM_UPDATE_ALL = true;
@@ -44,24 +44,6 @@ namespace IgFamily {
 	size_type ITERATE_TRAIN_SCORE = 1;
 	double BLASTP_THRESHOLD = 10000;
 	double PARPROP_SCALE = 10;
-
-	value_type alpha_sum = 6.4; // Parameter of prior on doc-topic distribution"
-	value_type beta = 0.01; // Parameter of prior on topic-word distribution"
-	value_type cost = 1.6; // C param in SVM
-	value_type ell = 64.0; // Margin param in SVM: usually 1
-	size_type num_iter = 50; // Number of burn - in iterations for MCMC
-	size_type st_constcount_topic = 40; // Model size, usually called K
-	size_type eval_every = 100; //Evaluate the model every N iterations
-	size_type num_mh = 6; // Number of MH steps for each token
-	size_type num_gibbs = 2; // Number of Gibbs sampling for classifier
-	size_type top = 10; // Save top N words for each topic
-
-	const value_type NUSQINV = 1.0;
-	const size_type  TRAIN_COLLECT = 1;
-	const size_type  TEST_COLLECT = 20;
-	const size_type  MAX_TEST_BURNIN = 100;
-	const value_type GIBBS_CONVERGED = 1e-4;
-	const value_type EXP_THRESHOLD = 640.0;
 
 	char_type ct_parse_data_separator = ':';
 	char_type ct_parse_data_delimitor = ' ';

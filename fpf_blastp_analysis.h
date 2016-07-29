@@ -23,45 +23,11 @@ namespace fpf_blastp_analysis {
 
 	typedef std::string string_type;
 	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data_type;
+	typedef fpf_data::s_blastp s_blastp_type;
+	typedef std::vector<fpf_data::s_blastp> v_s_blastp_tpye;
+	typedef fpf_data::s_mnom s_mnom_type;
 	typedef fpf_filesystem::s_filesystem s_filesystem_type;
 	typedef std::vector<fpf_filesystem::s_filesystem> v_s_filesystem_type;
-	typedef fpf_filesystem::s_blastp s_blastp_type;
-	typedef std::vector<fpf_filesystem::s_blastp> v_s_blastp_tpye;
-	typedef fpf_filesystem::s_mnom s_mnom_type;
-
-	//struct s_filesystem_blastp;
-	//struct s_blastp;
-	//struct s_mnom;
-
-	//struct s_filesystem_blastp {
-	//	s_filesystem_blastp() {
-	//		str_blastp_file = string_type();
-	//		v_s_blastp = std::vector<s_blastp>();
-	//	}
-
-	//	s_filesystem_blastp(string_type con_str_blastp_file, std::vector<s_blastp> con_v_s_blastp) {
-	//		str_blastp_file = con_str_blastp_file;
-	//	}
-
-	//public:
-	//	string_type str_blastp_file;
-	//	std::vector<s_blastp> v_s_blastp;
-	//	std::vector<s_mnom> v_s_filesystem_mnom;
-	//};
-
-	//struct s_blastp {
-	//public:
-	//	string_type str_blastp_query;
-	//	string_type str_blastp_subject_accession;
-	//	double d_blastp_evalue;
-	//	double d_blastp_par_prop;
-	//};
-
-	//struct s_mnom {
-	//public:
-	//	string_type str_mnom_comp;
-	//	double d_mnom_value;
-	//};
 
 	void create_blastp_input(s_filesystem_type par_s_filesystem) {
 		std::string output_blastp_FASTA = "blast_directory\\";
@@ -97,13 +63,13 @@ namespace fpf_blastp_analysis {
 	
 	void sys_blastp(s_filesystem_type par_s_filesystem) {
 		std::cout << "\n\n";
-		string_type string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
+		string_type string_system = "CD Z:\\Lukah Dykes\\IgFamily\\blast_directory\\";
 		string_system += " && makeblastdb.exe -in ";
 		string_system += "FPF_V_mouse_20160620.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
 		std::cout << "\n\n\n Performing BLAST analysis..\n\n\n";
-		string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
+		string_system = "CD Z:\\Lukah Dykes\\IgFamily\\blast_directory\\";
 		string_system += " && blastp.exe -query ";
 		string_system += par_s_filesystem.str_filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue 10 -max_target_seqs 200 -out ";
@@ -187,7 +153,7 @@ namespace fpf_blastp_analysis {
 						con_str_query_alignment.resize(0);
 					}
 					con_str_query_alignment += itr_v_s_blastp.str_blastp_query;
-					for (auto i = 0; i < (itr_v_s_blastp.st_blastp_query_alignment_index - 1); ++i) {
+					for (size_type i = 0; i < (itr_v_s_blastp.st_blastp_query_alignment_index - 1); ++i) {
 						con_str_query_alignment += ".";
 					}
 				}

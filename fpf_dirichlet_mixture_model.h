@@ -19,6 +19,7 @@
 /*Eigen*/
 
 
+
 namespace fpf_dirichlet_mixture_model {
 
 	typedef size_t size_type;

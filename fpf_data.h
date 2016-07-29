@@ -25,9 +25,15 @@ namespace fpf_data {
 	struct s_multinomial_element_data;
 	struct s_peptide_data;
 	struct s_denovo_peptide;
+	struct s_blastp;
+	struct s_mnom;
+	struct s_proteinconstruct_from_denovo;
+	struct s_report;
 
 	typedef std::string string_type;
 	typedef size_t size_type;
+	typedef s_blastp s_blastp_type;
+	typedef s_proteinconstruct_from_denovo s_proteinconstruct_from_denovo_type;
 
 	struct s_multinomial_element_data {
 	public:
@@ -51,6 +57,11 @@ namespace fpf_data {
 		std::vector<s_multinomial_element_data*> v_s_multinomial_element_polyassociation;
 	};
 
+	struct s_denovo_peptide {
+		char ch_aminoacid;
+		double d_denovo_localconfidence;
+	};
+
 	struct s_peptide_data {
 	public:
 		s_peptide_data() {
@@ -69,12 +80,44 @@ namespace fpf_data {
 		std::vector<string_type> v_str_peptideassociation;
 		std::vector<string_type> v_str_peptideassociation_distinct;
 		std::vector<std::pair<s_multinomial_element_data*, double>> v_p_peptideassociation;
-		std::vector<std::pair<s_multinomial_element_data*, double>> v_p_peptideassociation_distinct;		
+		std::vector<std::pair<s_multinomial_element_data*, double>> v_p_peptideassociation_distinct;
+		s_denovo_peptide s_blastp_denovo_peptide;
 	};
 
-	struct s_denovo_peptide {
+	struct s_blastp {
+	public:
+		string_type str_blastp_query;
+		string_type str_blastp_query_aligned;
+		string_type str_blastp_subject;
+		string_type str_blastp_subject_accession;
+		size_type st_blastp_query_alignment_index;
+		size_type st_blastp_subject_alignment_index;
+		string_type str_protein;
+		string_type str_blastp_query_alignment;
+		double d_blastp_evalue;
+		double d_blastp_par_prop;
+		s_denovo_peptide s_blastp_denovo_peptide;
+	};
+
+	struct s_proteinconstruct_from_denovo {
 		char ch_aminoacid;
-		double d_denovo_localconfidence;
+		double d_score;
+	};
+
+	struct s_mnom {
+	public:
+		string_type str_mnom_comp;
+		double d_mnom_value;
+	};
+
+	struct s_report {
+	public:
+		std::vector<s_blastp_type> v_s_blastp;
+		string_type str_protein_accession;
+		string_type str_protein;
+		std::vector<s_proteinconstruct_from_denovo_type> s_proteinconstruct_from_denovo;
+		double d_score;
+		std::vector<double> v_d_aminoacid_scores;
 	};
 
 	std::vector<s_multinomial_element_data> create_v_s_multinomial_element_data(std::vector<fpf_parse::c_parse_FASTA> par_v_c_parse_FASTA) {
@@ -164,26 +207,23 @@ namespace fpf_data {
 
 	std::vector<s_peptide_data> create_v_s_peptide_data(std::vector<fpf_parse::s_parse_peptides_csv> par_c_parse_csv_peptide_data) {
 		std::vector<s_peptide_data> con_v_s_peptide_data;
-		s_peptide_data con_s_peptide_data;
 		for (auto itr_c_parse_csv_peptide_data = par_c_parse_csv_peptide_data.begin(); itr_c_parse_csv_peptide_data != par_c_parse_csv_peptide_data.end(); ++itr_c_parse_csv_peptide_data) {
+			s_peptide_data con_s_peptide_data;
 			size_type ss_st_csv_IgP = size_type();
 			std::istringstream(itr_c_parse_csv_peptide_data->str_parse_csv_IgP) >> ss_st_csv_IgP;
-			//if (ss_st_csv_IgP >= PARSE_THRESHOLD_IgP) {
-				con_s_peptide_data.str_peptide = itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide;
-				std::istringstream ss_spectralcount(itr_c_parse_csv_peptide_data->str_parse_peptides_csv_spectralcount);
-				size_type ss_st_spectralcount;
-				ss_spectralcount >> ss_st_spectralcount;
-				con_s_peptide_data.st_spectralcount = ss_st_spectralcount;
-				s_denovo_peptide con_s_denovo_peptide;
-				for (auto i = 0; i < itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide.size(); ++i) {
-					con_s_denovo_peptide.ch_aminoacid = itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide[i];
-					con_s_denovo_peptide.d_denovo_localconfidence = itr_c_parse_csv_peptide_data->v_d_denovo_localconfidence[i];
-					con_s_peptide_data.v_s_denovo_peptide.push_back(con_s_denovo_peptide);
-				}
-				con_v_s_peptide_data.push_back(con_s_peptide_data);
-			//}
+			con_s_peptide_data.str_peptide = itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide;
+			std::istringstream ss_spectralcount(itr_c_parse_csv_peptide_data->str_parse_peptides_csv_spectralcount);
+			size_type ss_st_spectralcount;
+			ss_spectralcount >> ss_st_spectralcount;
+			con_s_peptide_data.st_spectralcount = ss_st_spectralcount;
+			s_denovo_peptide con_s_denovo_peptide;
+			for (size_type i = 0; i < itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide.size(); ++i) {
+				con_s_denovo_peptide.ch_aminoacid = itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide[i];
+				con_s_denovo_peptide.d_denovo_localconfidence = itr_c_parse_csv_peptide_data->v_d_denovo_localconfidence[i];
+				con_s_peptide_data.v_s_denovo_peptide.push_back(con_s_denovo_peptide);
+			}
+			con_v_s_peptide_data.push_back(con_s_peptide_data);
 		}
-
 		return con_v_s_peptide_data;
 	}
 
@@ -515,7 +555,7 @@ namespace fpf_data {
 					con_st_select_data.clear();
 				}
 			}
-			std::vector<fpf_parse::string_type> con_v_str_peptideassociation;
+			std::vector<string_type> con_v_str_peptideassociation;
 			for (auto itr_v_s_multinomial_element_data = par_v_s_multinomial_element_data.begin(); itr_v_s_multinomial_element_data != par_v_s_multinomial_element_data.end(); ++itr_v_s_multinomial_element_data) {
 				if (itr_v_s_multinomial_element_data->str_multinomial_element_name.find(con_st_select_data) != std::string::npos) {
 					con_v_str_peptideassociation.push_back(itr_v_s_multinomial_element_data->str_multinomial_element_name);

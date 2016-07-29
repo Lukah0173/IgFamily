@@ -22,49 +22,15 @@
 namespace fpf_filesystem {
 
 	struct s_filesystem;
-	struct s_blastp;
-	struct s_mnom;
-	struct s_report;
 
 	typedef std::string string_type;
 	typedef size_t size_type;
 	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data;
 	typedef fpf_data::s_peptide_data s_peptide_data;
-
-	struct s_blastp {
-	public:
-		string_type str_blastp_query;
-		string_type str_blastp_query_aligned;
-		string_type str_blastp_subject;
-		string_type str_blastp_subject_accession;
-		size_type st_blastp_query_alignment_index;
-		size_type st_blastp_subject_alignment_index;
-		string_type str_protein;
-		string_type str_blastp_query_alignment;
-		double d_blastp_evalue;
-		double d_blastp_par_prop;
-	};
-
-	struct s_mnom {
-	public:
-		string_type str_mnom_comp;
-		double d_mnom_value;
-	};
-
-	struct s_proteinconstruct_from_denovo {
-		char ch_aminoacid;
-		double d_score;
-	};
-
-	struct s_report {
-	public:
-		std::vector<s_blastp> v_s_blastp;
-		string_type str_protein_accession;
-		string_type str_protein;
-		std::vector<s_proteinconstruct_from_denovo> s_proteinconstruct_from_denovo;
-		double d_score;
-		std::vector<double> v_d_aminoacid_scores;
-	};
+	typedef fpf_data::s_blastp s_blastp_type;
+	typedef fpf_data::s_mnom s_mnom_type;
+	typedef fpf_data::s_blastp s_blastp_type;
+	typedef fpf_data::s_report s_report_type;
 
 	struct s_filesystem {
 	public:
@@ -83,9 +49,9 @@ namespace fpf_filesystem {
 		std::pair<string_type, string_type> p_filesystemid;
 		std::vector<std::pair<string_type, string_type>> v_p_replicates;
 		size_type st_replicate_count;
-		std::vector<s_blastp> v_s_blastp;
-		std::vector<s_mnom> v_s_mnom;
-		std::vector<s_report> v_s_report;
+		std::vector<s_blastp_type> v_s_blastp;
+		std::vector<s_mnom_type> v_s_mnom;
+		std::vector<s_report_type> v_s_report;
 	};
 
 	std::vector<string_type> read_root_dir(string_type par_IgFamily_root_dir) {

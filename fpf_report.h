@@ -11,19 +11,21 @@
 #include <cstdlib>						// provides - size_t
 #include <string>						// provides - std::string
 #include <vector>						// provides - std::vector
+#include <iomanip>						// provides - std::setprecision
 #include "fpf_data.h"
 #include "fpf_filesystem.h"
 
 
 
 namespace fpf_report {
+
 	typedef std::string string_type;
 	typedef size_t size_type;
 	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data_type;
+	typedef fpf_data::s_blastp s_blastp_type;
+	typedef fpf_data::s_proteinconstruct_from_denovo s_proteinconstruct_from_denovo_type;
+	typedef fpf_data::s_report s_report_type;
 	typedef fpf_filesystem::s_filesystem s_filesystem_type;
-	typedef fpf_filesystem::s_report s_report_type;
-	typedef fpf_filesystem::s_blastp s_blastp_type;
-	typedef fpf_filesystem::s_proteinconstruct_from_denovo s_proteinconstruct_from_denovo_type;
 
 	void create_s_report(s_filesystem_type& par_s_filesystem) {
 		s_report_type con_s_report;
@@ -55,13 +57,13 @@ namespace fpf_report {
 
 	void create_str_protein_from_denovo(s_filesystem_type& par_s_filesystem) {
 		for (auto& itr_v_s_report : par_s_filesystem.v_s_report) {
-			for (auto i = 0; i < itr_v_s_report.str_protein.length(); ++i) {
-				fpf_filesystem::s_proteinconstruct_from_denovo con_s_proteinconstruct_from_denovo;
+			for (size_type i = 0; i < itr_v_s_report.str_protein.length(); ++i) {
+				s_proteinconstruct_from_denovo_type con_s_proteinconstruct_from_denovo;
 				con_s_proteinconstruct_from_denovo.ch_aminoacid = '.';
 				con_s_proteinconstruct_from_denovo.d_score = 0;
 				itr_v_s_report.s_proteinconstruct_from_denovo.push_back(con_s_proteinconstruct_from_denovo);
 			}
-			for (auto i = 0; i < itr_v_s_report.str_protein.length(); ++i) {
+			for (size_type i = 0; i < itr_v_s_report.str_protein.length(); ++i) {
 				for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
 					if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != '.') && (itr_v_s_blastp.d_blastp_par_prop > itr_v_s_report.s_proteinconstruct_from_denovo[i].d_score)) {
 						itr_v_s_report.s_proteinconstruct_from_denovo[i].ch_aminoacid = itr_v_s_blastp.str_blastp_query_alignment.at(i);
@@ -155,17 +157,20 @@ namespace fpf_report {
 			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
 				if (std::find(dummy.begin(), dummy.end(), itr_v_s_blastp.str_blastp_query_alignment) == dummy.end()) {
 					fout_html_report << "\n<br> ";
-					for (auto i = 0; i < itr_v_s_blastp.str_blastp_query_alignment.length(); ++i) {
+					for (size_type i = 0; i < itr_v_s_blastp.str_blastp_query_alignment.length(); ++i) {
 						if (itr_v_s_blastp.str_blastp_query_alignment.at(i) == '.') {
 							fout_html_report << itr_v_s_blastp.str_blastp_query_alignment.at(i);
 						}
 						else {
-							if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != itr_v_s_blastp.str_protein.at(i)) && !((itr_v_s_blastp.str_blastp_query_alignment.at(i) != 'L') && (itr_v_s_blastp.str_protein.at(i) == 'I')) && ((itr_v_s_blastp.str_protein.at(i) != 'L') && (itr_v_s_blastp.str_blastp_query_alignment.at(i) == 'I'))) {
-								fout_html_report << "<font color=\"red\">" << itr_v_s_blastp.str_blastp_query_alignment.at(i) << "</font>";
-							}
-							else {
-								fout_html_report << itr_v_s_blastp.str_blastp_query_alignment.at(i);
-							}
+							size_type st_count_query = size_type();
+							//if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != itr_v_s_blastp.str_protein.at(i)) && !((itr_v_s_blastp.str_blastp_query_alignment.at(i) != 'L') && (itr_v_s_blastp.str_protein.at(i) == 'I')) && ((itr_v_s_blastp.str_protein.at(i) != 'L') && (itr_v_s_blastp.str_blastp_query_alignment.at(i) == 'I'))) {
+							//	fout_html_report << "<font color=\"red\">" << itr_v_s_blastp.str_blastp_query_alignment.at(i) << "</font>";
+							//}
+							//++st_count_query;
+							//if (itr_v_s_blastp.)
+							//else {
+							//	fout_html_report << itr_v_s_blastp.str_blastp_query_alignment.at(i);
+							//}
 						}
 					}
 					dummy.push_back(itr_v_s_blastp.str_blastp_query_alignment);
