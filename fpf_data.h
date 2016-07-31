@@ -17,6 +17,7 @@
 #include <math.h> // provides - std::floor
 #include <assert.h> 
 #include "IgFamily.h"
+#include "fpf_parse.h"
 
 
 
@@ -72,6 +73,7 @@ namespace fpf_data {
 		size_type st_spectralcount;
 		size_type st_IgP;
 		std::vector<s_denovo_peptide> v_s_denovo_peptide;
+		double d_denovo_peptide_localconfidence_average;
 		bool b_replicate_merged = bool();
 		size_type st_filesystem_replicate = size_type{ 1 };
 		std::vector<std::tuple<string_type, size_type, size_type>> v_p_replicate_data;
@@ -206,7 +208,8 @@ namespace fpf_data {
 	std::vector<s_peptide_data> create_v_s_peptide_data(std::vector<fpf_parse::s_parse_peptides_csv> par_c_parse_csv_peptide_data) {
 		std::vector<s_peptide_data> con_v_s_peptide_data;
 		for (auto itr_c_parse_csv_peptide_data = par_c_parse_csv_peptide_data.begin(); itr_c_parse_csv_peptide_data != par_c_parse_csv_peptide_data.end(); ++itr_c_parse_csv_peptide_data) {
-			s_peptide_data con_s_peptide_data;
+			s_peptide_data con_s_peptide_data = s_peptide_data();
+			s_denovo_peptide con_s_denovo_peptide = s_denovo_peptide();
 			size_type ss_st_csv_IgP = size_type();
 			std::istringstream(itr_c_parse_csv_peptide_data->str_parse_csv_IgP) >> ss_st_csv_IgP;
 			con_s_peptide_data.str_peptide = itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide;
@@ -214,12 +217,16 @@ namespace fpf_data {
 			size_type ss_st_spectralcount;
 			ss_spectralcount >> ss_st_spectralcount;
 			con_s_peptide_data.st_spectralcount = ss_st_spectralcount;
-			s_denovo_peptide con_s_denovo_peptide;
 			for (size_type i = 0; i < itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide.size(); ++i) {
 				con_s_denovo_peptide.ch_aminoacid = itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide[i];
 				con_s_denovo_peptide.d_denovo_localconfidence = itr_c_parse_csv_peptide_data->v_d_denovo_localconfidence[i];
 				con_s_peptide_data.v_s_denovo_peptide.push_back(con_s_denovo_peptide);
 			}
+			con_s_peptide_data.d_denovo_peptide_localconfidence_average = double();
+			for (auto itr_s_denovo_peptide : con_s_peptide_data.v_s_denovo_peptide) {
+				con_s_peptide_data.d_denovo_peptide_localconfidence_average += itr_s_denovo_peptide.d_denovo_localconfidence;
+			}
+			con_s_peptide_data.d_denovo_peptide_localconfidence_average /= con_s_peptide_data.v_s_denovo_peptide.size();
 			con_v_s_peptide_data.push_back(con_s_peptide_data);
 		}
 		return con_v_s_peptide_data;
@@ -253,6 +260,7 @@ namespace fpf_data {
 			con_s_peptide_data_filtered.st_spectralcount = itr_par_v_data->st_spectralcount;
 			con_s_peptide_data_filtered.st_IgP = itr_par_v_data->st_IgP;
 			con_s_peptide_data_filtered.v_s_denovo_peptide = itr_par_v_data->v_s_denovo_peptide;
+			con_s_peptide_data_filtered.d_denovo_peptide_localconfidence_average = itr_par_v_data->d_denovo_peptide_localconfidence_average;
 			con_s_peptide_data_filtered.st_filesystem_replicate = itr_par_v_data->st_filesystem_replicate;
 			con_s_peptide_data_filtered.v_p_replicate_data = itr_par_v_data->v_p_replicate_data;
 			v_s_peptide_data_filtered.push_back(con_s_peptide_data_filtered);
@@ -283,6 +291,7 @@ namespace fpf_data {
 				con_s_peptide_data_distinct.st_spectralcount = itr_par_v_data->st_spectralcount;
 				con_s_peptide_data_distinct.st_IgP = itr_par_v_data->st_IgP;
 				con_s_peptide_data_distinct.v_s_denovo_peptide = itr_par_v_data->v_s_denovo_peptide;
+				con_s_peptide_data_distinct.d_denovo_peptide_localconfidence_average = itr_par_v_data->d_denovo_peptide_localconfidence_average;
 				con_s_peptide_data_distinct.st_filesystem_replicate = itr_par_v_data->st_filesystem_replicate;
 				con_s_peptide_data_distinct.v_p_replicate_data = itr_par_v_data->v_p_replicate_data;
 				con_v_s_peptide_data_distinct.push_back(con_s_peptide_data_distinct);
@@ -299,6 +308,7 @@ namespace fpf_data {
 						con_s_peptide_data_distinct.st_spectralcount = (itr_par_v_data->st_spectralcount);
 						con_s_peptide_data_distinct.st_IgP = itr_par_v_data->st_IgP;
 						con_s_peptide_data_distinct.v_s_denovo_peptide = itr_par_v_data->v_s_denovo_peptide;
+						con_s_peptide_data_distinct.d_denovo_peptide_localconfidence_average = itr_par_v_data->d_denovo_peptide_localconfidence_average;
 						con_s_peptide_data_distinct.st_filesystem_replicate = itr_par_v_data->st_filesystem_replicate;
 						con_s_peptide_data_distinct.v_p_replicate_data = itr_par_v_data->v_p_replicate_data;
 						con_v_s_peptide_data_distinct.push_back(con_s_peptide_data_distinct);
@@ -332,6 +342,7 @@ namespace fpf_data {
 				con_s_peptide_data_filtered_distinct.st_spectralcount = itr_par_v_data_filtered->st_spectralcount;
 				con_s_peptide_data_filtered_distinct.st_IgP = itr_par_v_data_filtered->st_IgP;
 				con_s_peptide_data_filtered_distinct.v_s_denovo_peptide = itr_par_v_data_filtered->v_s_denovo_peptide;
+				con_s_peptide_data_filtered_distinct.d_denovo_peptide_localconfidence_average = itr_par_v_data_filtered->d_denovo_peptide_localconfidence_average;
 				con_s_peptide_data_filtered_distinct.st_filesystem_replicate = itr_par_v_data_filtered->st_filesystem_replicate;
 				con_s_peptide_data_filtered_distinct.v_p_replicate_data = itr_par_v_data_filtered->v_p_replicate_data;
 				v_s_peptide_data_filtered_distinct.push_back(con_s_peptide_data_filtered_distinct);
@@ -348,6 +359,7 @@ namespace fpf_data {
 						con_s_peptide_data_filtered_distinct.st_spectralcount = itr_par_v_data_filtered->st_spectralcount;
 						con_s_peptide_data_filtered_distinct.st_IgP = itr_par_v_data_filtered->st_IgP;
 						con_s_peptide_data_filtered_distinct.v_s_denovo_peptide = itr_par_v_data_filtered->v_s_denovo_peptide;
+						con_s_peptide_data_filtered_distinct.d_denovo_peptide_localconfidence_average = itr_par_v_data_filtered->d_denovo_peptide_localconfidence_average;
 						con_s_peptide_data_filtered_distinct.st_filesystem_replicate = itr_par_v_data_filtered->st_filesystem_replicate;
 						con_s_peptide_data_filtered_distinct.v_p_replicate_data = itr_par_v_data_filtered->v_p_replicate_data;
 						v_s_peptide_data_filtered_distinct.push_back(con_s_peptide_data_filtered_distinct);

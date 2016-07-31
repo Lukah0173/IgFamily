@@ -230,6 +230,7 @@ namespace fpf_parse {
 						con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
 						con_c_parse_csv.v_d_denovo_localconfidence = con_v_d_denovo_localconfidence;
 						con_v_c_parse_peptides_csv.push_back(con_c_parse_csv);
+						con_v_d_denovo_localconfidence.clear();
 					}
 					else {
 						bool b_parse_peptide_found = bool();
@@ -243,6 +244,7 @@ namespace fpf_parse {
 								con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
 								con_c_parse_csv.v_d_denovo_localconfidence = con_v_d_denovo_localconfidence;
 								con_v_c_parse_peptides_csv.push_back(con_c_parse_csv);
+								con_v_d_denovo_localconfidence.clear();
 								break;
 							}
 						}
@@ -285,6 +287,10 @@ namespace fpf_parse {
 					if (ch_parse_csv != ' ') {
 						con_str_denovo_localconfidence += str_parse_csv;
 					}
+				}
+				if ((st_count_csv == 15) && (ch_parse_csv == ',')) {
+					con_v_d_denovo_localconfidence.push_back(std::stod(con_str_denovo_localconfidence));
+					con_str_denovo_localconfidence.clear();
 				}
 			}
 			if ((sw_parse_csv_ignore_header == 0) && (ch_parse_csv == ',')) {
