@@ -25,21 +25,21 @@ namespace fpf_filesystem_analysis {
 	typedef size_t size_type;
 
 	struct s_filesystem_analysis {
-		fpf_filesystem::s_filesystem* s_filesystem;
+		fpf_filesystem::filesystem_type* filesystem_type;
 		std::vector<fpf_data::peptide_data_type> v_s_peptide_data_analysis;
 		std::vector<fpf_data::peptide_data_type> v_s_peptide_data_filtered_distinct_analysis;
 	};
 
-	void fout_file_genefamily_summary(fpf_filesystem::s_filesystem par_s_filesystem) {
+	void fout_file_genefamily_summary(fpf_filesystem::filesystem_type par_s_filesystem) {
 		std::string output_v_c_analysis = par_s_filesystem.str_directory + "\\" + par_s_filesystem.str_filename + "_genefamily_summary.txt";
 		std::ofstream fout_v_c_analysis;
 		fout_v_c_analysis.open(output_v_c_analysis);
 		fout_v_c_analysis << "-- IgFamily " << IgFamily::version << " --\n\n\n";
 		fout_v_c_analysis << "Input file : " << IgFamily::INPUT_CSV << "\n\n\n";
 
-		std::vector<fpf_data::s_multinomial_element_data*> con_map_main_v_c_analysis;
-		std::vector<fpf_data::s_multinomial_element_data*> map_main_v_c_analysis = map_v_s_multinomial_element_data_by_score(par_s_filesystem.v_c_analysis_data);
-		std::vector<fpf_data::s_multinomial_element_data*> map_main_v_c_analysis_distict = map_v_s_multinomial_element_data_by_score(par_s_filesystem.v_c_analysis_distinct_data);
+		std::vector<fpf_data::multinomial_element_data_type*> con_map_main_v_c_analysis;
+		std::vector<fpf_data::multinomial_element_data_type*> map_main_v_c_analysis = map_v_s_multinomial_element_data_by_score(par_s_filesystem.v_c_analysis_data);
+		std::vector<fpf_data::multinomial_element_data_type*> map_main_v_c_analysis_distict = map_v_s_multinomial_element_data_by_score(par_s_filesystem.v_c_analysis_distinct_data);
 		if (IgFamily::MAP_FOUT_BY_SCORE == 0) {
 			if (IgFamily::MAP_FOUT_BY_DISTINCT == 1) {
 				//con_map_main_v_c_analysis = par_s_filesystem.v_c_analysis_data;
@@ -57,7 +57,7 @@ namespace fpf_filesystem_analysis {
 			}
 		}
 
-		for (std::vector<fpf_data::s_multinomial_element_data*>::iterator itr_v_c_analysis_distinct = con_map_main_v_c_analysis.begin(); itr_v_c_analysis_distinct != con_map_main_v_c_analysis.end(); ++itr_v_c_analysis_distinct) {
+		for (std::vector<fpf_data::multinomial_element_data_type*>::iterator itr_v_c_analysis_distinct = con_map_main_v_c_analysis.begin(); itr_v_c_analysis_distinct != con_map_main_v_c_analysis.end(); ++itr_v_c_analysis_distinct) {
 			if (itr_v_c_analysis_distinct == con_map_main_v_c_analysis.begin()) {
 				fout_v_c_analysis << "\nTop gene families - " << "     Score mean - " << std::fixed << std::setprecision(2) << IgFamily::SCORE_MEAN;
 				fout_v_c_analysis << "\n\n";
@@ -125,7 +125,7 @@ namespace fpf_filesystem_analysis {
 			d_peptide_1genefamily = 0;
 			d_peptide_2genefamily = 0;
 			d_peptide_3genefamily = 0;
-			//for (std::vector<fpf_data::s_multinomial_element_data*>::iterator itr_v_c_analysis_distinct_v_c_polyassociation = (itr_v_c_analysis_distinct + i)->ref_v_c_analysis_polyassociation().begin(); itr_v_c_analysis_distinct_v_c_polyassociation != (itr_v_c_analysis_distinct + i)->ref_v_c_analysis_polyassociation().end(); ++itr_v_c_analysis_distinct_v_c_polyassociation) {
+			//for (std::vector<fpf_data::multinomial_element_data_type*>::iterator itr_v_c_analysis_distinct_v_c_polyassociation = (itr_v_c_analysis_distinct + i)->ref_v_c_analysis_polyassociation().begin(); itr_v_c_analysis_distinct_v_c_polyassociation != (itr_v_c_analysis_distinct + i)->ref_v_c_analysis_polyassociation().end(); ++itr_v_c_analysis_distinct_v_c_polyassociation) {
 			//	fout_v_c_analysis << "\n - - * " << (*itr_v_c_analysis_distinct_v_c_polyassociation)->str_multinomial_element_name;
 			//	for (size_type itr_s_genefamily_output = (itr_v_c_analysis_distinct + i)->str_multinomial_element_name.length(); itr_s_genefamily_output < 20; ++itr_s_genefamily_output) {
 			//		fout_v_c_analysis << " ";
@@ -134,7 +134,7 @@ namespace fpf_filesystem_analysis {
 			//}
 		}
 
-		for (std::vector<fpf_data::s_multinomial_element_data*>::iterator itr_v_c_analysis = map_main_v_c_analysis_distict.begin(); itr_v_c_analysis != map_main_v_c_analysis_distict.end(); ++itr_v_c_analysis) {
+		for (std::vector<fpf_data::multinomial_element_data_type*>::iterator itr_v_c_analysis = map_main_v_c_analysis_distict.begin(); itr_v_c_analysis != map_main_v_c_analysis_distict.end(); ++itr_v_c_analysis) {
 			fpf_data::sort_c_analysis_v_s_peptide_data_s_peptide((*itr_v_c_analysis)->v_s_peptide_data);
 			IgFamily::SCORE_THRESHOLD = (IgFamily::SCORE_MEAN / double{ 2 });
 			if (((*itr_v_c_analysis)->v_s_peptide_data.size() != 0) && ((*itr_v_c_analysis)->d_score >= 0.01)) {
@@ -142,7 +142,7 @@ namespace fpf_filesystem_analysis {
 				fout_v_c_analysis << "   (top: ";
 				double test2 = double();
 				string_type test3 = string_type();
-				for (std::vector<fpf_data::s_multinomial_element_data*>::iterator itr_v_c_polyassociation = (*itr_v_c_analysis)->v_s_multinomial_element_polyassociation.begin(); itr_v_c_polyassociation != (*itr_v_c_analysis)->v_s_multinomial_element_polyassociation.end(); ++itr_v_c_polyassociation) {
+				for (std::vector<fpf_data::multinomial_element_data_type*>::iterator itr_v_c_polyassociation = (*itr_v_c_analysis)->v_s_multinomial_element_polyassociation.begin(); itr_v_c_polyassociation != (*itr_v_c_analysis)->v_s_multinomial_element_polyassociation.end(); ++itr_v_c_polyassociation) {
 					if ((*itr_v_c_polyassociation)->d_score > test2) {
 						test2 = (*itr_v_c_polyassociation)->d_score;
 						test3 = (*itr_v_c_polyassociation)->str_multinomial_element_name;
@@ -257,8 +257,8 @@ namespace fpf_filesystem_analysis {
 						fout_v_c_analysis << " ";
 					}
 					fout_v_c_analysis << "   " << "Member of " << itr_v_s_peptide_data->v_p_peptideassociation_distinct.size() << " gene families - ";
-					std::vector<std::pair<fpf_data::s_multinomial_element_data*, double>> con_itr_v_p_peptideassociation_distinct = itr_v_s_peptide_data->v_p_peptideassociation_distinct;
-					for (std::vector<std::pair<fpf_data::s_multinomial_element_data*, double>>::iterator itr_v_p_peptideassociation_distinct = con_itr_v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != con_itr_v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
+					std::vector<std::pair<fpf_data::multinomial_element_data_type*, double>> con_itr_v_p_peptideassociation_distinct = itr_v_s_peptide_data->v_p_peptideassociation_distinct;
+					for (std::vector<std::pair<fpf_data::multinomial_element_data_type*, double>>::iterator itr_v_p_peptideassociation_distinct = con_itr_v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != con_itr_v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
 						fout_v_c_analysis << std::get<0>(*itr_v_p_peptideassociation_distinct)->str_multinomial_element_name;
 						fout_v_c_analysis << "(" << std::get<1>(*itr_v_p_peptideassociation_distinct) << ")";
 						if ((itr_v_p_peptideassociation_distinct + 1) != con_itr_v_p_peptideassociation_distinct.end()) {
@@ -270,7 +270,7 @@ namespace fpf_filesystem_analysis {
 		}
 	}
 
-	void fout_file_peptide_summary(fpf_filesystem::s_filesystem par_s_filesystem) {
+	void fout_file_peptide_summary(fpf_filesystem::filesystem_type par_s_filesystem) {
 		string_type str_peptide_summary = par_s_filesystem.str_directory + "\\" + par_s_filesystem.str_filename + "_peptide_summary.txt";
 		std::ofstream fout_file_peptide_summary;
 		fout_file_peptide_summary.open(str_peptide_summary);
@@ -341,7 +341,7 @@ namespace fpf_filesystem_analysis {
 				}
 			}
 			fout_file_peptide_summary << "   " << "Member of " << itr_v_s_peptide_data->v_p_peptideassociation_distinct.size() << " gene families - ";
-			std::vector<std::pair<fpf_data::s_multinomial_element_data*, double>> con_itr_v_p_peptideassociation_distinct = itr_v_s_peptide_data->v_p_peptideassociation_distinct;
+			std::vector<std::pair<fpf_data::multinomial_element_data_type*, double>> con_itr_v_p_peptideassociation_distinct = itr_v_s_peptide_data->v_p_peptideassociation_distinct;
 			for (auto itr_v_p_peptideassociation_distinct = con_itr_v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != con_itr_v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
 				fout_file_peptide_summary << std::get<0>(*itr_v_p_peptideassociation_distinct)->str_multinomial_element_name;
 				fout_file_peptide_summary << "(" << std::fixed << std::setprecision(2) << std::get<1>(*itr_v_p_peptideassociation_distinct) << ")";
@@ -352,7 +352,7 @@ namespace fpf_filesystem_analysis {
 		}
 	}
 
-	std::vector<string_type> create_v_str_peptide_total_observed(std::vector<fpf_filesystem::s_filesystem> par_v_s_filesystem) {
+	std::vector<string_type> create_v_str_peptide_total_observed(std::vector<fpf_filesystem::filesystem_type> par_v_s_filesystem) {
 		std::vector<string_type> con_v_str_peptide_total_observed;
 		for (auto itr_v_s_filesystem = par_v_s_filesystem.begin(); itr_v_s_filesystem != par_v_s_filesystem.end(); ++itr_v_s_filesystem) {
 			auto con_v_s_peptide_data = itr_v_s_filesystem->v_s_peptide_data;
@@ -367,7 +367,7 @@ namespace fpf_filesystem_analysis {
 		return con_v_str_peptide_total_observed;
 	}
 
-	std::vector<string_type> create_v_str_peptide_filtered_distinct_total_observed(std::vector<fpf_filesystem::s_filesystem> par_v_s_filesystem) {
+	std::vector<string_type> create_v_str_peptide_filtered_distinct_total_observed(std::vector<fpf_filesystem::filesystem_type> par_v_s_filesystem) {
 		std::vector<string_type> con_v_str_peptide_filtered_distinct_total_observed;
 		for (auto itr_v_s_filesystem = par_v_s_filesystem.begin(); itr_v_s_filesystem != par_v_s_filesystem.end(); ++itr_v_s_filesystem) {
 			auto con_v_s_peptide_data = itr_v_s_filesystem->v_s_peptide_data_filtered_distinct;
@@ -382,7 +382,7 @@ namespace fpf_filesystem_analysis {
 		return con_v_str_peptide_filtered_distinct_total_observed;
 	}
 
-	s_filesystem_analysis create_s_filesystem_analysis(fpf_filesystem::s_filesystem& par_s_filesystem, std::vector<string_type>& par_v_str_peptide_total_observed, std::vector<string_type>& par_v_str_peptide_filtered_distinct_total_observed) {
+	s_filesystem_analysis create_s_filesystem_analysis(fpf_filesystem::filesystem_type& par_s_filesystem, std::vector<string_type>& par_v_str_peptide_total_observed, std::vector<string_type>& par_v_str_peptide_filtered_distinct_total_observed) {
 		s_filesystem_analysis con_s_filesystem_analysis;
 		static fpf_data::peptide_data_type static_default_s_peptide_data = fpf_data::peptide_data_type();
 		for (auto itr_v_str_peptide_total_observed = par_v_str_peptide_total_observed.begin(); itr_v_str_peptide_total_observed != par_v_str_peptide_total_observed.end(); ++itr_v_str_peptide_total_observed) {
@@ -408,7 +408,7 @@ namespace fpf_filesystem_analysis {
 				con_s_filesystem_analysis.v_s_peptide_data_filtered_distinct_analysis.push_back(static_default_s_peptide_data_filtered_distinct);
 			}
 		}
-		con_s_filesystem_analysis.s_filesystem = &par_s_filesystem;
+		con_s_filesystem_analysis.filesystem_type = &par_s_filesystem;
 		return con_s_filesystem_analysis;
 	}
 
@@ -435,15 +435,15 @@ namespace fpf_filesystem_analysis {
 		
 		fout_v_s_filesystem_analysis_peptide_summary << ",";
 		for (auto itr_v_s_filesystem_analysis = par_v_s_filesystem_analysis.begin(); itr_v_s_filesystem_analysis != par_v_s_filesystem_analysis.end(); ++itr_v_s_filesystem_analysis) {
-			fout_v_s_filesystem_analysis_peptide_summary << itr_v_s_filesystem_analysis->s_filesystem->str_filename << ",";			
+			fout_v_s_filesystem_analysis_peptide_summary << itr_v_s_filesystem_analysis->filesystem_type->str_filename << ",";			
 		}
 		fout_v_s_filesystem_analysis_peptide_summary << std::endl;
 		for (auto itr_v_s_filesystem_analysis = par_v_s_filesystem_analysis.begin(); itr_v_s_filesystem_analysis != par_v_s_filesystem_analysis.end(); ++itr_v_s_filesystem_analysis) {
-			fout_v_s_filesystem_analysis_peptide_summary << itr_v_s_filesystem_analysis->s_filesystem->str_patientstatus << ",";
+			fout_v_s_filesystem_analysis_peptide_summary << itr_v_s_filesystem_analysis->filesystem_type->str_patientstatus << ",";
 		}
 		fout_v_s_filesystem_analysis_peptide_summary << std::endl;
 		for (auto itr_v_s_filesystem_analysis = par_v_s_filesystem_analysis.begin(); itr_v_s_filesystem_analysis != par_v_s_filesystem_analysis.end(); ++itr_v_s_filesystem_analysis) {
-			fout_v_s_filesystem_analysis_peptide_summary << itr_v_s_filesystem_analysis->s_filesystem->st_replicate_count << ",";
+			fout_v_s_filesystem_analysis_peptide_summary << itr_v_s_filesystem_analysis->filesystem_type->st_replicate_count << ",";
 		}
 		fout_v_s_filesystem_analysis_peptide_summary << std::endl;
 		for (auto itr_v_s_peptide_data_analysis = size_type(); itr_v_s_peptide_data_analysis < par_v_s_filesystem_analysis.begin()->v_s_peptide_data_analysis.size(); ++itr_v_s_peptide_data_analysis) {
@@ -463,18 +463,18 @@ namespace fpf_filesystem_analysis {
 		fout_v_s_filesystem_summary.open(output_v_s_filesystem_summary);
 
 		for (auto itr_v_s_filesystem_analysis = par_v_s_filesystem_analysis.begin(); itr_v_s_filesystem_analysis != par_v_s_filesystem_analysis.end(); ++itr_v_s_filesystem_analysis) {
-			fout_v_s_filesystem_summary << "ID: " << std::get<0>(itr_v_s_filesystem_analysis->s_filesystem->p_filesystemid) << "," << std::get<1>(itr_v_s_filesystem_analysis->s_filesystem->p_filesystemid) << ";\n";
-			fout_v_s_filesystem_summary << "FILE: " << itr_v_s_filesystem_analysis->s_filesystem->str_filename << ";\n";
+			fout_v_s_filesystem_summary << "ID: " << std::get<0>(itr_v_s_filesystem_analysis->filesystem_type->p_filesystemid) << "," << std::get<1>(itr_v_s_filesystem_analysis->filesystem_type->p_filesystemid) << ";\n";
+			fout_v_s_filesystem_summary << "FILE: " << itr_v_s_filesystem_analysis->filesystem_type->str_filename << ";\n";
 			fout_v_s_filesystem_summary << "VERSION: " << IgFamily::version << ";\n";
 			fout_v_s_filesystem_summary << "REPLICATES: ";
-			for (std::vector<std::pair<string_type, string_type>>::iterator itr_v_p_replicates = itr_v_s_filesystem_analysis->s_filesystem->v_p_replicates.begin(); itr_v_p_replicates != itr_v_s_filesystem_analysis->s_filesystem->v_p_replicates.end(); ++itr_v_p_replicates) {
+			for (std::vector<std::pair<string_type, string_type>>::iterator itr_v_p_replicates = itr_v_s_filesystem_analysis->filesystem_type->v_p_replicates.begin(); itr_v_p_replicates != itr_v_s_filesystem_analysis->filesystem_type->v_p_replicates.end(); ++itr_v_p_replicates) {
 				fout_v_s_filesystem_summary << std::get<0>(*itr_v_p_replicates) << "," << std::get<1>(*itr_v_p_replicates);
-				if ((itr_v_p_replicates + 1) != itr_v_s_filesystem_analysis->s_filesystem->v_p_replicates.end()) {
+				if ((itr_v_p_replicates + 1) != itr_v_s_filesystem_analysis->filesystem_type->v_p_replicates.end()) {
 					fout_v_s_filesystem_summary << ",";
 				}
 			}
 			fout_v_s_filesystem_summary << ";\n";
-			fout_v_s_filesystem_summary << "STATUS: " << itr_v_s_filesystem_analysis->s_filesystem->str_patientstatus << ";";
+			fout_v_s_filesystem_summary << "STATUS: " << itr_v_s_filesystem_analysis->filesystem_type->str_patientstatus << ";";
 			fout_v_s_filesystem_summary << std::endl << std::endl;
 		}
 	}

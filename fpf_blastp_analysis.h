@@ -22,12 +22,12 @@
 namespace fpf_blastp_analysis {
 
 	typedef std::string string_type;
-	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data_type;
-	typedef fpf_data::s_blastp s_blastp_type;
-	typedef std::vector<fpf_data::s_blastp> v_s_blastp_tpye;
-	typedef fpf_data::s_mnom s_mnom_type;
-	typedef fpf_filesystem::s_filesystem s_filesystem_type;
-	typedef std::vector<fpf_filesystem::s_filesystem> v_s_filesystem_type;
+	typedef fpf_data::multinomial_element_data_type s_multinomial_element_data_type;
+	typedef fpf_data::blastp_type s_blastp_type;
+	typedef std::vector<fpf_data::blastp_type> v_s_blastp_tpye;
+	typedef fpf_data::mnom_type s_mnom_type;
+	typedef fpf_filesystem::filesystem_type s_filesystem_type;
+	typedef std::vector<fpf_filesystem::filesystem_type> v_s_filesystem_type;
 
 	void create_blastp_input(s_filesystem_type par_s_filesystem) {
 		std::string output_blastp_FASTA = "blast_directory\\";

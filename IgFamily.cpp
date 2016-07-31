@@ -42,21 +42,21 @@ int main() {
 
 	std::ifstream fin_input_csv(IgFamily::INPUT_CSV);
 	std::ifstream fin_input_FASTA(IgFamily::INPUT_FASTA);
-	std::vector<fpf_parse::c_parse_FASTA> main_v_c_parse_FASTA = fpf_parse::parse_FASTA(fin_input_FASTA);
+	std::vector<fpf_parse::parse_FASTA_type> main_v_c_parse_FASTA = fpf_parse::parse_FASTA(fin_input_FASTA);
 	if (b_parse_FASTA_empty(main_v_c_parse_FASTA)) { return 1; };
 
-	std::vector<fpf_parse::s_parse_peptides_csv> main_v_c_parse_csv_proteinpeptides_data;
-	std::vector<fpf_parse::s_parse_peptides_csv> main_v_c_parse_csv_denovopeptides_data;
+	std::vector<fpf_parse::parse_peptides_csv_type> main_v_c_parse_csv_proteinpeptides_data;
+	std::vector<fpf_parse::parse_peptides_csv_type> main_v_c_parse_csv_denovopeptides_data;
 	std::vector<string_type> v_str_root_dir = fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR);
-	std::vector<fpf_filesystem::s_filesystem> v_s_filesystem = fpf_filesystem::read_filesystem(v_str_root_dir);
+	std::vector<fpf_filesystem::filesystem_type> v_s_filesystem = fpf_filesystem::read_filesystem(v_str_root_dir);
 
 	std::cout << "\n\n\n * parsing FASTA file";
 
-	std::vector<fpf_data::s_multinomial_element_data> main_v_s_multinomial_element_data = fpf_data::create_v_s_multinomial_element_data(main_v_c_parse_FASTA);
-	std::vector<fpf_data::s_multinomial_element_data> main_v_s_multinomial_element_data_distinct = fpf_data::create_v_s_multinomial_element_data_distinct(main_v_s_multinomial_element_data);
+	std::vector<fpf_data::multinomial_element_data_type> main_v_s_multinomial_element_data = fpf_data::create_v_s_multinomial_element_data(main_v_c_parse_FASTA);
+	std::vector<fpf_data::multinomial_element_data_type> main_v_s_multinomial_element_data_distinct = fpf_data::create_v_s_multinomial_element_data_distinct(main_v_s_multinomial_element_data);
 
 	if (!IgFamily::FILESYSTEM_MODE) {
-		fpf_filesystem::s_filesystem one_iteration;
+		fpf_filesystem::filesystem_type one_iteration;
 		v_s_filesystem.push_back(one_iteration);
 	}
 
@@ -112,11 +112,11 @@ int main() {
 				fpf_data::sort_v_s_peptide_data_str_peptide(main_v_c_proteinpeptides_data_filtered_distinct);
 				fpf_data::update_v_s_multinomial_element_distinctpolymorphism_data(main_v_s_multinomial_element_data_distinct);
 
-				std::vector<fpf_data::s_multinomial_element_data*> map_main_v_s_multinomial_element_data = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data);
-				std::vector<fpf_data::s_multinomial_element_data*> map_main_v_s_multinomial_element_data_distict = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data_distinct);
+				std::vector<fpf_data::multinomial_element_data_type*> map_main_v_s_multinomial_element_data = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data);
+				std::vector<fpf_data::multinomial_element_data_type*> map_main_v_s_multinomial_element_data_distict = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data_distinct);
 
 				bool b_map_main_v_s_multinomial_element_data_distict = true;
-				std::vector<fpf_data::s_multinomial_element_data*> con_map_main_v_s_multinomial_element_data;
+				std::vector<fpf_data::multinomial_element_data_type*> con_map_main_v_s_multinomial_element_data;
 				if (b_map_main_v_s_multinomial_element_data_distict) {
 					con_map_main_v_s_multinomial_element_data = map_main_v_s_multinomial_element_data_distict;
 				}

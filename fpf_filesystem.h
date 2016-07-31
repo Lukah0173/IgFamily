@@ -21,18 +21,18 @@
 
 namespace fpf_filesystem {
 
-	struct s_filesystem;
+	struct filesystem_type;
 
 	typedef std::string string_type;
 	typedef size_t size_type;
-	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data;
+	typedef fpf_data::multinomial_element_data_type multinomial_element_data_type;
 	typedef fpf_data::peptide_data_type peptide_data_type;
-	typedef fpf_data::s_blastp s_blastp_type;
-	typedef fpf_data::s_mnom s_mnom_type;
-	typedef fpf_data::s_blastp s_blastp_type;
-	typedef fpf_data::s_report s_report_type;
+	typedef fpf_data::blastp_type s_blastp_type;
+	typedef fpf_data::mnom_type s_mnom_type;
+	typedef fpf_data::blastp_type s_blastp_type;
+	typedef fpf_data::report_type s_report_type;
 
-	struct s_filesystem {
+	struct filesystem_type {
 	public:
 		bool b_proteinpeptides_exist;
 		bool b_denovopeptides_exist;
@@ -40,8 +40,8 @@ namespace fpf_filesystem {
 		string_type str_filename;
 		string_type str_fileversion;
 		string_type str_patientstatus;
-		std::vector<s_multinomial_element_data> v_c_analysis_data;
-		std::vector<s_multinomial_element_data> v_c_analysis_distinct_data;
+		std::vector<multinomial_element_data_type> v_c_analysis_data;
+		std::vector<multinomial_element_data_type> v_c_analysis_distinct_data;
 		std::vector<peptide_data_type> v_s_peptide_data;
 		std::vector<peptide_data_type> v_s_peptide_data_filtered;
 		std::vector<peptide_data_type> v_s_peptide_data_distinct;
@@ -75,9 +75,9 @@ namespace fpf_filesystem {
 		return con_v_str_fin_IgFamily_root;
 	}
 
-	std::vector<s_filesystem> read_filesystem(std::vector<string_type> par_root_dir) {
-		s_filesystem con_s_filesystem;
-		std::vector<s_filesystem> con_v_s_filesystem;
+	std::vector<filesystem_type> read_filesystem(std::vector<string_type> par_root_dir) {
+		filesystem_type con_s_filesystem;
+		std::vector<filesystem_type> con_v_s_filesystem;
 		std::cout << "\n";
 		for (std::vector<string_type>::iterator itr_root_dir = par_root_dir.begin(); itr_root_dir != par_root_dir.end(); ++itr_root_dir) {
 			string_type stream_str_filesytem = *itr_root_dir + "filesystem.data";
@@ -193,23 +193,23 @@ namespace fpf_filesystem {
 		return con_str_root_denovopeptides;
 	}
 
-	std::vector<fpf_parse::s_parse_peptides_csv> parse_filesystem_proteinpeptides(string_type par_str_fin_root) {
-		std::vector<fpf_parse::s_parse_peptides_csv> con_v_c_parse_csv;
+	std::vector<fpf_parse::parse_peptides_csv_type> parse_filesystem_proteinpeptides(string_type par_str_fin_root) {
+		std::vector<fpf_parse::parse_peptides_csv_type> con_v_c_parse_csv;
 		std::ifstream fin_input_csv(par_str_fin_root);
 		con_v_c_parse_csv = fpf_parse::parse_proteinpeptides(fin_input_csv, par_str_fin_root);
 		std::cout << "\n\n ! " << con_v_c_parse_csv.size();
 		return con_v_c_parse_csv;
 	}
 
-	std::vector<fpf_parse::s_parse_peptides_csv> parse_filesystem_denovopeptides(string_type par_str_fin_root) {
-		std::vector<fpf_parse::s_parse_peptides_csv> con_v_c_parse_csv;
+	std::vector<fpf_parse::parse_peptides_csv_type> parse_filesystem_denovopeptides(string_type par_str_fin_root) {
+		std::vector<fpf_parse::parse_peptides_csv_type> con_v_c_parse_csv;
 		std::ifstream fin_input_csv(par_str_fin_root);
 		con_v_c_parse_csv = fpf_parse::parse_denovopeptides_csv(fin_input_csv, par_str_fin_root);
 		std::cout << "\n\n ! " << con_v_c_parse_csv.size();
 		return con_v_c_parse_csv;
 	}
 
-	void create_v_p_replicate_data(s_filesystem& par_s_filesystem) {
+	void create_v_p_replicate_data(filesystem_type& par_s_filesystem) {
 		for (std::vector<peptide_data_type>::iterator itr_v_s_peptide_data = par_s_filesystem.v_s_peptide_data.begin(); itr_v_s_peptide_data != par_s_filesystem.v_s_peptide_data.end(); ++itr_v_s_peptide_data) {
 			itr_v_s_peptide_data->v_p_peptideassociation.clear();
 			itr_v_s_peptide_data->v_p_peptideassociation_distinct.clear();
@@ -256,7 +256,7 @@ namespace fpf_filesystem {
 		}
 	}	
 
-	std::vector<string_type> create_v_str_patientstatus(std::vector<s_filesystem> par_v_s_filesystem) {
+	std::vector<string_type> create_v_str_patientstatus(std::vector<filesystem_type> par_v_s_filesystem) {
 		std::vector<string_type> con_v_str_patientstatus;
 		for (auto itr_v_s_filesystem = par_v_s_filesystem.begin(); itr_v_s_filesystem != par_v_s_filesystem.end(); ++itr_v_s_filesystem) {
 			auto find_str_patientstatus = std::find(con_v_str_patientstatus.begin(), con_v_str_patientstatus.end(), itr_v_s_filesystem->str_patientstatus);
@@ -267,7 +267,7 @@ namespace fpf_filesystem {
 		return con_v_str_patientstatus;
 	}
 
-	void fout_filesystem(s_filesystem par_s_filesystem) {
+	void fout_filesystem(filesystem_type par_s_filesystem) {
 		std::string output_v_c_analysis = par_s_filesystem.str_directory + "filesystem.data";
 		std::ofstream fout_v_s_filesystem;
 		fout_v_s_filesystem.open(output_v_c_analysis);

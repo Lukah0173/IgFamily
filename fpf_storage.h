@@ -57,8 +57,8 @@
 //}
 
 //if (IgFamily::FILESYSTEM_MODE) {
-//	std::vector<fpf_filesystem::s_filesystem> v_s_filesystem_replicate_combined;
-//	for (std::vector<fpf_filesystem::s_filesystem>::iterator itr_v_s_filesystem = v_s_filesystem.begin(); itr_v_s_filesystem != v_s_filesystem.end(); ++itr_v_s_filesystem) {
+//	std::vector<fpf_filesystem::filesystem_type> v_s_filesystem_replicate_combined;
+//	for (std::vector<fpf_filesystem::filesystem_type>::iterator itr_v_s_filesystem = v_s_filesystem.begin(); itr_v_s_filesystem != v_s_filesystem.end(); ++itr_v_s_filesystem) {
 //		if (itr_v_s_filesystem->v_p_replicates.empty()) {
 //			v_s_filesystem_replicate_combined.push_back(*itr_v_s_filesystem);
 //		}

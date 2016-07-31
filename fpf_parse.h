@@ -24,20 +24,14 @@
 
 namespace fpf_parse {
 
-	struct s_parse_peptides_csv;
-	class c_parse_FASTA;
+	struct parse_peptides_csv_type;
+	class parse_FASTA_type;
 
 	typedef size_t size_type;
 	typedef std::string string_type;
-	typedef std::vector<s_parse_peptides_csv> v_s_parse_csv_data_type;
+	typedef std::vector<parse_peptides_csv_type> v_s_parse_csv_data_type;
 
-	struct s_parse_peptides_csv {
-		s_parse_peptides_csv() {
-		};
-
-		~s_parse_peptides_csv() {
-		};
-
+	struct parse_peptides_csv_type {
 	public:
 		string_type str_parse_peptides_csv_file;
 		string_type str_parse_peptides_csv_peptide;
@@ -46,12 +40,12 @@ namespace fpf_parse {
 		std::vector<double> v_d_denovo_localconfidence;
 	};
 
-	class c_parse_FASTA {
+	class parse_FASTA_type {
 	public:
-		c_parse_FASTA() {
+		parse_FASTA_type() {
 		};
 
-		~c_parse_FASTA() {
+		~parse_FASTA_type() {
 		};
 
 		inline void set_str_parse_FASTA_accession(string_type par_str_parse_FASTA_accession) {
@@ -111,9 +105,9 @@ namespace fpf_parse {
 		string_type str_parse_FASTA_protein;
 	};
 
-	std::vector<s_parse_peptides_csv> parse_proteinpeptides(std::ifstream& par_fin_proteinpeptides_csv, string_type par_str_dir) {
+	std::vector<parse_peptides_csv_type> parse_proteinpeptides(std::ifstream& par_fin_proteinpeptides_csv, string_type par_str_dir) {
 
-		std::vector<s_parse_peptides_csv> con_v_c_parse_proteinpeptides_csv;
+		std::vector<parse_peptides_csv_type> con_v_c_parse_proteinpeptides_csv;
 		string_type str_parse_csv;
 		size_type st_count_csv = size_type();
 		size_type sw_parse_csv = size_type();
@@ -128,7 +122,7 @@ namespace fpf_parse {
 				str_parse_csv = ch_parse_csv;
 				if (st_count_csv == 18) {
 					if (con_v_c_parse_proteinpeptides_csv.size() == 0) {
-						s_parse_peptides_csv con_c_parse_csv = s_parse_peptides_csv();
+						parse_peptides_csv_type con_c_parse_csv = parse_peptides_csv_type();
 						con_c_parse_csv.str_parse_peptides_csv_file = par_str_dir;
 						con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
 						con_c_parse_csv.str_parse_peptides_csv_spectralcount = str_parse_spectralcount;
@@ -143,7 +137,7 @@ namespace fpf_parse {
 								break;
 							}
 							if (count_v_c_parse_csv == con_v_c_parse_proteinpeptides_csv.size()) {
-								s_parse_peptides_csv con_c_parse_csv = s_parse_peptides_csv();
+								parse_peptides_csv_type con_c_parse_csv = parse_peptides_csv_type();
 								con_c_parse_csv.str_parse_peptides_csv_file = par_str_dir;
 								con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
 								con_c_parse_csv.str_parse_peptides_csv_spectralcount = str_parse_spectralcount;
@@ -208,9 +202,9 @@ namespace fpf_parse {
 		return con_v_c_parse_proteinpeptides_csv;
 	}
 
-	std::vector<s_parse_peptides_csv> parse_denovopeptides_csv(std::ifstream& par_fin_denovopeptides_csv, string_type par_str_dir) {
+	std::vector<parse_peptides_csv_type> parse_denovopeptides_csv(std::ifstream& par_fin_denovopeptides_csv, string_type par_str_dir) {
 
-		std::vector<s_parse_peptides_csv> con_v_c_parse_peptides_csv;
+		std::vector<parse_peptides_csv_type> con_v_c_parse_peptides_csv;
 		string_type str_parse_csv;
 		size_type st_count_csv = size_type();
 		size_type sw_parse_csv = size_type();
@@ -225,7 +219,7 @@ namespace fpf_parse {
 				str_parse_csv = ch_parse_csv;
 				if (st_count_csv == 16) {
 					if (con_v_c_parse_peptides_csv.size() == 0) {
-						s_parse_peptides_csv con_c_parse_csv = s_parse_peptides_csv();
+						parse_peptides_csv_type con_c_parse_csv = parse_peptides_csv_type();
 						con_c_parse_csv.str_parse_peptides_csv_file = par_str_dir;
 						con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
 						con_c_parse_csv.v_d_denovo_localconfidence = con_v_d_denovo_localconfidence;
@@ -239,7 +233,7 @@ namespace fpf_parse {
 								b_parse_peptide_found = true;
 							}
 							if (((itr_v_c_parse_csv + 1) == con_v_c_parse_peptides_csv.end()) && (!b_parse_peptide_found)) {
-								s_parse_peptides_csv con_c_parse_csv = s_parse_peptides_csv();
+								parse_peptides_csv_type con_c_parse_csv = parse_peptides_csv_type();
 								con_c_parse_csv.str_parse_peptides_csv_file = par_str_dir;
 								con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
 								con_c_parse_csv.v_d_denovo_localconfidence = con_v_d_denovo_localconfidence;
@@ -308,7 +302,7 @@ namespace fpf_parse {
 		return con_v_c_parse_peptides_csv;
 	}
 
-	std::vector<c_parse_FASTA> parse_FASTA(std::ifstream& par_fin_input_FASTA) {
+	std::vector<parse_FASTA_type> parse_FASTA(std::ifstream& par_fin_input_FASTA) {
 
 		char ch_parse_FASTA;
 		size_type sw_input_FASTA = size_type();
@@ -319,8 +313,8 @@ namespace fpf_parse {
 		string_type con_str_parse_FASTA_accession = string_type();
 		string_type con_str_FASTA_species = string_type();
 		string_type con_str_parse_FASTA_protein_delimited = string_type();
-		c_parse_FASTA con_c_parse_FASTA = c_parse_FASTA();
-		std::vector<c_parse_FASTA> con_v_c_parse_FASTA;
+		parse_FASTA_type con_c_parse_FASTA = parse_FASTA_type();
+		std::vector<parse_FASTA_type> con_v_c_parse_FASTA;
 
 		while (par_fin_input_FASTA.get(ch_parse_FASTA)) {
 			if (sw_2_input_FASTA == 1) {
@@ -385,7 +379,7 @@ namespace fpf_parse {
 		return con_v_c_parse_FASTA;
 	}
 
-	bool check_protein_peptides(std::vector<fpf_parse::s_parse_peptides_csv> par_v_c_parse_csv_proteinpeptides_data, bool par_filesystem_modified) {
+	bool check_protein_peptides(std::vector<fpf_parse::parse_peptides_csv_type> par_v_c_parse_csv_proteinpeptides_data, bool par_filesystem_modified) {
 		if (par_v_c_parse_csv_proteinpeptides_data.empty()) {
 			if (par_filesystem_modified) {
 				std::cout << "\n\n --- the protein_peptides file is empty or does not exist";
@@ -401,7 +395,7 @@ namespace fpf_parse {
 		return false;
 	}
 
-	bool check_denovo_peptides(std::vector<fpf_parse::s_parse_peptides_csv> par_v_c_parse_csv_denovopeptides_data, bool par_filesystem_modified) {
+	bool check_denovo_peptides(std::vector<fpf_parse::parse_peptides_csv_type> par_v_c_parse_csv_denovopeptides_data, bool par_filesystem_modified) {
 		if (par_v_c_parse_csv_denovopeptides_data.empty()) {
 			if (par_filesystem_modified) {
 				std::cout << "\n\n --- the denovo_peptides file is empty or does not exist";
@@ -417,14 +411,7 @@ namespace fpf_parse {
 		return false;
 	}
 
-	//if ((par_v_c_parse_csv_proteinpeptides_data.empty()) && (par_v_c_parse_csv_denovopeptides_data.empty()) && (par_filesystem_modified)) {
-//	std::cout << "\n\n\n input any key to exit...\n\n > ";
-//	std::string s_catch_error;
-//	std::cin >> s_catch_error;
-//	return true;
-//}
-
-	bool b_parse_FASTA_empty(std::vector<c_parse_FASTA> par_v_c_parse_FASTA) {
+	bool b_parse_FASTA_empty(std::vector<parse_FASTA_type> par_v_c_parse_FASTA) {
 		if (par_v_c_parse_FASTA.size() == 0) {
 			std::cout << "\n\n * * * FASTA file empty..\n\n * * * Is the file correctly directed?";
 			std::cout << "\n\n The program will now terminate. Input any key to continue -\n\n -> ";
@@ -435,7 +422,7 @@ namespace fpf_parse {
 		return false;
 	}
 
-	void output_v_c_parse_FASTA(std::vector<c_parse_FASTA> par_v_c_parse_FASTA) {
+	void output_v_c_parse_FASTA(std::vector<parse_FASTA_type> par_v_c_parse_FASTA) {
 		string_type output_FASTA_filtered = "output.fasta";
 		std::ofstream fout_FASTA_filtered;
 		fout_FASTA_filtered.open(output_FASTA_filtered);
@@ -446,8 +433,6 @@ namespace fpf_parse {
 			}
 		}
 	}
-
-	//void clear_v_s_parse_csv_data
 
 	//void IgSplicer() {
 	//	string_type CMD_SPLICER = "-spl";
