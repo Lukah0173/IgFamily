@@ -22,14 +22,14 @@
 namespace fpf_blastp_analysis {
 
 	typedef std::string string_type;
-	typedef fpf_data::multinomial_element_data_type s_multinomial_element_data_type;
-	typedef fpf_data::blastp_type s_blastp_type;
+	typedef fpf_data::multinomial_element_data_type multinomial_element_data_type;
+	typedef fpf_data::blastp_type blastp_type;
 	typedef std::vector<fpf_data::blastp_type> v_s_blastp_tpye;
 	typedef fpf_data::mnom_type s_mnom_type;
-	typedef fpf_filesystem::filesystem_type s_filesystem_type;
-	typedef std::vector<fpf_filesystem::filesystem_type> v_s_filesystem_type;
+	typedef fpf_filesystem::filesystem_type filesystem_type;
+	typedef std::vector<fpf_filesystem::filesystem_type> v_filesystem_type;
 
-	void create_blastp_input(s_filesystem_type par_s_filesystem) {
+	void create_blastp_input(filesystem_type par_s_filesystem) {
 		std::string output_blastp_FASTA = "blast_directory\\";
 		output_blastp_FASTA += par_s_filesystem.str_filename;
 		output_blastp_FASTA += "_blastp_input.fasta";
@@ -44,7 +44,7 @@ namespace fpf_blastp_analysis {
 		fout_blastp_input_FASTA.close();
 	}
 
-	void create_blastp_database(s_filesystem_type par_s_filesystem) {
+	void create_blastp_database(filesystem_type par_s_filesystem) {
 		string_type output_blastp_database_FASTA = "blast_directory\\blastp_database.fasta";
 		std::ofstream fout_blastp_database_FASTA;
 		fout_blastp_database_FASTA.open(output_blastp_database_FASTA);
@@ -61,7 +61,7 @@ namespace fpf_blastp_analysis {
 		fout_blastp_database_FASTA.close();
 	}
 	
-	void sys_blastp(s_filesystem_type par_s_filesystem) {
+	void sys_blastp(filesystem_type par_s_filesystem) {
 		std::cout << "\n\n";
 		string_type string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && makeblastdb.exe -in ";
@@ -81,13 +81,13 @@ namespace fpf_blastp_analysis {
 		std::cout << " BLAST analysis complete..";
 	}
 
-	void create_v_s_blastp(s_filesystem_type& par_s_filesystem) {
+	void create_v_s_blastp(filesystem_type& par_s_filesystem) {
 		if (par_s_filesystem.b_denovopeptides_exist) {
 			size_type st_csv_blastp = size_type(1);
 			string_type str_blastpoutput = "blast_directory\\" + par_s_filesystem.str_filename + "_blastp_output.csv";
 			std::ifstream fin_input_blastp(str_blastpoutput);
 			char ch_parse_blastp = char();
-			s_blastp_type con_s_blastp = s_blastp_type();
+			blastp_type con_s_blastp = blastp_type();
 			string_type con_str_parse_blastp = string_type();
 			while (fin_input_blastp.get(ch_parse_blastp)) {
 				if ((ch_parse_blastp != ',') && (ch_parse_blastp != '\n')) {
@@ -124,10 +124,10 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void create_str_protein(s_filesystem_type& par_s_filesystem) {
+	void create_str_protein(filesystem_type& par_s_filesystem) {
 		for (auto& itr_v_s_blastp : par_s_filesystem.v_s_blastp) {
 			auto find_str_genefamily = std::find_if(par_s_filesystem.v_c_analysis_data.begin(), par_s_filesystem.v_c_analysis_data.end(),
-				[itr_v_s_blastp](s_multinomial_element_data_type par_s_multinomial_element_data) {
+				[itr_v_s_blastp](multinomial_element_data_type par_s_multinomial_element_data) {
 				return par_s_multinomial_element_data.str_multinomial_element_name == itr_v_s_blastp.str_blastp_subject_accession;
 			});
 			if (find_str_genefamily == par_s_filesystem.v_c_analysis_data.end()) {
@@ -140,7 +140,7 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void create_str_query_alignment(s_filesystem_type& par_s_filesystem) {
+	void create_str_query_alignment(filesystem_type& par_s_filesystem) {
 		string_type con_str_query_alignment = string_type();
 		size_type st_index_match = 1;
 		for (auto& itr_v_s_blastp : par_s_filesystem.v_s_blastp) {			
@@ -169,7 +169,7 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void modify_v_s_filesystem_blastp_data(s_filesystem_type& par_s_filesystem) {
+	void modify_v_s_filesystem_blastp_data(filesystem_type& par_s_filesystem) {
 		for (auto& itr_v_c_blastp : par_s_filesystem.v_s_blastp) {
 			bool b_parse_query_accession = bool();
 			string_type con_str_parse_query_accession = string_type();
@@ -194,9 +194,9 @@ namespace fpf_blastp_analysis {
 		return (log(d) / log(base));
 	}
 
-	void normalise_v_s_filesystem_blastp_data(s_filesystem_type& par_s_filesystem) {
-		std::vector<s_blastp_type> con_v_s_blastp;
-		std::vector<s_blastp_type> hold_v_s_blastp;
+	void normalise_v_s_filesystem_blastp_data(filesystem_type& par_s_filesystem) {
+		std::vector<blastp_type> con_v_s_blastp;
+		std::vector<blastp_type> hold_v_s_blastp;
 		string_type hold_str_blastp_subject = string_type();
 		double hold_min_str_blastp_evalue = double();
 		double hold_sum_str_blastp_evalue = double();
@@ -234,7 +234,7 @@ namespace fpf_blastp_analysis {
 		par_s_filesystem.v_s_blastp = con_v_s_blastp;
 	}
 
-	void create_s_filesystem_mnom(s_filesystem_type& par_s_filesystem) {
+	void create_s_filesystem_mnom(filesystem_type& par_s_filesystem) {
 		for (auto itr_v_s_blastp : par_s_filesystem.v_s_blastp) {
 			auto find_v_s_mnom_comp = std::find_if(par_s_filesystem.v_s_mnom.begin(), par_s_filesystem.v_s_mnom.end(),
 				[itr_v_s_blastp](s_mnom_type par_smnom) {
@@ -251,7 +251,7 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void fout_v_s_mnom(s_filesystem_type& par_s_filesystem) {
+	void fout_v_s_mnom(filesystem_type& par_s_filesystem) {
 		std::string output_mnom = "blast_directory\\";
 		output_mnom += par_s_filesystem.str_filename;
 		output_mnom += "_mnom.csv";
@@ -264,7 +264,7 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void fout_blastp_summary(s_filesystem_type par_s_filesystem) {
+	void fout_blastp_summary(filesystem_type par_s_filesystem) {
 		std::string output_blastp_summary = "blast_directory\\";
 		output_blastp_summary += par_s_filesystem.str_filename;
 		output_blastp_summary += "_blastp_summary.csv";
@@ -285,7 +285,7 @@ namespace fpf_blastp_analysis {
 		fout_blastp_summary.close();
 	}
 
-	void fout_blastp_summary(s_filesystem_type par_s_filesystem, double par_d_blastp_evalue_threshold) {
+	void fout_blastp_summary(filesystem_type par_s_filesystem, double par_d_blastp_evalue_threshold) {
 		std::string output_blastp_summary = "blast_directory\\";
 		output_blastp_summary += par_s_filesystem.str_filename;
 		output_blastp_summary += "_blastp_summary.csv";

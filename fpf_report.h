@@ -21,18 +21,18 @@ namespace fpf_report {
 
 	typedef std::string string_type;
 	typedef size_t size_type;
-	typedef fpf_data::multinomial_element_data_type s_multinomial_element_data_type;
-	typedef fpf_data::blastp_type s_blastp_type;
-	typedef fpf_data::proteinconstruct_from_denovo_type s_proteinconstruct_from_denovo_type;
-	typedef fpf_data::report_type s_report_type;
-	typedef fpf_filesystem::filesystem_type s_filesystem_type;
+	typedef fpf_data::multinomial_element_data_type multinomial_element_data_type;
+	typedef fpf_data::blastp_type blastp_type;
+	typedef fpf_data::proteinconstruct_from_denovo_type proteinconstruct_from_denovo_type;
+	typedef fpf_data::report_type report_type;
+	typedef fpf_filesystem::filesystem_type filesystem_type;
 
-	void create_s_report(s_filesystem_type& par_s_filesystem) {
-		s_report_type con_s_report;
-		std::vector<s_report_type> con_v_s_report;
+	void create_s_report(filesystem_type& par_s_filesystem) {
+		report_type con_s_report;
+		std::vector<report_type> con_v_s_report;
 		for (auto& itr_v_s_blastp : par_s_filesystem.v_s_blastp) {
 			auto find_s_report = std::find_if(con_v_s_report.begin(), con_v_s_report.end(),
-				[itr_v_s_blastp](s_report_type par_s_report) {
+				[itr_v_s_blastp](report_type par_s_report) {
 				return par_s_report.str_protein_accession == itr_v_s_blastp.str_blastp_subject_accession;
 			});
 			if (find_s_report != con_v_s_report.end()) {
@@ -55,10 +55,10 @@ namespace fpf_report {
 		par_s_filesystem.v_s_report = con_v_s_report;
 	}
 
-	void create_str_protein_from_denovo(s_filesystem_type& par_s_filesystem) {
+	void create_str_protein_from_denovo(filesystem_type& par_s_filesystem) {
 		for (auto& itr_v_s_report : par_s_filesystem.v_s_report) {
 			for (size_type i = 0; i < itr_v_s_report.str_protein.length(); ++i) {
-				s_proteinconstruct_from_denovo_type con_s_proteinconstruct_from_denovo;
+				proteinconstruct_from_denovo_type con_s_proteinconstruct_from_denovo;
 				con_s_proteinconstruct_from_denovo.ch_aminoacid = '.';
 				con_s_proteinconstruct_from_denovo.d_score = 0;
 				itr_v_s_report.proteinconstruct_from_denovo_type.push_back(con_s_proteinconstruct_from_denovo);
@@ -74,23 +74,23 @@ namespace fpf_report {
 		}
 	}
 
-	inline bool predicate_v_s_blastp(const s_blastp_type& i, const s_blastp_type& j) {
+	inline bool predicate_v_s_blastp(const blastp_type& i, const blastp_type& j) {
 		return (i.d_blastp_evalue < j.d_blastp_evalue);
 	}
 
-	inline void sort_v_s_blastp(std::vector<s_blastp_type>& par_v_s_blastp) {
+	inline void sort_v_s_blastp(std::vector<blastp_type>& par_v_s_blastp) {
 		std::sort(par_v_s_blastp.begin(), par_v_s_blastp.end(), predicate_v_s_blastp);
 	}
 
-	inline bool predicate_v_s_report(const s_report_type& i, const s_report_type& j) {
+	inline bool predicate_v_s_report(const report_type& i, const report_type& j) {
 		return (i.d_score > j.d_score);
 	}
 
-	inline void sort_v_s_report(std::vector<s_report_type>& par_v_s_report) {
+	inline void sort_v_s_report(std::vector<report_type>& par_v_s_report) {
 		std::sort(par_v_s_report.begin(), par_v_s_report.end(), predicate_v_s_report);
 	}
 
-	void fout_s_report(s_filesystem_type& par_s_filesystem) {
+	void fout_s_report(filesystem_type& par_s_filesystem) {
 		std::string output_s_report = par_s_filesystem.str_directory + "report.txt";
 		std::ofstream fout_s_report;
 		fout_s_report.open(output_s_report);
@@ -113,7 +113,7 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_html_report(s_filesystem_type& par_s_filesystem) {
+	void fout_html_report(filesystem_type& par_s_filesystem) {
 		std::string output_html_report = par_s_filesystem.str_directory + "report.html";
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);

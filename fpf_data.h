@@ -69,9 +69,11 @@ namespace fpf_data {
 	struct peptide_data_type {
 	public:
 		string_type str_peptide;
+		string_type str_peptide_filtered;
 		size_type st_spectralcount;
 		size_type st_IgP;
-		denovo_peptide_type s_denovo_peptide;
+		size_type st_count_denovo_replicate;
+		std::vector<denovo_peptide_type> v_s_denovo_peptide;
 		bool b_replicate_merged = bool();
 		size_type st_filesystem_replicate = size_type{ 1 };
 		std::vector<std::tuple<string_type, size_type, size_type>> v_p_replicate_data;
@@ -79,7 +81,6 @@ namespace fpf_data {
 		std::vector<string_type> v_str_peptideassociation_distinct;
 		std::vector<std::pair<multinomial_element_data_type*, double>> v_p_peptideassociation;
 		std::vector<std::pair<multinomial_element_data_type*, double>> v_p_peptideassociation_distinct;
-		denovo_aminoacid_type s_blastp_denovo_peptide;
 	};
 
 	struct blastp_type {
@@ -94,6 +95,7 @@ namespace fpf_data {
 		string_type str_blastp_query_alignment;
 		double d_blastp_evalue;
 		double d_blastp_par_prop;
+		denovo_aminoacid_type s_blastp_denovo_peptide;
 	};
 
 	struct proteinconstruct_from_denovo_type {
@@ -204,26 +206,67 @@ namespace fpf_data {
 
 	std::vector<peptide_data_type> create_v_s_peptide_data(std::vector<fpf_parse::parse_peptides_csv_type> par_c_parse_csv_peptide_data) {
 		std::vector<peptide_data_type> con_v_s_peptide_data;
-		for (auto itr_c_parse_csv_peptide_data = par_c_parse_csv_peptide_data.begin(); itr_c_parse_csv_peptide_data != par_c_parse_csv_peptide_data.end(); ++itr_c_parse_csv_peptide_data) {
+		for (auto itr_c_parse_csv_peptide_data : par_c_parse_csv_peptide_data) {
 			peptide_data_type con_s_peptide_data = peptide_data_type();
+			denovo_peptide_type con_s_denovo_peptide = denovo_peptide_type();
 			denovo_aminoacid_type con_s_denovo_aminoacid = denovo_aminoacid_type();
-			size_type ss_st_csv_IgP = size_type();
-			std::istringstream(itr_c_parse_csv_peptide_data->str_parse_csv_IgP) >> ss_st_csv_IgP;
-			con_s_peptide_data.str_peptide = itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide;
-			std::istringstream ss_spectralcount(itr_c_parse_csv_peptide_data->str_parse_peptides_csv_spectralcount);
-			size_type ss_st_spectralcount;
-			ss_spectralcount >> ss_st_spectralcount;
-			con_s_peptide_data.st_spectralcount = ss_st_spectralcount;
-			for (size_type i = 0; i < itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide.size(); ++i) {
-				con_s_denovo_aminoacid.ch_aminoacid = itr_c_parse_csv_peptide_data->str_parse_peptides_csv_peptide[i];
-				con_s_denovo_aminoacid.d_denovo_localconfidence = itr_c_parse_csv_peptide_data->v_d_denovo_localconfidence[i];
-				con_s_peptide_data.s_denovo_peptide.v_s_denovo_aminoacid.push_back(con_s_denovo_aminoacid);
+			string_type con_str_peptide_filtered = string_type();
+			size_type sw_peptide_filtered = size_type();
+			for (auto j = size_type(); j < itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.length(); ++j) {
+				if (itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j) == '(' || ((itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j) == '.') && (itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.length() > 2))) {
+					sw_peptide_filtered = 1;
+					if (itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j + 1) == 's') {
+						con_str_peptide_filtered.pop_back();
+						con_str_peptide_filtered += itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j + 5);
+					}
+				}
+				if (sw_peptide_filtered == 0) {
+					con_str_peptide_filtered += itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j);
+				}
+				if (itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j) == ')') {
+					sw_peptide_filtered = 0;
+				}
+				if ((itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j) == '.') && (itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide.length() <= 2) && (sw_peptide_filtered == 0)) {
+					con_str_peptide_filtered.clear();
+				}
 			}
-			con_s_peptide_data.s_denovo_peptide.d_denovo_peptide_localconfidence_average = double();
-			for (auto itr_s_denovo_aminoacid : con_s_peptide_data.s_denovo_peptide.v_s_denovo_aminoacid) {
-				con_s_peptide_data.s_denovo_peptide.d_denovo_peptide_localconfidence_average += itr_s_denovo_aminoacid.d_denovo_localconfidence;
+			con_s_peptide_data.str_peptide_filtered = con_str_peptide_filtered;
+			auto find_s_peptide_data = std::find_if(con_v_s_peptide_data.begin(), con_v_s_peptide_data.end(),
+				[con_str_peptide_filtered](peptide_data_type par_s_peptide_data) {
+				return par_s_peptide_data.str_peptide_filtered == con_str_peptide_filtered;
+			});
+			if (find_s_peptide_data == con_v_s_peptide_data.end()) {
+				size_type ss_st_csv_IgP = size_type();
+				std::istringstream(itr_c_parse_csv_peptide_data.str_parse_csv_IgP) >> ss_st_csv_IgP;
+				con_s_peptide_data.str_peptide = itr_c_parse_csv_peptide_data.str_parse_peptides_csv_peptide;
+				std::istringstream ss_spectralcount(itr_c_parse_csv_peptide_data.str_parse_peptides_csv_spectralcount);
+				size_type ss_st_spectralcount;
+				ss_spectralcount >> ss_st_spectralcount;
+				con_s_peptide_data.st_spectralcount = ss_st_spectralcount;
+				for (size_type i = 0; i < con_str_peptide_filtered.size(); ++i) {
+					con_s_denovo_aminoacid.ch_aminoacid = con_str_peptide_filtered[i];
+					con_s_denovo_aminoacid.d_denovo_localconfidence = itr_c_parse_csv_peptide_data.v_d_denovo_localconfidence[i];
+					con_s_denovo_peptide.v_s_denovo_aminoacid.push_back(con_s_denovo_aminoacid);
+				}
+				con_s_denovo_peptide.d_denovo_peptide_localconfidence_average = double();
+				for (auto itr_s_denovo_aminoacid : con_s_denovo_peptide.v_s_denovo_aminoacid) {
+					con_s_denovo_peptide.d_denovo_peptide_localconfidence_average += itr_s_denovo_aminoacid.d_denovo_localconfidence;
+				}
+				con_s_denovo_peptide.d_denovo_peptide_localconfidence_average /= con_s_denovo_peptide.v_s_denovo_aminoacid.size();
 			}
-			con_s_peptide_data.s_denovo_peptide.d_denovo_peptide_localconfidence_average /= con_s_peptide_data.s_denovo_peptide.v_s_denovo_aminoacid.size();
+			else {
+				for (size_type i = 0; i < con_str_peptide_filtered.size(); ++i) {
+					con_s_denovo_aminoacid.ch_aminoacid = con_str_peptide_filtered[i];
+					con_s_denovo_aminoacid.d_denovo_localconfidence = itr_c_parse_csv_peptide_data.v_d_denovo_localconfidence[i];
+					con_s_denovo_peptide.v_s_denovo_aminoacid.push_back(con_s_denovo_aminoacid);
+				}
+				con_s_denovo_peptide.d_denovo_peptide_localconfidence_average = double();
+				for (auto itr_s_denovo_aminoacid : con_s_denovo_peptide.v_s_denovo_aminoacid) {
+					con_s_denovo_peptide.d_denovo_peptide_localconfidence_average += itr_s_denovo_aminoacid.d_denovo_localconfidence;
+				}
+				find_s_peptide_data->v_s_denovo_peptide.push_back(con_s_denovo_peptide);
+				++find_s_peptide_data->st_count_denovo_replicate;
+			}
 			con_v_s_peptide_data.push_back(con_s_peptide_data);
 		}
 		return con_v_s_peptide_data;
