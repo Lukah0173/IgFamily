@@ -26,7 +26,7 @@ namespace fpf_filesystem {
 	typedef std::string string_type;
 	typedef size_t size_type;
 	typedef fpf_data::s_multinomial_element_data s_multinomial_element_data;
-	typedef fpf_data::s_peptide_data s_peptide_data;
+	typedef fpf_data::peptide_data_type peptide_data_type;
 	typedef fpf_data::s_blastp s_blastp_type;
 	typedef fpf_data::s_mnom s_mnom_type;
 	typedef fpf_data::s_blastp s_blastp_type;
@@ -42,10 +42,10 @@ namespace fpf_filesystem {
 		string_type str_patientstatus;
 		std::vector<s_multinomial_element_data> v_c_analysis_data;
 		std::vector<s_multinomial_element_data> v_c_analysis_distinct_data;
-		std::vector<s_peptide_data> v_s_peptide_data;
-		std::vector<s_peptide_data> v_s_peptide_data_filtered;
-		std::vector<s_peptide_data> v_s_peptide_data_distinct;
-		std::vector<s_peptide_data> v_s_peptide_data_filtered_distinct;
+		std::vector<peptide_data_type> v_s_peptide_data;
+		std::vector<peptide_data_type> v_s_peptide_data_filtered;
+		std::vector<peptide_data_type> v_s_peptide_data_distinct;
+		std::vector<peptide_data_type> v_s_peptide_data_filtered_distinct;
 		std::pair<string_type, string_type> p_filesystemid;
 		std::vector<std::pair<string_type, string_type>> v_p_replicates;
 		size_type st_replicate_count;
@@ -210,7 +210,7 @@ namespace fpf_filesystem {
 	}
 
 	void create_v_p_replicate_data(s_filesystem& par_s_filesystem) {
-		for (std::vector<s_peptide_data>::iterator itr_v_s_peptide_data = par_s_filesystem.v_s_peptide_data.begin(); itr_v_s_peptide_data != par_s_filesystem.v_s_peptide_data.end(); ++itr_v_s_peptide_data) {
+		for (std::vector<peptide_data_type>::iterator itr_v_s_peptide_data = par_s_filesystem.v_s_peptide_data.begin(); itr_v_s_peptide_data != par_s_filesystem.v_s_peptide_data.end(); ++itr_v_s_peptide_data) {
 			itr_v_s_peptide_data->v_p_peptideassociation.clear();
 			itr_v_s_peptide_data->v_p_peptideassociation_distinct.clear();
 			for (size_type itr_st_replicate_count = 0; itr_st_replicate_count < par_s_filesystem.st_replicate_count; ++itr_st_replicate_count) {
@@ -249,7 +249,7 @@ namespace fpf_filesystem {
 				itr_v_s_peptide_data->v_p_replicate_data.push_back(std::make_tuple(string_type(), size_type(), size_type()));
 			}
 		}
-		for (std::vector<s_peptide_data>::iterator itr_v_s_peptide_data = par_s_filesystem.v_s_peptide_data.begin(); itr_v_s_peptide_data != par_s_filesystem.v_s_peptide_data.end(); itr_v_s_peptide_data->b_replicate_merged ? itr_v_s_peptide_data : ++itr_v_s_peptide_data) {
+		for (std::vector<peptide_data_type>::iterator itr_v_s_peptide_data = par_s_filesystem.v_s_peptide_data.begin(); itr_v_s_peptide_data != par_s_filesystem.v_s_peptide_data.end(); itr_v_s_peptide_data->b_replicate_merged ? itr_v_s_peptide_data : ++itr_v_s_peptide_data) {
 			if (itr_v_s_peptide_data->b_replicate_merged) {
 				par_s_filesystem.v_s_peptide_data.erase(itr_v_s_peptide_data);
 			}
