@@ -256,13 +256,8 @@ namespace fpf_data {
 				}
 			}
 			s_peptide_data con_s_peptide_data_filtered;
+			con_s_peptide_data_filtered = *itr_par_v_data;
 			con_s_peptide_data_filtered.str_peptide = con_str_peptide_filtered;
-			con_s_peptide_data_filtered.st_spectralcount = itr_par_v_data->st_spectralcount;
-			con_s_peptide_data_filtered.st_IgP = itr_par_v_data->st_IgP;
-			con_s_peptide_data_filtered.v_s_denovo_peptide = itr_par_v_data->v_s_denovo_peptide;
-			con_s_peptide_data_filtered.d_denovo_peptide_localconfidence_average = itr_par_v_data->d_denovo_peptide_localconfidence_average;
-			con_s_peptide_data_filtered.st_filesystem_replicate = itr_par_v_data->st_filesystem_replicate;
-			con_s_peptide_data_filtered.v_p_replicate_data = itr_par_v_data->v_p_replicate_data;
 			v_s_peptide_data_filtered.push_back(con_s_peptide_data_filtered);
 			con_str_peptide_filtered.clear();
 			sw_peptide_filtered = 0;
@@ -287,13 +282,7 @@ namespace fpf_data {
 		for (auto itr_par_v_data = par_v_s_peptide_data.begin(); itr_par_v_data != par_v_s_peptide_data.end(); ++itr_par_v_data) {
 			s_peptide_data con_s_peptide_data_distinct;
 			if (con_v_s_peptide_data_distinct.size() == 0) {
-				con_s_peptide_data_distinct.str_peptide = itr_par_v_data->str_peptide;
-				con_s_peptide_data_distinct.st_spectralcount = itr_par_v_data->st_spectralcount;
-				con_s_peptide_data_distinct.st_IgP = itr_par_v_data->st_IgP;
-				con_s_peptide_data_distinct.v_s_denovo_peptide = itr_par_v_data->v_s_denovo_peptide;
-				con_s_peptide_data_distinct.d_denovo_peptide_localconfidence_average = itr_par_v_data->d_denovo_peptide_localconfidence_average;
-				con_s_peptide_data_distinct.st_filesystem_replicate = itr_par_v_data->st_filesystem_replicate;
-				con_s_peptide_data_distinct.v_p_replicate_data = itr_par_v_data->v_p_replicate_data;
+				con_s_peptide_data_distinct = *itr_par_v_data;
 				con_v_s_peptide_data_distinct.push_back(con_s_peptide_data_distinct);
 			}
 			else {
@@ -304,13 +293,7 @@ namespace fpf_data {
 						break;
 					}
 					if (st_data_distinct == con_v_s_peptide_data_distinct.size()) {
-						con_s_peptide_data_distinct.str_peptide = (itr_par_v_data->str_peptide);
-						con_s_peptide_data_distinct.st_spectralcount = (itr_par_v_data->st_spectralcount);
-						con_s_peptide_data_distinct.st_IgP = itr_par_v_data->st_IgP;
-						con_s_peptide_data_distinct.v_s_denovo_peptide = itr_par_v_data->v_s_denovo_peptide;
-						con_s_peptide_data_distinct.d_denovo_peptide_localconfidence_average = itr_par_v_data->d_denovo_peptide_localconfidence_average;
-						con_s_peptide_data_distinct.st_filesystem_replicate = itr_par_v_data->st_filesystem_replicate;
-						con_s_peptide_data_distinct.v_p_replicate_data = itr_par_v_data->v_p_replicate_data;
+						con_s_peptide_data_distinct = *itr_par_v_data;
 						con_v_s_peptide_data_distinct.push_back(con_s_peptide_data_distinct);
 						break;
 					}
@@ -338,13 +321,7 @@ namespace fpf_data {
 		for (auto itr_par_v_data_filtered = par_v_s_peptide_data_filtered.begin(); itr_par_v_data_filtered != par_v_s_peptide_data_filtered.end(); ++itr_par_v_data_filtered) {
 			s_peptide_data con_s_peptide_data_filtered_distinct;
 			if (v_s_peptide_data_filtered_distinct.size() == 0) {
-				con_s_peptide_data_filtered_distinct.str_peptide = itr_par_v_data_filtered->str_peptide;
-				con_s_peptide_data_filtered_distinct.st_spectralcount = itr_par_v_data_filtered->st_spectralcount;
-				con_s_peptide_data_filtered_distinct.st_IgP = itr_par_v_data_filtered->st_IgP;
-				con_s_peptide_data_filtered_distinct.v_s_denovo_peptide = itr_par_v_data_filtered->v_s_denovo_peptide;
-				con_s_peptide_data_filtered_distinct.d_denovo_peptide_localconfidence_average = itr_par_v_data_filtered->d_denovo_peptide_localconfidence_average;
-				con_s_peptide_data_filtered_distinct.st_filesystem_replicate = itr_par_v_data_filtered->st_filesystem_replicate;
-				con_s_peptide_data_filtered_distinct.v_p_replicate_data = itr_par_v_data_filtered->v_p_replicate_data;
+				con_s_peptide_data_filtered_distinct = *itr_par_v_data_filtered;
 				v_s_peptide_data_filtered_distinct.push_back(con_s_peptide_data_filtered_distinct);
 			}
 			else {
@@ -355,13 +332,7 @@ namespace fpf_data {
 						break;
 					}
 					if (st_data_filtered_distinct == v_s_peptide_data_filtered_distinct.size()) {
-						con_s_peptide_data_filtered_distinct.str_peptide = itr_par_v_data_filtered->str_peptide;
-						con_s_peptide_data_filtered_distinct.st_spectralcount = itr_par_v_data_filtered->st_spectralcount;
-						con_s_peptide_data_filtered_distinct.st_IgP = itr_par_v_data_filtered->st_IgP;
-						con_s_peptide_data_filtered_distinct.v_s_denovo_peptide = itr_par_v_data_filtered->v_s_denovo_peptide;
-						con_s_peptide_data_filtered_distinct.d_denovo_peptide_localconfidence_average = itr_par_v_data_filtered->d_denovo_peptide_localconfidence_average;
-						con_s_peptide_data_filtered_distinct.st_filesystem_replicate = itr_par_v_data_filtered->st_filesystem_replicate;
-						con_s_peptide_data_filtered_distinct.v_p_replicate_data = itr_par_v_data_filtered->v_p_replicate_data;
+						con_s_peptide_data_filtered_distinct = *itr_par_v_data_filtered;
 						v_s_peptide_data_filtered_distinct.push_back(con_s_peptide_data_filtered_distinct);
 						break;
 					}
