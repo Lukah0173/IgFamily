@@ -182,33 +182,37 @@ namespace fpf_report {
 			}
 			fout_html_report << "\n\n<br><br>";
 			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
-				if (std::find(dummy.begin(), dummy.end(), itr_v_s_blastp.str_blastp_query_alignment) == dummy.end()) {
-					fout_html_report << "\n<br> ";
-					for (size_type i = 0; i < itr_v_s_blastp.str_blastp_query_alignment.length(); i) {
-						if (itr_v_s_blastp.str_blastp_query_alignment.at(i) == '.') {
-							fout_html_report << itr_v_s_blastp.str_blastp_query_alignment.at(i);
+				fout_html_report << "\n<br> ";
+				int st_mismatch = int();
+				for (int i = 0; i < itr_v_s_blastp.str_blastp_query_alignment.length(); i) {
+					if (itr_v_s_blastp.str_blastp_query_alignment.at(i) == '.') {
+						if (i < itr_v_s_blastp.str_protein.length()) {
+							fout_html_report << ".";
+						}
+						++i;
+					}
+					else {
+						for (auto itr_v_s_denovo_aminoacid : itr_v_s_blastp.s_denovo_peptide_best.v_s_denovo_aminoacid) {
+							if (itr_v_s_denovo_aminoacid.d_denovo_localconfidence > 80) {
+								fout_html_report << "<font color=\"#239B56\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
+							}
+							if ((itr_v_s_denovo_aminoacid.d_denovo_localconfidence <= 80) && (itr_v_s_denovo_aminoacid.d_denovo_localconfidence > 60)) {
+								fout_html_report << "<font color=\"#E67E22\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
+							}
+							if (itr_v_s_denovo_aminoacid.d_denovo_localconfidence <= 60) {
+								fout_html_report << "<font color=\"red\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
+							}
 							++i;
 						}
-						else {
-							for (auto itr_v_s_denovo_aminoacid : itr_v_s_blastp.s_denovo_peptide_best.v_s_denovo_aminoacid) {
-								if (itr_v_s_denovo_aminoacid.d_denovo_localconfidence > 80) {
-									fout_html_report << "<font color=\"#239B56\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
-								}
-								if ((itr_v_s_denovo_aminoacid.d_denovo_localconfidence <= 80) && (itr_v_s_denovo_aminoacid.d_denovo_localconfidence > 60)) {
-									fout_html_report << "<font color=\"#E67E22\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
-								}
-								if (itr_v_s_denovo_aminoacid.d_denovo_localconfidence <= 60) {
-									fout_html_report << "<font color=\"red\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
-								}
-								++i;
-							}
-						}
 					}
-					dummy.push_back(itr_v_s_blastp.str_blastp_query_alignment);
-					fout_html_report << "&nbsp&nbsp&nbsp&nbsp" << std::fixed << std::setprecision(2) << itr_v_s_blastp.d_blastp_par_prop;
-					fout_html_report << "&nbsp&nbsp&nbsp" << itr_v_s_blastp.st_count_denovo_replicates;
+					st_mismatch = i;
 				}
-				dummy.clear();
+				st_mismatch = (st_mismatch - itr_v_s_blastp.str_blastp_query_alignment.length());
+				for (auto j = 0; j < (5 - st_mismatch); ++j) {
+					fout_html_report << "&nbsp";
+				}
+				fout_html_report << std::fixed << std::setprecision(2) << itr_v_s_blastp.d_blastp_par_prop;
+				fout_html_report << "&nbsp&nbsp&nbsp" << itr_v_s_blastp.st_count_denovo_replicates;
 			}
 		}
 

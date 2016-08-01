@@ -21,7 +21,7 @@ namespace IgFamily {
 	typedef double value_type;
 	typedef size_t size_type;
 
-	string_type version = "v0.5.9";
+	string_type version = "v0.5.11";
 
 	bool FILESYSTEM_MODE = true;
 	bool FILESYSTEM_UPDATE_ALL = true;
