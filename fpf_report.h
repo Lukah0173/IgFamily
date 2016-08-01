@@ -52,7 +52,6 @@ namespace fpf_report {
 		}
 		for (auto& itr_v_s_report : con_v_s_report) {
 			for (auto& itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
-				itr_v_s_report.d_score += itr_v_s_blastp.d_blastp_par_prop;
 				auto& find_s_peptide_data = std::find_if(par_s_filesystem.v_s_peptide_data.begin(), par_s_filesystem.v_s_peptide_data.end(),
 					[itr_v_s_blastp](peptide_data_type par_s_peptide_data) {
 					return par_s_peptide_data.str_peptide_filtered == itr_v_s_blastp.str_blastp_query;
@@ -72,13 +71,15 @@ namespace fpf_report {
 							string_type str_catch_error;
 							std::cin >> str_catch_error;
 						}
-						else {						
+						else {
+							++itr_v_s_blastp.st_count_denovo_replicates;
 							if (itr_v_s_blastp.s_denovo_peptide_best.d_denovo_peptide_localconfidence_average < itr_v_s_denovo_peptide.d_denovo_peptide_localconfidence_average) {
 								itr_v_s_blastp.s_denovo_peptide_best = itr_v_s_denovo_peptide;
 							}
 						}
 					}
 				}
+				itr_v_s_report.d_score += (itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates);
 			}
 		}
 
@@ -165,13 +166,13 @@ namespace fpf_report {
 			for (auto itr_s_proteinconstruct_from_denovo : itr_v_s_report.proteinconstruct_from_denovo_type) {
 				if (itr_s_proteinconstruct_from_denovo.ch_aminoacid != '.') {
 					if (itr_s_proteinconstruct_from_denovo.d_score > 3) {
-						fout_html_report << "<font color=\"#3498DB\">";
-					}
-					if ((itr_s_proteinconstruct_from_denovo.d_score <= 3) && (itr_s_proteinconstruct_from_denovo.d_score > 1)) {
 						fout_html_report << "<font color=\"#239B56\">";
 					}
-					if (itr_s_proteinconstruct_from_denovo.d_score < 1) {
+					if ((itr_s_proteinconstruct_from_denovo.d_score <= 3) && (itr_s_proteinconstruct_from_denovo.d_score > 1)) {
 						fout_html_report << "<font color=\"#E67E22\">";
+					}
+					if (itr_s_proteinconstruct_from_denovo.d_score < 1) {
+						fout_html_report << "<font color=\"red\">";
 					}
 				}
 				fout_html_report << itr_s_proteinconstruct_from_denovo.ch_aminoacid;
@@ -183,24 +184,29 @@ namespace fpf_report {
 			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
 				if (std::find(dummy.begin(), dummy.end(), itr_v_s_blastp.str_blastp_query_alignment) == dummy.end()) {
 					fout_html_report << "\n<br> ";
-					for (size_type i = 0; i < itr_v_s_blastp.str_blastp_query_alignment.length(); ++i) {
+					for (size_type i = 0; i < itr_v_s_blastp.str_blastp_query_alignment.length(); i) {
 						if (itr_v_s_blastp.str_blastp_query_alignment.at(i) == '.') {
 							fout_html_report << itr_v_s_blastp.str_blastp_query_alignment.at(i);
+							++i;
 						}
 						else {
-							size_type st_count_query = size_type();
-							//if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != itr_v_s_blastp.str_protein.at(i)) && !((itr_v_s_blastp.str_blastp_query_alignment.at(i) != 'L') && (itr_v_s_blastp.str_protein.at(i) == 'I')) && ((itr_v_s_blastp.str_protein.at(i) != 'L') && (itr_v_s_blastp.str_blastp_query_alignment.at(i) == 'I'))) {
-							//	fout_html_report << "<font color=\"red\">" << itr_v_s_blastp.str_blastp_query_alignment.at(i) << "</font>";
-							//}
-							//++st_count_query;
-							//if (itr_v_s_blastp.)
-							//else {
-							//	fout_html_report << itr_v_s_blastp.str_blastp_query_alignment.at(i);
-							//}
+							for (auto itr_v_s_denovo_aminoacid : itr_v_s_blastp.s_denovo_peptide_best.v_s_denovo_aminoacid) {
+								if (itr_v_s_denovo_aminoacid.d_denovo_localconfidence > 80) {
+									fout_html_report << "<font color=\"#239B56\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
+								}
+								if ((itr_v_s_denovo_aminoacid.d_denovo_localconfidence <= 80) && (itr_v_s_denovo_aminoacid.d_denovo_localconfidence > 60)) {
+									fout_html_report << "<font color=\"#E67E22\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
+								}
+								if (itr_v_s_denovo_aminoacid.d_denovo_localconfidence <= 60) {
+									fout_html_report << "<font color=\"red\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
+								}
+								++i;
+							}
 						}
 					}
 					dummy.push_back(itr_v_s_blastp.str_blastp_query_alignment);
-					fout_html_report << "     " << std::fixed << std::setprecision(2) << itr_v_s_blastp.d_blastp_par_prop;
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp" << std::fixed << std::setprecision(2) << itr_v_s_blastp.d_blastp_par_prop;
+					fout_html_report << "&nbsp&nbsp&nbsp" << itr_v_s_blastp.st_count_denovo_replicates;
 				}
 				dummy.clear();
 			}

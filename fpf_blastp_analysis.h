@@ -144,6 +144,7 @@ namespace fpf_blastp_analysis {
 		string_type con_str_query_alignment = string_type();
 		size_type st_index_match = 1;
 		for (auto& itr_v_s_blastp : par_s_filesystem.v_s_blastp) {
+			//std::cout << "\n\n " << itr_v_s_blastp.str_protein;
 			for (auto itr_str_protein : itr_v_s_blastp.str_protein) {
 				if (st_index_match == itr_v_s_blastp.st_blastp_subject_alignment_index) {
 					if (con_str_query_alignment.length() >= itr_v_s_blastp.st_blastp_query_alignment_index) {
@@ -164,8 +165,15 @@ namespace fpf_blastp_analysis {
 			}
 			con_str_query_alignment.resize(con_str_query_alignment.length() - itr_v_s_blastp.str_blastp_query.length() + 1);
 			itr_v_s_blastp.str_blastp_query_alignment = con_str_query_alignment;
+			//std::cout << "\n " << itr_v_s_blastp.str_blastp_query_alignment;
 			con_str_query_alignment.clear();
 			st_index_match = 1;
+			if (itr_v_s_blastp.str_blastp_query == "TSVTAWTAVYYCAR") {
+				std::cout << "PING";
+			}
+			if (itr_v_s_blastp.str_blastp_query == "QESGPLVK") {
+				std::cout << "PING";
+			}
 		}
 	}
 

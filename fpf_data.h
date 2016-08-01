@@ -95,6 +95,7 @@ namespace fpf_data {
 		double d_blastp_evalue;
 		double d_blastp_par_prop;
 		denovo_peptide_type s_denovo_peptide_best;
+		size_type st_count_denovo_replicates;
 	};
 
 	struct proteinconstruct_from_denovo_type {
