@@ -522,3 +522,7 @@ paket-files/
 
 # FAKE - F# Make
 .fake/
+/.gitattributes
+/IgFamily.sln
+/IgFamily.vcxproj
+/IgFamily.vcxproj.filters

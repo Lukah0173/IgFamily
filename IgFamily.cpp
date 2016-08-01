@@ -86,15 +86,11 @@ int main() {
 			std::cout << "\n\n peptides parsed - " << main_v_c_parse_csv_proteinpeptides_data.size();
 			std::cout << "\n\n ...creating data structures";
 			std::vector<fpf_data::peptide_data_type> main_v_c_proteinpeptides_data = fpf_data::create_v_s_peptide_data(main_v_c_parse_csv_proteinpeptides_data);
-			std::vector<fpf_data::peptide_data_type> main_v_c_proteinpeptides_data_filtered = fpf_data::create_v_s_peptide_data_filtered(main_v_c_proteinpeptides_data);
-			std::vector<fpf_data::peptide_data_type> main_v_c_proteinpeptides_data_distinct = fpf_data::create_v_s_peptide_data_distinct(main_v_c_proteinpeptides_data);
-			std::vector<fpf_data::peptide_data_type> main_v_c_proteinpeptides_data_filtered_distinct = fpf_data::create_v_s_peptide_data_filtered_distinct(main_v_c_proteinpeptides_data_filtered);
 
 			if (SIMPLE_SCORE) {
 				create_global_score_mean(main_v_s_multinomial_element_data);
 				std::cout << "\n\n ...assigning peptides to gene families";
 				fpf_data::create_v_s_multinomial_element_data_v_s_peptide_data(main_v_s_multinomial_element_data, main_v_c_proteinpeptides_data);
-				fpf_data::create_v_s_multinomial_element_data_v_s_peptide_data_distinct_filtered(main_v_s_multinomial_element_data, main_v_c_proteinpeptides_data_filtered_distinct);
 				fpf_data::create_v_s_multinomial_element_data_str_alignment(main_v_s_multinomial_element_data);
 				std::cout << "\n\n ...determining sequence coverage and total spectral count";
 				fpf_data::create_v_s_multinomial_element_data_st_totalspectralcount(main_v_s_multinomial_element_data);
@@ -109,7 +105,6 @@ int main() {
 				fpf_data::train_v_s_multinomial_element_data_d_score(main_v_c_proteinpeptides_data, main_v_s_multinomial_element_data, main_v_s_multinomial_element_data_distinct);
 				std::cout << "\n\n ...formatting output";
 				fpf_data::sort_v_s_peptide_data_str_peptide(main_v_c_proteinpeptides_data);
-				fpf_data::sort_v_s_peptide_data_str_peptide(main_v_c_proteinpeptides_data_filtered_distinct);
 				fpf_data::update_v_s_multinomial_element_distinctpolymorphism_data(main_v_s_multinomial_element_data_distinct);
 
 				std::vector<fpf_data::multinomial_element_data_type*> map_main_v_s_multinomial_element_data = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data);
@@ -136,15 +131,9 @@ int main() {
 			std::cout << "\n\n peptides parsed - " << main_v_c_parse_csv_denovopeptides_data.size();
 			std::cout << "\n\n ...creating data structures";
 			std::vector<fpf_data::peptide_data_type> main_v_c_denovopeptides_data = fpf_data::create_v_s_peptide_data(main_v_c_parse_csv_denovopeptides_data);
-			std::vector<fpf_data::peptide_data_type> main_v_c_denovopeptides_data_filtered = fpf_data::create_v_s_peptide_data_filtered(main_v_c_denovopeptides_data);
-			std::vector<fpf_data::peptide_data_type> main_v_c_denovopeptides_data_distinct = fpf_data::create_v_s_peptide_data_distinct(main_v_c_denovopeptides_data);
-			std::vector<fpf_data::peptide_data_type> main_v_c_denovopeptides_data_filtered_distinct = fpf_data::create_v_s_peptide_data_filtered_distinct(main_v_c_denovopeptides_data_filtered);
 
 			if (IgFamily::FILESYSTEM_MODE) {
 				itr_v_s_filesystem.v_s_peptide_data = main_v_c_denovopeptides_data;
-				itr_v_s_filesystem.v_s_peptide_data_filtered = main_v_c_denovopeptides_data_filtered;
-				itr_v_s_filesystem.v_s_peptide_data_distinct = main_v_c_denovopeptides_data_distinct;
-				itr_v_s_filesystem.v_s_peptide_data_filtered_distinct = main_v_c_denovopeptides_data_filtered_distinct;
 				itr_v_s_filesystem.v_c_analysis_data = main_v_s_multinomial_element_data;
 				itr_v_s_filesystem.v_c_analysis_distinct_data = main_v_s_multinomial_element_data_distinct;
 			}

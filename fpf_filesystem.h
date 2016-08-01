@@ -43,9 +43,6 @@ namespace fpf_filesystem {
 		std::vector<multinomial_element_data_type> v_c_analysis_data;
 		std::vector<multinomial_element_data_type> v_c_analysis_distinct_data;
 		std::vector<peptide_data_type> v_s_peptide_data;
-		std::vector<peptide_data_type> v_s_peptide_data_filtered;
-		std::vector<peptide_data_type> v_s_peptide_data_distinct;
-		std::vector<peptide_data_type> v_s_peptide_data_filtered_distinct;
 		std::pair<string_type, string_type> p_filesystemid;
 		std::vector<std::pair<string_type, string_type>> v_p_replicates;
 		size_type st_replicate_count;

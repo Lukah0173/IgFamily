@@ -36,10 +36,10 @@ namespace fpf_blastp_analysis {
 		std::ofstream fout_blastp_input_FASTA;
 		fout_blastp_input_FASTA.open(output_blastp_FASTA);
 		size_type st_count_blastp_FASTA = size_type();
-		for (auto itr_v_s_peptide_data_filtered : par_s_filesystem.v_s_peptide_data_filtered) {
+		for (auto itr_v_s_peptide_data : par_s_filesystem.v_s_peptide_data) {
 			++st_count_blastp_FASTA;
-			fout_blastp_input_FASTA << ">" << itr_v_s_peptide_data_filtered.str_peptide << "\n";
-			fout_blastp_input_FASTA << itr_v_s_peptide_data_filtered.str_peptide << "\n";
+			fout_blastp_input_FASTA << ">" << itr_v_s_peptide_data.str_peptide_filtered << "\n";
+			fout_blastp_input_FASTA << itr_v_s_peptide_data.str_peptide_filtered << "\n";
 		}
 		fout_blastp_input_FASTA.close();
 	}

@@ -370,11 +370,11 @@ namespace fpf_filesystem_analysis {
 	std::vector<string_type> create_v_str_peptide_filtered_distinct_total_observed(std::vector<fpf_filesystem::filesystem_type> par_v_s_filesystem) {
 		std::vector<string_type> con_v_str_peptide_filtered_distinct_total_observed;
 		for (auto itr_v_s_filesystem = par_v_s_filesystem.begin(); itr_v_s_filesystem != par_v_s_filesystem.end(); ++itr_v_s_filesystem) {
-			auto con_v_s_peptide_data = itr_v_s_filesystem->v_s_peptide_data_filtered_distinct;
-			for (auto itr_v_s_peptide_data = con_v_s_peptide_data.begin(); itr_v_s_peptide_data != con_v_s_peptide_data.end(); ++itr_v_s_peptide_data) {
-				if (std::find(con_v_str_peptide_filtered_distinct_total_observed.begin(), con_v_str_peptide_filtered_distinct_total_observed.end(), itr_v_s_peptide_data->str_peptide)
+			auto con_v_s_peptide_data = itr_v_s_filesystem->v_s_peptide_data;
+			for (auto itr_v_s_peptide_data : con_v_s_peptide_data) {
+				if (std::find(con_v_str_peptide_filtered_distinct_total_observed.begin(), con_v_str_peptide_filtered_distinct_total_observed.end(), itr_v_s_peptide_data.str_peptide_filtered)
 					== con_v_str_peptide_filtered_distinct_total_observed.end()) {
-					con_v_str_peptide_filtered_distinct_total_observed.push_back(itr_v_s_peptide_data->str_peptide);
+					con_v_str_peptide_filtered_distinct_total_observed.push_back(itr_v_s_peptide_data.str_peptide_filtered);
 				}
 			}
 		}
@@ -397,11 +397,11 @@ namespace fpf_filesystem_analysis {
 			}
 		}
 		static fpf_data::peptide_data_type static_default_s_peptide_data_filtered_distinct = fpf_data::peptide_data_type();
-		for (auto itr_v_str_peptide_filtered_distinct_total_observed = par_v_str_peptide_filtered_distinct_total_observed.begin(); itr_v_str_peptide_filtered_distinct_total_observed != par_v_str_peptide_filtered_distinct_total_observed.end(); ++itr_v_str_peptide_filtered_distinct_total_observed) {
-			auto find_v_s_peptide_data_filtered_distinct = std::find_if(par_s_filesystem.v_s_peptide_data_filtered_distinct.begin(), par_s_filesystem.v_s_peptide_data_filtered_distinct.end(),
+		for (auto itr_v_str_peptide_filtered_distinct_total_observed : par_v_str_peptide_filtered_distinct_total_observed) {
+			auto find_v_s_peptide_data_filtered_distinct = std::find_if(par_s_filesystem.v_s_peptide_data.begin(), par_s_filesystem.v_s_peptide_data.end(),
 				[itr_v_str_peptide_filtered_distinct_total_observed](fpf_data::peptide_data_type& par_s_peptide_data_filtered_distinct) {
-				return par_s_peptide_data_filtered_distinct.str_peptide == *itr_v_str_peptide_filtered_distinct_total_observed; });
-			if (find_v_s_peptide_data_filtered_distinct != par_s_filesystem.v_s_peptide_data_filtered_distinct.end()) {
+				return par_s_peptide_data_filtered_distinct.str_peptide_filtered == itr_v_str_peptide_filtered_distinct_total_observed; });
+			if (find_v_s_peptide_data_filtered_distinct != par_s_filesystem.v_s_peptide_data.end()) {
 				con_s_filesystem_analysis.v_s_peptide_data_filtered_distinct_analysis.push_back(*find_v_s_peptide_data_filtered_distinct);
 			}
 			else {
@@ -411,22 +411,6 @@ namespace fpf_filesystem_analysis {
 		con_s_filesystem_analysis.filesystem_type = &par_s_filesystem;
 		return con_s_filesystem_analysis;
 	}
-
-	//inline bool predicate_v_s_filesystem_peptide_data_by_st_spectralcount(const std::pair<string_type, std::vector<s_filesystem_peptide_data>>& i, const std::pair<string_type, std::vector<s_filesystem_peptide_data>>& j) {
-	//	size_type sum_i_st_spectralcount = size_type();
-	//	size_type sum_j_st_spectralcount = size_type();
-	//	for (auto itr_i = std::get<1>(i).begin(); itr_i != std::get<1>(i).end(); ++itr_i) {
-	//		sum_i_st_spectralcount += itr_i->st_spectralcount;
-	//	}
-	//	for (auto itr_j = std::get<1>(j).begin(); itr_j != std::get<1>(j).end(); ++itr_j) {
-	//		sum_j_st_spectralcount += itr_j->st_spectralcount;
-	//	}
-	//	return (sum_i_st_spectralcount > sum_j_st_spectralcount);
-	//}
-
-	//inline void sort_v_s_peptide_data_st_spectralcount(std::vector<std::pair<string_type, std::vector<s_filesystem_peptide_data>>>& par_v_p_filesystem_peptide_data) {
-	//	std::sort(par_v_p_filesystem_peptide_data.begin(), par_v_p_filesystem_peptide_data.end(), predicate_v_s_filesystem_peptide_data_by_st_spectralcount);
-	//}
 
 	void fout_filesystem_peptide_data_summary(std::vector<s_filesystem_analysis>& par_v_s_filesystem_analysis, std::vector<string_type> par_v_str_peptide_total_observed, string_type par_str_output) {
 		std::string output_v_s_filesystem_analysis_peptide_summary = "summary_data\\" + par_str_output;
