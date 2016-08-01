@@ -23,6 +23,7 @@ namespace fpf_report {
 	typedef size_t size_type;
 	typedef fpf_data::multinomial_element_data_type multinomial_element_data_type;
 	typedef fpf_data::peptide_data_type peptide_data_type;
+	typedef fpf_data::denovo_peptide_type denovo_peptide_type;
 	typedef fpf_data::blastp_type blastp_type;
 	typedef fpf_data::proteinconstruct_from_denovo_type proteinconstruct_from_denovo_type;
 	typedef fpf_data::report_type report_type;
@@ -52,14 +53,30 @@ namespace fpf_report {
 		for (auto& itr_v_s_report : con_v_s_report) {
 			for (auto& itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
 				itr_v_s_report.d_score += itr_v_s_blastp.d_blastp_par_prop;
-				auto find_s_peptide_data = std::find_if(par_s_filesystem.v_s_peptide_data.begin(), par_s_filesystem.v_s_peptide_data.end(),
+				auto& find_s_peptide_data = std::find_if(par_s_filesystem.v_s_peptide_data.begin(), par_s_filesystem.v_s_peptide_data.end(),
 					[itr_v_s_blastp](peptide_data_type par_s_peptide_data) {
 					return par_s_peptide_data.str_peptide_filtered == itr_v_s_blastp.str_blastp_query;
 				});
-				for (auto itr_v_s_denovo_peptide : find_s_peptide_data->v_s_denovo_peptide) {
-					if (itr_v_s_blastp.s_blastp_denovo_peptide.d_denovo_peptide_localconfidence_average < itr_v_s_denovo_peptide.d_denovo_peptide_localconfidence_average) {
-						itr_v_s_blastp.s_blastp_denovo_peptide = itr_v_s_denovo_peptide;
-						std::cout << "\n " << itr_v_s_blastp.s_blastp_denovo_peptide.d_denovo_peptide_localconfidence_average;
+				if (find_s_peptide_data == par_s_filesystem.v_s_peptide_data.end()) {
+					std::cout << "\n\n ERROR: ";
+					std::cout << "\n\n find_s_peptide_data == par_s_filesystem.v_s_peptide_data.end()";
+					string_type str_catch_error;
+					std::cin >> str_catch_error;
+				}
+				else {
+					itr_v_s_blastp.s_denovo_peptide_best = denovo_peptide_type();
+					for (auto itr_v_s_denovo_peptide : find_s_peptide_data->v_s_denovo_peptide) {
+						if (find_s_peptide_data->v_s_denovo_peptide.size() == 0) {
+							std::cout << "\n\n ERROR: ";
+							std::cout << "\n\n find_s_peptide_data->v_s_denovo_peptide.size() == 0";
+							string_type str_catch_error;
+							std::cin >> str_catch_error;
+						}
+						else {						
+							if (itr_v_s_blastp.s_denovo_peptide_best.d_denovo_peptide_localconfidence_average < itr_v_s_denovo_peptide.d_denovo_peptide_localconfidence_average) {
+								itr_v_s_blastp.s_denovo_peptide_best = itr_v_s_denovo_peptide;
+							}
+						}
 					}
 				}
 			}
@@ -162,10 +179,6 @@ namespace fpf_report {
 					fout_html_report << "</font>";
 				}
 			}
-			//fout_html_report << "\n<br>";
-			//for (auto itr_s_proteinconstruct_from_denovo_ident : itr_v_s_report.s_proteinconstruct_from_denovo_ident) {
-			//	fout_html_report << itr_s_proteinconstruct_from_denovo_ident.ch_aminoacid;
-			//}
 			fout_html_report << "\n\n<br><br>";
 			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
 				if (std::find(dummy.begin(), dummy.end(), itr_v_s_blastp.str_blastp_query_alignment) == dummy.end()) {
