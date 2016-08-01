@@ -126,7 +126,7 @@ namespace fpf_parse {
 						con_c_parse_csv.str_parse_peptides_csv_file = par_str_dir;
 						con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
 						con_c_parse_csv.str_parse_peptides_csv_spectralcount = str_parse_spectralcount;
-						con_c_parse_csv.str_parse_csv_IgP= str_parse_IgP;
+						con_c_parse_csv.str_parse_csv_IgP = str_parse_IgP;
 						con_v_c_parse_proteinpeptides_csv.push_back(con_c_parse_csv);
 					}
 					else {
@@ -207,7 +207,7 @@ namespace fpf_parse {
 		std::vector<parse_peptides_csv_type> con_v_c_parse_peptides_csv;
 		string_type str_parse_csv;
 		size_type st_count_csv = size_type();
-		size_type sw_parse_csv = size_type();
+		size_type sw_parse_csv = size_type(1);
 		size_type sw_parse_csv_ignore_header = size_type();
 		char ch_parse_csv;
 		string_type str_parse_peptide;
@@ -218,31 +218,12 @@ namespace fpf_parse {
 			if (sw_parse_csv_ignore_header == 1) {
 				str_parse_csv = ch_parse_csv;
 				if (st_count_csv == 16) {
-					if (con_v_c_parse_peptides_csv.size() == 0) {
-						parse_peptides_csv_type con_c_parse_csv = parse_peptides_csv_type();
-						con_c_parse_csv.str_parse_peptides_csv_file = par_str_dir;
-						con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
-						con_c_parse_csv.v_d_denovo_localconfidence = con_v_d_denovo_localconfidence;
-						con_v_c_parse_peptides_csv.push_back(con_c_parse_csv);
-						con_v_d_denovo_localconfidence.clear();
-					}
-					else {
-						bool b_parse_peptide_found = bool();
-						for (auto itr_v_c_parse_csv = con_v_c_parse_peptides_csv.begin(); itr_v_c_parse_csv != con_v_c_parse_peptides_csv.end(); ++itr_v_c_parse_csv) {
-							if (itr_v_c_parse_csv->str_parse_peptides_csv_peptide == str_parse_peptide) {
-								b_parse_peptide_found = true;
-							}
-							if (((itr_v_c_parse_csv + 1) == con_v_c_parse_peptides_csv.end()) && (!b_parse_peptide_found)) {
-								parse_peptides_csv_type con_c_parse_csv = parse_peptides_csv_type();
-								con_c_parse_csv.str_parse_peptides_csv_file = par_str_dir;
-								con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
-								con_c_parse_csv.v_d_denovo_localconfidence = con_v_d_denovo_localconfidence;
-								con_v_c_parse_peptides_csv.push_back(con_c_parse_csv);
-								con_v_d_denovo_localconfidence.clear();
-								break;
-							}
-						}
-					}
+					parse_peptides_csv_type con_c_parse_csv = parse_peptides_csv_type();
+					con_c_parse_csv.str_parse_peptides_csv_file = par_str_dir;
+					con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
+					con_c_parse_csv.v_d_denovo_localconfidence = con_v_d_denovo_localconfidence;
+					con_v_c_parse_peptides_csv.push_back(con_c_parse_csv);
+					con_v_d_denovo_localconfidence.clear();
 					str_parse_peptide.clear();
 					st_count_csv = 0;
 				}

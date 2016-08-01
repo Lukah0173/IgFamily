@@ -45,7 +45,7 @@ namespace fpf_data {
 		string_type str_multinomial_element_name;
 		string_type str_protein;
 		string_type str_species;
-		string_type str_multinomial_element_class;	
+		string_type str_multinomial_element_class;
 		std::vector<peptide_data_type> v_s_peptide_data;
 		std::vector<peptide_data_type> v_s_peptide_data_distinct_filtered;
 		string_type str_alignment;
@@ -56,7 +56,6 @@ namespace fpf_data {
 	};
 
 	struct denovo_aminoacid_type {
-		denovo_aminoacid_type (){};
 		char ch_aminoacid;
 		double d_denovo_localconfidence;
 	};
@@ -231,7 +230,7 @@ namespace fpf_data {
 				}
 			}
 			con_s_peptide_data.str_peptide_filtered = con_str_peptide_filtered;
-			auto find_s_peptide_data = std::find_if(con_v_s_peptide_data.begin(), con_v_s_peptide_data.end(),
+			auto& find_s_peptide_data = std::find_if(con_v_s_peptide_data.begin(), con_v_s_peptide_data.end(),
 				[con_str_peptide_filtered](peptide_data_type par_s_peptide_data) {
 				return par_s_peptide_data.str_peptide_filtered == con_str_peptide_filtered;
 			});
@@ -253,6 +252,9 @@ namespace fpf_data {
 					con_s_denovo_peptide.d_denovo_peptide_localconfidence_average += itr_s_denovo_aminoacid.d_denovo_localconfidence;
 				}
 				con_s_denovo_peptide.d_denovo_peptide_localconfidence_average /= con_s_denovo_peptide.v_s_denovo_aminoacid.size();
+				con_s_peptide_data.v_s_denovo_peptide.push_back(con_s_denovo_peptide);
+				++con_s_peptide_data.st_count_denovo_replicate;
+				con_v_s_peptide_data.push_back(con_s_peptide_data);
 			}
 			else {
 				for (size_type i = 0; i < con_str_peptide_filtered.size(); ++i) {
@@ -264,10 +266,10 @@ namespace fpf_data {
 				for (auto itr_s_denovo_aminoacid : con_s_denovo_peptide.v_s_denovo_aminoacid) {
 					con_s_denovo_peptide.d_denovo_peptide_localconfidence_average += itr_s_denovo_aminoacid.d_denovo_localconfidence;
 				}
+				con_s_denovo_peptide.d_denovo_peptide_localconfidence_average /= con_s_denovo_peptide.v_s_denovo_aminoacid.size();
 				find_s_peptide_data->v_s_denovo_peptide.push_back(con_s_denovo_peptide);
 				++find_s_peptide_data->st_count_denovo_replicate;
 			}
-			con_v_s_peptide_data.push_back(con_s_peptide_data);
 		}
 		return con_v_s_peptide_data;
 	}
@@ -656,7 +658,7 @@ namespace fpf_data {
 				if (sw_peptideassociation_distinct == 0) {
 					con_str_multinomial_element_name_distinct += con_str_multinomial_element_name.at(i);
 				}
-			}	
+			}
 			std::vector<peptide_data_type> con_v_s_peptide_data = itr_v_s_multinomial_element_data.v_s_peptide_data;
 			double con_d_score = double();
 			double con_d_parameter_gene_family = double();
@@ -680,7 +682,7 @@ namespace fpf_data {
 		}
 		update_v_s_multinomial_element_distinctpolymorphism_data(par_v_s_multinomial_element_data_distinct);
 
-		for (auto& itr_v_s_peptide_data = par_v_s_peptide_data.begin(); itr_v_s_peptide_data != par_v_s_peptide_data.end(); ++itr_v_s_peptide_data) {		
+		for (auto& itr_v_s_peptide_data = par_v_s_peptide_data.begin(); itr_v_s_peptide_data != par_v_s_peptide_data.end(); ++itr_v_s_peptide_data) {
 			double d_v_p_peptideassociation_d_score_sum = double();
 			double d_v_p_peptideassociation_d_score_mean = double();
 			for (auto itr_v_p_peptideassociation_distinct = itr_v_s_peptide_data->v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != itr_v_s_peptide_data->v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
@@ -790,7 +792,7 @@ namespace fpf_data {
 	}
 
 	void output(string_type par_str_fin, std::vector<multinomial_element_data_type*> par_v_s_multinomial_element_data_distinct, std::vector<multinomial_element_data_type*> par_v_s_multinomial_element_data) {
-		
+
 		std::cout << "\n\n ...streaming output";
 		std::string output_v_s_multinomial_element_data = par_str_fin + "_output.txt";
 		std::ofstream fout_v_s_multinomial_element_data;
