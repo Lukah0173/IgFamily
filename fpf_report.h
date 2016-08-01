@@ -22,6 +22,7 @@ namespace fpf_report {
 	typedef std::string string_type;
 	typedef size_t size_type;
 	typedef fpf_data::multinomial_element_data_type multinomial_element_data_type;
+	typedef fpf_data::peptide_data_type peptide_data_type;
 	typedef fpf_data::blastp_type blastp_type;
 	typedef fpf_data::proteinconstruct_from_denovo_type proteinconstruct_from_denovo_type;
 	typedef fpf_data::report_type report_type;
@@ -37,7 +38,8 @@ namespace fpf_report {
 			});
 			if (find_s_report != con_v_s_report.end()) {
 				find_s_report->v_s_blastp.push_back(itr_v_s_blastp);
-			} else {
+			}
+			else {
 				double con_d_score = double();
 				con_s_report.v_s_blastp.push_back(itr_v_s_blastp);
 				con_s_report.str_protein_accession = itr_v_s_blastp.str_blastp_subject_accession;
@@ -48,10 +50,21 @@ namespace fpf_report {
 			}
 		}
 		for (auto& itr_v_s_report : con_v_s_report) {
-			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
+			for (auto& itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
 				itr_v_s_report.d_score += itr_v_s_blastp.d_blastp_par_prop;
+				auto find_s_peptide_data = std::find_if(par_s_filesystem.v_s_peptide_data.begin(), par_s_filesystem.v_s_peptide_data.end(),
+					[itr_v_s_blastp](peptide_data_type par_s_peptide_data) {
+					return par_s_peptide_data.str_peptide_filtered == itr_v_s_blastp.str_blastp_query;
+				});
+				for (auto itr_v_s_denovo_peptide : find_s_peptide_data->v_s_denovo_peptide) {
+					if (itr_v_s_blastp.s_blastp_denovo_peptide.d_denovo_peptide_localconfidence_average < itr_v_s_denovo_peptide.d_denovo_peptide_localconfidence_average) {
+						itr_v_s_blastp.s_blastp_denovo_peptide = itr_v_s_denovo_peptide;
+						std::cout << "\n " << itr_v_s_blastp.s_blastp_denovo_peptide.d_denovo_peptide_localconfidence_average;
+					}
+				}
 			}
 		}
+
 		par_s_filesystem.v_s_report = con_v_s_report;
 	}
 
@@ -179,7 +192,7 @@ namespace fpf_report {
 				dummy.clear();
 			}
 		}
-			
+
 		fout_html_report << "\
 		</p></font>\n \
 	</body>\n \

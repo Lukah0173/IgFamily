@@ -94,7 +94,7 @@ namespace fpf_data {
 		string_type str_blastp_query_alignment;
 		double d_blastp_evalue;
 		double d_blastp_par_prop;
-		denovo_aminoacid_type s_blastp_denovo_peptide;
+		denovo_peptide_type s_blastp_denovo_peptide;
 	};
 
 	struct proteinconstruct_from_denovo_type {
@@ -115,7 +115,6 @@ namespace fpf_data {
 		string_type str_protein;
 		std::vector<proteinconstruct_from_denovo_type> proteinconstruct_from_denovo_type;
 		double d_score;
-		std::vector<double> v_d_aminoacid_scores;
 	};
 
 	std::vector<multinomial_element_data_type> create_v_s_multinomial_element_data(std::vector<fpf_parse::parse_FASTA_type> par_v_c_parse_FASTA) {
