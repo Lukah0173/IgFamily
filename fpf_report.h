@@ -86,7 +86,7 @@ namespace fpf_report {
 		par_s_filesystem.v_s_report = con_v_s_report;
 	}
 
-	void create_str_protein_from_denovo(filesystem_type& par_s_filesystem) {
+	void create_str_proteinconstruct_from_denovo(filesystem_type& par_s_filesystem) {
 		for (auto& itr_v_s_report : par_s_filesystem.v_s_report) {
 			for (size_type i = 0; i < itr_v_s_report.str_protein.length(); ++i) {
 				proteinconstruct_from_denovo_type con_s_proteinconstruct_from_denovo;
@@ -96,9 +96,9 @@ namespace fpf_report {
 			}
 			for (size_type i = 0; i < itr_v_s_report.str_protein.length(); ++i) {
 				for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
-					if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != '.') && (itr_v_s_blastp.d_blastp_par_prop > itr_v_s_report.proteinconstruct_from_denovo_type[i].d_score)) {
+					if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != '.') && ((itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates) > itr_v_s_report.proteinconstruct_from_denovo_type[i].d_score)) {
 						itr_v_s_report.proteinconstruct_from_denovo_type[i].ch_aminoacid = itr_v_s_blastp.str_blastp_query_alignment.at(i);
-						itr_v_s_report.proteinconstruct_from_denovo_type[i].d_score = itr_v_s_blastp.d_blastp_par_prop;
+						itr_v_s_report.proteinconstruct_from_denovo_type[i].d_score = (itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates);
 					}
 				}
 			}
@@ -106,11 +106,19 @@ namespace fpf_report {
 	}
 
 	inline bool predicate_v_s_blastp(const blastp_type& i, const blastp_type& j) {
-		return (i.d_blastp_evalue < j.d_blastp_evalue);
+		return (i.d_blastp_par_prop > j.d_blastp_par_prop);
 	}
 
 	inline void sort_v_s_blastp(std::vector<blastp_type>& par_v_s_blastp) {
 		std::sort(par_v_s_blastp.begin(), par_v_s_blastp.end(), predicate_v_s_blastp);
+	}
+
+	inline bool predicate_v_s_blastp_withspectralcount(const blastp_type& i, const blastp_type& j) {
+		return ((i.d_blastp_par_prop * i.st_count_denovo_replicates) > (j.d_blastp_par_prop * j.st_count_denovo_replicates));
+	}
+
+	inline void sort_v_s_blastp_withspectralcount(std::vector<blastp_type>& par_v_s_blastp) {
+		std::sort(par_v_s_blastp.begin(), par_v_s_blastp.end(), predicate_v_s_blastp_withspectralcount);
 	}
 
 	inline bool predicate_v_s_report(const report_type& i, const report_type& j) {
@@ -151,34 +159,52 @@ namespace fpf_report {
 		std::vector<string_type> dummy;
 		std::cout << "\n\n ...generating html report for " << par_s_filesystem.str_filename;
 		fout_html_report << "\
-<!DOCTYPE html>\n\
-	<head>\n\
-		<meta charset = \"UTF-8\">\n\
-		<title>HTML Template</title>\n\
-	</head>\n\
-	<body>\n\
-		<p><font face=\"Lucida Console\" size=\"3\" color=\"black\">";
+							<!DOCTYPE html>\n\
+							<head>\n\
+							<meta charset = \"UTF-8\">\n\
+							<title>HTML Template</title>\n\
+							</head>\n\
+							<body>\n\
+							<p><font face=\"Lucida Console\" size=\"3\" color=\"black\">";
+	fout_html_report << "<style> \
+						.mismatch { \
+						color: black; \
+						border-bottom: 2px solid black; \
+						} \
+						</style>";
+		fout_html_report << "\n<br>" << par_s_filesystem.str_filename;
+		fout_html_report << "\n\n<br><br>" << par_s_filesystem.str_fileversion;
+		fout_html_report << "&nbsp&nbsp&nbsp" << par_s_filesystem.str_enzyme;
+		fout_html_report << "&nbsp&nbsp&nbsp" << par_s_filesystem.str_denono_deltamass << "&nbspDa";
 		for (auto itr_v_s_report : par_s_filesystem.v_s_report) {
 			fout_html_report << "\n\n\n<br><br><br> " << itr_v_s_report.str_protein_accession;
 			fout_html_report << "     Score: " << std::fixed << std::setprecision(2) << itr_v_s_report.d_score;
 			fout_html_report << "\n\n<br><br> " << itr_v_s_report.str_protein;
 			fout_html_report << "\n\n<br> ";
+			size_type foo = size_type();
 			for (auto itr_s_proteinconstruct_from_denovo : itr_v_s_report.proteinconstruct_from_denovo_type) {
 				if (itr_s_proteinconstruct_from_denovo.ch_aminoacid != '.') {
-					if (itr_s_proteinconstruct_from_denovo.d_score > 3) {
+					if (itr_s_proteinconstruct_from_denovo.ch_aminoacid != itr_v_s_report.str_protein.at(foo)) {
+						fout_html_report << "<span class=\"mismatch\">";
+					}
+					if (itr_s_proteinconstruct_from_denovo.d_score > 5) {
 						fout_html_report << "<font color=\"#239B56\">";
 					}
-					if ((itr_s_proteinconstruct_from_denovo.d_score <= 3) && (itr_s_proteinconstruct_from_denovo.d_score > 1)) {
+					if ((itr_s_proteinconstruct_from_denovo.d_score <= 5) && (itr_s_proteinconstruct_from_denovo.d_score > 2)) {
 						fout_html_report << "<font color=\"#E67E22\">";
 					}
-					if (itr_s_proteinconstruct_from_denovo.d_score < 1) {
+					if (itr_s_proteinconstruct_from_denovo.d_score < 2) {
 						fout_html_report << "<font color=\"red\">";
-					}
+					}					
 				}
 				fout_html_report << itr_s_proteinconstruct_from_denovo.ch_aminoacid;
+				if (itr_s_proteinconstruct_from_denovo.ch_aminoacid != itr_v_s_report.str_protein.at(foo)) {
+					fout_html_report << "</span>";
+				}
 				if (itr_s_proteinconstruct_from_denovo.ch_aminoacid != '.') {
 					fout_html_report << "</font>";
 				}
+				++foo;
 			}
 			fout_html_report << "\n\n<br><br>";
 			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
@@ -193,6 +219,9 @@ namespace fpf_report {
 					}
 					else {
 						for (auto itr_v_s_denovo_aminoacid : itr_v_s_blastp.s_denovo_peptide_best.v_s_denovo_aminoacid) {
+							if ((i >= itr_v_s_blastp.str_blastp_query_alignment.length()) || (itr_v_s_denovo_aminoacid.ch_aminoacid != itr_v_s_blastp.str_protein.at(i))) {
+								fout_html_report << "<span class=\"mismatch\">";
+							}
 							if (itr_v_s_denovo_aminoacid.d_denovo_localconfidence > 80) {
 								fout_html_report << "<font color=\"#239B56\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
 							}
@@ -201,6 +230,9 @@ namespace fpf_report {
 							}
 							if (itr_v_s_denovo_aminoacid.d_denovo_localconfidence <= 60) {
 								fout_html_report << "<font color=\"red\">" << itr_v_s_denovo_aminoacid.ch_aminoacid << "</font>";
+							}
+							if ((i >= itr_v_s_blastp.str_blastp_query_alignment.length()) || (itr_v_s_denovo_aminoacid.ch_aminoacid != itr_v_s_blastp.str_protein.at(i))) {
+								fout_html_report << "</span>";
 							}
 							++i;
 						}
@@ -224,14 +256,3 @@ namespace fpf_report {
 }
 #endif
 
-
-
-
-
-
-//		for (auto itr_v_s_filesystem_mnom : itr_v_blastp_filesystem_data.v_s_filesystem_mnom) {
-//			auto find_v_str_mnom_xlabel = std::find_if(con_s_model_data.v_str_mnom_xlabel.begin(),
-//													   con_s_model_data.v_str_mnom_xlabel.end(),
-//													   [itr_v_s_filesystem_mnom](string_type par_str_mnom_xlabel) {
-//				return par_str_mnom_xlabel == itr_v_s_filesystem_mnom.str_mnom_comp;
-//			});

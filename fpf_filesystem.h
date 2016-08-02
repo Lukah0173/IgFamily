@@ -40,6 +40,8 @@ namespace fpf_filesystem {
 		string_type str_filename;
 		string_type str_fileversion;
 		string_type str_patientstatus;
+		string_type str_enzyme;
+		string_type str_denono_deltamass;
 		std::vector<multinomial_element_data_type> v_c_analysis_data;
 		std::vector<multinomial_element_data_type> v_c_analysis_distinct_data;
 		std::vector<peptide_data_type> v_s_peptide_data;
@@ -87,6 +89,8 @@ namespace fpf_filesystem {
 			string_type con_str_filesystem_filename = string_type();
 			string_type con_str_filesystem_version = string_type();
 			string_type con_str_filesystem_status = string_type();
+			string_type con_str_filesystem_enzyme = string_type();
+			string_type con_str_filesystem_denovo_deltamass = string_type();
 			string_type con_str_filesystem_replicatedate = string_type();
 			size_type sw_filesystem_replicatepair = size_type();
 			std::vector<std::pair<string_type, string_type>> v_p_filesystem_replicates = std::vector<std::pair<string_type, string_type>>();
@@ -132,6 +136,14 @@ namespace fpf_filesystem {
 					str_stream_fin_filesystem.clear();
 					sw_stream_fin_filesystem = 5;
 				}
+				if (str_stream_fin_filesystem == "ENZYME: ") {
+					str_stream_fin_filesystem.clear();
+					sw_stream_fin_filesystem = 6;
+				}
+				if (str_stream_fin_filesystem == "DENOVO_DELTAMASS: ") {
+					str_stream_fin_filesystem.clear();
+					sw_stream_fin_filesystem = 7;
+				}
 				if (c_stream_fin_filesystem == ';') {
 					if (sw_stream_fin_filesystem == 1) {
 						con_p_filesystem_id = make_pair(con_str_filesystem_date, str_stream_fin_filesystem);
@@ -157,12 +169,22 @@ namespace fpf_filesystem {
 					if (sw_stream_fin_filesystem == 5) {
 						con_str_filesystem_status = str_stream_fin_filesystem;
 						str_stream_fin_filesystem.clear();
+					}
+					if (sw_stream_fin_filesystem == 6) {
+						con_str_filesystem_enzyme = str_stream_fin_filesystem;
+						str_stream_fin_filesystem.clear();
+					}
+					if (sw_stream_fin_filesystem == 7) {
+						con_str_filesystem_denovo_deltamass = str_stream_fin_filesystem;
+						str_stream_fin_filesystem.clear();
 						con_s_filesystem.str_directory = *itr_root_dir;
 						con_s_filesystem.p_filesystemid = con_p_filesystem_id;
 						con_s_filesystem.str_filename = con_str_filesystem_filename;
 						con_s_filesystem.str_fileversion = con_str_filesystem_version;
 						con_s_filesystem.str_patientstatus = con_str_filesystem_status;
 						con_s_filesystem.v_p_replicates = v_p_filesystem_replicates;
+						con_s_filesystem.str_enzyme = con_str_filesystem_enzyme;
+						con_s_filesystem.str_denono_deltamass = con_str_filesystem_denovo_deltamass;
 						con_s_filesystem.st_replicate_count = size_type{ 1 };
 						v_p_filesystem_replicates.clear();
 						con_v_s_filesystem.push_back(con_s_filesystem);
@@ -279,7 +301,9 @@ namespace fpf_filesystem {
 			}
 		}
 		fout_v_s_filesystem << ";\n";
-		fout_v_s_filesystem << "STATUS: " << par_s_filesystem.str_patientstatus << ";";
+		fout_v_s_filesystem << "STATUS: " << par_s_filesystem.str_patientstatus << ";\n";
+		fout_v_s_filesystem << "ENZYME: " << par_s_filesystem.str_enzyme << ";\n";
+		fout_v_s_filesystem << "DENOVO_DELTAMASS: " << par_s_filesystem.str_denono_deltamass << ";\n";
 	}
 }
 
