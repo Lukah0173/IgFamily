@@ -52,10 +52,6 @@ namespace fpf_parse {
 			str_parse_FASTA_accession = par_str_parse_FASTA_accession;
 		};
 
-		inline void set_str_parse_FASTA_protein_delimited(string_type par_str_parse_FASTA_protein_delimited) {
-			str_parse_FASTA_protein_delimited = par_str_parse_FASTA_protein_delimited;
-		};
-
 		inline void set_str_parse_FASTA_genefamily(string_type par_str_parse_FASTA_genefamily) {
 			str_parse_FASTA_genefamily = par_str_parse_FASTA_genefamily;
 		};
@@ -74,10 +70,6 @@ namespace fpf_parse {
 
 		inline const string_type return_str_parse_FASTA_accession() const {
 			return str_parse_FASTA_accession;
-		};
-
-		inline const string_type return_str_parse_FASTA_protein_delimited() const {
-			return str_parse_FASTA_protein_delimited;
 		};
 
 		inline const string_type return_str_parse_FASTA_genefamily() const {
@@ -293,7 +285,6 @@ namespace fpf_parse {
 		string_type con_str_FASTA_protein = string_type();
 		string_type con_str_parse_FASTA_accession = string_type();
 		string_type con_str_FASTA_species = string_type();
-		string_type con_str_parse_FASTA_protein_delimited = string_type();
 		parse_FASTA_type con_c_parse_FASTA = parse_FASTA_type();
 		std::vector<parse_FASTA_type> con_v_c_parse_FASTA;
 
@@ -302,7 +293,6 @@ namespace fpf_parse {
 				if (ch_parse_FASTA != '\n') {
 					con_str_FASTA_protein += ch_parse_FASTA;
 				}
-				con_str_parse_FASTA_protein_delimited += ch_parse_FASTA;
 			}
 			if ((sw_2_input_FASTA == 0) && (ch_parse_FASTA == '\n')) {
 				con_str_FASTA_protein.clear();
@@ -335,16 +325,17 @@ namespace fpf_parse {
 				con_str_FASTA_genefamily.clear();
 				sw_input_FASTA = 1;
 			}
-			if ((sw_2_input_FASTA == 1) && (par_fin_input_FASTA.peek() == '>')) {
-				con_c_parse_FASTA.set_str_parse_FASTA_accession("test");
-				con_c_parse_FASTA.set_str_parse_FASTA_protein_delimited(con_str_parse_FASTA_protein_delimited);
+			if ((sw_input_FASTA == 0) && (ch_parse_FASTA != '>')) {
+				con_str_parse_FASTA_accession += ch_parse_FASTA;
+			}
+			if ((sw_2_input_FASTA == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
+				con_c_parse_FASTA.set_str_parse_FASTA_accession(con_str_parse_FASTA_accession);
 				con_c_parse_FASTA.set_str_parse_FASTA_genefamily(con_str_FASTA_genefamily);
 				con_c_parse_FASTA.set_str_parse_FASTA_genefamily_class(con_str_FASTA_genefamily_class);
 				con_c_parse_FASTA.set_str_parse_FASTA_species(con_str_FASTA_species);
 				con_c_parse_FASTA.set_str_parse_FASTA_protein(con_str_FASTA_protein);
 				con_v_c_parse_FASTA.push_back(con_c_parse_FASTA);
 				con_str_parse_FASTA_accession.clear();
-				con_str_parse_FASTA_protein_delimited.clear();
 				con_str_FASTA_protein.clear();
 				con_str_FASTA_genefamily.clear();
 				con_str_FASTA_genefamily_class.clear();
@@ -404,13 +395,22 @@ namespace fpf_parse {
 	}
 
 	void output_v_c_parse_FASTA(std::vector<parse_FASTA_type> par_v_c_parse_FASTA) {
-		string_type output_FASTA_filtered = "output.fasta";
+		string_type output_FASTA_filtered = "FASTA\\output.fasta";
 		std::ofstream fout_FASTA_filtered;
 		fout_FASTA_filtered.open(output_FASTA_filtered);
-		for (auto itr_v_c_parse_FASTA : par_v_c_parse_FASTA) {
-			if ((IgFamily::OUTPUT_FASTA == 1) && ((itr_v_c_parse_FASTA.return_str_parse_FASTA_accession().find("IGHV3-23") != std::string::npos))) {
-				fout_FASTA_filtered << itr_v_c_parse_FASTA.return_str_parse_FASTA_accession();
-				fout_FASTA_filtered << itr_v_c_parse_FASTA.return_str_parse_FASTA_protein_delimited();
+		if (IgFamily::OUTPUT_FASTA == 1) {
+			for (auto itr_v_c_parse_FASTA : par_v_c_parse_FASTA) {
+				fout_FASTA_filtered << ">" << itr_v_c_parse_FASTA.return_str_parse_FASTA_accession();
+				fout_FASTA_filtered << "|" << itr_v_c_parse_FASTA.return_str_parse_FASTA_genefamily();
+				fout_FASTA_filtered << "|" << itr_v_c_parse_FASTA.return_str_parse_FASTA_species();
+				fout_FASTA_filtered << "|";
+				for (auto i = 0; i < itr_v_c_parse_FASTA.return_str_parse_FASTA_protein().length(); ++i) {
+					if ((i % 60 == 0) && ((i + 1) < itr_v_c_parse_FASTA.return_str_parse_FASTA_protein().length())) {
+						fout_FASTA_filtered << "\n";
+					}
+					fout_FASTA_filtered << itr_v_c_parse_FASTA.return_str_parse_FASTA_protein().at(i);
+				}
+				fout_FASTA_filtered << "\n";
 			}
 		}
 	}
