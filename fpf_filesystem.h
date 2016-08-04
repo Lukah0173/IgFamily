@@ -198,7 +198,6 @@ namespace fpf_filesystem {
 			fin_input_filesystem.clear();
 			fin_input_filesystem.seekg(0, std::ios::beg);
 		}
-		std::cout << con_v_s_filesystem.begin()->str_filename;
 		return con_v_s_filesystem;
 	}
 

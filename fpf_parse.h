@@ -330,6 +330,9 @@ namespace fpf_parse {
 					if (con_str_FASTA_genefamily == "MIGHV") {
 						con_str_FASTA_genefamily_class = con_str_FASTA_genefamily;
 					}
+					if (con_str_FASTA_genefamily == "mA") {
+						con_str_FASTA_genefamily_class = "mAB";
+					}
 					if (con_str_FASTA_genefamily == "CON") {
 						con_str_FASTA_genefamily_class = "CONT";
 					}
