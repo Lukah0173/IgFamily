@@ -34,7 +34,7 @@ namespace IgFamily {
 
 	string_type IGFAMILY_ROOT_DIR = "IgFamily_root_3.txt";
 	string_type INPUT_CSV;
-	string_type INPUT_FASTA = "FASTA\\FPF_V_mouse_contams_20160802.fasta";
+	string_type INPUT_FASTA = "FASTA\\MOST_RECENT_20160804.fasta";
 	string_type output = "z";
 
 	double PARSE_THRESHOLD_IgP = 30;

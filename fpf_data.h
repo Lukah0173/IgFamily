@@ -116,6 +116,7 @@ namespace fpf_data {
 	public:
 		std::vector<string_type> v_str_multinomial_element;
 		std::vector<string_type> v_str_multinomial_category;
+		std::vector<string_type> v_str_multinomial_category_class;
 		std::vector<std::vector<double>> v2_d_multinomial_frequency;
 		std::vector<std::vector<double>> v2_d_multinomial_density;
 	};

@@ -312,8 +312,26 @@ namespace fpf_parse {
 					if (con_str_FASTA_genefamily == "IGHV") {
 						con_str_FASTA_genefamily_class = con_str_FASTA_genefamily;
 					}
+					if (con_str_FASTA_genefamily == "IGKV") {
+						con_str_FASTA_genefamily_class = con_str_FASTA_genefamily;
+					}
 					if (con_str_FASTA_genefamily == "IGLV") {
 						con_str_FASTA_genefamily_class = con_str_FASTA_genefamily;
+					}
+					if (con_str_FASTA_genefamily == "IGKJ") {
+						con_str_FASTA_genefamily_class = "IGKJ_IGLJ_IGKC_IGLC";
+					}
+					if (con_str_FASTA_genefamily == "IGLJ") {
+						con_str_FASTA_genefamily_class = "IGKJ_IGLJ_IGKC_IGLC";
+					}
+					if (con_str_FASTA_genefamily == "IGHJ") {
+						con_str_FASTA_genefamily_class = "IGHJ_IGHC";
+					}
+					if (con_str_FASTA_genefamily == "MIGHV") {
+						con_str_FASTA_genefamily_class = con_str_FASTA_genefamily;
+					}
+					if (con_str_FASTA_genefamily == "CON") {
+						con_str_FASTA_genefamily_class = "CONT";
 					}
 					con_str_FASTA_genefamily += ch_parse_FASTA;
 				}
@@ -396,6 +414,27 @@ namespace fpf_parse {
 
 	void output_v_c_parse_FASTA(std::vector<parse_FASTA_type> par_v_c_parse_FASTA) {
 		string_type output_FASTA_filtered = "FASTA\\output.fasta";
+		std::ofstream fout_FASTA_filtered;
+		fout_FASTA_filtered.open(output_FASTA_filtered);
+		if (IgFamily::OUTPUT_FASTA == 1) {
+			for (auto itr_v_c_parse_FASTA : par_v_c_parse_FASTA) {
+				fout_FASTA_filtered << ">" << itr_v_c_parse_FASTA.return_str_parse_FASTA_accession();
+				fout_FASTA_filtered << "|" << itr_v_c_parse_FASTA.return_str_parse_FASTA_genefamily();
+				fout_FASTA_filtered << "|" << itr_v_c_parse_FASTA.return_str_parse_FASTA_species();
+				fout_FASTA_filtered << "|";
+				for (auto i = 0; i < itr_v_c_parse_FASTA.return_str_parse_FASTA_protein().length(); ++i) {
+					if ((i % 60 == 0) && ((i + 1) < itr_v_c_parse_FASTA.return_str_parse_FASTA_protein().length())) {
+						fout_FASTA_filtered << "\n";
+					}
+					fout_FASTA_filtered << itr_v_c_parse_FASTA.return_str_parse_FASTA_protein().at(i);
+				}
+				fout_FASTA_filtered << "\n";
+			}
+		}
+	}
+
+	void output_v_c_parse_FASTA_to_blastdirectory(std::vector<parse_FASTA_type> par_v_c_parse_FASTA) {
+		string_type output_FASTA_filtered = "blast_directory\\database.fasta";
 		std::ofstream fout_FASTA_filtered;
 		fout_FASTA_filtered.open(output_FASTA_filtered);
 		if (IgFamily::OUTPUT_FASTA == 1) {

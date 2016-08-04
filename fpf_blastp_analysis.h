@@ -65,7 +65,7 @@ namespace fpf_blastp_analysis {
 		std::cout << "\n\n";
 		string_type string_system = "CD Z:\\Lukah Dykes\\IgFamily\\blast_directory\\";
 		string_system += " && makeblastdb.exe -in ";
-		string_system += "output.fasta";
+		string_system += "database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
 		std::cout << "\n\n\n Performing BLAST analysis..\n\n\n";

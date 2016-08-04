@@ -46,7 +46,7 @@ int main() {
 	std::vector<fpf_parse::parse_FASTA_type> main_v_c_parse_FASTA = fpf_parse::parse_FASTA(fin_input_FASTA);
 	if (b_parse_FASTA_empty(main_v_c_parse_FASTA)) { return 1; };
 	fpf_parse::output_v_c_parse_FASTA(main_v_c_parse_FASTA);
-
+	fpf_parse::output_v_c_parse_FASTA_to_blastdirectory(main_v_c_parse_FASTA);
 
 	std::vector<fpf_parse::parse_peptides_csv_type> main_v_c_parse_csv_proteinpeptides_data;
 	std::vector<fpf_parse::parse_peptides_csv_type> main_v_c_parse_csv_denovopeptides_data;

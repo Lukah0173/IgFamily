@@ -27,6 +27,7 @@ namespace fpf_multinomial {
 	void create_s_filesystem_mnom(filesystem_type& par_s_filesystem) {
 		for (auto itr_v_c_multinomial_catagory : par_s_filesystem.v_c_multinomial_catagory) {
 			par_s_filesystem.s_multinomial.v_str_multinomial_category.push_back(itr_v_c_multinomial_catagory.str_multinomial_catagory_name);
+			par_s_filesystem.s_multinomial.v_str_multinomial_category_class.push_back(itr_v_c_multinomial_catagory.str_multinomial_catagory_class);
 		}
 		for (auto itr_v_s_peptide_data : par_s_filesystem.v_s_peptide_data) {
 			par_s_filesystem.s_multinomial.v_str_multinomial_element.push_back(itr_v_s_peptide_data.str_peptide_filtered);
@@ -58,10 +59,15 @@ namespace fpf_multinomial {
 		fout_s_multinomial.open(output_s_multinomial);
 		std::cout << "\n\n ...outputting multinomial data frame for " << par_s_filesystem.str_filename;
 		fout_s_multinomial << ",";
-		fout_s_multinomial << "\n";
 		for (auto itr_v_str_multinomial_category : par_s_filesystem.s_multinomial.v_str_multinomial_category) {
 			fout_s_multinomial << itr_v_str_multinomial_category << ",";
 		}
+		fout_s_multinomial << "\n";
+		fout_s_multinomial << ",";
+		for (auto itr_v_str_multinomial_category_class : par_s_filesystem.s_multinomial.v_str_multinomial_category_class) {
+			fout_s_multinomial << itr_v_str_multinomial_category_class << ",";
+		}
+		fout_s_multinomial << "\n";
 		for (auto i = 0; i < par_s_filesystem.s_multinomial.v_str_multinomial_element.size(); ++i) {
 			fout_s_multinomial << par_s_filesystem.s_multinomial.v_str_multinomial_element[i] << ",";
 			for (auto j = 0; j < par_s_filesystem.s_multinomial.v_str_multinomial_category.size(); ++j) {
