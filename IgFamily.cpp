@@ -1,4 +1,4 @@
-// * * IgFamily v0.5.14 * * 
+// * * IgFamily v0.5.15 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -168,6 +168,8 @@ int main() {
 				if (itr_v_s_filesystem.b_denovopeptides_exist) {
 					fpf_multinomial::create_s_filesystem_mnom(itr_v_s_filesystem);
 					fpf_multinomial::fout_s_multinomial(itr_v_s_filesystem);
+					fpf_multinomial::fout_s_multinomial_peptide_list(itr_v_s_filesystem);
+					fpf_multinomial::fout_s_multinomial_peptide_list_filtered(itr_v_s_filesystem);
 				}
 			}
 		}

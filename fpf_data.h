@@ -118,6 +118,7 @@ namespace fpf_data {
 		std::vector<string_type> v_str_multinomial_category;
 		std::vector<string_type> v_str_multinomial_category_class;
 		std::vector<std::vector<double>> v2_d_multinomial_frequency;
+		std::vector<double> v_d_multinomial_frequency_sum;
 		std::vector<std::vector<double>> v2_d_multinomial_density;
 	};
 

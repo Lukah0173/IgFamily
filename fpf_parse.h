@@ -347,12 +347,14 @@ namespace fpf_parse {
 				con_str_parse_FASTA_accession += ch_parse_FASTA;
 			}
 			if ((sw_2_input_FASTA == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
-				con_c_parse_FASTA.set_str_parse_FASTA_accession(con_str_parse_FASTA_accession);
-				con_c_parse_FASTA.set_str_parse_FASTA_genefamily(con_str_FASTA_genefamily);
-				con_c_parse_FASTA.set_str_parse_FASTA_genefamily_class(con_str_FASTA_genefamily_class);
-				con_c_parse_FASTA.set_str_parse_FASTA_species(con_str_FASTA_species);
-				con_c_parse_FASTA.set_str_parse_FASTA_protein(con_str_FASTA_protein);
-				con_v_c_parse_FASTA.push_back(con_c_parse_FASTA);
+				if (con_str_FASTA_genefamily_class != "MIGHV") {
+					con_c_parse_FASTA.set_str_parse_FASTA_accession(con_str_parse_FASTA_accession);
+					con_c_parse_FASTA.set_str_parse_FASTA_genefamily(con_str_FASTA_genefamily);
+					con_c_parse_FASTA.set_str_parse_FASTA_genefamily_class(con_str_FASTA_genefamily_class);
+					con_c_parse_FASTA.set_str_parse_FASTA_species(con_str_FASTA_species);
+					con_c_parse_FASTA.set_str_parse_FASTA_protein(con_str_FASTA_protein);
+					con_v_c_parse_FASTA.push_back(con_c_parse_FASTA);
+				}
 				con_str_parse_FASTA_accession.clear();
 				con_str_FASTA_protein.clear();
 				con_str_FASTA_genefamily.clear();
