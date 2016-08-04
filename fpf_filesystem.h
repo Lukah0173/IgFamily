@@ -25,10 +25,10 @@ namespace fpf_filesystem {
 
 	typedef std::string string_type;
 	typedef size_t size_type;
-	typedef fpf_data::multinomial_element_data_type multinomial_element_data_type;
+	typedef fpf_data::multinomial_catagory_data_type multinomial_catagory_data_type;
 	typedef fpf_data::peptide_data_type peptide_data_type;
 	typedef fpf_data::blastp_type blastp_type;
-	typedef fpf_data::mnom_type s_mnom_type;
+	typedef fpf_data::multinomial_type multinomial_type;
 	typedef fpf_data::blastp_type blastp_type;
 	typedef fpf_data::report_type report_type;
 
@@ -42,15 +42,15 @@ namespace fpf_filesystem {
 		string_type str_patientstatus;
 		string_type str_enzyme;
 		string_type str_denono_deltamass;
-		std::vector<multinomial_element_data_type> v_c_analysis_data;
-		std::vector<multinomial_element_data_type> v_c_analysis_distinct_data;
+		std::vector<multinomial_catagory_data_type> v_c_multinomial_catagory;
+		std::vector<multinomial_catagory_data_type> v_c_multinomial_catagory_distinct;
 		std::vector<peptide_data_type> v_s_peptide_data;
 		std::pair<string_type, string_type> p_filesystemid;
 		std::vector<std::pair<string_type, string_type>> v_p_replicates;
 		size_type st_replicate_count;
 		std::vector<blastp_type> v_s_blastp;
-		std::vector<s_mnom_type> v_s_mnom;
 		std::vector<report_type> v_s_report;
+		multinomial_type s_multinomial;
 	};
 
 	std::vector<string_type> read_root_dir(string_type par_IgFamily_root_dir) {

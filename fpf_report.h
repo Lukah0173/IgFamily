@@ -15,13 +15,13 @@
 #include "fpf_data.h"
 #include "fpf_filesystem.h"
 
-int test;
+
 
 namespace fpf_report {
 
 	typedef std::string string_type;
 	typedef size_t size_type;
-	typedef fpf_data::multinomial_element_data_type multinomial_element_data_type;
+	typedef fpf_data::multinomial_catagory_data_type multinomial_catagory_data_type;
 	typedef fpf_data::peptide_data_type peptide_data_type;
 	typedef fpf_data::denovo_peptide_type denovo_peptide_type;
 	typedef fpf_data::blastp_type blastp_type;
@@ -38,20 +38,20 @@ namespace fpf_report {
 				return par_s_report.str_protein_accession == itr_v_s_blastp.str_blastp_subject_accession;
 			});
 			if (find_s_report != con_v_s_report.end()) {
-				find_s_report->v_s_blastp.push_back(itr_v_s_blastp);
+				find_s_report->v_s_blastp_genefamily_combined.push_back(itr_v_s_blastp);
 			}
 			else {
 				double con_d_score = double();
-				con_s_report.v_s_blastp.push_back(itr_v_s_blastp);
+				con_s_report.v_s_blastp_genefamily_combined.push_back(itr_v_s_blastp);
 				con_s_report.str_protein_accession = itr_v_s_blastp.str_blastp_subject_accession;
 				con_s_report.str_protein = itr_v_s_blastp.str_protein;
 				con_s_report.d_score = con_d_score;
 				con_v_s_report.push_back(con_s_report);
-				con_s_report.v_s_blastp.clear();
+				con_s_report.v_s_blastp_genefamily_combined.clear();
 			}
 		}
 		for (auto& itr_v_s_report : con_v_s_report) {
-			for (auto& itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
+			for (auto& itr_v_s_blastp : itr_v_s_report.v_s_blastp_genefamily_combined) {
 				auto& find_s_peptide_data = std::find_if(par_s_filesystem.v_s_peptide_data.begin(), par_s_filesystem.v_s_peptide_data.end(),
 					[itr_v_s_blastp](peptide_data_type par_s_peptide_data) {
 					return par_s_peptide_data.str_peptide_filtered == itr_v_s_blastp.str_blastp_query;
@@ -95,7 +95,7 @@ namespace fpf_report {
 				itr_v_s_report.proteinconstruct_from_denovo_type.push_back(con_s_proteinconstruct_from_denovo);
 			}
 			for (size_type i = 0; i < itr_v_s_report.str_protein.length(); ++i) {
-				for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
+				for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp_genefamily_combined) {
 					if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != '.') && ((itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates) > itr_v_s_report.proteinconstruct_from_denovo_type[i].d_score)) {
 						itr_v_s_report.proteinconstruct_from_denovo_type[i].ch_aminoacid = itr_v_s_blastp.str_blastp_query_alignment.at(i);
 						itr_v_s_report.proteinconstruct_from_denovo_type[i].d_score = (itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates);
@@ -141,7 +141,7 @@ namespace fpf_report {
 			fout_s_report << "     Score: " << std::fixed << std::setprecision(2) << itr_v_s_report.d_score;
 			fout_s_report << "\n\n " << itr_v_s_report.str_protein;
 			fout_s_report << "\n";
-			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
+			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp_genefamily_combined) {
 				if (std::find(dummy.begin(), dummy.end(), itr_v_s_blastp.str_blastp_query_alignment) == dummy.end()) {
 					fout_s_report << "\n " << itr_v_s_blastp.str_blastp_query_alignment;
 					dummy.push_back(itr_v_s_blastp.str_blastp_query_alignment);
@@ -207,7 +207,7 @@ namespace fpf_report {
 				++foo;
 			}
 			fout_html_report << "\n\n<br><br>";
-			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp) {
+			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp_genefamily_combined) {
 				fout_html_report << "\n<br> ";
 				int st_mismatch = int();
 				for (int i = 0; i < itr_v_s_blastp.str_blastp_query_alignment.length(); i) {

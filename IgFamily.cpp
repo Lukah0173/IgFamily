@@ -1,4 +1,4 @@
-// * * IgFamily v0.5.13 * * 
+// * * IgFamily v0.5.14 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -15,6 +15,7 @@
 #include "fpf_blastp_analysis.h"
 #include "fpf_dirichlet_mixture_model.h"
 #include "fpf_report.h"
+#include "fpf_multinomial.h"
 
 
 
@@ -54,8 +55,8 @@ int main() {
 
 	std::cout << "\n\n\n * parsing FASTA file";
 
-	std::vector<fpf_data::multinomial_element_data_type> main_v_s_multinomial_element_data = fpf_data::create_v_s_multinomial_element_data(main_v_c_parse_FASTA);
-	std::vector<fpf_data::multinomial_element_data_type> main_v_s_multinomial_element_data_distinct = fpf_data::create_v_s_multinomial_element_data_distinct(main_v_s_multinomial_element_data);
+	std::vector<fpf_data::multinomial_catagory_data_type> main_v_s_multinomial_element_data = fpf_data::create_v_s_multinomial_element_data(main_v_c_parse_FASTA);
+	std::vector<fpf_data::multinomial_catagory_data_type> main_v_s_multinomial_element_data_distinct = fpf_data::create_v_s_multinomial_element_data_distinct(main_v_s_multinomial_element_data);
 
 	if (!IgFamily::FILESYSTEM_MODE) {
 		fpf_filesystem::filesystem_type one_iteration;
@@ -109,11 +110,11 @@ int main() {
 				fpf_data::sort_v_s_peptide_data_str_peptide(main_v_c_proteinpeptides_data);
 				fpf_data::update_v_s_multinomial_element_distinctpolymorphism_data(main_v_s_multinomial_element_data_distinct);
 
-				std::vector<fpf_data::multinomial_element_data_type*> map_main_v_s_multinomial_element_data = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data);
-				std::vector<fpf_data::multinomial_element_data_type*> map_main_v_s_multinomial_element_data_distict = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data_distinct);
+				std::vector<fpf_data::multinomial_catagory_data_type*> map_main_v_s_multinomial_element_data = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data);
+				std::vector<fpf_data::multinomial_catagory_data_type*> map_main_v_s_multinomial_element_data_distict = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data_distinct);
 
 				bool b_map_main_v_s_multinomial_element_data_distict = true;
-				std::vector<fpf_data::multinomial_element_data_type*> con_map_main_v_s_multinomial_element_data;
+				std::vector<fpf_data::multinomial_catagory_data_type*> con_map_main_v_s_multinomial_element_data;
 				if (b_map_main_v_s_multinomial_element_data_distict) {
 					con_map_main_v_s_multinomial_element_data = map_main_v_s_multinomial_element_data_distict;
 				}
@@ -136,8 +137,8 @@ int main() {
 
 			if (IgFamily::FILESYSTEM_MODE) {
 				itr_v_s_filesystem.v_s_peptide_data = main_v_c_denovopeptides_data;
-				itr_v_s_filesystem.v_c_analysis_data = main_v_s_multinomial_element_data;
-				itr_v_s_filesystem.v_c_analysis_distinct_data = main_v_s_multinomial_element_data_distinct;
+				itr_v_s_filesystem.v_c_multinomial_catagory = main_v_s_multinomial_element_data;
+				itr_v_s_filesystem.v_c_multinomial_catagory_distinct = main_v_s_multinomial_element_data_distinct;
 			}
 		}
 	}
@@ -155,23 +156,31 @@ int main() {
 				fpf_blastp_analysis::create_str_protein(itr_v_s_filesystem);
 				fpf_blastp_analysis::create_str_query_alignment(itr_v_s_filesystem);
 				fpf_blastp_analysis::normalise_v_s_filesystem_blastp_data(itr_v_s_filesystem);
-				fpf_blastp_analysis::fout_blastp_summary(itr_v_s_filesystem, BLASTP_THRESHOLD);
-				fpf_blastp_analysis::create_s_filesystem_mnom(itr_v_s_filesystem);
-				fpf_blastp_analysis::fout_v_s_mnom(itr_v_s_filesystem);
+				fpf_blastp_analysis::fout_blastp_summary(itr_v_s_filesystem, BLASTP_THRESHOLD);				
 			}
 		}
 
 		//fpf_dirichlet_mixture_model::initialise();
 
 		if (IgFamily::FILESYSTEM_MODE == 1) {
-			std::cout << "\n\n\n\n ...producing summary reports -\n";
+			std::cout << "\n\n\n\n creating multinomial data frames...\n";
+			for (auto& itr_v_s_filesystem : v_s_filesystem) {
+				if (itr_v_s_filesystem.b_denovopeptides_exist) {
+					fpf_multinomial::create_s_filesystem_mnom(itr_v_s_filesystem);
+					fpf_multinomial::fout_s_multinomial(itr_v_s_filesystem);
+				}
+			}
+		}
+
+		if (IgFamily::FILESYSTEM_MODE == 1) {
+			std::cout << "\n\n\n\n producing summary reports...\n";
 			for (auto& itr_v_s_filesystem : v_s_filesystem) {
 				if (itr_v_s_filesystem.b_denovopeptides_exist) {
 					fpf_report::create_s_report(itr_v_s_filesystem);
 					fpf_report::create_str_proteinconstruct_from_denovo(itr_v_s_filesystem);
 					for (auto& itr_v_s_report : itr_v_s_filesystem.v_s_report) {
 						//fpf_report::sort_v_s_blastp(itr_v_s_report.v_s_blastp);
-						fpf_report::sort_v_s_blastp_withspectralcount(itr_v_s_report.v_s_blastp);
+						fpf_report::sort_v_s_blastp_withspectralcount(itr_v_s_report.v_s_blastp_genefamily_combined);
 					}
 					fpf_report::sort_v_s_report(itr_v_s_filesystem.v_s_report);
 					fpf_report::fout_s_report(itr_v_s_filesystem);
@@ -196,7 +205,7 @@ int main() {
 	//	);
 
 	std::string farewell;
-	std::cout << "\n\n\n\n ...program complete";
+	std::cout << "\n\n\n\n program complete...";
 	std::cout << "\n\n\n\n input any key to exit...\n\n > ";
 	std::cin >> farewell;
 

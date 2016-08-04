@@ -21,7 +21,7 @@ namespace IgFamily {
 	typedef double value_type;
 	typedef size_t size_type;
 
-	string_type version = "v0.5.13";
+	string_type version = "v0.5.14";
 
 	bool FILESYSTEM_MODE = true;
 	bool FILESYSTEM_UPDATE_ALL = true;
@@ -32,7 +32,7 @@ namespace IgFamily {
 	size_type DEBUG_MODE = 0;
 	size_type OUTPUT_FASTA = 1;
 
-	string_type IGFAMILY_ROOT_DIR = "IgFamily_root_2.txt";
+	string_type IGFAMILY_ROOT_DIR = "IgFamily_root_3.txt";
 	string_type INPUT_CSV;
 	string_type INPUT_FASTA = "FASTA\\FPF_V_mouse_contams_20160802.fasta";
 	string_type output = "z";
