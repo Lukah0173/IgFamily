@@ -194,7 +194,7 @@ namespace fpf_parse {
 		return con_v_c_parse_proteinpeptides_csv;
 	}
 
-	std::vector<parse_peptides_csv_type> parse_denovopeptides_csv(std::ifstream& par_fin_denovopeptides_csv, string_type par_str_dir) {
+	std::vector<parse_peptides_csv_type> parse_PEAKS_denovopeptides_csv(std::ifstream& par_fin_denovopeptides_csv, string_type par_str_dir) {
 
 		std::vector<parse_peptides_csv_type> con_v_c_parse_peptides_csv;
 		string_type str_parse_csv;
@@ -222,7 +222,7 @@ namespace fpf_parse {
 				if (str_parse_csv == ",") {
 					++st_count_csv;
 				}
-				if ((st_count_csv == 3) && (str_parse_csv != ",")) {
+				if ((st_count_csv == 3) && (str_parse_csv != ",") && (str_parse_csv != " ")) {
 					if (str_parse_csv == "(") {
 						sw_parse_csv = 2;
 					}
@@ -265,6 +265,87 @@ namespace fpf_parse {
 				if (st_count_csv == 16) {
 					sw_parse_csv_ignore_header = 1;
 					st_count_csv = 0;
+				}
+			}
+		}
+
+		par_fin_denovopeptides_csv.clear();
+		par_fin_denovopeptides_csv.seekg(0, std::ios::beg);
+
+		return con_v_c_parse_peptides_csv;
+	}
+
+	std::vector<parse_peptides_csv_type> parse_NOVOR_denovopeptides_csv(std::ifstream& par_fin_denovopeptides_csv, string_type par_str_dir) {
+
+		std::vector<parse_peptides_csv_type> con_v_c_parse_peptides_csv;
+		string_type str_parse_csv;
+		size_type st_count_csv = size_type();
+		size_type sw_parse_csv = size_type(1);
+		bool b_parse_csv_ignore_header = bool();
+		string_type str_parse_csv_ignore_header = string_type();
+		char ch_parse_csv;
+		string_type str_parse_peptide;
+		string_type con_str_denovo_localconfidence;
+		std::vector<double> con_v_d_denovo_localconfidence;
+
+		while (par_fin_denovopeptides_csv.std::istream::get(ch_parse_csv)) {
+			if (b_parse_csv_ignore_header) {
+				str_parse_csv = ch_parse_csv;
+				if (str_parse_csv == ",") {
+					++st_count_csv;
+				}
+				if ((st_count_csv == 11) && (ch_parse_csv == ',')) {
+					con_v_d_denovo_localconfidence.push_back(std::stod(con_str_denovo_localconfidence));
+					parse_peptides_csv_type con_c_parse_csv = parse_peptides_csv_type();
+					con_c_parse_csv.str_parse_peptides_csv_file = par_str_dir;
+					con_c_parse_csv.str_parse_peptides_csv_peptide = str_parse_peptide;
+					con_c_parse_csv.v_d_denovo_localconfidence = con_v_d_denovo_localconfidence;
+					con_v_c_parse_peptides_csv.push_back(con_c_parse_csv);
+					con_v_d_denovo_localconfidence.clear();
+					str_parse_peptide.clear();
+					st_count_csv = 1;
+				}
+				if ((st_count_csv == 10) && (ch_parse_csv != ',')) {
+					if (ch_parse_csv == '-') {
+						con_v_d_denovo_localconfidence.push_back(std::stod(con_str_denovo_localconfidence));
+						con_str_denovo_localconfidence.clear();
+					}
+					if ((ch_parse_csv != ' ') && (ch_parse_csv != '-')) {
+						con_str_denovo_localconfidence += str_parse_csv;
+					}
+				}
+				if ((st_count_csv == 9) && (str_parse_csv != ",") && (str_parse_csv != " ")) {
+					if (str_parse_csv == "(") {
+						sw_parse_csv = 2;
+					}
+					if (str_parse_csv == ")") {
+						sw_parse_csv = 1;
+					}
+					if ((sw_parse_csv == 1) && ((str_parse_csv == ".") && (str_parse_peptide.length() > 2))) {
+						sw_parse_csv = 0;
+					}
+					if ((sw_parse_csv == 1) || (sw_parse_csv == 2)) {
+						str_parse_peptide += str_parse_csv;
+					}
+					if ((str_parse_csv == ".") && (str_parse_peptide.length() <= 2)) {
+						str_parse_peptide.clear();
+						sw_parse_csv = 1;
+					}
+					if ((sw_parse_csv != 2) && (str_parse_csv != ".")) {
+						sw_parse_csv = 1;
+					}
+				}
+				if ((st_count_csv == 10) && (str_parse_csv != ",")) {
+					str_parse_csv.clear();
+				}
+			}
+			if (!b_parse_csv_ignore_header) {
+				str_parse_csv_ignore_header += ch_parse_csv;
+				if (str_parse_csv_ignore_header == " aaScore,") {
+					b_parse_csv_ignore_header = true;
+				}
+				if (ch_parse_csv == ',') {
+					str_parse_csv_ignore_header.clear();
 				}
 			}
 		}

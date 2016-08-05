@@ -207,7 +207,13 @@ namespace fpf_filesystem {
 	}
 
 	string_type read_filesystem_denovopeptides(string_type par_IgFamily_root_dir) {
-		string_type con_str_root_denovopeptides = par_IgFamily_root_dir + "denovo_peptides.csv";
+		string_type con_str_root_denovopeptides;
+		if (IgFamily::NOVOR_DENOVO) {
+			con_str_root_denovopeptides = par_IgFamily_root_dir + "denovo_peptides_NOVOR.csv";
+		}
+		else {
+			con_str_root_denovopeptides = par_IgFamily_root_dir + "denovo_peptides.csv";
+		}
 		return con_str_root_denovopeptides;
 	}
 
@@ -222,7 +228,12 @@ namespace fpf_filesystem {
 	std::vector<fpf_parse::parse_peptides_csv_type> parse_filesystem_denovopeptides(string_type par_str_fin_root) {
 		std::vector<fpf_parse::parse_peptides_csv_type> con_v_c_parse_csv;
 		std::ifstream fin_input_csv(par_str_fin_root);
-		con_v_c_parse_csv = fpf_parse::parse_denovopeptides_csv(fin_input_csv, par_str_fin_root);
+		if (IgFamily::NOVOR_DENOVO) {
+			con_v_c_parse_csv = fpf_parse::parse_NOVOR_denovopeptides_csv(fin_input_csv, par_str_fin_root);
+		}
+		else {
+			con_v_c_parse_csv = fpf_parse::parse_PEAKS_denovopeptides_csv(fin_input_csv, par_str_fin_root);
+		}
 		std::cout << "\n\n ! " << con_v_c_parse_csv.size();
 		return con_v_c_parse_csv;
 	}

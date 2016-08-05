@@ -52,7 +52,7 @@ namespace fpf_multinomial {
 				std::cout << "\n\n ~~~ query / peptide or subject / accession mismatch";
 				std::cout << "\n\n ~~~ input any key to continue";
 				string_type catch_error;
-				std::cin >> catch_error;
+				//std::cin >> catch_error;
 			}
 		}
 	}

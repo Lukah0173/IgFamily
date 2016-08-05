@@ -6,13 +6,13 @@
 //}
 //fout_peptidecomparison << "\n\n\n";
 //for (auto itr_2 : main_v_c_parse_csv_denovopeptides_data) {
-//	fout_peptidecomparison << "\n" << itr_2.str_parse_denovopeptides_csv_peptide;
+//	fout_peptidecomparison << "\n" << itr_2.str_parse_PEAKS_denovopeptides_csv_peptide;
 //}
 //fout_peptidecomparison << "\n\n\n";
 //for (auto itr_1 : main_v_c_parse_csv_proteinpeptides_data) {
 //	bool itr_1_find = bool();
 //	for (auto itr_2 = main_v_c_parse_csv_denovopeptides_data.begin(); itr_2 != main_v_c_parse_csv_denovopeptides_data.end(); ++itr_2) {
-//		if (itr_1.return_str_parse_proteinpeptides_csv_peptide() == itr_2->str_parse_denovopeptides_csv_peptide) {
+//		if (itr_1.return_str_parse_proteinpeptides_csv_peptide() == itr_2->str_parse_PEAKS_denovopeptides_csv_peptide) {
 //			itr_1_find = true;
 //		}
 //	}
@@ -24,12 +24,12 @@
 //for (auto itr_2 = main_v_c_parse_csv_denovopeptides_data.begin(); itr_2 != main_v_c_parse_csv_denovopeptides_data.end(); ++itr_2) {
 //	bool itr_2_find = bool();
 //	for (auto itr_1 = main_v_c_parse_csv_proteinpeptides_data.begin(); itr_1 != main_v_c_parse_csv_proteinpeptides_data.end(); ++itr_1) {
-//		if (itr_1->return_str_parse_proteinpeptides_csv_peptide() == itr_2->str_parse_denovopeptides_csv_peptide) {
+//		if (itr_1->return_str_parse_proteinpeptides_csv_peptide() == itr_2->str_parse_PEAKS_denovopeptides_csv_peptide) {
 //			itr_2_find = true;
 //		}
 //	}
 //	if (!itr_2_find) {
-//		fout_peptidecomparison << "\n" << itr_2->str_parse_denovopeptides_csv_peptide;
+//		fout_peptidecomparison << "\n" << itr_2->str_parse_PEAKS_denovopeptides_csv_peptide;
 //	}
 //}
 
