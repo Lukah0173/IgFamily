@@ -1,4 +1,4 @@
-// * * IgFamily v0.5.16 * * 
+// * * IgFamily v0.5.17 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -52,6 +52,11 @@ int main() {
 	std::vector<fpf_parse::parse_peptides_csv_type> main_v_c_parse_csv_denovopeptides_data;
 	std::vector<string_type> v_str_root_dir = fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR);
 	std::vector<fpf_filesystem::filesystem_type> v_s_filesystem = fpf_filesystem::read_filesystem(v_str_root_dir);
+	for (auto& itr_v_s_filesystem : v_s_filesystem) {
+		if (itr_v_s_filesystem.b_fileconversion) {
+			fpf_filesystem::perform_fileconversion(itr_v_s_filesystem);
+		}
+	}
 
 	std::cout << "\n\n\n * parsing FASTA file";
 

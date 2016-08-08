@@ -16,6 +16,7 @@
 #include <tuple> // provides - std::tuple
 #include "IgFamily.h"
 #include "fpf_data.h"
+#include "fpf_convert.h"
 
 
 
@@ -25,6 +26,7 @@ namespace fpf_filesystem {
 
 	typedef std::string string_type;
 	typedef size_t size_type;
+	typedef fpf_convert::fileconversion_type fileconversion_type;
 	typedef fpf_data::multinomial_catagory_data_type multinomial_catagory_data_type;
 	typedef fpf_data::peptide_data_type peptide_data_type;
 	typedef fpf_data::blastp_type blastp_type;
@@ -36,12 +38,27 @@ namespace fpf_filesystem {
 	public:
 		bool b_proteinpeptides_exist;
 		bool b_denovopeptides_exist;
+
+		/* filesystem */
+
 		string_type str_directory;
 		string_type str_filename;
 		string_type str_fileversion;
+
+		/* sample factors */
+
 		string_type str_patientstatus;
-		string_type str_enzyme;
+		string_type str_enzyme;	
+
+		/* mgf conversion parameters */
+
+		bool b_fileconversion = true;
+		fileconversion_type s_fileconversion;
+
+		/* de novo parameters */
+
 		string_type str_denono_deltamass;
+
 		std::vector<multinomial_catagory_data_type> v_c_multinomial_catagory;
 		std::vector<multinomial_catagory_data_type> v_c_multinomial_catagory_distinct;
 		std::vector<peptide_data_type> v_s_peptide_data;
@@ -201,6 +218,48 @@ namespace fpf_filesystem {
 		return con_v_s_filesystem;
 	}
 
+	void perform_fileconversion(filesystem_type& par_s_filesystem) {
+		par_s_filesystem.s_fileconversion = fpf_convert::create_s_fileconversion(fpf_convert::prompt_b_defaultconversion());
+		string_type str_fileconversion_command = string_type();
+		str_fileconversion_command += "msconvert.exe ";
+		str_fileconversion_command += "\"Z:\\Lukah Dykes\\IgFamily\\";
+		str_fileconversion_command += par_s_filesystem.str_directory;
+		str_fileconversion_command += par_s_filesystem.str_filename;
+		str_fileconversion_command += ".wiff\"";
+		str_fileconversion_command += " --mgf";
+		if (par_s_filesystem.s_fileconversion.s_peakpicking.b_peakpicking) {
+			str_fileconversion_command += " --filter \"peakPicking true ";
+			str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_peakpicking.st_peakpicking_mslevel_from);
+			str_fileconversion_command += "-";
+			str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_peakpicking.st_peakpicking_mslevel_to);
+			str_fileconversion_command += "\"";
+		}
+		if (par_s_filesystem.s_fileconversion.s_ms2deisotope.b_ms2deisotope) {
+			//str_fileconversion_command += " --filter MS2Deisotope";
+		}
+		if (par_s_filesystem.s_fileconversion.s_ms2denoise.b_ms2denoise) {
+			str_fileconversion_command += " --filter \"MS2Denoise ";
+			str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_ms2denoise.st_ms2denoise_peaksinwindow);
+			str_fileconversion_command += " ";
+			str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_ms2denoise.st_ms2denoise_windowwidth);
+			str_fileconversion_command += " true\"";
+		}
+		if (par_s_filesystem.s_fileconversion.s_chargestatepredictor.b_chargestatepredictor) {
+			//str_fileconversion_command += " --filter \"chargeStatePredictor true ";
+			//str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_chargestatepredictor.st_chargestatepredictor_mincharge);
+			//str_fileconversion_command += " ";
+			//str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_chargestatepredictor.st_chargestatepredictor_maxcharge);
+			//str_fileconversion_command += " ";
+			//str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_chargestatepredictor.d_chargestatepredictor_chargefraction);
+			//str_fileconversion_command += "\"";
+		}
+		str_fileconversion_command += " outdir=\"Z:\\Lukah Dykes\\IgFamily\\";
+		str_fileconversion_command += par_s_filesystem.str_directory;
+		str_fileconversion_command += "\"";
+		std::cout << "\n\n" << str_fileconversion_command;
+		fpf_convert::sys_msconvert(str_fileconversion_command, par_s_filesystem.str_directory);
+	}
+
 	string_type read_filesystem_proteinpeptides(string_type par_IgFamily_root_dir) {
 		string_type con_str_root_proteinpeptides = par_IgFamily_root_dir + "protein_peptides.csv";
 		return con_str_root_proteinpeptides;
@@ -313,6 +372,12 @@ namespace fpf_filesystem {
 		fout_v_s_filesystem << ";\n";
 		fout_v_s_filesystem << "STATUS: " << par_s_filesystem.str_patientstatus << ";\n";
 		fout_v_s_filesystem << "ENZYME: " << par_s_filesystem.str_enzyme << ";\n";
+		//if (par_s_filesystem.b_wiffconversion) {
+		//	fout_v_s_filesystem << "CHARGE_STATE_PREDICTOR: ";
+		//	if (par_s_filesystem.str_chargestatepredictor == "") {
+		//		fout_v_s_filesystem << par_s_filesystem.str_chargestatepredictor << ";\n";
+		//	}
+		//}
 		fout_v_s_filesystem << "DENOVO_DELTAMASS: " << par_s_filesystem.str_denono_deltamass << ";\n";
 	}
 }
