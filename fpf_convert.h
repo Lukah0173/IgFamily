@@ -58,23 +58,23 @@ namespace fpf_convert {
 	};
 
 	bool prompt_b_defaultconversion() {
-		std::cout << " default .wiff conversion parameters - ";
-		std::cout << "\n\n ~ peak picking";
-		std::cout << "\n\n                ~ MS levels: 1-2";
-		std::cout << "\n\n ~ deisotope";
-		std::cout << "\n\n ~ denoise ms2";
-		std::cout << "\n\n               ~ window width: 30 Da";
-		std::cout << "\n\n               ~ most intense peaks in window: 6";
-		std::cout << "\n\n ~ charge state predictor";
-		std::cout << "\n\n                          ~ minimum charge: 2";
-		std::cout << "\n\n                          ~ maximum charge: 3";
-		std::cout << "\n\n                          ~ charge fraction: 0.9";
+		std::cout << "\n\n\n\n default .wiff conversion parameters - ";
+		std::cout << "\n\n   ~ peak picking";
+		std::cout << "\n\n     - MS levels: 1-2";
+		std::cout << "\n\n   ~ deisotope";
+		std::cout << "\n\n   ~ denoise ms2";
+		std::cout << "\n\n     - window width: 30 Da";
+		std::cout << "\n\n     - most intense peaks in window: 6";
+		std::cout << "\n\n   ~ charge state predictor";
+		std::cout << "\n\n     - minimum charge: 2";
+		std::cout << "\n\n     - maximum charge: 3";
+		std::cout << "\n\n     - charge fraction: 0.9";
 		std::cout << "\n\n\n use default .wiff conversion parameters?";
 		std::cout << "\n\n (y = yes, any other value = no)";
-		std::cout << "\n\n -> ";
 		
 		string_type str_prompt;
-		while (str_prompt == "y") {
+		while (str_prompt != "y") {
+			std::cout << "\n\n -> ";
 			std::cin >> str_prompt;
 		}
 		if (str_prompt == "y") {
@@ -103,7 +103,7 @@ namespace fpf_convert {
 	}
 
 	void sys_msconvert(string_type par_str_msconvert_command, string_type par_str_filesystem_directory) {
-		string_type string_system = "CD Z:\\Lukah Dykes\\IgFamily\\ProteoWizard\\";
+		string_type string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\ProteoWizard\\";
 		string_system += " && ";
 		string_system += par_str_msconvert_command;
 		system(string_system.c_str());

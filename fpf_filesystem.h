@@ -222,7 +222,7 @@ namespace fpf_filesystem {
 		par_s_filesystem.s_fileconversion = fpf_convert::create_s_fileconversion(fpf_convert::prompt_b_defaultconversion());
 		string_type str_fileconversion_command = string_type();
 		str_fileconversion_command += "msconvert.exe ";
-		str_fileconversion_command += "\"Z:\\Lukah Dykes\\IgFamily\\";
+		str_fileconversion_command += "\"Z:\\Lukah_Dykes\\IgFamily\\";
 		str_fileconversion_command += par_s_filesystem.str_directory;
 		str_fileconversion_command += par_s_filesystem.str_filename;
 		str_fileconversion_command += ".wiff\"";
@@ -253,9 +253,8 @@ namespace fpf_filesystem {
 			//str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_chargestatepredictor.d_chargestatepredictor_chargefraction);
 			//str_fileconversion_command += "\"";
 		}
-		str_fileconversion_command += " outdir=\"Z:\\Lukah Dykes\\IgFamily\\";
+		str_fileconversion_command += " -o Z:\\Lukah_Dykes\\IgFamily\\";
 		str_fileconversion_command += par_s_filesystem.str_directory;
-		str_fileconversion_command += "\"";
 		std::cout << "\n\n" << str_fileconversion_command;
 		fpf_convert::sys_msconvert(str_fileconversion_command, par_s_filesystem.str_directory);
 	}
