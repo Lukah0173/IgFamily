@@ -60,8 +60,8 @@ int main() {
 
 	std::cout << "\n\n\n * parsing FASTA file";
 
-	std::vector<fpf_data::multinomial_catagory_data_type> main_v_s_multinomial_element_data = fpf_data::create_v_s_multinomial_element_data(main_v_c_parse_FASTA);
-	std::vector<fpf_data::multinomial_catagory_data_type> main_v_s_multinomial_element_data_distinct = fpf_data::create_v_s_multinomial_element_data_distinct(main_v_s_multinomial_element_data);
+	std::vector<fpf_data::multinomial_category_data_type> main_v_s_multinomial_element_data = fpf_data::create_v_s_multinomial_element_data(main_v_c_parse_FASTA);
+	std::vector<fpf_data::multinomial_category_data_type> main_v_s_multinomial_element_data_distinct = fpf_data::create_v_s_multinomial_element_data_distinct(main_v_s_multinomial_element_data);
 
 	if (!IgFamily::FILESYSTEM_MODE) {
 		fpf_filesystem::filesystem_type one_iteration;
@@ -115,11 +115,11 @@ int main() {
 				fpf_data::sort_v_s_peptide_data_str_peptide(main_v_c_proteinpeptides_data);
 				fpf_data::update_v_s_multinomial_element_distinctpolymorphism_data(main_v_s_multinomial_element_data_distinct);
 
-				std::vector<fpf_data::multinomial_catagory_data_type*> map_main_v_s_multinomial_element_data = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data);
-				std::vector<fpf_data::multinomial_catagory_data_type*> map_main_v_s_multinomial_element_data_distict = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data_distinct);
+				std::vector<fpf_data::multinomial_category_data_type*> map_main_v_s_multinomial_element_data = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data);
+				std::vector<fpf_data::multinomial_category_data_type*> map_main_v_s_multinomial_element_data_distict = map_v_s_multinomial_element_data_by_score(main_v_s_multinomial_element_data_distinct);
 
 				bool b_map_main_v_s_multinomial_element_data_distict = true;
-				std::vector<fpf_data::multinomial_catagory_data_type*> con_map_main_v_s_multinomial_element_data;
+				std::vector<fpf_data::multinomial_category_data_type*> con_map_main_v_s_multinomial_element_data;
 				if (b_map_main_v_s_multinomial_element_data_distict) {
 					con_map_main_v_s_multinomial_element_data = map_main_v_s_multinomial_element_data_distict;
 				}

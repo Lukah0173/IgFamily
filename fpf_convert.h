@@ -19,11 +19,17 @@ namespace fpf_convert {
 	typedef size_t size_type;
 	typedef std::string string_type;
 
+	struct threshold_type;
 	struct peakpicking_type;
 	struct ms2deisotope_type;
 	struct ms2denoise_type;
 	struct chargestatepredictor_type;
 	struct fileconversion_type;
+
+	struct threshold_type {
+		bool b_threshold;
+		size_type st_threshold;
+	};
 
 	struct peakpicking_type {
 		bool b_peakpicking;
@@ -51,14 +57,17 @@ namespace fpf_convert {
 	};
 
 	struct fileconversion_type {
-		chargestatepredictor_type s_chargestatepredictor;
+		threshold_type s_threshold;
 		peakpicking_type s_peakpicking;
 		ms2deisotope_type s_ms2deisotope;
 		ms2denoise_type s_ms2denoise;
+		chargestatepredictor_type s_chargestatepredictor;
 	};
 
 	bool prompt_b_defaultconversion() {
 		std::cout << "\n\n\n\n default .wiff conversion parameters - ";
+		std::cout << "\n\n   ~ absolute intensity threshold";
+		std::cout << "\n\n     - intensity: 3";
 		std::cout << "\n\n   ~ peak picking";
 		std::cout << "\n\n     - MS levels: 1-2";
 		std::cout << "\n\n   ~ deisotope";
@@ -86,6 +95,8 @@ namespace fpf_convert {
 	fileconversion_type create_s_fileconversion(bool par_b_defaultconversion) {
 		fileconversion_type s_fileconversion = fileconversion_type();
 		if (par_b_defaultconversion) {
+			s_fileconversion.s_threshold.b_threshold = true;
+			s_fileconversion.s_threshold.st_threshold = 3;
 			s_fileconversion.s_peakpicking.b_peakpicking = true;
 			s_fileconversion.s_peakpicking.st_peakpicking_mslevel_from = 1;
 			s_fileconversion.s_peakpicking.st_peakpicking_mslevel_to = 2;
@@ -103,6 +114,7 @@ namespace fpf_convert {
 	}
 
 	void sys_msconvert(string_type par_str_msconvert_command, string_type par_str_filesystem_directory) {
+		std::cout << "\n\n";
 		string_type string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\ProteoWizard\\";
 		string_system += " && ";
 		string_system += par_str_msconvert_command;

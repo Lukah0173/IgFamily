@@ -23,7 +23,7 @@
 
 namespace fpf_data {
 
-	struct multinomial_catagory_data_type;
+	struct multinomial_category_data_type;
 	struct peptide_data_type;
 	struct denovo_aminoacid_type;
 	struct denovo_peptide_type;
@@ -36,9 +36,9 @@ namespace fpf_data {
 	typedef size_t size_type;
 	typedef bool bool_type;
 
-	struct multinomial_catagory_data_type {
+	struct multinomial_category_data_type {
 	public:
-		multinomial_catagory_data_type() {
+		multinomial_category_data_type() {
 			d_score = { 1 };
 		};
 
@@ -52,7 +52,7 @@ namespace fpf_data {
 		size_type st_totalspectralcount;
 		double d_coverage;
 		double d_score;
-		std::vector<multinomial_catagory_data_type*> v_s_multinomial_catagory_polyassociation;
+		std::vector<multinomial_category_data_type*> v_s_multinomial_catagory_polyassociation;
 	};
 
 	struct denovo_aminoacid_type {
@@ -78,8 +78,8 @@ namespace fpf_data {
 		std::vector<std::tuple<string_type, size_type, size_type>> v_p_replicate_data;
 		std::vector<string_type> v_str_peptideassociation;
 		std::vector<string_type> v_str_peptideassociation_distinct;
-		std::vector<std::pair<multinomial_catagory_data_type*, double>> v_p_peptideassociation;
-		std::vector<std::pair<multinomial_catagory_data_type*, double>> v_p_peptideassociation_distinct;
+		std::vector<std::pair<multinomial_category_data_type*, double>> v_p_peptideassociation;
+		std::vector<std::pair<multinomial_category_data_type*, double>> v_p_peptideassociation_distinct;
 	};
 
 	struct blastp_type {
@@ -122,18 +122,18 @@ namespace fpf_data {
 		std::vector<std::vector<double>> v2_d_multinomial_density;
 	};
 
-	std::vector<multinomial_catagory_data_type> create_v_s_multinomial_element_data(std::vector<fpf_parse::parse_FASTA_type> par_v_c_parse_FASTA) {
+	std::vector<multinomial_category_data_type> create_v_s_multinomial_element_data(std::vector<fpf_parse::parse_FASTA_type> par_v_c_parse_FASTA) {
 
-		// Vector reallocation will invalidate all pointers to multinomial_catagory_data_type references.
+		// Vector reallocation will invalidate all pointers to multinomial_category_data_type references.
 		// Do not reallocate after return!
 
-		std::vector<multinomial_catagory_data_type> con_v_s_multinomial_element_data;
-		multinomial_catagory_data_type con_c_analysis;
+		std::vector<multinomial_category_data_type> con_v_s_multinomial_element_data;
+		multinomial_category_data_type con_c_analysis;
 		size_type con_st_ID = size_type();
 		for (auto itr_par_v_c_parse_FASTA : par_v_c_parse_FASTA) {
 			++con_st_ID;
 			auto find_v_s_multinomial_element_data = std::find_if(con_v_s_multinomial_element_data.begin(), con_v_s_multinomial_element_data.end(),
-				[itr_par_v_c_parse_FASTA](multinomial_catagory_data_type par_s_multinomial_element_data) {
+				[itr_par_v_c_parse_FASTA](multinomial_category_data_type par_s_multinomial_element_data) {
 				return par_s_multinomial_element_data.str_multinomial_catagory_name == itr_par_v_c_parse_FASTA.return_str_parse_FASTA_genefamily(); });
 			if (find_v_s_multinomial_element_data == con_v_s_multinomial_element_data.end()) {
 				con_c_analysis.str_multinomial_catagory_name = itr_par_v_c_parse_FASTA.return_str_parse_FASTA_genefamily();
@@ -149,10 +149,10 @@ namespace fpf_data {
 		return con_v_s_multinomial_element_data;
 	}
 
-	std::vector<multinomial_catagory_data_type> create_v_s_multinomial_element_data_distinct(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data) {
-		std::vector<multinomial_catagory_data_type> con_v_s_multinomial_element_data_distinct;
+	std::vector<multinomial_category_data_type> create_v_s_multinomial_element_data_distinct(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data) {
+		std::vector<multinomial_category_data_type> con_v_s_multinomial_element_data_distinct;
 		std::vector<string_type> con_v_str_multinomial_catagory_name_distinct;
-		multinomial_catagory_data_type con_c_analysis_distinct;
+		multinomial_category_data_type con_c_analysis_distinct;
 		for (auto itr_v_s_multinomial_element_data_data = par_v_s_multinomial_element_data.begin(); itr_v_s_multinomial_element_data_data != par_v_s_multinomial_element_data.end(); ++itr_v_s_multinomial_element_data_data) {
 			string_type con_str_multinomial_catagory_name = itr_v_s_multinomial_element_data_data->str_multinomial_catagory_name;
 			size_type sw_peptideassociation_distinct = size_type();
@@ -185,10 +185,10 @@ namespace fpf_data {
 		return con_v_s_multinomial_element_data_distinct;
 	}
 
-	void update_v_s_multinomial_element_distinctpolymorphism_data(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data_distinct) {
-		multinomial_catagory_data_type con_c_analysis_distinct_update;
+	void update_v_s_multinomial_element_distinctpolymorphism_data(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data_distinct) {
+		multinomial_category_data_type con_c_analysis_distinct_update;
 		for (auto itr_v_s_multinomial_element_data_distinct = par_v_s_multinomial_element_data_distinct.begin(); itr_v_s_multinomial_element_data_distinct != par_v_s_multinomial_element_data_distinct.end(); ++itr_v_s_multinomial_element_data_distinct) {
-			std::vector<multinomial_catagory_data_type*> con_v_s_multinomial_element_data_distinct_update = itr_v_s_multinomial_element_data_distinct->v_s_multinomial_catagory_polyassociation;
+			std::vector<multinomial_category_data_type*> con_v_s_multinomial_element_data_distinct_update = itr_v_s_multinomial_element_data_distinct->v_s_multinomial_catagory_polyassociation;
 			for (auto itr_v_s_multinomial_element_data_distinct_polyassociation = con_v_s_multinomial_element_data_distinct_update.begin(); itr_v_s_multinomial_element_data_distinct_polyassociation != con_v_s_multinomial_element_data_distinct_update.end(); ++itr_v_s_multinomial_element_data_distinct_polyassociation) {
 				if (itr_v_s_multinomial_element_data_distinct_polyassociation == con_v_s_multinomial_element_data_distinct_update.begin()) {
 					con_c_analysis_distinct_update = **itr_v_s_multinomial_element_data_distinct_polyassociation;
@@ -278,7 +278,7 @@ namespace fpf_data {
 		return con_v_s_peptide_data;
 	}
 
-	void create_v_s_multinomial_element_data_v_s_peptide_data(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data, std::vector<peptide_data_type> par_v_s_peptide_data) {
+	void create_v_s_multinomial_element_data_v_s_peptide_data(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data, std::vector<peptide_data_type> par_v_s_peptide_data) {
 		string_type con_str_peptide = string_type();
 		std::vector<peptide_data_type> con_v_s_peptide_data;
 		size_type sw_peptide_filtered = size_type();
@@ -322,7 +322,7 @@ namespace fpf_data {
 		}
 	}
 
-	void create_v_s_multinomial_element_data_v_s_peptide_data_distinct_filtered(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data, std::vector<peptide_data_type> par_v_data_filtered_distinct) {
+	void create_v_s_multinomial_element_data_v_s_peptide_data_distinct_filtered(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data, std::vector<peptide_data_type> par_v_data_filtered_distinct) {
 		string_type con_str_peptide_distinct_filtered = string_type();
 		std::vector<peptide_data_type> con_v_s_peptide_data_distinct_filtered;
 		for (auto& itr_v_s_multinomial_element_data : par_v_s_multinomial_element_data) {
@@ -338,7 +338,7 @@ namespace fpf_data {
 		}
 	}
 
-	void create_v_s_multinomial_element_data_str_alignment(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data) {
+	void create_v_s_multinomial_element_data_str_alignment(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data) {
 		for (auto& itr_v_s_multinomial_element_data : par_v_s_multinomial_element_data) {
 			string_type con_str_alignment = string_type();
 			con_str_alignment.clear();
@@ -382,7 +382,7 @@ namespace fpf_data {
 		}
 	}
 
-	void create_v_s_multinomial_element_data_st_totalspectralcount(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data) {
+	void create_v_s_multinomial_element_data_st_totalspectralcount(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data) {
 		for (auto& itr_v_s_multinomial_element_data : par_v_s_multinomial_element_data) {
 			size_type con_st_totalspectralcount = size_type();
 			std::vector<peptide_data_type> con_v_s_peptide_data = itr_v_s_multinomial_element_data.v_s_peptide_data;
@@ -393,7 +393,7 @@ namespace fpf_data {
 		}
 	}
 
-	void create_v_s_multinomial_element_data_d_coverage(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data) {
+	void create_v_s_multinomial_element_data_d_coverage(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data) {
 		for (auto itr_v_s_multinomial_element_data = par_v_s_multinomial_element_data.begin(); itr_v_s_multinomial_element_data != par_v_s_multinomial_element_data.end(); ++itr_v_s_multinomial_element_data) {
 			double con_d_coverage;
 			double count_str_alignment_true = double();
@@ -412,7 +412,7 @@ namespace fpf_data {
 		}
 	}
 
-	void create_v_c_peptide_v_p_peptideassociation(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data, std::vector<peptide_data_type>& par_v_s_peptide_data) {
+	void create_v_c_peptide_v_p_peptideassociation(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data, std::vector<peptide_data_type>& par_v_s_peptide_data) {
 		for (auto& itr_v_s_peptide_data = par_v_s_peptide_data.begin(); itr_v_s_peptide_data != par_v_s_peptide_data.end(); ++itr_v_s_peptide_data) {
 			size_type sw_select_data = size_type();
 			string_type con_st_select_data = string_type();
@@ -474,11 +474,11 @@ namespace fpf_data {
 		}
 	}
 
-	void create_v_c_peptide_v_p_peptideassociation_distinct(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data_distinct, std::vector<peptide_data_type>& par_v_s_peptide_data) {
-		std::vector<multinomial_catagory_data_type*> con_v_p_peptideassociation_distinct;
+	void create_v_c_peptide_v_p_peptideassociation_distinct(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data_distinct, std::vector<peptide_data_type>& par_v_s_peptide_data) {
+		std::vector<multinomial_category_data_type*> con_v_p_peptideassociation_distinct;
 		std::vector<string_type> con_v_str_peptideassociation_distinct;
 		for (auto& itr_v_s_peptide_data = par_v_s_peptide_data.begin(); itr_v_s_peptide_data != par_v_s_peptide_data.end(); ++itr_v_s_peptide_data) {
-			std::vector<std::pair<multinomial_catagory_data_type*, double>> con_v_p_peptideassociation = itr_v_s_peptide_data->v_p_peptideassociation;
+			std::vector<std::pair<multinomial_category_data_type*, double>> con_v_p_peptideassociation = itr_v_s_peptide_data->v_p_peptideassociation;
 			for (auto itr_v_p_peptideassociation = con_v_p_peptideassociation.begin(); itr_v_p_peptideassociation != con_v_p_peptideassociation.end(); ++itr_v_p_peptideassociation) {
 				size_type sw_peptideassociation_distinct = size_type();
 				string_type con_str_peptideassociation_distinct = string_type();
@@ -506,7 +506,7 @@ namespace fpf_data {
 		}
 	}
 
-	inline void create_global_score_mean(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data) {
+	inline void create_global_score_mean(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data) {
 		double con_d_score = double();
 		size_type con_st_nonzero_score = size_type();
 		for (auto itr_v_s_multinomial_element_data = par_v_s_multinomial_element_data.begin(); itr_v_s_multinomial_element_data != par_v_s_multinomial_element_data.end(); ++itr_v_s_multinomial_element_data) {
@@ -527,7 +527,7 @@ namespace fpf_data {
 		return (log(d) / log(base));
 	}
 
-	void create_v_s_multinomial_element_data_d_score(std::vector<peptide_data_type>& par_v_s_peptide_data, std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data, std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data_distinct) {
+	void create_v_s_multinomial_element_data_d_score(std::vector<peptide_data_type>& par_v_s_peptide_data, std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data, std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data_distinct) {
 		for (auto& itr_v_s_multinomial_element_data : par_v_s_multinomial_element_data) {
 			string_type con_str_multinomial_catagory_name = itr_v_s_multinomial_element_data.str_multinomial_catagory_name;
 			size_type sw_peptideassociation_distinct = size_type();
@@ -576,11 +576,11 @@ namespace fpf_data {
 		}
 	}
 
-	inline bool predicate_v_s_multinomial_element_data_d_score(const multinomial_catagory_data_type& i, const multinomial_catagory_data_type& j) {
+	inline bool predicate_v_s_multinomial_element_data_d_score(const multinomial_category_data_type& i, const multinomial_category_data_type& j) {
 		return (i.d_score > j.d_score);
 	}
 
-	inline void sort_v_s_multinomial_element_data_d_score(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data) {
+	inline void sort_v_s_multinomial_element_data_d_score(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data) {
 		std::sort(par_v_s_multinomial_element_data.begin(), par_v_s_multinomial_element_data.end(), predicate_v_s_multinomial_element_data_d_score);
 	}
 
@@ -608,13 +608,13 @@ namespace fpf_data {
 		std::sort(par_v_s_peptide_data.begin(), par_v_s_peptide_data.end(), test2);
 	}
 
-	std::vector<multinomial_catagory_data_type*> map_v_s_multinomial_element_data_by_score(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data) {
-		std::vector<multinomial_catagory_data_type*> con_v_s_multinomial_element_data;
-		multinomial_catagory_data_type* con_c_analysis;
+	std::vector<multinomial_category_data_type*> map_v_s_multinomial_element_data_by_score(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data) {
+		std::vector<multinomial_category_data_type*> con_v_s_multinomial_element_data;
+		multinomial_category_data_type* con_c_analysis;
 		size_type st_count_map = size_type();
 		while (st_count_map < par_v_s_multinomial_element_data.size()) {
 			double d_compare_map = double();
-			for (std::vector<multinomial_catagory_data_type>::iterator itr_v_s_multinomial_element_data = par_v_s_multinomial_element_data.begin(); itr_v_s_multinomial_element_data != par_v_s_multinomial_element_data.end(); ++itr_v_s_multinomial_element_data) {
+			for (std::vector<multinomial_category_data_type>::iterator itr_v_s_multinomial_element_data = par_v_s_multinomial_element_data.begin(); itr_v_s_multinomial_element_data != par_v_s_multinomial_element_data.end(); ++itr_v_s_multinomial_element_data) {
 				bool b_compare_map = ((std::find(con_v_s_multinomial_element_data.begin(), con_v_s_multinomial_element_data.end(), &(*itr_v_s_multinomial_element_data))) == con_v_s_multinomial_element_data.end());
 				if ((d_compare_map <= itr_v_s_multinomial_element_data->d_score) && b_compare_map) {
 					d_compare_map = itr_v_s_multinomial_element_data->d_score;
@@ -627,7 +627,7 @@ namespace fpf_data {
 		return con_v_s_multinomial_element_data;
 	}
 
-	void train_v_s_multinomial_element_data_d_score(std::vector<peptide_data_type>& par_v_s_peptide_data, std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data, std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data_distinct) {
+	void train_v_s_multinomial_element_data_d_score(std::vector<peptide_data_type>& par_v_s_peptide_data, std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data, std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data_distinct) {
 		double delta_score_mean = double();
 		for (IgFamily::GLOBAL_ITERATOR; IgFamily::GLOBAL_ITERATOR < IgFamily::ITERATE_TRAIN_SCORE; ++IgFamily::GLOBAL_ITERATOR) {
 			delta_score_mean = IgFamily::SCORE_MEAN;
@@ -653,9 +653,9 @@ namespace fpf_data {
 		fpf_data::create_v_s_multinomial_element_data_v_s_peptide_data(par_v_s_multinomial_element_data, par_v_s_peptide_data);
 	}
 
-	std::vector<multinomial_catagory_data_type*> map_v_s_multinomial_element_data_by_genefamily(std::vector<multinomial_catagory_data_type>& par_v_s_multinomial_element_data) {
-		std::vector<multinomial_catagory_data_type*> con_v_s_multinomial_element_data;
-		multinomial_catagory_data_type* con_c_analysis;
+	std::vector<multinomial_category_data_type*> map_v_s_multinomial_element_data_by_genefamily(std::vector<multinomial_category_data_type>& par_v_s_multinomial_element_data) {
+		std::vector<multinomial_category_data_type*> con_v_s_multinomial_element_data;
+		multinomial_category_data_type* con_c_analysis;
 		size_type st_count_map = size_type();
 		while (st_count_map < par_v_s_multinomial_element_data.size()) {
 			string_type str_compare_map = string_type();
@@ -672,7 +672,7 @@ namespace fpf_data {
 		return con_v_s_multinomial_element_data;
 	}
 
-	void output(string_type par_str_fin, std::vector<multinomial_catagory_data_type*> par_v_s_multinomial_element_data_distinct, std::vector<multinomial_catagory_data_type*> par_v_s_multinomial_element_data) {
+	void output(string_type par_str_fin, std::vector<multinomial_category_data_type*> par_v_s_multinomial_element_data_distinct, std::vector<multinomial_category_data_type*> par_v_s_multinomial_element_data) {
 
 		std::cout << "\n\n ...streaming output";
 		std::string output_v_s_multinomial_element_data = par_str_fin + "_output.txt";
@@ -750,7 +750,7 @@ namespace fpf_data {
 			d_peptide_1genefamily = 0;
 			d_peptide_2genefamily = 0;
 			d_peptide_3genefamily = 0;
-			//for (std::vector<fpf_data::multinomial_catagory_data_type*>::iterator itr_v_s_multinomial_element_data_distinct_v_c_polyassociation = (itr_v_s_multinomial_element_data_distinct + i)->ref_v_s_multinomial_catagory_polyassociation().begin(); itr_v_s_multinomial_element_data_distinct_v_c_polyassociation != (itr_v_s_multinomial_element_data_distinct + i)->ref_v_s_multinomial_catagory_polyassociation().end(); ++itr_v_s_multinomial_element_data_distinct_v_c_polyassociation) {
+			//for (std::vector<fpf_data::multinomial_category_data_type*>::iterator itr_v_s_multinomial_element_data_distinct_v_c_polyassociation = (itr_v_s_multinomial_element_data_distinct + i)->ref_v_s_multinomial_catagory_polyassociation().begin(); itr_v_s_multinomial_element_data_distinct_v_c_polyassociation != (itr_v_s_multinomial_element_data_distinct + i)->ref_v_s_multinomial_catagory_polyassociation().end(); ++itr_v_s_multinomial_element_data_distinct_v_c_polyassociation) {
 			//	fout_v_s_multinomial_element_data << "\n - - * " << (*itr_v_s_multinomial_element_data_distinct_v_c_polyassociation)->str_multinomial_catagory_name;
 			//	for (size_type itr_str_multinomial_catagory_name_output = (itr_v_s_multinomial_element_data_distinct + i)->str_multinomial_catagory_name.length(); itr_str_multinomial_catagory_name_output < 20; ++itr_str_multinomial_catagory_name_output) {
 			//		fout_v_s_multinomial_element_data << " ";
@@ -760,13 +760,13 @@ namespace fpf_data {
 		}
 
 		//fout_v_s_multinomial_element_data << "\n\n";
-		//for (std::vector<fpf_data::multinomial_catagory_data_type*>::iterator itr_v_s_multinomial_element_data_distinct = par_v_s_multinomial_element_data_distinct.begin(); itr_v_s_multinomial_element_data_distinct != par_v_s_multinomial_element_data_distinct.end(); ++itr_v_s_multinomial_element_data_distinct) {
+		//for (std::vector<fpf_data::multinomial_category_data_type*>::iterator itr_v_s_multinomial_element_data_distinct = par_v_s_multinomial_element_data_distinct.begin(); itr_v_s_multinomial_element_data_distinct != par_v_s_multinomial_element_data_distinct.end(); ++itr_v_s_multinomial_element_data_distinct) {
 		//	if ((*itr_v_s_multinomial_element_data_distinct)->d_score >= 5) {
 		//		fout_v_s_multinomial_element_data << "\n" << (*itr_v_s_multinomial_element_data_distinct)->str_multinomial_catagory_name;
 		//	}
 		//}
 		//fout_v_s_multinomial_element_data << "\n\n";
-		//for (std::vector<fpf_data::multinomial_catagory_data_type*>::iterator itr_v_s_multinomial_element_data_distinct = par_v_s_multinomial_element_data_distinct.begin(); itr_v_s_multinomial_element_data_distinct != par_v_s_multinomial_element_data_distinct.end(); ++itr_v_s_multinomial_element_data_distinct) {
+		//for (std::vector<fpf_data::multinomial_category_data_type*>::iterator itr_v_s_multinomial_element_data_distinct = par_v_s_multinomial_element_data_distinct.begin(); itr_v_s_multinomial_element_data_distinct != par_v_s_multinomial_element_data_distinct.end(); ++itr_v_s_multinomial_element_data_distinct) {
 		//	if ((*itr_v_s_multinomial_element_data_distinct)->d_score >= 5) {
 		//		fout_v_s_multinomial_element_data << "\n" << (*itr_v_s_multinomial_element_data_distinct)->d_score;
 		//	}
@@ -859,8 +859,8 @@ namespace fpf_data {
 					//	fout_v_s_multinomial_element_data << " ";
 					//}
 					fout_v_s_multinomial_element_data << "   " << "Member of " << itr_v_s_peptide_data->v_p_peptideassociation_distinct.size() << " gene families - ";
-					std::vector<std::pair<fpf_data::multinomial_catagory_data_type*, double>> con_itr_v_p_peptideassociation_distinct = itr_v_s_peptide_data->v_p_peptideassociation_distinct;
-					for (std::vector<std::pair<fpf_data::multinomial_catagory_data_type*, double>>::iterator itr_v_p_peptideassociation_distinct = con_itr_v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != con_itr_v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
+					std::vector<std::pair<fpf_data::multinomial_category_data_type*, double>> con_itr_v_p_peptideassociation_distinct = itr_v_s_peptide_data->v_p_peptideassociation_distinct;
+					for (std::vector<std::pair<fpf_data::multinomial_category_data_type*, double>>::iterator itr_v_p_peptideassociation_distinct = con_itr_v_p_peptideassociation_distinct.begin(); itr_v_p_peptideassociation_distinct != con_itr_v_p_peptideassociation_distinct.end(); ++itr_v_p_peptideassociation_distinct) {
 						fout_v_s_multinomial_element_data << std::get<0>(*itr_v_p_peptideassociation_distinct)->str_multinomial_catagory_name;
 						fout_v_s_multinomial_element_data << "(" << std::get<1>(*itr_v_p_peptideassociation_distinct) << ")";
 						if ((itr_v_p_peptideassociation_distinct + 1) != con_itr_v_p_peptideassociation_distinct.end()) {

@@ -21,7 +21,7 @@ namespace fpf_report {
 
 	typedef std::string string_type;
 	typedef size_t size_type;
-	typedef fpf_data::multinomial_catagory_data_type multinomial_catagory_data_type;
+	typedef fpf_data::multinomial_category_data_type multinomial_category_data_type;
 	typedef fpf_data::peptide_data_type peptide_data_type;
 	typedef fpf_data::denovo_peptide_type denovo_peptide_type;
 	typedef fpf_data::blastp_type blastp_type;

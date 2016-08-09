@@ -26,7 +26,7 @@ namespace IgFamily {
 	bool FILESYSTEM_MODE = true;
 	bool FILESYSTEM_UPDATE_ALL = true;
 	bool SIMPLE_SCORE = false;
-	bool NOVOR_DENOVO = true;
+	bool NOVOR_DENOVO = false;
 	size_type MAP_FOUT_BY_SCORE = 1;
 	size_type MAP_FOUT_BY_DISTINCT = 1;
 	size_type MAP_FOUT_PEPTIDE_SUMMARY_BY_SPECTRALCOUNT = 1;

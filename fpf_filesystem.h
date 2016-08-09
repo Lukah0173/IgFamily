@@ -27,7 +27,7 @@ namespace fpf_filesystem {
 	typedef std::string string_type;
 	typedef size_t size_type;
 	typedef fpf_convert::fileconversion_type fileconversion_type;
-	typedef fpf_data::multinomial_catagory_data_type multinomial_catagory_data_type;
+	typedef fpf_data::multinomial_category_data_type multinomial_category_data_type;
 	typedef fpf_data::peptide_data_type peptide_data_type;
 	typedef fpf_data::blastp_type blastp_type;
 	typedef fpf_data::multinomial_type multinomial_type;
@@ -59,8 +59,8 @@ namespace fpf_filesystem {
 
 		string_type str_denono_deltamass;
 
-		std::vector<multinomial_catagory_data_type> v_c_multinomial_catagory;
-		std::vector<multinomial_catagory_data_type> v_c_multinomial_catagory_distinct;
+		std::vector<multinomial_category_data_type> v_c_multinomial_catagory;
+		std::vector<multinomial_category_data_type> v_c_multinomial_catagory_distinct;
 		std::vector<peptide_data_type> v_s_peptide_data;
 		std::pair<string_type, string_type> p_filesystemid;
 		std::vector<std::pair<string_type, string_type>> v_p_replicates;
@@ -226,16 +226,21 @@ namespace fpf_filesystem {
 		str_fileconversion_command += par_s_filesystem.str_directory;
 		str_fileconversion_command += par_s_filesystem.str_filename;
 		str_fileconversion_command += ".wiff\"";
+		str_fileconversion_command += " --64";
+		str_fileconversion_command += " --mz64";
+		str_fileconversion_command += " -v";
 		str_fileconversion_command += " --mgf";
 		if (par_s_filesystem.s_fileconversion.s_peakpicking.b_peakpicking) {
-			str_fileconversion_command += " --filter \"peakPicking true ";
-			str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_peakpicking.st_peakpicking_mslevel_from);
-			str_fileconversion_command += "-";
-			str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_peakpicking.st_peakpicking_mslevel_to);
+			str_fileconversion_command += " --filter \"peakPicking cwt ";
+			//str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_peakpicking.st_peakpicking_mslevel_from);
+			//str_fileconversion_command += "-";
+			//str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_peakpicking.st_peakpicking_mslevel_to);
 			str_fileconversion_command += "\"";
 		}
-		if (par_s_filesystem.s_fileconversion.s_ms2deisotope.b_ms2deisotope) {
-			//str_fileconversion_command += " --filter MS2Deisotope";
+		if (par_s_filesystem.s_fileconversion.s_threshold.b_threshold) {
+			str_fileconversion_command += " --filter \"threshold absolute ";
+			str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_threshold.st_threshold);
+			str_fileconversion_command += " most-intense\"";
 		}
 		if (par_s_filesystem.s_fileconversion.s_ms2denoise.b_ms2denoise) {
 			str_fileconversion_command += " --filter \"MS2Denoise ";
@@ -243,6 +248,9 @@ namespace fpf_filesystem {
 			str_fileconversion_command += " ";
 			str_fileconversion_command += std::to_string(par_s_filesystem.s_fileconversion.s_ms2denoise.st_ms2denoise_windowwidth);
 			str_fileconversion_command += " true\"";
+		}
+		if (par_s_filesystem.s_fileconversion.s_ms2deisotope.b_ms2deisotope) {
+			str_fileconversion_command += " --filter MS2Deisotope";
 		}
 		if (par_s_filesystem.s_fileconversion.s_chargestatepredictor.b_chargestatepredictor) {
 			//str_fileconversion_command += " --filter \"chargeStatePredictor true ";
@@ -255,7 +263,7 @@ namespace fpf_filesystem {
 		}
 		str_fileconversion_command += " -o Z:\\Lukah_Dykes\\IgFamily\\";
 		str_fileconversion_command += par_s_filesystem.str_directory;
-		std::cout << "\n\n" << str_fileconversion_command;
+		//std::cout << "\n\n" << str_fileconversion_command;
 		fpf_convert::sys_msconvert(str_fileconversion_command, par_s_filesystem.str_directory);
 	}
 

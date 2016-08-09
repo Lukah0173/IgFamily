@@ -22,7 +22,7 @@
 namespace fpf_blastp_analysis {
 
 	typedef std::string string_type;
-	typedef fpf_data::multinomial_catagory_data_type multinomial_catagory_data_type;
+	typedef fpf_data::multinomial_category_data_type multinomial_category_data_type;
 	typedef fpf_data::blastp_type blastp_type;
 	typedef std::vector<fpf_data::blastp_type> v_s_blastp_tpye;
 	typedef fpf_data::multinomial_type s_multinomial_type;
@@ -127,7 +127,7 @@ namespace fpf_blastp_analysis {
 	void create_str_protein(filesystem_type& par_s_filesystem) {
 		for (auto& itr_v_s_blastp : par_s_filesystem.v_s_blastp) {
 			auto find_str_genefamily = std::find_if(par_s_filesystem.v_c_multinomial_catagory.begin(), par_s_filesystem.v_c_multinomial_catagory.end(),
-				[itr_v_s_blastp](multinomial_catagory_data_type par_s_multinomial_element_data) {
+				[itr_v_s_blastp](multinomial_category_data_type par_s_multinomial_element_data) {
 				return par_s_multinomial_element_data.str_multinomial_catagory_name == itr_v_s_blastp.str_blastp_subject_accession;
 			});
 			if (find_str_genefamily == par_s_filesystem.v_c_multinomial_catagory.end()) {
