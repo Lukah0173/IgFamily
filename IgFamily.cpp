@@ -1,4 +1,4 @@
-// * * IgFamily v0.5.17 * * 
+// * * IgFamily v0.5.18 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -28,9 +28,11 @@ int main() {
 	std::cout << "-- IgFamily " << IgFamily::version << " --\n\n\n";
 
 	if (IgFamily::FILESYSTEM_MODE) {
-		std::cout << "Enter any key to continue: \n\n > ";
-		string_type filesystem_initial;
-		std::cin >> filesystem_initial;
+		int catch_menu_selection;
+		catch_menu_selection = fpf_filesystem::perform_menu_selection(fpf_filesystem::display_menu());
+		if (catch_menu_selection == 1){
+			
+		}
 	}
 	else {
 		std::cout << "Enter [filename].csv of a comma separated variables file from PEAKS output: \n\n > ";
@@ -54,7 +56,7 @@ int main() {
 	std::vector<fpf_filesystem::filesystem_type> v_s_filesystem = fpf_filesystem::read_filesystem(v_str_root_dir);
 	for (auto& itr_v_s_filesystem : v_s_filesystem) {
 		if (itr_v_s_filesystem.b_fileconversion) {
-			fpf_filesystem::perform_fileconversion(itr_v_s_filesystem);
+			//fpf_filesystem::perform_fileconversion(itr_v_s_filesystem);
 		}
 	}
 

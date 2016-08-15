@@ -15,6 +15,7 @@
 #include <algorithm> // provides - std::find
 #include <tuple> // provides - std::tuple
 #include "IgFamily.h"
+#include "fpf_parse.h"
 #include "fpf_data.h"
 #include "fpf_convert.h"
 
@@ -69,6 +70,29 @@ namespace fpf_filesystem {
 		std::vector<report_type> v_s_report;
 		multinomial_type s_multinomial;
 	};
+
+	string_type display_menu() {
+		std::cout << " FASTA utilities:     [F] ";
+		std::cout << "\n Continue:            [Z] ";
+		string_type str_menu_selection;
+		while ((str_menu_selection != ("F")) && (str_menu_selection != ("Z"))) {
+			str_menu_selection.clear();
+			std::cout << "\n\n Input selection: \n\n > ";
+			std::cin >> str_menu_selection;
+		}
+		return str_menu_selection;
+	}
+
+	int perform_menu_selection(string_type par_str_menu_selection) {
+		if (par_str_menu_selection == "F") {
+			fpf_parse::check_FASTA_format(IgFamily::INPUT_FASTA);
+			return 0;
+		}
+		if (par_str_menu_selection == "Z") {
+			return 0;
+		}
+		return 1;
+	}
 
 	std::vector<string_type> read_root_dir(string_type par_IgFamily_root_dir) {
 		std::ifstream fin_input_csv(par_IgFamily_root_dir);

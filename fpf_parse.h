@@ -356,6 +356,62 @@ namespace fpf_parse {
 		return con_v_c_parse_peptides_csv;
 	}
 
+	void check_FASTA_format(string_type par_INPUT_FASTA) {
+		std::ifstream fin_INPUT_FASTA(par_INPUT_FASTA);
+		char ch_parse_FASTA = char();
+		string_type str_parse_FASTA = string_type();
+		size_type count_delimit = size_type();
+		bool b_read_format = bool();
+		bool b_header_line = bool();
+		while (fin_INPUT_FASTA.get(ch_parse_FASTA)) {
+			if (ch_parse_FASTA == '>') {
+				std::cout << "\n\n Accession - \n\n";
+				std::cout << str_parse_FASTA;
+				str_parse_FASTA.clear();
+				b_header_line = true;
+				if (b_read_format) {
+					string_type str_format_break = string_type();
+					std::cout << "\n\n\n continue? ( y / n ) ";					
+					while (str_format_break == "") {
+						std::cout << "\n\n -> ";
+						std::cin >> str_format_break;
+					}
+					if (str_format_break == "y") {
+					}
+					else {
+						break;
+					}
+				}
+				}
+				count_delimit = 0;
+				b_read_format = true;
+			}
+			if (b_header_line) {
+				if (ch_parse_FASTA == '|') {
+					std::cout << "\n Field # ";
+					std::cout << count_delimit;
+					std::cout << " - \"";
+					std::cout << str_parse_FASTA;
+					std::cout << "\"";
+					++count_delimit;
+					str_parse_FASTA.clear();
+				}
+				if ((ch_parse_FASTA != '>') && (ch_parse_FASTA != '|') && ((ch_parse_FASTA != '\n') && (ch_parse_FASTA != '\r\n') && (ch_parse_FASTA != '\r'))) {
+					str_parse_FASTA += ch_parse_FASTA;
+				}
+				if ((ch_parse_FASTA == '\n') || (ch_parse_FASTA == '\r\n') || (ch_parse_FASTA == '\r')) {					
+					b_header_line = false;
+					str_parse_FASTA.clear();
+				}
+			}
+			if (!b_header_line) {
+				str_parse_FASTA += ch_parse_FASTA;
+			}
+		}
+		fin_INPUT_FASTA.clear();
+		fin_INPUT_FASTA.seekg(0, std::ios::beg);
+	}
+
 	std::vector<parse_FASTA_type> parse_FASTA(std::ifstream& par_fin_input_FASTA) {
 
 		char ch_parse_FASTA;
