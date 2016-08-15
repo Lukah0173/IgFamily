@@ -45,6 +45,11 @@ int main() {
 
 	std::ifstream fin_input_csv(IgFamily::INPUT_CSV);
 	std::ifstream fin_input_FASTA(IgFamily::INPUT_FASTA);
+
+	fpf_parse::custom_FASTA_output(IgFamily::INPUT_FASTA);
+
+	std::cout << "\n\n\n * parsing FASTA file... \n\n";
+
 	std::vector<fpf_parse::parse_FASTA_type> main_v_c_parse_FASTA = fpf_parse::parse_FASTA(fin_input_FASTA);
 	if (b_parse_FASTA_empty(main_v_c_parse_FASTA)) { return 1; };
 	fpf_parse::output_v_c_parse_FASTA(main_v_c_parse_FASTA);
@@ -60,7 +65,7 @@ int main() {
 		}
 	}
 
-	std::cout << "\n\n\n * parsing FASTA file";
+	std::cout << "\n\n\n * creating data structures... \n\n";
 
 	std::vector<fpf_data::multinomial_category_data_type> main_v_s_multinomial_element_data = fpf_data::create_v_s_multinomial_element_data(main_v_c_parse_FASTA);
 	std::vector<fpf_data::multinomial_category_data_type> main_v_s_multinomial_element_data_distinct = fpf_data::create_v_s_multinomial_element_data_distinct(main_v_s_multinomial_element_data);

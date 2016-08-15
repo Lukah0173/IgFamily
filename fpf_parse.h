@@ -365,15 +365,15 @@ namespace fpf_parse {
 		bool b_header_line = bool();
 		while (fin_INPUT_FASTA.get(ch_parse_FASTA)) {
 			if (ch_parse_FASTA == '>') {
-				std::cout << "\n\n Accession - \n\n";
-				std::cout << str_parse_FASTA;
-				str_parse_FASTA.clear();
 				b_header_line = true;
 				if (b_read_format) {
+					std::cout << "\n\n Accession - \n";
+					std::cout << str_parse_FASTA;
+					str_parse_FASTA.clear();
 					string_type str_format_break = string_type();
 					std::cout << "\n\n\n continue? ( y / n ) ";					
 					while (str_format_break == "") {
-						std::cout << "\n\n -> ";
+						std::cout << "\n\n --> ";
 						std::cin >> str_format_break;
 					}
 					if (str_format_break == "y") {
@@ -382,12 +382,11 @@ namespace fpf_parse {
 						break;
 					}
 				}
-				}
 				count_delimit = 0;
 				b_read_format = true;
 			}
 			if (b_header_line) {
-				if (ch_parse_FASTA == '|') {
+				if ((ch_parse_FASTA == '|') || (ch_parse_FASTA == '\n') || (ch_parse_FASTA == '\r\n') || (ch_parse_FASTA == '\r')) {
 					std::cout << "\n Field # ";
 					std::cout << count_delimit;
 					std::cout << " - \"";
@@ -412,6 +411,224 @@ namespace fpf_parse {
 		fin_INPUT_FASTA.seekg(0, std::ios::beg);
 	}
 
+	void output_custom_FASTA_format(string_type par_INPUT_FASTA) {
+		std::ifstream fin_INPUT_FASTA(par_INPUT_FASTA);
+		char ch_parse_FASTA = char();
+		string_type str_parse_FASTA = string_type();
+		size_type count_delimit = size_type();
+		bool b_read_format = bool();
+		bool b_header_line = bool();
+		while (fin_INPUT_FASTA.get(ch_parse_FASTA)) {
+			if (ch_parse_FASTA == '>') {
+				b_header_line = true;
+				if (b_read_format) {
+					std::cout << "\n\n Accession - \n";
+					std::cout << str_parse_FASTA;
+					str_parse_FASTA.clear();
+					std::cout << "\n\n current FASTA output format: ";
+					std::cout << "\n\n >";
+					for (auto i = 0; i < count_delimit; ++i) {
+						std::cout << "[Field #";
+						std::cout << i;
+						std::cout << "]|";
+					}
+					std::cout << "\n [Accession]";
+					std::cout << "\n\n\n Create custom output format:           [C] ";
+					std::cout << "\n Output FASTA with selected format:     [X] ";
+					string_type str_menu_selection = string_type();
+					while ((str_menu_selection != ("C")) && (str_menu_selection != ("X"))) {
+						str_menu_selection.clear();
+						std::cout << "\n\n Input selection: \n\n --> ";
+						std::cin >> str_menu_selection;
+					}
+					if (str_menu_selection == "C") {
+						while (true) {
+							std::vector<string_type> v_str_field_value(count_delimit);
+							for (auto i = 0; i < count_delimit; ++i) {
+								v_str_field_value[i] = std::to_string(i);
+								std::cout << "\n ";
+								std::cout << i;
+								std::cout << ":     Modify Field #";
+								std::cout << i;
+							}
+							std::cout << "\n T:     Truncate field output";
+							std::cout << "\n X:     Continue";
+							string_type str_change_field_value = "-1";
+							while (!((std::stoi(str_change_field_value) < count_delimit) && (std::stoi(str_change_field_value) >= 0))) {
+								std::cout << "\n\n Input selection: \n\n --> ";
+								std::cin >> str_change_field_value;
+								if ((str_change_field_value != "T") && (str_change_field_value != "X")){
+									try {
+										auto try_catch = std::stoi(str_change_field_value);
+										if (try_catch == 0) {
+										}
+									}
+									catch (const std::invalid_argument&) {
+										str_change_field_value = "-1";
+									}
+								} 
+								else {
+									break;
+								}
+							}
+							if (str_change_field_value == "T") {
+								size_type st_truncate_v_str_field_value = size_type();
+								std::cout << "\n\n Truncate to how many fields?: \n\n --> ";
+								while (!((st_truncate_v_str_field_value > 0) && (st_truncate_v_str_field_value < count_delimit))) {
+									std::cin >> st_truncate_v_str_field_value;
+								}
+								v_str_field_value.resize(st_truncate_v_str_field_value);
+								std::cout << "\n\n current FASTA output format: ";
+								std::cout << "\n\n >";
+								for (auto i = 0; i < v_str_field_value.size(); ++i) {
+									std::cout << "[Field #";
+									std::cout << v_str_field_value[i];
+									std::cout << "]|";
+								}
+								std::cout << "\n [Accession]";
+								std::cout << "\n ";
+							}
+							if (str_change_field_value == "X") {
+								break;
+							}
+							if ((str_change_field_value != "T") && (str_change_field_value != "X")) {
+								std::cout << "\n\n Modifying Field #";
+								std::cout << str_change_field_value;
+								std::cout << "\n";
+								for (auto i = 0; i < count_delimit; ++i) {
+									v_str_field_value[i] = std::to_string(i);
+									std::cout << "\n ";
+									std::cout << i;
+									std::cout << ":     Assign Field #";
+									std::cout << i;
+								}
+								std::cout << "\n ";
+								std::cout << count_delimit;
+								std::cout << ":     Custom string entry";
+								std::cout << "\n ";
+								size_type st_assign_field_value = -1;
+								while (!((st_assign_field_value <= count_delimit) && (st_assign_field_value >= 0))) {
+									std::cout << "\n\n Input selection: \n\n --> ";
+									std::cin >> st_assign_field_value;
+									if (std::cin.fail()) {
+										std::cin.clear();
+										std::cin.ignore(256, '\n');
+										st_assign_field_value = -1;
+									}
+								}
+								if (st_assign_field_value == count_delimit) {
+									string_type str_assign_field_value;
+									std::cout << "\n\n Input selection: \n\n --> ";
+									std::cin >> str_assign_field_value;
+									v_str_field_value[std::stoi(str_change_field_value)] = str_assign_field_value;
+								}
+								if (st_assign_field_value < count_delimit) {
+									v_str_field_value[std::stoi(str_change_field_value)] = std::to_string(st_assign_field_value);
+								}
+								std::cout << "\n\n current FASTA output format: ";
+								std::cout << "\n\n >";
+								for (auto i = 0; i < v_str_field_value.size(); ++i) {
+									std::cout << "[Field #";
+									std::cout << v_str_field_value[i];
+									std::cout << "]|";
+								}
+								std::cout << "\n [Accession]";
+								std::cout << "\n ";
+							}
+						}
+					}
+					if (str_menu_selection == "X") {
+					}
+					break;
+				}
+				count_delimit = 0;
+				b_read_format = true;
+			}
+			if (b_header_line) {
+				if ((ch_parse_FASTA == '|') || (ch_parse_FASTA == '\n') || (ch_parse_FASTA == '\r\n') || (ch_parse_FASTA == '\r')) {
+					std::cout << "\n Field # ";
+					std::cout << count_delimit;
+					std::cout << " - \"";
+					std::cout << str_parse_FASTA;
+					std::cout << "\"";
+					++count_delimit;
+					str_parse_FASTA.clear();
+				}
+				if ((ch_parse_FASTA != '>') && (ch_parse_FASTA != '|') && ((ch_parse_FASTA != '\n') && (ch_parse_FASTA != '\r\n') && (ch_parse_FASTA != '\r'))) {
+					str_parse_FASTA += ch_parse_FASTA;
+				}
+				if ((ch_parse_FASTA == '\n') || (ch_parse_FASTA == '\r\n') || (ch_parse_FASTA == '\r')) {
+					b_header_line = false;
+					str_parse_FASTA.clear();
+				}
+			}
+			if (!b_header_line) {
+				str_parse_FASTA += ch_parse_FASTA;
+			}
+		}
+		fin_INPUT_FASTA.clear();
+		fin_INPUT_FASTA.seekg(0, std::ios::beg);
+	}
+
+	void custom_FASTA_output(string_type par_INPUT_FASTA) {
+		std::ifstream fin_INPUT_FASTA(par_INPUT_FASTA);
+		std::string output_custom_FASTA = "FASTA\\custom_FASTA.fasta";
+		std::ofstream fout_custom_FASTA;
+		fout_custom_FASTA.open(output_custom_FASTA);
+		char ch_parse_FASTA = char();
+		string_type str_parse_FASTA = string_type();
+		size_type count_delimit = size_type();
+		bool b_read_format = bool();
+		bool b_header_line = bool();
+		while (fin_INPUT_FASTA.get(ch_parse_FASTA)) {
+			if (ch_parse_FASTA == '>') {
+				b_header_line = true;
+				if (b_read_format) {
+					fout_custom_FASTA << "Homo sapiens|";
+					fout_custom_FASTA << str_parse_FASTA;
+					str_parse_FASTA.clear();
+				}
+				count_delimit = 0;
+				b_read_format = true;
+			}
+			if (b_header_line) {
+				if ((ch_parse_FASTA == '|') || (ch_parse_FASTA == '\n') || (ch_parse_FASTA == '\r\n') || (ch_parse_FASTA == '\r')) {
+					if (count_delimit == 0) {
+						fout_custom_FASTA << ">";
+					}
+					if (count_delimit == 1) {
+						fout_custom_FASTA << str_parse_FASTA;
+						fout_custom_FASTA << "|";
+					}
+					if (count_delimit == 2) {
+						fout_custom_FASTA << "UNIPROT(";
+						fout_custom_FASTA << str_parse_FASTA;
+						fout_custom_FASTA << ")";
+						fout_custom_FASTA << "|";
+					}
+					if (count_delimit == 3) {
+						fout_custom_FASTA << "Homo sapiens";
+						fout_custom_FASTA << "|";
+					}
+					++count_delimit;
+					str_parse_FASTA.clear();
+				}
+				if ((ch_parse_FASTA != '>') && (ch_parse_FASTA != '|') && ((ch_parse_FASTA != '\n') && (ch_parse_FASTA != '\r\n') && (ch_parse_FASTA != '\r'))) {
+					str_parse_FASTA += ch_parse_FASTA;
+				}
+				if ((ch_parse_FASTA == '\n') || (ch_parse_FASTA == '\r\n') || (ch_parse_FASTA == '\r')) {
+					b_header_line = false;
+					str_parse_FASTA.clear();
+				}
+			}
+			if (!b_header_line) {
+				str_parse_FASTA += ch_parse_FASTA;
+			}
+		}
+		fin_INPUT_FASTA.clear();
+		fin_INPUT_FASTA.seekg(0, std::ios::beg);
+	}
+
 	std::vector<parse_FASTA_type> parse_FASTA(std::ifstream& par_fin_input_FASTA) {
 
 		char ch_parse_FASTA;
@@ -424,6 +641,7 @@ namespace fpf_parse {
 		string_type con_str_FASTA_species = string_type();
 		parse_FASTA_type con_c_parse_FASTA = parse_FASTA_type();
 		std::vector<parse_FASTA_type> con_v_c_parse_FASTA;
+		size_type st_count_parse_FASTA = size_type();
 
 		while (par_fin_input_FASTA.get(ch_parse_FASTA)) {
 			if (sw_2_input_FASTA == 1) {
@@ -473,6 +691,9 @@ namespace fpf_parse {
 					if (con_str_FASTA_genefamily == "CON") {
 						con_str_FASTA_genefamily_class = "CONT";
 					}
+					if (con_str_FASTA_genefamily == "UNIPROT") {
+						con_str_FASTA_genefamily_class = "UNIPROT";
+					}
 					con_str_FASTA_genefamily += ch_parse_FASTA;
 				}
 				else {
@@ -494,6 +715,15 @@ namespace fpf_parse {
 					con_c_parse_FASTA.set_str_parse_FASTA_species(con_str_FASTA_species);
 					con_c_parse_FASTA.set_str_parse_FASTA_protein(con_str_FASTA_protein);
 					con_v_c_parse_FASTA.push_back(con_c_parse_FASTA);
+				}
+				++st_count_parse_FASTA;
+				if (st_count_parse_FASTA % 100 == 0) {
+					std::cout << "\n FASTA accession parse #: ";
+					std::cout << st_count_parse_FASTA;
+				}
+				if ((par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof())) {
+					std::cout << "\n FASTA accession parse #: ";
+					std::cout << st_count_parse_FASTA;
 				}
 				con_str_parse_FASTA_accession.clear();
 				con_str_FASTA_protein.clear();

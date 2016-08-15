@@ -73,9 +73,9 @@ namespace fpf_filesystem {
 
 	string_type display_menu() {
 		std::cout << " FASTA utilities:     [F] ";
-		std::cout << "\n Continue:            [Z] ";
+		std::cout << "\n Continue:            [X]";
 		string_type str_menu_selection;
-		while ((str_menu_selection != ("F")) && (str_menu_selection != ("Z"))) {
+		while ((str_menu_selection != ("F")) && (str_menu_selection != ("X"))) {
 			str_menu_selection.clear();
 			std::cout << "\n\n Input selection: \n\n > ";
 			std::cin >> str_menu_selection;
@@ -85,10 +85,23 @@ namespace fpf_filesystem {
 
 	int perform_menu_selection(string_type par_str_menu_selection) {
 		if (par_str_menu_selection == "F") {
-			fpf_parse::check_FASTA_format(IgFamily::INPUT_FASTA);
+			std::cout << "\n Read FASTA format:              [R] ";
+			std::cout << "\n Output custom FASTA format:     [C] ";
+			string_type str_menu_selection = string_type();
+			while ((str_menu_selection != ("R")) && (str_menu_selection != ("C"))) {
+				str_menu_selection.clear();
+				std::cout << "\n\n Input selection: \n\n > ";
+				std::cin >> str_menu_selection;
+			}
+			if (str_menu_selection == "R") {
+				fpf_parse::check_FASTA_format(IgFamily::INPUT_FASTA);
+			}
+			if (str_menu_selection == "C") {
+				fpf_parse::output_custom_FASTA_format(IgFamily::INPUT_FASTA);
+			}
 			return 0;
 		}
-		if (par_str_menu_selection == "Z") {
+		if (par_str_menu_selection == "X") {
 			return 0;
 		}
 		return 1;
