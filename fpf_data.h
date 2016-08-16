@@ -88,6 +88,7 @@ namespace fpf_data {
 		string_type str_blastp_query_aligned;
 		string_type str_blastp_subject;
 		string_type str_blastp_subject_accession;
+		string_type str_blastp_subject_accession_class;
 		size_type st_blastp_query_alignment_index;
 		size_type st_blastp_subject_alignment_index;
 		string_type str_protein;
@@ -106,6 +107,7 @@ namespace fpf_data {
 	struct report_type {
 	public:
 		std::vector<blastp_type> v_s_blastp_genefamily_combined;
+		string_type str_report_multinomial_category_class;
 		string_type str_protein_accession;
 		string_type str_protein;
 		std::vector<proteinconstruct_from_denovo_type> proteinconstruct_from_denovo_type;

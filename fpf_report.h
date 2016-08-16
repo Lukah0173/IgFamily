@@ -43,6 +43,7 @@ namespace fpf_report {
 			else {
 				double con_d_score = double();
 				con_s_report.v_s_blastp_genefamily_combined.push_back(itr_v_s_blastp);
+				con_s_report.str_report_multinomial_category_class = itr_v_s_blastp.str_blastp_subject_accession_class;
 				con_s_report.str_protein_accession = itr_v_s_blastp.str_blastp_subject_accession;
 				con_s_report.str_protein = itr_v_s_blastp.str_protein;
 				con_s_report.d_score = con_d_score;
@@ -79,7 +80,12 @@ namespace fpf_report {
 						}
 					}
 				}
-				itr_v_s_report.d_score += (itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates);
+				if (itr_v_s_report.str_report_multinomial_category_class != "UNIPROT") {
+					itr_v_s_report.d_score += (itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates * 5);
+				}
+				else {
+					itr_v_s_report.d_score += (itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates);
+				}
 			}
 		}
 

@@ -72,7 +72,9 @@ namespace fpf_blastp_analysis {
 		string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
 		string_system += " && blastp.exe -query ";
 		string_system += par_s_filesystem.str_filename;
-		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue 10 -max_target_seqs 200 -out ";
+		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";
+		string_system += std::to_string(EVALUE_THRESHOLD);
+		string_system += " -max_target_seqs 200 -out ";
 		string_system += par_s_filesystem.str_filename;
 		string_system += "_blastp_output.csv -outfmt \"10 qacc qseq sseq sacc qstart sstart qlen pident ppos mismatch evalue\"";
 		system(string_system.c_str());
@@ -137,6 +139,8 @@ namespace fpf_blastp_analysis {
 				std::cin >> catch_error;
 			}
 			itr_v_s_blastp.str_protein = find_str_genefamily->str_protein;
+			itr_v_s_blastp.str_blastp_subject_accession_class = find_str_genefamily->str_multinomial_catagory_class;
+
 		}
 	}
 
@@ -209,7 +213,6 @@ namespace fpf_blastp_analysis {
 			if (itr_v_s_blastp.str_blastp_query != hold_str_blastp_subject) {
 				if (b_hold) {
 					for (auto& itr_hold_v_s_blastp : hold_v_s_blastp) {
-						//itr_hold_v_s_blastp.d_blastp_par_prop = ((1 / itr_hold_v_s_blastp.d_blastp_evalue) / hold_sum_str_blastp_evalue) * log10(BLASTP_THRESHOLD / itr_hold_v_s_blastp.d_blastp_evalue);
 						itr_hold_v_s_blastp.d_blastp_par_prop = log_base(((double(4) * PARPROP_SCALE) / itr_hold_v_s_blastp.d_blastp_evalue), 15);
 						con_v_s_blastp.push_back(itr_hold_v_s_blastp);
 					}
@@ -220,16 +223,6 @@ namespace fpf_blastp_analysis {
 				hold_min_str_blastp_evalue = itr_v_s_blastp.d_blastp_evalue;
 				b_hold = true;
 			}
-			//if (hold_min_str_blastp_evalue < (itr_v_s_blastp.d_blastp_evalue / double(10))) {
-			//	b_hold = false;
-			//	for (auto& itr_hold_v_s_blastp : hold_v_s_blastp) {
-			//		//itr_hold_v_s_blastp.d_blastp_par_prop = ((1 / itr_hold_v_s_blastp.d_blastp_evalue) / hold_sum_str_blastp_evalue) * log10(BLASTP_THRESHOLD / itr_hold_v_s_blastp.d_blastp_evalue);
-			//		itr_hold_v_s_blastp.d_blastp_par_prop = log10(PARPROP_SCALE / itr_hold_v_s_blastp.d_blastp_evalue);
-			//		con_v_s_blastp.push_back(itr_hold_v_s_blastp);
-			//	}
-			//	hold_v_s_blastp.clear();
-			//	hold_sum_str_blastp_evalue = 0;
-			//}
 			if (b_hold && (itr_v_s_blastp.d_blastp_evalue < BLASTP_THRESHOLD)) {
 				hold_v_s_blastp.push_back(itr_v_s_blastp);
 				hold_sum_str_blastp_evalue += (1 / itr_v_s_blastp.d_blastp_evalue);
@@ -255,29 +248,6 @@ namespace fpf_blastp_analysis {
 			fout_blastp_summary << itr_v_s_blastp.d_blastp_evalue << ",";
 			fout_blastp_summary << itr_v_s_blastp.d_blastp_par_prop << ",";
 			fout_blastp_summary << "\n";
-		}
-		fout_blastp_summary.close();
-	}
-
-	void fout_blastp_summary(filesystem_type par_s_filesystem, double par_d_blastp_evalue_threshold) {
-		std::string output_blastp_summary = "blast_directory\\";
-		output_blastp_summary += par_s_filesystem.str_filename;
-		output_blastp_summary += "_blastp_summary.csv";
-		std::ofstream fout_blastp_summary;
-		fout_blastp_summary.open(output_blastp_summary);
-		fout_blastp_summary << "subject,";
-		fout_blastp_summary << "query_accession,";
-		fout_blastp_summary << "e_value,";
-		fout_blastp_summary << "par_prop,";
-		fout_blastp_summary << "\n";
-		for (auto itr_v_s_blastp : par_s_filesystem.v_s_blastp) {
-			if (itr_v_s_blastp.d_blastp_evalue < double(par_d_blastp_evalue_threshold)) {
-				fout_blastp_summary << itr_v_s_blastp.str_blastp_query << ",";
-				fout_blastp_summary << itr_v_s_blastp.str_blastp_subject_accession << ",";
-				fout_blastp_summary << itr_v_s_blastp.d_blastp_evalue << ",";
-				fout_blastp_summary << itr_v_s_blastp.d_blastp_par_prop << ",";
-				fout_blastp_summary << "\n";
-			}
 		}
 		fout_blastp_summary.close();
 	}

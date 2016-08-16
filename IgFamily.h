@@ -44,7 +44,8 @@ namespace IgFamily {
 	size_type GLOBAL_ITERATOR = 0;
 	size_type ITERATE_TRAIN_SCORE = 1;
 	double BLASTP_THRESHOLD = 10000;
-	double PARPROP_SCALE = 10;
+	double EVALUE_THRESHOLD = 20;
+	double PARPROP_SCALE = EVALUE_THRESHOLD;
 
 	char_type ct_parse_data_separator = ':';
 	char_type ct_parse_data_delimitor = ' ';

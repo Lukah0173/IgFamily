@@ -125,8 +125,6 @@ namespace fpf_multinomial {
 			sort_v_s_multinomial_frequency(con_v_s_multinomial_frequency);
 			for (auto j = 0; j < par_s_filesystem.s_multinomial.v_str_multinomial_category.size(); ++j) {
 				if (con_v_s_multinomial_frequency[j].d_multinomial_frequency > 0.2) {
-					//fout_s_multinomial << par_s_filesystem.s_multinomial.v_str_multinomial_category[j] << " (";
-					//fout_s_multinomial << par_s_filesystem.s_multinomial.v2_d_multinomial_frequency[i][j] << "), ";
 					fout_s_multinomial << con_v_s_multinomial_frequency[j].str_multinomial_category << " (";
 					fout_s_multinomial << con_v_s_multinomial_frequency[j].d_multinomial_frequency << "), ";
 				}
@@ -171,8 +169,6 @@ namespace fpf_multinomial {
 				sort_v_s_multinomial_frequency(con_v_s_multinomial_frequency);
 				for (auto j = 0; j < par_s_filesystem.s_multinomial.v_str_multinomial_category.size(); ++j) {
 					if (con_v_s_multinomial_frequency[j].d_multinomial_frequency > 0.1) {
-						//fout_s_multinomial << par_s_filesystem.s_multinomial.v_str_multinomial_category[j] << " (";
-						//fout_s_multinomial << par_s_filesystem.s_multinomial.v2_d_multinomial_frequency[i][j] << "), ";
 						fout_s_multinomial << con_v_s_multinomial_frequency[j].str_multinomial_category << " (";
 						fout_s_multinomial << con_v_s_multinomial_frequency[j].d_multinomial_frequency << "), ";
 					}

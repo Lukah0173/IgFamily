@@ -57,6 +57,9 @@ int main() {
 
 	std::vector<fpf_parse::parse_peptides_csv_type> main_v_c_parse_csv_proteinpeptides_data;
 	std::vector<fpf_parse::parse_peptides_csv_type> main_v_c_parse_csv_denovopeptides_data;
+	if (IgFamily::FILESYSTEM_MODE == 1) {
+		std::cout << "\n\n\n ...reading root directory\n";
+	}
 	std::vector<string_type> v_str_root_dir = fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR);
 	std::vector<fpf_filesystem::filesystem_type> v_s_filesystem = fpf_filesystem::read_filesystem(v_str_root_dir);
 	for (auto& itr_v_s_filesystem : v_s_filesystem) {
@@ -168,7 +171,7 @@ int main() {
 				fpf_blastp_analysis::create_str_protein(itr_v_s_filesystem);
 				fpf_blastp_analysis::create_str_query_alignment(itr_v_s_filesystem);
 				fpf_blastp_analysis::normalise_v_s_filesystem_blastp_data(itr_v_s_filesystem);
-				fpf_blastp_analysis::fout_blastp_summary(itr_v_s_filesystem, BLASTP_THRESHOLD);				
+				fpf_blastp_analysis::fout_blastp_summary(itr_v_s_filesystem);				
 			}
 		}
 
@@ -210,13 +213,6 @@ int main() {
 		//fpf_dirichlet_mixture_model::def_s_model_data s_model_data = fpf_dirichlet_mixture_model::create_s_model_data(v_s_filesystem_blastp_data, main_v_s_multinomial_element_data);
 	}
 
-	
-
-
-	//DWORD WINAPI GetCurrentDirectory(
-	//	_In_  DWORD  nBufferLength,
-	//	_Out_ LPTSTR lpBuffer
-	//	);
 
 	std::string farewell;
 	std::cout << "\n\n\n\n program complete...";

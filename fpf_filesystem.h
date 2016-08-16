@@ -109,9 +109,6 @@ namespace fpf_filesystem {
 
 	std::vector<string_type> read_root_dir(string_type par_IgFamily_root_dir) {
 		std::ifstream fin_input_csv(par_IgFamily_root_dir);
-		if (IgFamily::FILESYSTEM_MODE == 1) {
-			std::cout << "\n\n ...reading root directory\n";
-		}
 		std::vector<string_type> con_v_str_fin_IgFamily_root;
 		string_type str_stream_fin_IgFamily_root = string_type();
 		char c_stream_fin_IgFamily_root = char();

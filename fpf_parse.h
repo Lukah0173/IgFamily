@@ -694,7 +694,12 @@ namespace fpf_parse {
 					if (con_str_FASTA_genefamily == "UNIPROT") {
 						con_str_FASTA_genefamily_class = "UNIPROT";
 					}
-					con_str_FASTA_genefamily += ch_parse_FASTA;
+					if (ch_parse_FASTA == ' ') {
+						con_str_FASTA_genefamily += "_";
+					}
+					else {
+						con_str_FASTA_genefamily += ch_parse_FASTA;
+					}
 				}
 				else {
 					con_str_FASTA_genefamily += '*';
@@ -717,7 +722,7 @@ namespace fpf_parse {
 					con_v_c_parse_FASTA.push_back(con_c_parse_FASTA);
 				}
 				++st_count_parse_FASTA;
-				if (st_count_parse_FASTA % 100 == 0) {
+				if (st_count_parse_FASTA % 1000 == 0) {
 					std::cout << "\n FASTA accession parse #: ";
 					std::cout << st_count_parse_FASTA;
 				}
