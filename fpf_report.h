@@ -100,11 +100,42 @@ namespace fpf_report {
 				con_s_proteinconstruct_from_denovo.d_score = 0;
 				itr_v_s_report.proteinconstruct_from_denovo_type.push_back(con_s_proteinconstruct_from_denovo);
 			}
+			std::vector<blastp_type> v_s_blastp_query_alignment_selected = std::vector<blastp_type>();
+			std::vector<blastp_type> v_s_blastp_query_alignment_rejected = std::vector<blastp_type>();
+			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp_genefamily_combined) {		
+				auto find_str_blastp_query_alignment_rejected = std::find_if(v_s_blastp_query_alignment_rejected.begin(), v_s_blastp_query_alignment_rejected.end(),
+					[itr_v_s_blastp](blastp_type par_s_blastp) {
+					return par_s_blastp.str_blastp_query_alignment == itr_v_s_blastp.str_blastp_query_alignment;
+				});
+				if (find_str_blastp_query_alignment_rejected == v_s_blastp_query_alignment_rejected.end()) {
+					blastp_type con_s_blastp_query_alignment_selected = blastp_type();
+					for (auto itr_v_s_blastp_2 : itr_v_s_report.v_s_blastp_genefamily_combined) {
+						for (auto i = 0; i < itr_v_s_blastp.str_blastp_query_alignment.length(); ++i) {
+							if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != '.') && (itr_v_s_blastp_2.str_blastp_query_alignment.at(i) != '.')) {
+								if (itr_v_s_blastp_2.d_blastp_par_prop >= itr_v_s_blastp.d_blastp_par_prop) {
+									if (con_s_blastp_query_alignment_selected.str_blastp_query_alignment != "") {
+										v_s_blastp_query_alignment_rejected.push_back(con_s_blastp_query_alignment_selected);
+									}
+									con_s_blastp_query_alignment_selected.str_blastp_query_alignment = itr_v_s_blastp_2.str_blastp_query_alignment;
+									con_s_blastp_query_alignment_selected.d_blastp_par_prop = itr_v_s_blastp_2.d_blastp_par_prop;
+								}
+								else {
+									v_s_blastp_query_alignment_rejected.push_back(itr_v_s_blastp_2);
+								}
+								break;
+							}
+						}
+					}
+					if (con_s_blastp_query_alignment_selected.str_blastp_query_alignment != "") {
+						v_s_blastp_query_alignment_selected.push_back(con_s_blastp_query_alignment_selected);
+					}
+				}
+			}
 			for (size_type i = 0; i < itr_v_s_report.str_protein.length(); ++i) {
-				for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp_genefamily_combined) {
-					if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != '.') && ((itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates) > itr_v_s_report.proteinconstruct_from_denovo_type[i].d_score)) {
-						itr_v_s_report.proteinconstruct_from_denovo_type[i].ch_aminoacid = itr_v_s_blastp.str_blastp_query_alignment.at(i);
-						itr_v_s_report.proteinconstruct_from_denovo_type[i].d_score = (itr_v_s_blastp.d_blastp_par_prop * itr_v_s_blastp.st_count_denovo_replicates);
+				for (auto itr_v_str_blastp_query_alignment_selected : v_s_blastp_query_alignment_selected) {
+					if (itr_v_str_blastp_query_alignment_selected.str_blastp_query_alignment.at(i) != '.') {
+						itr_v_s_report.proteinconstruct_from_denovo_type[i].ch_aminoacid = itr_v_str_blastp_query_alignment_selected.str_blastp_query_alignment.at(i);
+						itr_v_s_report.proteinconstruct_from_denovo_type[i].d_score = itr_v_str_blastp_query_alignment_selected.d_blastp_par_prop;
 					}
 				}
 			}
@@ -133,29 +164,6 @@ namespace fpf_report {
 
 	inline void sort_v_s_report(std::vector<report_type>& par_v_s_report) {
 		std::sort(par_v_s_report.begin(), par_v_s_report.end(), predicate_v_s_report);
-	}
-
-	void fout_s_report(filesystem_type& par_s_filesystem) {
-		std::string output_s_report = par_s_filesystem.str_directory + "report.txt";
-		std::ofstream fout_s_report;
-		fout_s_report.open(output_s_report);
-		std::vector<string_type> dummy;
-		std::cout << "\n\n ...generating report for " << par_s_filesystem.str_filename;
-		fout_s_report << "\n " << par_s_filesystem.str_filename;
-		for (auto itr_v_s_report : par_s_filesystem.v_s_report) {
-			fout_s_report << "\n\n\n " << itr_v_s_report.str_protein_accession;
-			fout_s_report << "     Score: " << std::fixed << std::setprecision(2) << itr_v_s_report.d_score;
-			fout_s_report << "\n\n " << itr_v_s_report.str_protein;
-			fout_s_report << "\n";
-			for (auto itr_v_s_blastp : itr_v_s_report.v_s_blastp_genefamily_combined) {
-				if (std::find(dummy.begin(), dummy.end(), itr_v_s_blastp.str_blastp_query_alignment) == dummy.end()) {
-					fout_s_report << "\n " << itr_v_s_blastp.str_blastp_query_alignment;
-					dummy.push_back(itr_v_s_blastp.str_blastp_query_alignment);
-					fout_s_report << "     " << std::fixed << std::setprecision(2) << itr_v_s_blastp.d_blastp_par_prop;
-				}
-			}
-			dummy.clear();
-		}
 	}
 
 	void fout_html_report(filesystem_type& par_s_filesystem) {

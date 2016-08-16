@@ -134,7 +134,6 @@ int main() {
 				fpf_report::sort_v_s_blastp_withspectralcount(itr_v_s_report.v_s_blastp_genefamily_combined);
 			}
 			fpf_report::sort_v_s_report(itr_v_s_filesystem.v_s_report);
-			fpf_report::fout_s_report(itr_v_s_filesystem);
 			fpf_report::fout_html_report(itr_v_s_filesystem);
 		}
 	}
