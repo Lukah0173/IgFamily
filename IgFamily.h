@@ -21,11 +21,9 @@ namespace IgFamily {
 	typedef double value_type;
 	typedef size_t size_type;
 
-	string_type version = "v0.5.18";
+	string_type version = "v0.6.0";
 
-	bool FILESYSTEM_MODE = true;
 	bool FILESYSTEM_UPDATE_ALL = true;
-	bool SIMPLE_SCORE = false;
 	bool NOVOR_DENOVO = false;
 	size_type MAP_FOUT_BY_SCORE = 1;
 	size_type MAP_FOUT_BY_DISTINCT = 1;
