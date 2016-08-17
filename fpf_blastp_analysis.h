@@ -68,7 +68,6 @@ namespace fpf_blastp_analysis {
 		string_system += "database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
-		std::cout << "\n\n\n Performing BLAST analysis..\n\n\n";
 		string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
 		string_system += " && blastp.exe -query ";
 		string_system += par_s_filesystem.str_filename;
@@ -80,7 +79,6 @@ namespace fpf_blastp_analysis {
 		system(string_system.c_str());
 		string_system = "EXIT";
 		system(string_system.c_str());
-		std::cout << " BLAST analysis complete..";
 	}
 
 	void create_v_s_blastp(filesystem_type& par_s_filesystem) {

@@ -112,12 +112,18 @@ namespace fpf_report {
 					for (auto itr_v_s_blastp_2 : itr_v_s_report.v_s_blastp_genefamily_combined) {
 						for (auto i = 0; i < itr_v_s_blastp.str_blastp_query_alignment.length(); ++i) {
 							if ((itr_v_s_blastp.str_blastp_query_alignment.at(i) != '.') && (itr_v_s_blastp_2.str_blastp_query_alignment.at(i) != '.')) {
-								if (itr_v_s_blastp_2.d_blastp_par_prop >= itr_v_s_blastp.d_blastp_par_prop) {
+								if (con_s_blastp_query_alignment_selected.str_blastp_query_alignment == "") {
+									con_s_blastp_query_alignment_selected.str_blastp_query_alignment = itr_v_s_blastp.str_blastp_query_alignment;
+									con_s_blastp_query_alignment_selected.d_blastp_par_prop = itr_v_s_blastp.d_blastp_par_prop;
+									con_s_blastp_query_alignment_selected.st_count_denovo_replicates = itr_v_s_blastp.st_count_denovo_replicates;
+								}
+								if ((itr_v_s_blastp_2.d_blastp_par_prop * itr_v_s_blastp_2.st_count_denovo_replicates) >= (con_s_blastp_query_alignment_selected.d_blastp_par_prop * con_s_blastp_query_alignment_selected.st_count_denovo_replicates)) {
 									if (con_s_blastp_query_alignment_selected.str_blastp_query_alignment != "") {
 										v_s_blastp_query_alignment_rejected.push_back(con_s_blastp_query_alignment_selected);
 									}
 									con_s_blastp_query_alignment_selected.str_blastp_query_alignment = itr_v_s_blastp_2.str_blastp_query_alignment;
 									con_s_blastp_query_alignment_selected.d_blastp_par_prop = itr_v_s_blastp_2.d_blastp_par_prop;
+									con_s_blastp_query_alignment_selected.st_count_denovo_replicates = itr_v_s_blastp_2.st_count_denovo_replicates;
 								}
 								else {
 									v_s_blastp_query_alignment_rejected.push_back(itr_v_s_blastp_2);
@@ -171,7 +177,6 @@ namespace fpf_report {
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);
 		std::vector<string_type> dummy;
-		std::cout << "\n\n ...generating html report for " << par_s_filesystem.str_filename;
 		fout_html_report << "\
 							<!DOCTYPE html>\n\
 							<head>\n\

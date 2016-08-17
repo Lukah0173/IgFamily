@@ -321,7 +321,6 @@ namespace fpf_filesystem {
 		std::vector<fpf_parse::parse_peptides_csv_type> con_v_c_parse_csv;
 		std::ifstream fin_input_csv(par_str_fin_root);
 		con_v_c_parse_csv = fpf_parse::parse_proteinpeptides(fin_input_csv, par_str_fin_root);
-		std::cout << "\n\n ! " << con_v_c_parse_csv.size();
 		return con_v_c_parse_csv;
 	}
 
@@ -334,7 +333,6 @@ namespace fpf_filesystem {
 		else {
 			con_v_c_parse_csv = fpf_parse::parse_PEAKS_denovopeptides_csv(fin_input_csv, par_str_fin_root);
 		}
-		std::cout << "\n\n ! " << con_v_c_parse_csv.size();
 		return con_v_c_parse_csv;
 	}
 
