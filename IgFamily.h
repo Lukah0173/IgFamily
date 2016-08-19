@@ -7,8 +7,7 @@
 
 #define EXIT_FILESYTEM_CURRENT 0;
 
-#include <string> // provides - std::string
-#include <vector> // provides - std::vector
+#include <string> // provides - string
 #include <cstdlib> // provides - size_t
 
 #ifndef IgFamily
@@ -16,37 +15,26 @@
 
 namespace IgFamily {
 
-	typedef std::string string_type;
-	typedef char char_type;
-	typedef double value_type;
-	typedef size_t size_type;
+	using std::string;
 
-	string_type version = "v0.6.1";
+	const string version = "v0.7.0";
 
-	bool FILESYSTEM_UPDATE_ALL = true;
-	bool NOVOR_DENOVO = false;
-	size_type MAP_FOUT_BY_SCORE = 1;
-	size_type MAP_FOUT_BY_DISTINCT = 1;
-	size_type MAP_FOUT_PEPTIDE_SUMMARY_BY_SPECTRALCOUNT = 1;
-	size_type DEBUG_MODE = 0;
-	size_type OUTPUT_FASTA = 1;
+	const bool FILESYSTEM_UPDATE_ALL = 1;
+	const bool NOVOR_DENOVO = 0;
+	const bool MAP_FOUT_BY_SCORE = 1;
+	const bool MAP_FOUT_BY_DISTINCT = 1;
+	const bool MAP_FOUT_PEPTIDE_SUMMARY_BY_SPECTRALCOUNT = 1;
+	const bool DEBUG_MODE = 0;
+	const bool OUTPUT_FASTA = 1;
 
-	string_type IGFAMILY_ROOT_DIR = "IgFamily_root_3.txt";
-	string_type INPUT_CSV;
-	string_type INPUT_FASTA = "FASTA\\MOST_RECENT_20160804.fasta";
-	string_type output = "z";
+	const string IGFAMILY_ROOT_DIR = "IgFamily_root_3.txt";
+	const string INPUT_CSV;
+	const string INPUT_FASTA = "FASTA\\MOST_RECENT_20160804.fasta";
 
-	double PARSE_THRESHOLD_IgP = 30;
-	double SCORE_MEAN = 0;
-	double SCORE_THRESHOLD = 10;
-	size_type GLOBAL_ITERATOR = 0;
-	size_type ITERATE_TRAIN_SCORE = 1;
-	double BLASTP_THRESHOLD = 10000;
-	double EVALUE_THRESHOLD = 20;
-	double PARPROP_SCALE = EVALUE_THRESHOLD;
-
-	char_type ct_parse_data_separator = ':';
-	char_type ct_parse_data_delimitor = ' ';
+	const double BLASTP_THRESHOLD = 10000;
+	const double EVALUE_THRESHOLD = 20;
+	const double PARPROP_SCALE = EVALUE_THRESHOLD;
+	const double MULTINOMIAL_ELEMENT_OUTPUT_THRESHOLD = 0.1;
 }
 
 #endif

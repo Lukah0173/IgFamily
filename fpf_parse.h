@@ -7,11 +7,11 @@
 
 
 #include <cstdlib> // provides - size_t
-#include <string> // provides - std::string
+#include <string> // provides - string
 #include <iostream> // provides - std::cin, std::cout
 #include <fstream> // provides - std::ifstream, std::ofstream
 #include <istream> // provides - std::istream::get
-#include <vector> // provides - std::vector
+#include <vector> // provides - vector
 #include <map> // provides - std::map
 #include <set>
 #include <algorithm>
@@ -24,20 +24,21 @@
 
 namespace fpf_parse {
 
+	using std::string;
+	using std::vector;
+
 	struct parse_peptides_csv_type;
 	class parse_FASTA_type;
 
-	typedef size_t size_type;
-	typedef std::string string_type;
-	typedef std::vector<parse_peptides_csv_type> v_s_parse_csv_data_type;
+	typedef vector<parse_peptides_csv_type> v_s_parse_csv_data_type;
 
 	struct parse_peptides_csv_type {
 	public:
-		string_type str_parse_peptides_csv_file;
-		string_type str_parse_peptides_csv_peptide;
-		string_type str_parse_peptides_csv_spectralcount;
-		string_type str_parse_csv_IgP;
-		std::vector<double> v_d_denovo_localconfidence;
+		string str_parse_peptides_csv_file;
+		string str_parse_peptides_csv_peptide;
+		string str_parse_peptides_csv_spectralcount;
+		string str_parse_csv_IgP;
+		vector<double> v_d_denovo_localconfidence;
 	};
 
 	class parse_FASTA_type {
@@ -48,66 +49,66 @@ namespace fpf_parse {
 		~parse_FASTA_type() {
 		};
 
-		inline void set_str_parse_FASTA_accession(string_type par_str_parse_FASTA_accession) {
+		inline void set_str_parse_FASTA_accession(string par_str_parse_FASTA_accession) {
 			str_parse_FASTA_accession = par_str_parse_FASTA_accession;
 		};
 
-		inline void set_str_parse_FASTA_genefamily(string_type par_str_parse_FASTA_genefamily) {
+		inline void set_str_parse_FASTA_genefamily(string par_str_parse_FASTA_genefamily) {
 			str_parse_FASTA_genefamily = par_str_parse_FASTA_genefamily;
 		};
 
-		inline void set_str_parse_FASTA_genefamily_class(string_type par_str_parse_FASTA_genefamily_class) {
+		inline void set_str_parse_FASTA_genefamily_class(string par_str_parse_FASTA_genefamily_class) {
 			str_parse_FASTA_genefamily_class = par_str_parse_FASTA_genefamily_class;
 		};
 
-		inline void set_str_parse_FASTA_species(string_type par_str_parse_FASTA_species) {
+		inline void set_str_parse_FASTA_species(string par_str_parse_FASTA_species) {
 			str_parse_FASTA_species = par_str_parse_FASTA_species;
 		};
 
-		inline void set_str_parse_FASTA_protein(string_type par_str_parse_FASTA_protein) {
+		inline void set_str_parse_FASTA_protein(string par_str_parse_FASTA_protein) {
 			str_parse_FASTA_protein = par_str_parse_FASTA_protein;
 		};
 
-		inline const string_type return_str_parse_FASTA_accession() const {
+		inline const string return_str_parse_FASTA_accession() const {
 			return str_parse_FASTA_accession;
 		};
 
-		inline const string_type return_str_parse_FASTA_genefamily() const {
+		inline const string return_str_parse_FASTA_genefamily() const {
 			return str_parse_FASTA_genefamily;
 		};
 
-		inline const string_type return_str_parse_FASTA_genefamily_class() const {
+		inline const string return_str_parse_FASTA_genefamily_class() const {
 			return str_parse_FASTA_genefamily_class;
 		};
 
-		inline const string_type return_str_parse_FASTA_species() const {
+		inline const string return_str_parse_FASTA_species() const {
 			return str_parse_FASTA_species;
 		};
 
-		inline const string_type return_str_parse_FASTA_protein() const {
+		inline const string return_str_parse_FASTA_protein() const {
 			return str_parse_FASTA_protein;
 		};
 
 	private:
-		string_type str_parse_FASTA_accession;
-		string_type str_parse_FASTA_protein_delimited;
-		string_type str_parse_FASTA_genefamily;
-		string_type str_parse_FASTA_genefamily_class;
-		string_type str_parse_FASTA_species;
-		string_type str_parse_FASTA_protein;
+		string str_parse_FASTA_accession;
+		string str_parse_FASTA_protein_delimited;
+		string str_parse_FASTA_genefamily;
+		string str_parse_FASTA_genefamily_class;
+		string str_parse_FASTA_species;
+		string str_parse_FASTA_protein;
 	};
 
-	std::vector<parse_peptides_csv_type> parse_proteinpeptides(std::ifstream& par_fin_proteinpeptides_csv, string_type par_str_dir) {
+	vector<parse_peptides_csv_type> parse_proteinpeptides(std::ifstream& par_fin_proteinpeptides_csv, string par_str_dir) {
 
-		std::vector<parse_peptides_csv_type> con_v_c_parse_proteinpeptides_csv;
-		string_type str_parse_csv;
-		size_type st_count_csv = size_type();
-		size_type sw_parse_csv = size_type();
-		size_type sw_parse_csv_ignore_header = size_type();
+		vector<parse_peptides_csv_type> con_v_c_parse_proteinpeptides_csv;
+		string str_parse_csv;
+		size_t st_count_csv = size_t();
+		size_t sw_parse_csv = size_t();
+		size_t sw_parse_csv_ignore_header = size_t();
 		char ch_parse_csv;
-		string_type str_parse_peptide;
-		string_type str_parse_spectralcount;
-		string_type str_parse_IgP;
+		string str_parse_peptide;
+		string str_parse_spectralcount;
+		string str_parse_IgP;
 
 		while (par_fin_proteinpeptides_csv.std::istream::get(ch_parse_csv)) {
 			if (sw_parse_csv_ignore_header == 1) {
@@ -122,7 +123,7 @@ namespace fpf_parse {
 						con_v_c_parse_proteinpeptides_csv.push_back(con_c_parse_csv);
 					}
 					else {
-						size_type count_v_c_parse_csv = size_type();
+						size_t count_v_c_parse_csv = size_t();
 						for (auto& itr_v_c_parse_csv : con_v_c_parse_proteinpeptides_csv) {
 							++count_v_c_parse_csv;
 							if (itr_v_c_parse_csv.str_parse_peptides_csv_peptide == str_parse_peptide) {
@@ -194,17 +195,17 @@ namespace fpf_parse {
 		return con_v_c_parse_proteinpeptides_csv;
 	}
 
-	std::vector<parse_peptides_csv_type> parse_PEAKS_denovopeptides_csv(std::ifstream& par_fin_denovopeptides_csv, string_type par_str_dir) {
+	vector<parse_peptides_csv_type> parse_PEAKS_denovopeptides_csv(std::ifstream& par_fin_denovopeptides_csv, string par_str_dir) {
 
-		std::vector<parse_peptides_csv_type> con_v_c_parse_peptides_csv;
-		string_type str_parse_csv;
-		size_type st_count_csv = size_type();
-		size_type sw_parse_csv = size_type(1);
-		size_type sw_parse_csv_ignore_header = size_type();
+		vector<parse_peptides_csv_type> con_v_c_parse_peptides_csv;
+		string str_parse_csv;
+		size_t st_count_csv = size_t();
+		size_t sw_parse_csv = size_t(1);
+		size_t sw_parse_csv_ignore_header = size_t();
 		char ch_parse_csv;
-		string_type str_parse_peptide;
-		string_type con_str_denovo_localconfidence;
-		std::vector<double> con_v_d_denovo_localconfidence;
+		string str_parse_peptide;
+		string con_str_denovo_localconfidence;
+		vector<double> con_v_d_denovo_localconfidence;
 
 		while (par_fin_denovopeptides_csv.std::istream::get(ch_parse_csv)) {
 			if (sw_parse_csv_ignore_header == 1) {
@@ -275,18 +276,18 @@ namespace fpf_parse {
 		return con_v_c_parse_peptides_csv;
 	}
 
-	std::vector<parse_peptides_csv_type> parse_NOVOR_denovopeptides_csv(std::ifstream& par_fin_denovopeptides_csv, string_type par_str_dir) {
+	vector<parse_peptides_csv_type> parse_NOVOR_denovopeptides_csv(std::ifstream& par_fin_denovopeptides_csv, string par_str_dir) {
 
-		std::vector<parse_peptides_csv_type> con_v_c_parse_peptides_csv;
-		string_type str_parse_csv;
-		size_type st_count_csv = size_type();
-		size_type sw_parse_csv = size_type(1);
+		vector<parse_peptides_csv_type> con_v_c_parse_peptides_csv;
+		string str_parse_csv;
+		size_t st_count_csv = size_t();
+		size_t sw_parse_csv = size_t(1);
 		bool b_parse_csv_ignore_header = bool();
-		string_type str_parse_csv_ignore_header = string_type();
+		string str_parse_csv_ignore_header = string();
 		char ch_parse_csv;
-		string_type str_parse_peptide;
-		string_type con_str_denovo_localconfidence;
-		std::vector<double> con_v_d_denovo_localconfidence;
+		string str_parse_peptide;
+		string con_str_denovo_localconfidence;
+		vector<double> con_v_d_denovo_localconfidence;
 
 		while (par_fin_denovopeptides_csv.std::istream::get(ch_parse_csv)) {
 			if (b_parse_csv_ignore_header) {
@@ -356,11 +357,11 @@ namespace fpf_parse {
 		return con_v_c_parse_peptides_csv;
 	}
 
-	void check_FASTA_format(string_type par_INPUT_FASTA) {
+	void check_FASTA_format(string par_INPUT_FASTA) {
 		std::ifstream fin_INPUT_FASTA(par_INPUT_FASTA);
 		char ch_parse_FASTA = char();
-		string_type str_parse_FASTA = string_type();
-		size_type count_delimit = size_type();
+		string str_parse_FASTA = string();
+		size_t count_delimit = size_t();
 		bool b_read_format = bool();
 		bool b_header_line = bool();
 		while (fin_INPUT_FASTA.get(ch_parse_FASTA)) {
@@ -370,7 +371,7 @@ namespace fpf_parse {
 					std::cout << "\n\n Accession - \n";
 					std::cout << str_parse_FASTA;
 					str_parse_FASTA.clear();
-					string_type str_format_break = string_type();
+					string str_format_break = string();
 					std::cout << "\n\n\n continue? ( y / n ) ";					
 					while (str_format_break == "") {
 						std::cout << "\n\n --> ";
@@ -411,11 +412,11 @@ namespace fpf_parse {
 		fin_INPUT_FASTA.seekg(0, std::ios::beg);
 	}
 
-	void output_custom_FASTA_format(string_type par_INPUT_FASTA) {
+	void output_custom_FASTA_format(string par_INPUT_FASTA) {
 		std::ifstream fin_INPUT_FASTA(par_INPUT_FASTA);
 		char ch_parse_FASTA = char();
-		string_type str_parse_FASTA = string_type();
-		size_type count_delimit = size_type();
+		string str_parse_FASTA = string();
+		size_t count_delimit = size_t();
 		bool b_read_format = bool();
 		bool b_header_line = bool();
 		while (fin_INPUT_FASTA.get(ch_parse_FASTA)) {
@@ -435,7 +436,7 @@ namespace fpf_parse {
 					std::cout << "\n [Accession]";
 					std::cout << "\n\n\n Create custom output format:           [C] ";
 					std::cout << "\n Output FASTA with selected format:     [X] ";
-					string_type str_menu_selection = string_type();
+					string str_menu_selection = string();
 					while ((str_menu_selection != ("C")) && (str_menu_selection != ("X"))) {
 						str_menu_selection.clear();
 						std::cout << "\n\n Input selection: \n\n --> ";
@@ -443,7 +444,7 @@ namespace fpf_parse {
 					}
 					if (str_menu_selection == "C") {
 						while (true) {
-							std::vector<string_type> v_str_field_value(count_delimit);
+							vector<string> v_str_field_value(count_delimit);
 							for (auto i = 0; i < count_delimit; ++i) {
 								v_str_field_value[i] = std::to_string(i);
 								std::cout << "\n ";
@@ -453,7 +454,7 @@ namespace fpf_parse {
 							}
 							std::cout << "\n T:     Truncate field output";
 							std::cout << "\n X:     Continue";
-							string_type str_change_field_value = "-1";
+							string str_change_field_value = "-1";
 							while (!((std::stoi(str_change_field_value) < count_delimit) && (std::stoi(str_change_field_value) >= 0))) {
 								std::cout << "\n\n Input selection: \n\n --> ";
 								std::cin >> str_change_field_value;
@@ -472,7 +473,7 @@ namespace fpf_parse {
 								}
 							}
 							if (str_change_field_value == "T") {
-								size_type st_truncate_v_str_field_value = size_type();
+								size_t st_truncate_v_str_field_value = size_t();
 								std::cout << "\n\n Truncate to how many fields?: \n\n --> ";
 								while (!((st_truncate_v_str_field_value > 0) && (st_truncate_v_str_field_value < count_delimit))) {
 									std::cin >> st_truncate_v_str_field_value;
@@ -506,7 +507,7 @@ namespace fpf_parse {
 								std::cout << count_delimit;
 								std::cout << ":     Custom string entry";
 								std::cout << "\n ";
-								size_type st_assign_field_value = -1;
+								size_t st_assign_field_value = -1;
 								while (!((st_assign_field_value <= count_delimit) && (st_assign_field_value >= 0))) {
 									std::cout << "\n\n Input selection: \n\n --> ";
 									std::cin >> st_assign_field_value;
@@ -517,7 +518,7 @@ namespace fpf_parse {
 									}
 								}
 								if (st_assign_field_value == count_delimit) {
-									string_type str_assign_field_value;
+									string str_assign_field_value;
 									std::cout << "\n\n Input selection: \n\n --> ";
 									std::cin >> str_assign_field_value;
 									v_str_field_value[std::stoi(str_change_field_value)] = str_assign_field_value;
@@ -570,14 +571,14 @@ namespace fpf_parse {
 		fin_INPUT_FASTA.seekg(0, std::ios::beg);
 	}
 
-	void custom_FASTA_output(string_type par_INPUT_FASTA) {
+	void custom_FASTA_output(string par_INPUT_FASTA) {
 		std::ifstream fin_INPUT_FASTA(par_INPUT_FASTA);
-		std::string output_custom_FASTA = "FASTA\\custom_FASTA.fasta";
+		string output_custom_FASTA = "FASTA\\custom_FASTA.fasta";
 		std::ofstream fout_custom_FASTA;
 		fout_custom_FASTA.open(output_custom_FASTA);
 		char ch_parse_FASTA = char();
-		string_type str_parse_FASTA = string_type();
-		size_type count_delimit = size_type();
+		string str_parse_FASTA = string();
+		size_t count_delimit = size_t();
 		bool b_read_format = bool();
 		bool b_header_line = bool();
 		while (fin_INPUT_FASTA.get(ch_parse_FASTA)) {
@@ -629,19 +630,19 @@ namespace fpf_parse {
 		fin_INPUT_FASTA.seekg(0, std::ios::beg);
 	}
 
-	std::vector<parse_FASTA_type> parse_FASTA(std::ifstream& par_fin_input_FASTA) {
+	vector<parse_FASTA_type> parse_FASTA(std::ifstream& par_fin_input_FASTA) {
 
 		char ch_parse_FASTA;
-		size_type sw_input_FASTA = size_type();
-		size_type sw_2_input_FASTA = size_type();
-		string_type con_str_FASTA_genefamily = string_type();
-		string_type con_str_FASTA_genefamily_class = string_type();
-		string_type con_str_FASTA_protein = string_type();
-		string_type con_str_parse_FASTA_accession = string_type();
-		string_type con_str_FASTA_species = string_type();
+		size_t sw_input_FASTA = size_t();
+		size_t sw_2_input_FASTA = size_t();
+		string con_str_FASTA_genefamily = string();
+		string con_str_FASTA_genefamily_class = string();
+		string con_str_FASTA_protein = string();
+		string con_str_parse_FASTA_accession = string();
+		string con_str_FASTA_species = string();
 		parse_FASTA_type con_c_parse_FASTA = parse_FASTA_type();
-		std::vector<parse_FASTA_type> con_v_c_parse_FASTA;
-		size_type st_count_parse_FASTA = size_type();
+		vector<parse_FASTA_type> con_v_c_parse_FASTA;
+		size_t st_count_parse_FASTA = size_t();
 
 		while (par_fin_input_FASTA.get(ch_parse_FASTA)) {
 			if (sw_2_input_FASTA == 1) {
@@ -746,7 +747,7 @@ namespace fpf_parse {
 		return con_v_c_parse_FASTA;
 	}
 
-	bool check_protein_peptides(std::vector<fpf_parse::parse_peptides_csv_type> par_v_c_parse_csv_proteinpeptides_data, bool par_filesystem_modified) {
+	bool check_protein_peptides(vector<fpf_parse::parse_peptides_csv_type> par_v_c_parse_csv_proteinpeptides_data, bool par_filesystem_modified) {
 		if (par_v_c_parse_csv_proteinpeptides_data.empty()) {
 			if (par_filesystem_modified) {
 				std::cout << "\n\n --- the protein_peptides file is empty or does not exist";
@@ -762,7 +763,7 @@ namespace fpf_parse {
 		return false;
 	}
 
-	bool check_denovo_peptides(std::vector<fpf_parse::parse_peptides_csv_type> par_v_c_parse_csv_denovopeptides_data, bool par_filesystem_modified) {
+	bool check_denovo_peptides(vector<fpf_parse::parse_peptides_csv_type> par_v_c_parse_csv_denovopeptides_data, bool par_filesystem_modified) {
 		if (par_v_c_parse_csv_denovopeptides_data.empty()) {
 			if (par_filesystem_modified) {
 				std::cout << "\n\n --- the denovo_peptides file is empty or does not exist";
@@ -778,19 +779,19 @@ namespace fpf_parse {
 		return false;
 	}
 
-	bool b_parse_FASTA_empty(std::vector<parse_FASTA_type> par_v_c_parse_FASTA) {
+	bool b_parse_FASTA_empty(vector<parse_FASTA_type> par_v_c_parse_FASTA) {
 		if (par_v_c_parse_FASTA.size() == 0) {
 			std::cout << "\n\n * * * FASTA file empty..\n\n * * * Is the file correctly directed?";
 			std::cout << "\n\n The program will now terminate. Input any key to continue -\n\n -> ";
-			string_type str_exit;
+			string str_exit;
 			std::cin >> str_exit;
 			return true;
 		}
 		return false;
 	}
 
-	void output_v_c_parse_FASTA(std::vector<parse_FASTA_type> par_v_c_parse_FASTA) {
-		string_type output_FASTA_filtered = "FASTA\\output.fasta";
+	void output_v_c_parse_FASTA(vector<parse_FASTA_type> par_v_c_parse_FASTA) {
+		string output_FASTA_filtered = "FASTA\\output.fasta";
 		std::ofstream fout_FASTA_filtered;
 		fout_FASTA_filtered.open(output_FASTA_filtered);
 		if (IgFamily::OUTPUT_FASTA == 1) {
@@ -810,8 +811,8 @@ namespace fpf_parse {
 		}
 	}
 
-	void output_v_c_parse_FASTA_to_blastdirectory(std::vector<parse_FASTA_type> par_v_c_parse_FASTA) {
-		string_type output_FASTA_filtered = "blast_directory\\database.fasta";
+	void output_v_c_parse_FASTA_to_blastdirectory(vector<parse_FASTA_type> par_v_c_parse_FASTA) {
+		string output_FASTA_filtered = "blast_directory\\database.fasta";
 		std::ofstream fout_FASTA_filtered;
 		fout_FASTA_filtered.open(output_FASTA_filtered);
 		if (IgFamily::OUTPUT_FASTA == 1) {
