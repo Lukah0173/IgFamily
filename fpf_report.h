@@ -35,7 +35,7 @@ namespace fpf_report {
 		vector<category_report> temp_v_category_report;
 		for (const auto itr_blastp_data : par_filesystem.v_blastp_data) {
 			auto find_category_report = std::find_if(temp_v_category_report.begin(), temp_v_category_report.end(),
-				[itr_blastp_data](category_report par_category_report) {
+				[itr_blastp_data](const category_report par_category_report) {
 				return par_category_report.category_name == itr_blastp_data.blastp_subject_accession;
 			});
 			if (find_category_report != temp_v_category_report.end()) {
@@ -55,7 +55,7 @@ namespace fpf_report {
 		for (auto& itr_category_report : temp_v_category_report) {
 			for (auto& itr_blastp_data : itr_category_report.v_blastp_combined_by_category) {
 				const auto find_peptide_data = std::find_if(par_filesystem.v_peptide_data.begin(), par_filesystem.v_peptide_data.end(),
-					[itr_blastp_data](peptide_data par_peptide_data) {
+					[itr_blastp_data](const peptide_data par_peptide_data) {
 					return par_peptide_data.peptide_filtered == itr_blastp_data.blastp_query;
 				});
 				if (find_peptide_data == par_filesystem.v_peptide_data.end()) {
@@ -104,8 +104,8 @@ namespace fpf_report {
 			vector<blastp_data> v_blastp_query_alignment_selected = vector<blastp_data>();
 			vector<blastp_data> v_blastp_query_alignment_rejected = vector<blastp_data>();
 			for (const auto itr_v_blastp : itr_category_report.v_blastp_combined_by_category) {		
-				auto find_str_blastp_query_alignment_rejected = std::find_if(v_blastp_query_alignment_rejected.begin(), v_blastp_query_alignment_rejected.end(),
-					[itr_v_blastp](blastp_data par_s_blastp) {
+				const auto find_str_blastp_query_alignment_rejected = std::find_if(v_blastp_query_alignment_rejected.begin(), v_blastp_query_alignment_rejected.end(),
+					[itr_v_blastp](const blastp_data par_s_blastp) {
 					return par_s_blastp.query_alignment == itr_v_blastp.query_alignment;
 				});
 				if (find_str_blastp_query_alignment_rejected == v_blastp_query_alignment_rejected.end()) {
