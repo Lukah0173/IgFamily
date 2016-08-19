@@ -49,7 +49,7 @@ namespace fpf_blastp_analysis {
 		std::ofstream fout_blastp_database_FASTA;
 		fout_blastp_database_FASTA.open(output_blastp_database_FASTA);
 		for (auto itr_v_c_multinomial_catagory_distinct : par_s_filesystem.v_c_multinomial_catagory_distinct) {
-			fout_blastp_database_FASTA << ">" << itr_v_c_multinomial_catagory_distinct.str_multinomial_catagory_name << "\n";
+			fout_blastp_database_FASTA << ">" << itr_v_c_multinomial_catagory_distinct.str_multinomial_category_name << "\n";
 			for (size_type i = 0; i < itr_v_c_multinomial_catagory_distinct.str_protein.length(); ++i) {
 				if ((i % 60 == 0) && (i != 0)) {
 					fout_blastp_database_FASTA << "\n";
@@ -128,7 +128,7 @@ namespace fpf_blastp_analysis {
 		for (auto& itr_v_s_blastp : par_s_filesystem.v_s_blastp) {
 			auto find_str_genefamily = std::find_if(par_s_filesystem.v_c_multinomial_catagory.begin(), par_s_filesystem.v_c_multinomial_catagory.end(),
 				[itr_v_s_blastp](multinomial_category_data_type par_s_multinomial_element_data) {
-				return par_s_multinomial_element_data.str_multinomial_catagory_name == itr_v_s_blastp.str_blastp_subject_accession;
+				return par_s_multinomial_element_data.str_multinomial_category_name == itr_v_s_blastp.str_blastp_subject_accession;
 			});
 			if (find_str_genefamily == par_s_filesystem.v_c_multinomial_catagory.end()) {
 				std::cout << "\n\n error - std::find_if returns nullptr";
@@ -137,7 +137,7 @@ namespace fpf_blastp_analysis {
 				std::cin >> catch_error;
 			}
 			itr_v_s_blastp.str_protein = find_str_genefamily->str_protein;
-			itr_v_s_blastp.str_blastp_subject_accession_class = find_str_genefamily->str_multinomial_catagory_class;
+			itr_v_s_blastp.str_blastp_subject_accession_class = find_str_genefamily->str_multinomial_category_class;
 
 		}
 	}

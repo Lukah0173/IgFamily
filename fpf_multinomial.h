@@ -28,8 +28,8 @@ namespace fpf_multinomial {
 
 	void create_s_filesystem_mnom(filesystem_type& par_s_filesystem) {
 		for (auto itr_v_c_multinomial_catagory : par_s_filesystem.v_c_multinomial_catagory) {
-			par_s_filesystem.s_multinomial.v_str_multinomial_category.push_back(itr_v_c_multinomial_catagory.str_multinomial_catagory_name);
-			par_s_filesystem.s_multinomial.v_str_multinomial_category_class.push_back(itr_v_c_multinomial_catagory.str_multinomial_catagory_class);
+			par_s_filesystem.s_multinomial.v_str_multinomial_category.push_back(itr_v_c_multinomial_catagory.str_multinomial_category_name);
+			par_s_filesystem.s_multinomial.v_str_multinomial_category_class.push_back(itr_v_c_multinomial_catagory.str_multinomial_category_class);
 		}
 		for (auto itr_v_s_peptide_data : par_s_filesystem.v_s_peptide_data) {
 			par_s_filesystem.s_multinomial.v_str_multinomial_element.push_back(itr_v_s_peptide_data.str_peptide_filtered);
