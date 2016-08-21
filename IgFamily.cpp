@@ -1,4 +1,4 @@
-// * * IgFamily v0.7.1 * * 
+// * * IgFamily v0.7.2 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -14,9 +14,9 @@
 #include "IgFamily.h"
 #include "fpf_filesystem.h"
 #include "fpf_filesystem_analysis.h"
+#include "fpf_data_analysis.h"
 #include "fpf_blastp_analysis.h"
 #include "fpf_dirichlet_mixture_model.h"
-#include "fpf_category_analysis.h"
 #include "fpf_report.h"
 #include "fpf_multinomial.h"
 
@@ -126,27 +126,27 @@ int main() {
 	std::cout << "\n\n\n\n scoring categories...\n";
 	for (auto& itr_v_s_filesystem : v_s_filesystem) {
 		if (itr_v_s_filesystem.denovopeptides_exist) {
-			fpf_category_analysis::create_category_analysis(itr_v_s_filesystem);
-			fpf_category_analysis::create_proteinconstruct_from_denovo(itr_v_s_filesystem);
+			fpf_data_analysis::create_category_analysis(itr_v_s_filesystem);
+			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_s_filesystem);
 			for (auto& itr_v_s_report : itr_v_s_filesystem.v_category_analysis) {
 				//fpf_report::sort_v_blastp_data(itr_v_s_report.v_blastp_data);
-				fpf_category_analysis::sort_v_blastp_data_with_spectralcount(itr_v_s_report.v_blastp_data_combined_by_category);
+				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_s_report.v_blastp_data_combined_by_category);
 			}
-			fpf_category_analysis::sort_v_category_analysis(itr_v_s_filesystem.v_category_analysis);
+			fpf_data_analysis::sort_v_category_analysis(itr_v_s_filesystem.v_category_analysis);
 		}
 	}
 
 	std::cout << "\n\n\n\n determining most-probable germline representation...\n";
 	for (auto& itr_v_s_filesystem : v_s_filesystem) {
 		if (itr_v_s_filesystem.denovopeptides_exist) {
-			fpf_category_analysis::select_category_analysis_by_score(itr_v_s_filesystem);
-			fpf_category_analysis::create_refined_blastp_database(itr_v_s_filesystem);
+			fpf_data_analysis::select_category_analysis_by_score(itr_v_s_filesystem);
+			fpf_blastp_analysis::create_blastp_database_refined(itr_v_s_filesystem);
 			fpf_blastp_analysis::sys_blastp(itr_v_s_filesystem);
 			std::cout << "\n\n\n ...homology analysis complete";
 			std::cout << "\n\n\n creating homology data structures...";
 			fpf_blastp_analysis::create_v_s_blastp(itr_v_s_filesystem);
 			fpf_blastp_analysis::modify_v_s_filesystem_blastp_data(itr_v_s_filesystem);
-			fpf_blastp_analysis::create_str_protein(itr_v_s_filesystem);
+			fpf_blastp_analysis::create_str_protein_from_category_analysis(itr_v_s_filesystem);
 			fpf_blastp_analysis::create_str_query_alignment(itr_v_s_filesystem);
 			fpf_blastp_analysis::normalise_v_s_filesystem_blastp_data(itr_v_s_filesystem);
 			std::cout << "\n\n ...data structures assigned";
@@ -171,6 +171,8 @@ int main() {
 	std::cout << "\n\n\n\n producing summary reports...\n";
 	for (auto& itr_v_s_filesystem : v_s_filesystem) {
 		if (itr_v_s_filesystem.denovopeptides_exist) {
+			std::cout << "\n\n ...generating multinomial report for " << itr_v_s_filesystem.filename;
+			fpf_report::fout_multinomial_comparison(itr_v_s_filesystem);
 			std::cout << "\n\n ...generating html report for " << itr_v_s_filesystem.filename;
 			fpf_report::fout_html_report(itr_v_s_filesystem);
 		}

@@ -24,6 +24,20 @@ namespace fpf_report {
 
 	typedef fpf_filesystem::filesystem filesystem;
 
+	void fout_multinomial_comparison(filesystem& par_filesystem) {
+		std::string output_multinomial_comparison = par_filesystem.directory + "multinomial_comparison.csv";
+		std::ofstream fout_multinomial_comparison;
+		fout_multinomial_comparison.open(output_multinomial_comparison);
+		for (const auto& itr_v_category_analysis : par_filesystem.v_category_analysis_selected_by_polymorphism) {
+			if (itr_v_category_analysis.category_class == "IGHV"
+				|| itr_v_category_analysis.category_class == "IGKV"
+				|| itr_v_category_analysis.category_class == "IGLV") {
+				fout_multinomial_comparison << itr_v_category_analysis.category_name << "\n";
+				fout_multinomial_comparison << itr_v_category_analysis.category_score << ",";
+			}
+		}
+	}
+
 	void fout_html_report(filesystem& par_filesystem) {
 		std::string output_html_report = par_filesystem.directory + "report.html";
 		std::ofstream fout_html_report;

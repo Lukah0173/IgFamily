@@ -70,7 +70,7 @@ namespace fpf_filesystem {
 		/* sample data */
 
 		vector<multinomial_category> v_multinomial_category;
-		vector<multinomial_category> v_multinomial_category_distinct_polymorphism;
+		vector<multinomial_category*> pv_multinomial_category_distinct_polymorphism;
 		vector<peptide_data> v_peptide_data;
 
 		/* blastp data */

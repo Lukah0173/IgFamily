@@ -29,9 +29,9 @@ namespace fpf_multinomial {
 	typedef fpf_filesystem::filesystem filesystem;
 
 	void create_filesystem_multinomial_data(filesystem& par_filesystem) {
-		for (const auto& itr_v_multinomial_category : par_filesystem.v_multinomial_category) {
-			par_filesystem.multinomial_data.v_category_name.push_back(itr_v_multinomial_category.category_name);
-			par_filesystem.multinomial_data.v_category_class.push_back(itr_v_multinomial_category.category_class);
+		for (const auto& itr_v_category_analysis : par_filesystem.v_category_analysis_selected_by_polymorphism) {
+			par_filesystem.multinomial_data.v_category_name.push_back(itr_v_category_analysis.category_name);
+			par_filesystem.multinomial_data.v_category_class.push_back(itr_v_category_analysis.category_class);
 		}
 		for (const auto& itr_v_peptide_data : par_filesystem.v_peptide_data) {
 			par_filesystem.multinomial_data.v_element_name.push_back(itr_v_peptide_data.peptide_filtered);

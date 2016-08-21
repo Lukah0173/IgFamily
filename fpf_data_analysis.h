@@ -1,4 +1,4 @@
-// * * fpf_category_analysis.h * * 
+// * * fpf_data_analysis.h * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -6,8 +6,8 @@
 
 
 
-#ifndef FPF_CATEGORY_ANALYSIS
-#define	FPF_CATEGORY_ANALYSIS
+#ifndef FPF_DATA_ANALYSIS
+#define	FPF_DATA_ANALYSIS
 
 #include <cstdlib>						// provides - size_t
 #include <string>						// provides - string
@@ -20,7 +20,7 @@
 #include "fpf_data.h"
 
 
-namespace fpf_category_analysis {
+namespace fpf_data_analysis {
 
 	using std::string;
 	using std::vector;
@@ -28,6 +28,7 @@ namespace fpf_category_analysis {
 	typedef fpf_filesystem::filesystem filesystem;
 	typedef fpf_data::peptide_data peptide_data;
 	typedef fpf_data::denovo_peptide denovo_peptide;
+	typedef fpf_data::multinomial_category multinomial_category;
 	typedef fpf_data::blastp_data blastp_data;
 	typedef fpf_data::proteinconstruct_from_denovo proteinconstruct_from_denovo;
 	typedef fpf_data::category_analysis category_analysis;
@@ -186,24 +187,7 @@ namespace fpf_category_analysis {
 				temp_v_category_analysis_selected_by_polymorphism.push_back(itr_v_category_analysis);
 			}
 		}
-		par_filesystem.v_category_analysis_selected_by_polymorphism = std::move(temp_v_category_analysis_selected_by_polymorphism);
-	}
-
-	void create_refined_blastp_database(filesystem par_filesystem) {
-		string output_blastp_database_FASTA = "blast_directory\\blastp_database.fasta";
-		std::ofstream fout_blastp_database_FASTA;
-		fout_blastp_database_FASTA.open(output_blastp_database_FASTA);
-		for (auto itr_v_category_analysis : par_filesystem.v_category_analysis_selected_by_polymorphism) {
-			fout_blastp_database_FASTA << ">" << itr_v_category_analysis.category_name << "\n";
-			for (size_t i = 0; i < itr_v_category_analysis.category_protein.length(); ++i) {
-				if ((i % 60 == 0) && (i != 0)) {
-					fout_blastp_database_FASTA << "\n";
-				}
-				fout_blastp_database_FASTA << itr_v_category_analysis.category_protein.at(i);
-			}
-			fout_blastp_database_FASTA << "\n";
-		}
-		fout_blastp_database_FASTA.close();
+		par_filesystem.v_category_analysis_selected_by_polymorphism = temp_v_category_analysis_selected_by_polymorphism;
 	}
 
 	inline bool predicate_blastp_data(const blastp_data& i, const blastp_data& j) {
