@@ -32,8 +32,8 @@ namespace fpf_report {
 			if (itr_v_category_analysis.category_class == "IGHV"
 				|| itr_v_category_analysis.category_class == "IGKV"
 				|| itr_v_category_analysis.category_class == "IGLV") {
-				fout_multinomial_comparison << itr_v_category_analysis.category_name << "\n";
-				fout_multinomial_comparison << itr_v_category_analysis.category_score << ",";
+				fout_multinomial_comparison << itr_v_category_analysis.category_name << ",";
+				fout_multinomial_comparison << itr_v_category_analysis.category_score << "\n";
 			}
 		}
 	}

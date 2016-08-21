@@ -178,7 +178,6 @@ int main() {
 		}
 	}
 
-
 	for (auto itr_v_s_filesystem : v_s_filesystem) {
 		fpf_filesystem::fout_filesystem(itr_v_s_filesystem);
 	}
