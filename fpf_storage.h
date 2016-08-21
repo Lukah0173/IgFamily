@@ -134,7 +134,7 @@
 //		}
 //
 //if (IgFamily::FILESYSTEM_MODE == 1) {
-//	vector<string> v_str_peptide_total_observed = fpf_filesystem_analysis::create_v_str_peptide_total_observed(v_s_filesystem);
+//	vector<string> v_str_peptide_total_observed = fpf_filesystem_analysis::create_v_peptide_data_total_observed(v_s_filesystem);
 //	for (auto itr_v_s_filesystem = v_s_filesystem.begin(); itr_v_s_filesystem != v_s_filesystem.end(); ++itr_v_s_filesystem) {
 //		vector<fpf_data::c_peptide_data> filesystem_v_c_peptide_data_filtered = fpf_data::create_v_c_peptide_data_filtered(itr_v_s_filesystem->v_c_peptide_data);
 //		vector<fpf_data::c_peptide_data> filesystem_v_c_peptide_data_filtered_distinct = fpf_data::create_v_c_peptide_data_filtered_distinct(filesystem_v_c_peptide_data_filtered);
@@ -142,15 +142,15 @@
 //	}
 //	vector<string> v_str_peptide_filtered_distinct_total_observed = fpf_filesystem_analysis::create_v_str_peptide_filtered_distinct_total_observed(v_s_filesystem);
 //
-//	vector<fpf_filesystem_analysis::s_filesystem_analysis> v_s_filesystem_analysis;
+//	vector<fpf_filesystem_analysis::filesystem_analysis> v_s_filesystem_analysis;
 //	for (auto itr_v_s_filesystem = v_s_filesystem.begin(); itr_v_s_filesystem != v_s_filesystem.end(); ++itr_v_s_filesystem) {
-//		v_s_filesystem_analysis.push_back(fpf_filesystem_analysis::create_s_filesystem_analysis(*itr_v_s_filesystem, v_str_peptide_total_observed, v_str_peptide_filtered_distinct_total_observed));
+//		v_s_filesystem_analysis.push_back(fpf_filesystem_analysis::create_filesystem_analysis(*itr_v_s_filesystem, v_str_peptide_total_observed, v_str_peptide_filtered_distinct_total_observed));
 //	}
 //	fpf_filesystem_analysis::fout_filesystem_peptide_data_summary(v_s_filesystem_analysis, v_str_peptide_total_observed, "peptide_summary.csv");
 //
-//	vector<fpf_filesystem_analysis::s_filesystem_analysis> v_s_filesystem_analysis_replicate_combined;
+//	vector<fpf_filesystem_analysis::filesystem_analysis> v_s_filesystem_analysis_replicate_combined;
 //	for (auto itr_v_s_filesystem_replicate_combined = v_s_filesystem_replicate_combined.begin(); itr_v_s_filesystem_replicate_combined != v_s_filesystem_replicate_combined.end(); ++itr_v_s_filesystem_replicate_combined) {
-//		v_s_filesystem_analysis_replicate_combined.push_back(fpf_filesystem_analysis::create_s_filesystem_analysis(*itr_v_s_filesystem_replicate_combined, v_str_peptide_total_observed, v_str_peptide_filtered_distinct_total_observed));
+//		v_s_filesystem_analysis_replicate_combined.push_back(fpf_filesystem_analysis::create_filesystem_analysis(*itr_v_s_filesystem_replicate_combined, v_str_peptide_total_observed, v_str_peptide_filtered_distinct_total_observed));
 //	}
 //	fpf_filesystem_analysis::fout_filesystem_peptide_data_summary(v_s_filesystem_analysis_replicate_combined, v_str_peptide_total_observed, "peptide_summary_replicate_combined.csv");
 //}
