@@ -11,10 +11,10 @@
 
 #include <cstdlib> // provides - size_t
 #include <vector> // provides - vector
-#include <utility> // provides - std::pair
+#include <utility> // provides - pair
 #include <iostream> // provides - std::istream
 #include <algorithm> // provides - std::find
-#include <tuple> // provides - std::tuple
+#include <tuple> // provides - tuple
 
 #include "IgFamily.h"
 #include "fpf_parse.h"
@@ -26,6 +26,7 @@ namespace fpf_filesystem {
 
 	using std::string;
 	using std::vector;
+	using std::pair;
 
 	typedef fpf_convert::fileconversion_parameters fileconversion_parameters;
 	typedef fpf_data::multinomial_category multinomial_category;
@@ -63,8 +64,8 @@ namespace fpf_filesystem {
 
 		vector<multinomial_category> v_multinomial_category;
 		vector<peptide_data> v_peptide_data;
-		std::pair<string, string> filesystem_id;
-		vector<std::pair<string, string>> v_filesystem_replicates;
+		pair<string, string> filesystem_id;
+		vector<pair<string, string>> v_filesystem_replicates;
 		size_t filesystem_replicate_count;
 		vector<blastp_data> v_blastp_data;
 		multinomial multinomial_data;
@@ -135,7 +136,7 @@ namespace fpf_filesystem {
 			char c_stream_fin_filesystem = char();
 			string str_stream_fin_filesystem = string();
 			size_t sw_stream_fin_filesystem = size_t();
-			std::pair<string, string> con_p_filesystem_id = std::pair<string, string>();
+			pair<string, string> con_p_filesystem_id = pair<string, string>();
 			string con_str_filesystem_date = string();
 			string con_str_filesystem_filename = string();
 			string con_str_filesystem_version = string();
@@ -144,7 +145,7 @@ namespace fpf_filesystem {
 			string con_str_filesystem_denovo_deltamass = string();
 			string con_str_filesystem_replicatedate = string();
 			size_t sw_filesystem_replicatepair = size_t();
-			vector<std::pair<string, string>> v_p_filesystem_replicates = vector<std::pair<string, string>>();
+			vector<pair<string, string>> v_p_filesystem_replicates = vector<pair<string, string>>();
 			while (fin_input_filesystem.std::istream::get(c_stream_fin_filesystem)) {
 				if ((c_stream_fin_filesystem != ';') && (c_stream_fin_filesystem != '\n') && (c_stream_fin_filesystem != ',')) {
 					str_stream_fin_filesystem += c_stream_fin_filesystem;
@@ -317,21 +318,21 @@ namespace fpf_filesystem {
 		return con_str_root_denovopeptides;
 	}
 
-	vector<fpf_parse::parse_peptides_csv_type> parse_filesystem_proteinpeptides(string par_str_fin_root) {
-		vector<fpf_parse::parse_peptides_csv_type> con_v_c_parse_csv;
+	vector<fpf_parse::csv_data> parse_filesystem_proteinpeptides(string par_str_fin_root) {
+		vector<fpf_parse::csv_data> con_v_c_parse_csv;
 		std::ifstream fin_input_csv(par_str_fin_root);
 		con_v_c_parse_csv = fpf_parse::parse_proteinpeptides(fin_input_csv, par_str_fin_root);
 		return con_v_c_parse_csv;
 	}
 
-	vector<fpf_parse::parse_peptides_csv_type> parse_filesystem_denovopeptides(string par_str_fin_root) {
-		vector<fpf_parse::parse_peptides_csv_type> con_v_c_parse_csv;
+	vector<fpf_parse::csv_data> parse_filesystem_denovopeptides(string par_str_fin_root) {
+		vector<fpf_parse::csv_data> con_v_c_parse_csv;
 		std::ifstream fin_input_csv(par_str_fin_root);
 		if (IgFamily::NOVOR_DENOVO) {
-			con_v_c_parse_csv = fpf_parse::parse_NOVOR_denovopeptides_csv(fin_input_csv, par_str_fin_root);
+			con_v_c_parse_csv = fpf_parse::parse_csv_NOVOR_denovopeptides(fin_input_csv, par_str_fin_root);
 		}
 		else {
-			con_v_c_parse_csv = fpf_parse::parse_PEAKS_denovopeptides_csv(fin_input_csv, par_str_fin_root);
+			con_v_c_parse_csv = fpf_parse::parse_csv_PEAKS_denovopeptides(fin_input_csv, par_str_fin_root);
 		}
 		return con_v_c_parse_csv;
 	}
@@ -344,7 +345,7 @@ namespace fpf_filesystem {
 		fout_v_s_filesystem << "FILE: " << par_filesystem.filename << ";\n";
 		fout_v_s_filesystem << "VERSION: " << IgFamily::version << ";\n";
 		fout_v_s_filesystem << "REPLICATES: ";
-		for (vector<std::pair<string, string>>::iterator itr_v_p_replicates = par_filesystem.v_filesystem_replicates.begin(); itr_v_p_replicates != par_filesystem.v_filesystem_replicates.end(); ++itr_v_p_replicates) {
+		for (vector<pair<string, string>>::iterator itr_v_p_replicates = par_filesystem.v_filesystem_replicates.begin(); itr_v_p_replicates != par_filesystem.v_filesystem_replicates.end(); ++itr_v_p_replicates) {
 			fout_v_s_filesystem << std::get<0>(*itr_v_p_replicates) << "," << std::get<1>(*itr_v_p_replicates);
 			if ((itr_v_p_replicates + 1) != par_filesystem.v_filesystem_replicates.end()) {
 				fout_v_s_filesystem << ",";

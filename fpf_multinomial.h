@@ -14,7 +14,7 @@
 #include <vector>						// provides - vector
 #include <iomanip>						// provides - std::setprecision
 #include <iostream>						// provides - std::get
-#include <utility>						// provides - std::pair
+#include <utility>						// provides - pair
 
 #include "fpf_data.h"
 #include "fpf_filesystem.h"

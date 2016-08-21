@@ -21,6 +21,7 @@ namespace fpf_filesystem_analysis {
 
 	using std::string;
 	using std::vector;
+	using std::pair;
 
 	struct s_filesystem_analysis;
 
@@ -129,7 +130,7 @@ namespace fpf_filesystem_analysis {
 			fout_v_s_filesystem_summary << "FILE: " << itr_v_s_filesystem_analysis->filesystem->filename << ";\n";
 			fout_v_s_filesystem_summary << "VERSION: " << IgFamily::version << ";\n";
 			fout_v_s_filesystem_summary << "REPLICATES: ";
-			for (vector<std::pair<string, string>>::iterator itr_v_p_replicates = itr_v_s_filesystem_analysis->filesystem->v_filesystem_replicates.begin(); itr_v_p_replicates != itr_v_s_filesystem_analysis->filesystem->v_filesystem_replicates.end(); ++itr_v_p_replicates) {
+			for (vector<pair<string, string>>::iterator itr_v_p_replicates = itr_v_s_filesystem_analysis->filesystem->v_filesystem_replicates.begin(); itr_v_p_replicates != itr_v_s_filesystem_analysis->filesystem->v_filesystem_replicates.end(); ++itr_v_p_replicates) {
 				fout_v_s_filesystem_summary << std::get<0>(*itr_v_p_replicates) << "," << std::get<1>(*itr_v_p_replicates);
 				if ((itr_v_p_replicates + 1) != itr_v_s_filesystem_analysis->filesystem->v_filesystem_replicates.end()) {
 					fout_v_s_filesystem_summary << ",";

@@ -65,7 +65,7 @@
 //		else {
 //			bool b_replicate_found = bool();
 //			for (auto& itr_v_s_filesystem_replicate_combined : v_s_filesystem_replicate_combined) {
-//				for (vector<std::pair<string, string>>::iterator itr_v_p_replicates = itr_v_s_filesystem->v_filesystem_replicates.begin(); itr_v_p_replicates != itr_v_s_filesystem->v_filesystem_replicates.end(); ++itr_v_p_replicates) {
+//				for (vector<pair<string, string>>::iterator itr_v_p_replicates = itr_v_s_filesystem->v_filesystem_replicates.begin(); itr_v_p_replicates != itr_v_s_filesystem->v_filesystem_replicates.end(); ++itr_v_p_replicates) {
 //					if (itr_v_s_filesystem_replicate_combined.filesystem_id == *itr_v_p_replicates) {
 //						b_replicate_found = true;
 //						++itr_v_s_filesystem_replicate_combined.filesystem_replicate_count;
@@ -76,7 +76,7 @@
 //						}
 //						if (itr_v_s_filesystem_replicate_combined.filesystem_replicate_count == itr_v_s_filesystem->v_filesystem_replicates.size()) {
 //							std::cout << "\n\n\n\n ...combining replicate data";
-//							for (vector<std::pair<string, string>>::iterator itr_v_p_replicates_2 = itr_v_s_filesystem->v_filesystem_replicates.begin(); itr_v_p_replicates_2 != itr_v_s_filesystem->v_filesystem_replicates.end(); ++itr_v_p_replicates_2) {
+//							for (vector<pair<string, string>>::iterator itr_v_p_replicates_2 = itr_v_s_filesystem->v_filesystem_replicates.begin(); itr_v_p_replicates_2 != itr_v_s_filesystem->v_filesystem_replicates.end(); ++itr_v_p_replicates_2) {
 //								std::cout << "\n\n * " << std::get<0>(*itr_v_p_replicates_2) << "   " << std::get<1>(*itr_v_p_replicates_2);
 //							}
 //							for (vector<fpf_data::c_genefamily_data>::iterator itr_v_c_analysis = itr_v_s_filesystem_replicate_combined.v_multinomial_category.begin(); itr_v_c_analysis != itr_v_s_filesystem_replicate_combined.v_multinomial_category.end(); ++itr_v_c_analysis) {

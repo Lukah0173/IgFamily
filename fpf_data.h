@@ -8,28 +8,28 @@
 
 #ifndef FPF_DATA
 #define	FPF_DATA
+
 #include <cstdlib> // provides - size_t
-#include <vector> // provides - vector
+#include <vector> // provides - std::vector
 #include <sstream> // provides - std::istringstream
 #include <algorithm> // provides - std::find
-#include <string> // provides - string, string::pop_back
-#include <complex> // provides - std::log
+#include <string> // provides - std::string, string::pop_back
 #include <math.h> // provides - std::floor
-#include <assert.h> 
+
 #include "IgFamily.h"
 #include "fpf_parse.h"
-
 
 
 namespace fpf_data {
 
 	using std::string;
 	using std::vector;
+	using std::tuple;
 
 	struct multinomial_category;
 	struct peptide_data;
-	struct denovo_aminoacid;
 	struct denovo_peptide;
+	struct denovo_aminoacid;
 	struct blastp_data;
 	struct proteinconstruct_from_denovo;
 	struct category_report;
@@ -43,14 +43,14 @@ namespace fpf_data {
 		string category_species;
 	};
 
-	struct denovo_aminoacid {
-		char aminoacid;
-		double aminoacid_score;
-	};
-
 	struct denovo_peptide {
 		vector<denovo_aminoacid> v_denovo_aminoacid;
 		double localconfidence_average;
+	};
+
+	struct denovo_aminoacid {
+		char aminoacid;
+		double aminoacid_score;
 	};
 
 	struct peptide_data {
@@ -62,7 +62,7 @@ namespace fpf_data {
 		vector<denovo_peptide> v_denovo_peptide_data;
 		size_t filesystem_sample_replicate_count = size_t{ 1 };
 		bool filesystem_sample_replicate_merged = bool();
-		vector<std::tuple<string, size_t, size_t>> v_filesystem_sample_replicate_data;
+		vector<tuple<string, size_t, size_t>> v_filesystem_sample_replicate_data;
 	};
 
 	struct blastp_data {
@@ -107,28 +107,28 @@ namespace fpf_data {
 		vector<vector<double>> v2_density;
 	};
 
-	vector<multinomial_category> create_multinomial_category(vector<fpf_parse::parse_FASTA_type> par_parse_FASTA) {
+	vector<multinomial_category> create_multinomial_category(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
 		vector<multinomial_category> temp_v_multinomial_category;
 		multinomial_category temp_multinomial_category;
 		for (const auto itr_parse_FASTA : par_parse_FASTA) {
 			const auto find_v_s_multinomial_element_data = std::find_if(temp_v_multinomial_category.begin(), temp_v_multinomial_category.end(),
 				[itr_parse_FASTA](const multinomial_category& par_s_multinomial_element_data) {
-				return par_s_multinomial_element_data.category_name == itr_parse_FASTA.return_str_parse_FASTA_genefamily(); });
+				return par_s_multinomial_element_data.category_name == itr_parse_FASTA.return_FASTA_genefamily(); });
 			if (find_v_s_multinomial_element_data == temp_v_multinomial_category.end()) {
-				temp_multinomial_category.category_name = itr_parse_FASTA.return_str_parse_FASTA_genefamily();
-				temp_multinomial_category.category_class = itr_parse_FASTA.return_str_parse_FASTA_genefamily_class();
-				temp_multinomial_category.category_species = itr_parse_FASTA.return_str_parse_FASTA_species();
-				temp_multinomial_category.category_protein = itr_parse_FASTA.return_str_parse_FASTA_protein();
+				temp_multinomial_category.category_name = itr_parse_FASTA.return_FASTA_genefamily();
+				temp_multinomial_category.category_class = itr_parse_FASTA.return_FASTA_genefamily_class();
+				temp_multinomial_category.category_species = itr_parse_FASTA.return_FASTA_species();
+				temp_multinomial_category.category_protein = itr_parse_FASTA.return_FASTA_protein();
 				temp_v_multinomial_category.push_back(temp_multinomial_category);
 			}
 			else {
-				find_v_s_multinomial_element_data->category_protein = find_v_s_multinomial_element_data->category_name + itr_parse_FASTA.return_str_parse_FASTA_protein();
+				find_v_s_multinomial_element_data->category_protein = find_v_s_multinomial_element_data->category_name + itr_parse_FASTA.return_FASTA_protein();
 			}
 		}
 		return temp_v_multinomial_category;
 	}
 
-	vector<peptide_data> create_peptide_data(vector<fpf_parse::parse_peptides_csv_type> par_parse_csv_peptide_data) {
+	vector<peptide_data> create_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data) {
 		vector<peptide_data> temp_v_peptide_data;
 		for (const auto itr_parse_csv_peptide_data : par_parse_csv_peptide_data) {
 			peptide_data temp_peptide_data = peptide_data();
@@ -136,21 +136,21 @@ namespace fpf_data {
 			denovo_aminoacid temp_denovo_aminoacid = denovo_aminoacid();
 			string temp_peptide_filtered = string();
 			size_t sw_peptide_filtered = size_t();
-			for (auto j = size_t(); j < itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.length(); ++j) {
-				if (itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j) == '(' || ((itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j) == '.') && (itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.length() > 2))) {
+			for (auto j = size_t(); j < itr_parse_csv_peptide_data.csv_peptide.length(); ++j) {
+				if (itr_parse_csv_peptide_data.csv_peptide.at(j) == '(' || ((itr_parse_csv_peptide_data.csv_peptide.at(j) == '.') && (itr_parse_csv_peptide_data.csv_peptide.length() > 2))) {
 					sw_peptide_filtered = 1;
-					if (itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j + 1) == 's') {
+					if (itr_parse_csv_peptide_data.csv_peptide.at(j + 1) == 's') {
 						temp_peptide_filtered.pop_back();
-						temp_peptide_filtered += itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j + 5);
+						temp_peptide_filtered += itr_parse_csv_peptide_data.csv_peptide.at(j + 5);
 					}
 				}
 				if (sw_peptide_filtered == 0) {
-					temp_peptide_filtered += itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j);
+					temp_peptide_filtered += itr_parse_csv_peptide_data.csv_peptide.at(j);
 				}
-				if (itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j) == ')') {
+				if (itr_parse_csv_peptide_data.csv_peptide.at(j) == ')') {
 					sw_peptide_filtered = 0;
 				}
-				if ((itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.at(j) == '.') && (itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide.length() <= 2) && (sw_peptide_filtered == 0)) {
+				if ((itr_parse_csv_peptide_data.csv_peptide.at(j) == '.') && (itr_parse_csv_peptide_data.csv_peptide.length() <= 2) && (sw_peptide_filtered == 0)) {
 					temp_peptide_filtered.clear();
 				}
 			}
@@ -160,10 +160,10 @@ namespace fpf_data {
 				return par_peptide_data.peptide_filtered == temp_peptide_filtered;
 			});
 			if (find_peptide_data == temp_v_peptide_data.end()) {
-				temp_peptide_data.peptide_withmod = itr_parse_csv_peptide_data.str_parse_peptides_csv_peptide;
+				temp_peptide_data.peptide_withmod = itr_parse_csv_peptide_data.csv_peptide;
 				for (size_t i = 0; i < temp_peptide_filtered.size(); ++i) {
 					temp_denovo_aminoacid.aminoacid = temp_peptide_filtered[i];
-					temp_denovo_aminoacid.aminoacid_score = itr_parse_csv_peptide_data.v_d_denovo_localconfidence[i];
+					temp_denovo_aminoacid.aminoacid_score = itr_parse_csv_peptide_data.v_csv_denovo_localconfidence[i];
 					temp_denovo_peptide.v_denovo_aminoacid.push_back(temp_denovo_aminoacid);
 				}
 				temp_denovo_peptide.localconfidence_average = double();
@@ -178,7 +178,7 @@ namespace fpf_data {
 			else {
 				for (size_t i = 0; i < temp_peptide_filtered.size(); ++i) {
 					temp_denovo_aminoacid.aminoacid = temp_peptide_filtered[i];
-					temp_denovo_aminoacid.aminoacid_score = itr_parse_csv_peptide_data.v_d_denovo_localconfidence[i];
+					temp_denovo_aminoacid.aminoacid_score = itr_parse_csv_peptide_data.v_csv_denovo_localconfidence[i];
 					temp_denovo_peptide.v_denovo_aminoacid.push_back(temp_denovo_aminoacid);
 				}
 				temp_denovo_peptide.localconfidence_average = double();

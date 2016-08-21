@@ -42,13 +42,13 @@ int main() {
 
 	std::cout << "\n\n\n * parsing FASTA file... \n\n";
 
-	vector<fpf_parse::parse_FASTA_type> main_v_c_parse_FASTA = fpf_parse::parse_FASTA(fin_input_FASTA);
-	if (b_parse_FASTA_empty(main_v_c_parse_FASTA)) { return 1; };
-	fpf_parse::output_v_c_parse_FASTA(main_v_c_parse_FASTA);
-	fpf_parse::output_v_c_parse_FASTA_to_blastdirectory(main_v_c_parse_FASTA);
+	vector<fpf_parse::FASTA_data> main_v_c_parse_FASTA = fpf_parse::parse_FASTA(fin_input_FASTA);
+	if (check_FASTA_file_empty(main_v_c_parse_FASTA)) { return 1; };
+	fpf_parse::output_v_FASTA_data(main_v_c_parse_FASTA);
+	fpf_parse::output_v_FASTA_data_to_blastdirectory(main_v_c_parse_FASTA);
 
-	vector<fpf_parse::parse_peptides_csv_type> main_v_c_parse_csv_proteinpeptides_data;
-	vector<fpf_parse::parse_peptides_csv_type> main_v_c_parse_csv_denovopeptides_data;
+	vector<fpf_parse::csv_data> main_v_c_parse_csv_proteinpeptides_data;
+	vector<fpf_parse::csv_data> main_v_c_parse_csv_denovopeptides_data;
 
 	std::cout << "\n\n\n reading root directory...\n";
 
@@ -70,15 +70,15 @@ int main() {
 			main_v_c_parse_csv_denovopeptides_data = fpf_filesystem::parse_filesystem_denovopeptides(fpf_filesystem::read_filesystem_denovopeptides(itr_v_s_filesystem.directory));
 			filesystem_modified = true;
 		}
-		itr_v_s_filesystem.proteinpeptides_exist = fpf_parse::check_protein_peptides(main_v_c_parse_csv_proteinpeptides_data, filesystem_modified);
-		itr_v_s_filesystem.denovopeptides_exist = fpf_parse::check_denovo_peptides(main_v_c_parse_csv_denovopeptides_data, filesystem_modified);
+		itr_v_s_filesystem.proteinpeptides_exist = fpf_parse::check_csv_proteinpeptides_empty(main_v_c_parse_csv_proteinpeptides_data, filesystem_modified);
+		itr_v_s_filesystem.denovopeptides_exist = fpf_parse::check_csv_denovopeptides_empty(main_v_c_parse_csv_denovopeptides_data, filesystem_modified);
 
 		//if (fpf_filesystem::check_filesystem_current(main_v_c_parse_csv_proteinpeptides_data, main_v_c_parse_csv_denovopeptides_data, filesystem_modified)) {
 		//	return EXIT_FILESYTEM_CURRENT;
 		//}
 
 		if (itr_v_s_filesystem.proteinpeptides_exist) {
-			std::cout << "\n\n * parsing " << main_v_c_parse_csv_proteinpeptides_data.begin()->str_parse_peptides_csv_file;
+			std::cout << "\n\n * parsing " << main_v_c_parse_csv_proteinpeptides_data.begin()->csv_file;
 			std::cout << "\n\n ~ peptides parsed - " << main_v_c_parse_csv_proteinpeptides_data.size();
 			std::cout << "\n\n\n creating data structures...";
 			vector<fpf_data::peptide_data> main_v_c_proteinpeptides_data = fpf_data::create_peptide_data(main_v_c_parse_csv_proteinpeptides_data);
@@ -86,7 +86,7 @@ int main() {
 		}
 
 		if (itr_v_s_filesystem.denovopeptides_exist) {
-			std::cout << "\n\n * parsing " << main_v_c_parse_csv_denovopeptides_data.begin()->str_parse_peptides_csv_file;
+			std::cout << "\n\n * parsing " << main_v_c_parse_csv_denovopeptides_data.begin()->csv_file;
 			std::cout << "\n\n ~ peptides parsed - " << main_v_c_parse_csv_denovopeptides_data.size();
 			std::cout << "\n\n creating data structures...";
 			vector<fpf_data::peptide_data> main_v_c_denovopeptides_data = fpf_data::create_peptide_data(main_v_c_parse_csv_denovopeptides_data);
