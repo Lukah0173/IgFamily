@@ -26,22 +26,14 @@ namespace fpf_data {
 	using std::vector;
 	using std::tuple;
 
-	struct multinomial_category;
 	struct peptide_data;
 	struct denovo_peptide;
 	struct denovo_aminoacid;
+	struct multinomial_category;
 	struct blastp_data;
 	struct proteinconstruct_from_denovo;
-	struct category_report;
+	struct category_analysis;
 	struct multinomial;
-
-	struct multinomial_category {
-	public:
-		string category_name;
-		string category_class;
-		string category_protein;
-		string category_species;
-	};
 
 	struct denovo_peptide {
 		vector<denovo_aminoacid> v_denovo_aminoacid;
@@ -63,6 +55,14 @@ namespace fpf_data {
 		size_t filesystem_sample_replicate_count = size_t{ 1 };
 		bool filesystem_sample_replicate_merged = bool();
 		vector<tuple<string, size_t, size_t>> v_filesystem_sample_replicate_data;
+	};
+
+	struct multinomial_category {
+	public:
+		string category_name;
+		string category_class;
+		string category_protein;
+		string category_species;
 	};
 
 	struct blastp_data {
@@ -87,9 +87,9 @@ namespace fpf_data {
 		double aminoacid_score;
 	};
 
-	struct category_report {
+	struct category_analysis {
 	public:
-		vector<blastp_data> v_blastp_combined_by_category;
+		vector<blastp_data> v_blastp_data_combined_by_category;
 		string category_name;
 		string category_class;
 		string category_protein;
