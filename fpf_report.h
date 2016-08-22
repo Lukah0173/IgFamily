@@ -148,6 +148,15 @@ namespace fpf_report {
 					}
 				}
 				fout_html_report << itr_blastp_data.denovo_replicate_count;
+				if (itr_blastp_data.denovo_replicate_count < 1) {
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				}
+				else {
+					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.denovo_replicate_count))); ++j) {
+						fout_html_report << "&nbsp";
+					}
+				}
+				fout_html_report << (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
 			}
 		}
 
@@ -269,6 +278,15 @@ namespace fpf_report {
 						}
 					}
 					fout_html_report << itr_blastp_data.denovo_replicate_count;
+					if (itr_blastp_data.denovo_replicate_count < 1) {
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+					}
+					else {
+						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.denovo_replicate_count))); ++j) {
+							fout_html_report << "&nbsp";
+						}
+					}
+					fout_html_report << (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
 				}
 			}
 		}

@@ -109,15 +109,15 @@ namespace fpf_parse {
 
 	vector<csv_data> parse_proteinpeptides(std::ifstream& par_fin_csv_proteinpeptides, string par_directory) {
 
-		vector<csv_data> temp_v_csv_data = vector<csv_data>();
-		string csv_parse = string();
-		size_t csv_count_delimit = size_t();
-		size_t csv_condition_switch = size_t();
-		size_t csv_ignore_header = size_t();
-		char csv_read = char();
-		string csv_peptide = string();
-		string csv_spectralcount = string();
-		string csv_IgP = string();
+		vector<csv_data> temp_v_csv_data{};
+		string csv_parse{};
+		size_t csv_count_delimit{};
+		size_t csv_condition_switch{};
+		size_t csv_ignore_header{};
+		char csv_read{};
+		string csv_peptide{};
+		string csv_spectralcount{};
+		string csv_IgP{};
 
 		while (par_fin_csv_proteinpeptides.std::istream::get(csv_read)) {
 			if (csv_ignore_header == 1) {
@@ -205,21 +205,21 @@ namespace fpf_parse {
 
 	vector<csv_data> parse_csv_PEAKS_denovopeptides(std::ifstream& par_fin_csv_denovopeptides, string par_directory) {
 
-		vector<csv_data> temp_v_csv_data = vector<csv_data>();
-		string csv_parse = string();
-		size_t csv_count_delimit = size_t();
-		size_t csv_condition_switch = size_t(1);
-		size_t csv_ignore_header = size_t();
-		char csv_read = char();
-		string temp_csv_peptide = string();
-		string temp_csv_denovo_localconfidence = string();
-		vector<double> temp_v_csv_denovo_localconfidence = vector<double>();
+		vector<csv_data> temp_v_csv_data{};
+		string csv_parse{};
+		size_t csv_count_delimit{};
+		size_t csv_condition_switch{};
+		size_t csv_ignore_header{};
+		char csv_read{};
+		string temp_csv_peptide{};
+		string temp_csv_denovo_localconfidence{};
+		vector<double> temp_v_csv_denovo_localconfidence{};
 
 		while (par_fin_csv_denovopeptides.std::istream::get(csv_read)) {
 			if (csv_ignore_header == 1) {
 				csv_parse = csv_read;
 				if (csv_count_delimit == 16) {
-					csv_data temp_csv_data = csv_data();
+					csv_data temp_csv_data{};
 					temp_csv_data.csv_file = par_directory;
 					temp_csv_data.csv_peptide = temp_csv_peptide;
 					temp_csv_data.v_csv_denovo_localconfidence = temp_v_csv_denovo_localconfidence;
@@ -286,15 +286,15 @@ namespace fpf_parse {
 
 	vector<csv_data> parse_csv_NOVOR_denovopeptides(std::ifstream& par_fin_csv_denovopeptides, string par_directory) {
 
-		vector<csv_data> temp_v_csv_data = vector<csv_data>();
-		string csv_parse = string();
-		size_t csv_count_delimit = size_t();
-		size_t csv_condition_switch = size_t(1);
-		bool csv_ignore_header = bool();
-		char csv_read = char();
-		string temp_csv_peptide = string();
-		string temp_csv_denovo_localconfidence = string();
-		vector<double> temp_v_csv_denovo_localconfidence = vector<double>();
+		vector<csv_data> temp_v_csv_data{};
+		string csv_parse{};
+		size_t csv_count_delimit{};
+		size_t csv_condition_switch{};
+		bool csv_ignore_header{};
+		char csv_read{};
+		string temp_csv_peptide{};
+		string temp_csv_denovo_localconfidence{};
+		vector<double> temp_v_csv_denovo_localconfidence{};
 
 		while (par_fin_csv_denovopeptides.std::istream::get(csv_read)) {
 			if (csv_ignore_header) {
@@ -304,7 +304,7 @@ namespace fpf_parse {
 				}
 				if ((csv_count_delimit == 11) && (csv_read == ',')) {
 					temp_v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
-					csv_data temp_csv_data = csv_data();
+					csv_data temp_csv_data{};
 					temp_csv_data.csv_file = par_directory;
 					temp_csv_data.csv_peptide = temp_csv_peptide;
 					temp_csv_data.v_csv_denovo_localconfidence = temp_v_csv_denovo_localconfidence;
@@ -368,11 +368,11 @@ namespace fpf_parse {
 	void check_FASTA_format(string par_INPUT_FASTA) {
 
 		std::ifstream fin_INPUT_FASTA(par_INPUT_FASTA);
-		char FASTA_read = char();
-		string FASTA_parse = string();
-		size_t FASTA_count_delimit = size_t();
-		bool read_format = bool();
-		bool header_line = bool();
+		char FASTA_read{};
+		string FASTA_parse{};
+		size_t FASTA_count_delimit{};
+		bool read_format{};
+		bool header_line{};
 
 		while (fin_INPUT_FASTA.get(FASTA_read)) {
 			if (FASTA_read == '>') {
@@ -381,7 +381,7 @@ namespace fpf_parse {
 					std::cout << "\n\n Accession - \n";
 					std::cout << FASTA_parse;
 					FASTA_parse.clear();
-					string str_format_break = string();
+					string str_format_break{};
 					std::cout << "\n\n\n continue? ( y / n ) ";					
 					while (str_format_break == "") {
 						std::cout << "\n\n --> ";
@@ -425,11 +425,11 @@ namespace fpf_parse {
 	void output_custom_FASTA_format(string par_INPUT_FASTA) {
 
 		std::ifstream fin_INPUT_FASTA(par_INPUT_FASTA);
-		char FASTA_read = char();
-		string FASTA_parse = string();
-		size_t FASTA_count_delimit = size_t();
-		bool read_format = bool();
-		bool header_line = bool();
+		char FASTA_read{};
+		string FASTA_parse{};
+		size_t FASTA_count_delimit{};
+		bool read_format{};
+		bool header_line{};
 
 		while (fin_INPUT_FASTA.get(FASTA_read)) {
 			if (FASTA_read == '>') {
@@ -448,7 +448,7 @@ namespace fpf_parse {
 					std::cout << "\n [Accession]";
 					std::cout << "\n\n\n Create custom output format:           [C] ";
 					std::cout << "\n Output FASTA with selected format:     [X] ";
-					string menu_selection = string();
+					string menu_selection{};
 					while ((menu_selection != ("C")) && (menu_selection != ("X"))) {
 						menu_selection.clear();
 						std::cout << "\n\n Input selection: \n\n --> ";
@@ -589,11 +589,11 @@ namespace fpf_parse {
 		string output_custom_FASTA = "FASTA\\custom_FASTA.fasta";
 		std::ofstream fout_custom_FASTA;
 		fout_custom_FASTA.open(output_custom_FASTA);
-		char FASTA_get = char();
-		string FASTA_parse = string();
-		size_t FASTA_count_delimit = size_t();
-		bool read_format = bool();
-		bool header_line = bool();
+		char FASTA_get{};
+		string FASTA_parse{};
+		size_t FASTA_count_delimit{};
+		bool read_format{};
+		bool header_line{};
 
 		while (fin_INPUT_FASTA.get(FASTA_get)) {
 			if (FASTA_get == '>') {
@@ -646,18 +646,18 @@ namespace fpf_parse {
 
 	vector<FASTA_data> parse_FASTA(std::ifstream& par_fin_input_FASTA) {
 
-		char FASTA_read = char();
-		size_t FASTA_condition_switch = size_t();
-		size_t FASTA_condition_switch_2 = size_t();
-		size_t FASTA_count_accession = size_t();
-		string temp_FASTA_accession = string();
-		string temp_FASTA_name = string();
-		string temp_FASTA_class = string();
-		string temp_FASTA_type = string();
-		string tenp_FASTA_species = string();
-		string temp_FASTA_element = string();
-		FASTA_data temp_FASTA_data = FASTA_data();
-		vector<FASTA_data> temp_v_FASTA_data = vector<FASTA_data>();
+		char FASTA_read{};
+		size_t FASTA_condition_switch{};
+		size_t FASTA_condition_switch_2{};
+		size_t FASTA_count_accession{};
+		string temp_FASTA_accession{};
+		string temp_FASTA_name{};
+		string temp_FASTA_class{};
+		string temp_FASTA_type{};
+		string tenp_FASTA_species{};
+		string temp_FASTA_element{};
+		FASTA_data temp_FASTA_data{};
+		vector<FASTA_data> temp_v_FASTA_data{};
 
 		while (par_fin_input_FASTA.get(FASTA_read)) {
 			if (FASTA_condition_switch_2 == 1) {

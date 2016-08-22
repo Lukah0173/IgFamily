@@ -254,8 +254,8 @@ namespace fpf_blastp_analysis {
 			if (itr_v_s_blastp.blastp_query != hold_str_blastp_subject) {
 				if (b_hold) {
 					for (auto& itr_hold_v_s_blastp : hold_v_s_blastp) {
-						//itr_hold_v_s_blastp.blastp_evalue_transformed = log_base(((double(3) * PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 2);
-						itr_hold_v_s_blastp.blastp_evalue_transformed = (itr_hold_v_s_blastp.blastp_evalue + 0.01);
+						itr_hold_v_s_blastp.blastp_evalue_transformed = log_base(((double(3) * PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 1.4);
+						//itr_hold_v_s_blastp.blastp_evalue_transformed = (itr_hold_v_s_blastp.blastp_evalue + 0.01);
 						con_v_s_blastp.push_back(itr_hold_v_s_blastp);
 					}
 				}

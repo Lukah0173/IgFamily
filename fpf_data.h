@@ -62,8 +62,8 @@ namespace fpf_data {
 		string category_name;
 		string category_class;
 		string category_type;
-		string category_protein;
 		string category_species;
+		string category_protein;
 	};
 
 	struct blastp_data {
@@ -109,35 +109,35 @@ namespace fpf_data {
 	};
 
 	vector<FASTA_category> create_FASTA_category(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
-		vector<FASTA_category> temp_v_FASTA_category;
+		vector<FASTA_category> temp_v_FASTA_category{};
 		for (const auto itr_parse_FASTA : par_parse_FASTA) {
 			const auto find_v_FASTA_element = std::find_if(temp_v_FASTA_category.begin(), temp_v_FASTA_category.end(),
 				[itr_parse_FASTA](const FASTA_category& par_FASTA_element) {
 				return par_FASTA_element.category_name == itr_parse_FASTA.return_FASTA_name(); });
 			if (find_v_FASTA_element == temp_v_FASTA_category.end()) {
-				FASTA_category temp_FASTA_category;
-				temp_FASTA_category.category_name = itr_parse_FASTA.return_FASTA_name();
-				temp_FASTA_category.category_class = itr_parse_FASTA.return_FASTA_class();
-				temp_FASTA_category.category_type = itr_parse_FASTA.return_FASTA_type();
-				temp_FASTA_category.category_species = itr_parse_FASTA.return_FASTA_species();
-				temp_FASTA_category.category_protein = itr_parse_FASTA.return_FASTA_protein();
+				FASTA_category temp_FASTA_category{
+					itr_parse_FASTA.return_FASTA_name(),
+					itr_parse_FASTA.return_FASTA_class(),
+					itr_parse_FASTA.return_FASTA_type(),
+					itr_parse_FASTA.return_FASTA_species(),
+					itr_parse_FASTA.return_FASTA_protein()};
 				temp_v_FASTA_category.push_back(temp_FASTA_category);
 			}
-			else {
-				find_v_FASTA_element->category_protein = find_v_FASTA_element->category_name + itr_parse_FASTA.return_FASTA_protein();
-			}
+			//else {
+			//	find_v_FASTA_element->category_protein = find_v_FASTA_element->category_name + itr_parse_FASTA.return_FASTA_protein();
+			//}
 		}
 		return temp_v_FASTA_category;
 	}
 
 	vector<peptide_data> create_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data) {
-		vector<peptide_data> temp_v_peptide_data;
+		vector<peptide_data> temp_v_peptide_data{};
 		for (const auto itr_parse_csv_peptide_data : par_parse_csv_peptide_data) {
-			peptide_data temp_peptide_data = peptide_data();
-			denovo_peptide temp_denovo_peptide = denovo_peptide();
-			denovo_aminoacid temp_denovo_aminoacid = denovo_aminoacid();
-			string temp_peptide_filtered = string();
-			size_t sw_peptide_filtered = size_t();
+			peptide_data temp_peptide_data{};
+			denovo_peptide temp_denovo_peptide{};
+			denovo_aminoacid temp_denovo_aminoacid{};
+			string temp_peptide_filtered{};
+			size_t sw_peptide_filtered{};
 			for (auto j = size_t(); j < itr_parse_csv_peptide_data.csv_peptide.length(); ++j) {
 				if (itr_parse_csv_peptide_data.csv_peptide.at(j) == '(' || ((itr_parse_csv_peptide_data.csv_peptide.at(j) == '.') && (itr_parse_csv_peptide_data.csv_peptide.length() > 2))) {
 					sw_peptide_filtered = 1;
