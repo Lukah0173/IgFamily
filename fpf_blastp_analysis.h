@@ -42,7 +42,7 @@ namespace fpf_blastp_analysis {
 		output_blastp_FASTA += "_blastp_input.fasta";
 		std::ofstream fout_blastp_input_FASTA;
 		fout_blastp_input_FASTA.open(output_blastp_FASTA);
-		size_t st_count_blastp_FASTA = size_t();
+		size_t st_count_blastp_FASTA{};
 		for (auto itr_v_s_peptide_data : par_filesystem.v_peptide_data) {
 			++st_count_blastp_FASTA;
 			fout_blastp_input_FASTA << ">" << itr_v_s_peptide_data.peptide_filtered << "\n";
@@ -87,12 +87,12 @@ namespace fpf_blastp_analysis {
 
 	void sys_blastp(filesystem par_filesystem) {
 		std::cout << "\n\n";
-		string string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && makeblastdb.exe -in ";
 		string_system += "blastp_database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
-		string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && blastp.exe -query ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";
@@ -110,10 +110,10 @@ namespace fpf_blastp_analysis {
 			size_t blastp_data_count_delimit = size_t(1);
 			string blastp_data_output = "blast_directory\\" + par_filesystem.filename + "_blastp_output.csv";
 			std::ifstream fin_input_blastp(blastp_data_output);
-			char blastp_data_read = char();
-			vector<blastp_data> temp_v_blastp_data = vector<blastp_data>();
-			blastp_data temp_blastp_data = blastp_data();
-			string con_str_parse_blastp = string();
+			char blastp_data_read{};
+			vector<blastp_data> temp_v_blastp_data{};
+			blastp_data temp_blastp_data{};
+			string con_str_parse_blastp{};
 			while (fin_input_blastp.get(blastp_data_read)) {
 				if ((blastp_data_read != ',') && (blastp_data_read != '\n')) {
 					con_str_parse_blastp += blastp_data_read;
@@ -177,7 +177,7 @@ namespace fpf_blastp_analysis {
 			if (find_category_name == par_filesystem.v_category_analysis_selected_by_polymorphism.end()) {
 				std::cout << "\n\n error - std::find_if returns nullptr";
 				std::cout << "\n\n" << itr_v_blastp_data.blastp_subject_accession;
-				string catch_error;
+				string catch_error{};
 				std::cin >> catch_error;
 			}
 			itr_v_blastp_data.p_FASTA_category = find_category_name->p_FASTA_category;
@@ -186,7 +186,7 @@ namespace fpf_blastp_analysis {
 	}
 
 	void create_str_query_alignment(filesystem& par_filesystem) {
-		string con_str_query_alignment = string();
+		string con_str_query_alignment{};
 		size_t st_index_match = 1;
 		for (auto& itr_v_s_blastp : par_filesystem.v_blastp_data) {
 			for (auto itr_str_protein : itr_v_s_blastp.p_FASTA_category->category_protein) {
@@ -220,8 +220,8 @@ namespace fpf_blastp_analysis {
 
 	void modify_v_s_filesystem_blastp_data(filesystem& par_filesystem) {
 		for (auto& itr_v_c_blastp : par_filesystem.v_blastp_data) {
-			bool b_parse_query_accession = bool();
-			string con_str_parse_query_accession = string();
+			bool b_parse_query_accession{};
+			string con_str_parse_query_accession{};
 			for (auto ch_blastp_query_accession : itr_v_c_blastp.blastp_subject_accession) {
 				if ((ch_blastp_query_accession == '|') && (b_parse_query_accession)) {
 					b_parse_query_accession = false;
@@ -244,38 +244,38 @@ namespace fpf_blastp_analysis {
 	}
 
 	void normalise_v_s_filesystem_blastp_data(filesystem& par_filesystem) {
-		vector<blastp_data> con_v_s_blastp;
-		vector<blastp_data> hold_v_s_blastp;
-		string hold_str_blastp_subject = string();
-		double hold_min_str_blastp_evalue = double();
-		double hold_sum_str_blastp_evalue = double();
-		bool b_hold = bool();
+		vector<blastp_data> temp_v_blastp_data{};
+		vector<blastp_data> hold_v_blastp_data{};
+		string hold_blastp_subject{};
+		double hold_min_blastp_evalue{};
+		double hold_sum_blastp_evalue{};
+		bool is_hold{};
 		for (auto itr_v_s_blastp : par_filesystem.v_blastp_data) {
-			if (itr_v_s_blastp.blastp_query != hold_str_blastp_subject) {
-				if (b_hold) {
-					for (auto& itr_hold_v_s_blastp : hold_v_s_blastp) {
+			if (itr_v_s_blastp.blastp_query != hold_blastp_subject) {
+				if (is_hold) {
+					for (auto& itr_hold_v_s_blastp : hold_v_blastp_data) {
 						itr_hold_v_s_blastp.blastp_evalue_transformed = log_base(((double(3) * PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 1.4);
 						//itr_hold_v_s_blastp.blastp_evalue_transformed = (itr_hold_v_s_blastp.blastp_evalue + 0.01);
-						con_v_s_blastp.push_back(itr_hold_v_s_blastp);
+						temp_v_blastp_data.push_back(itr_hold_v_s_blastp);
 					}
 				}
-				hold_v_s_blastp.clear();
-				hold_sum_str_blastp_evalue = 0;
-				hold_str_blastp_subject = itr_v_s_blastp.blastp_query;
-				hold_min_str_blastp_evalue = itr_v_s_blastp.blastp_evalue;
-				b_hold = true;
+				hold_v_blastp_data.clear();
+				hold_sum_blastp_evalue = 0;
+				hold_blastp_subject = itr_v_s_blastp.blastp_query;
+				hold_min_blastp_evalue = itr_v_s_blastp.blastp_evalue;
+				is_hold = true;
 			}
-			if (b_hold && (itr_v_s_blastp.blastp_evalue < BLASTP_THRESHOLD)) {
-				hold_v_s_blastp.push_back(itr_v_s_blastp);
-				hold_sum_str_blastp_evalue += (1 / itr_v_s_blastp.blastp_evalue);
+			if (is_hold && (itr_v_s_blastp.blastp_evalue < BLASTP_THRESHOLD)) {
+				hold_v_blastp_data.push_back(itr_v_s_blastp);
+				hold_sum_blastp_evalue += (1 / itr_v_s_blastp.blastp_evalue);
 			}
 		}
-		par_filesystem.v_blastp_data = con_v_s_blastp;
+		par_filesystem.v_blastp_data = temp_v_blastp_data;
 	}
 
 	void determine_blastp_parameter_density(filesystem& par_filesystem) {
 		for (auto& itr_v_blastp : par_filesystem.v_blastp_data) {
-			double temp_evalue_transform_sum = double();
+			double temp_evalue_transform_sum{};
 			for (const auto& itr_v_blastp_2 : par_filesystem.v_blastp_data) {
 				if (itr_v_blastp.blastp_query == itr_v_blastp_2.blastp_query) {
 					temp_evalue_transform_sum += itr_v_blastp_2.blastp_evalue_transformed;

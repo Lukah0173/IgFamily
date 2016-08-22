@@ -90,7 +90,7 @@ namespace fpf_filesystem {
 	string display_menu() {
 		std::cout << " FASTA utilities:     [F] ";
 		std::cout << "\n Continue:            [X]";
-		string menu_selection;
+		string menu_selection{};
 		while ((menu_selection != ("F")) && (menu_selection != ("X"))) {
 			menu_selection.clear();
 			std::cout << "\n\n Input selection: \n\n > ";
@@ -103,7 +103,7 @@ namespace fpf_filesystem {
 		if (par_menu_selection == "F") {
 			std::cout << "\n Read FASTA format:              [R] ";
 			std::cout << "\n Output custom FASTA format:     [C] ";
-			string menu_selection = string();
+			string menu_selection{};
 			while ((menu_selection != ("R")) && (menu_selection != ("C"))) {
 				menu_selection.clear();
 				std::cout << "\n\n Input selection: \n\n > ";
@@ -125,9 +125,9 @@ namespace fpf_filesystem {
 
 	vector<string> read_root_dir(string par_IgFamily_root_dir) {
 		std::ifstream fin_input_csv(par_IgFamily_root_dir);
-		vector<string> temp_v_IgFamily_root;
-		string fin_IgFamily_root = string();
-		char stream_IgFamily_root = char();
+		vector<string> temp_v_IgFamily_root{};
+		string fin_IgFamily_root{};
+		char stream_IgFamily_root{};
 		while (fin_input_csv.std::istream::get(stream_IgFamily_root)) {
 			if ((stream_IgFamily_root != '\n') && (stream_IgFamily_root != ',')) {
 				fin_IgFamily_root += stream_IgFamily_root;
@@ -142,25 +142,25 @@ namespace fpf_filesystem {
 	}
 
 	vector<filesystem> read_filesystem(vector<string> par_root_dir) {
-		filesystem con_s_filesystem;
-		vector<filesystem> con_v_s_filesystem;
+		filesystem con_s_filesystem{};
+		vector<filesystem> con_v_s_filesystem{};
 		std::cout << "\n";
-		for (vector<string>::iterator itr_root_dir = par_root_dir.begin(); itr_root_dir != par_root_dir.end(); ++itr_root_dir) {
+		for (vector<string>::iterator itr_root_dir = par_root_dir.begin(); itr_root_dir != par_root_dir.end(); ++itr_root_dir) {		
 			string stream_str_filesytem = *itr_root_dir + "filesystem.data";
 			std::ifstream fin_input_filesystem(stream_str_filesytem);
-			char c_stream_fin_filesystem = char();
-			string str_stream_fin_filesystem = string();
-			size_t sw_stream_fin_filesystem = size_t();
-			pair<string, string> con_p_filesystem_id = pair<string, string>();
-			string con_str_filesystem_date = string();
-			string con_str_filesystem_filename = string();
-			string con_str_filesystem_version = string();
-			string con_str_filesystem_status = string();
-			string con_str_filesystem_enzyme = string();
-			string con_str_filesystem_denovo_deltamass = string();
-			string con_str_filesystem_replicatedate = string();
-			size_t sw_filesystem_replicatepair = size_t();
-			vector<pair<string, string>> v_p_filesystem_replicates = vector<pair<string, string>>();
+			char c_stream_fin_filesystem{};
+			string str_stream_fin_filesystem{};
+			size_t sw_stream_fin_filesystem{};
+			pair<string, string> con_p_filesystem_id{};
+			string con_str_filesystem_date{};
+			string con_str_filesystem_filename{};
+			string con_str_filesystem_version{};
+			string con_str_filesystem_status{};
+			string con_str_filesystem_enzyme{};
+			string con_str_filesystem_denovo_deltamass{};
+			string con_str_filesystem_replicatedate{};
+			size_t sw_filesystem_replicatepair{};
+			vector<pair<string, string>> v_p_filesystem_replicates{};	
 			while (fin_input_filesystem.std::istream::get(c_stream_fin_filesystem)) {
 				if ((c_stream_fin_filesystem != ';') && (c_stream_fin_filesystem != '\n') && (c_stream_fin_filesystem != ',')) {
 					str_stream_fin_filesystem += c_stream_fin_filesystem;
@@ -270,7 +270,7 @@ namespace fpf_filesystem {
 
 	void perform_fileconversion(filesystem& par_filesystem) {
 		par_filesystem.fileconversion_parameters = fpf_convert::create_fileconversion_parameters(fpf_convert::prompt_defaultconversion());
-		string str_fileconversion_command = string();
+		string str_fileconversion_command{};
 		str_fileconversion_command += "msconvert.exe ";
 		str_fileconversion_command += "\"Z:\\Lukah_Dykes\\IgFamily\\";
 		str_fileconversion_command += par_filesystem.directory;
@@ -323,7 +323,7 @@ namespace fpf_filesystem {
 	}
 
 	string read_filesystem_denovopeptides(string par_IgFamily_root_dir) {
-		string con_str_root_denovopeptides;
+		string con_str_root_denovopeptides{};
 		if (IgFamily::NOVOR_DENOVO) {
 			con_str_root_denovopeptides = par_IgFamily_root_dir + "denovo_peptides_NOVOR.csv";
 		}
@@ -334,14 +334,14 @@ namespace fpf_filesystem {
 	}
 
 	vector<csv_data> parse_filesystem_proteinpeptides(string par_str_fin_root) {
-		vector<csv_data> con_v_c_parse_csv;
+		vector<csv_data> con_v_c_parse_csv{};
 		std::ifstream fin_input_csv(par_str_fin_root);
 		con_v_c_parse_csv = fpf_parse::parse_proteinpeptides(fin_input_csv, par_str_fin_root);
 		return con_v_c_parse_csv;
 	}
 
 	vector<csv_data> parse_filesystem_denovopeptides(string par_str_fin_root) {
-		vector<csv_data> con_v_c_parse_csv;
+		vector<csv_data> con_v_c_parse_csv{};
 		std::ifstream fin_input_csv(par_str_fin_root);
 		if (IgFamily::NOVOR_DENOVO) {
 			con_v_c_parse_csv = fpf_parse::parse_csv_NOVOR_denovopeptides(fin_input_csv, par_str_fin_root);

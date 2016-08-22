@@ -35,8 +35,8 @@ namespace fpf_data_analysis {
 	typedef fpf_data::multinomial multinomial;
 
 	void create_category_analysis(filesystem& par_filesystem) {
-		category_analysis temp_category_analysis;
-		vector<category_analysis> temp_v_category_analysis;
+		category_analysis temp_category_analysis{};
+		vector<category_analysis> temp_v_category_analysis{};
 		for (const auto itr_blastp_data : par_filesystem.v_blastp_data) {
 			auto find_category_analysis = std::find_if(temp_v_category_analysis.begin(), temp_v_category_analysis.end(),
 				[itr_blastp_data](const category_analysis par_category_analysis) {
@@ -46,7 +46,7 @@ namespace fpf_data_analysis {
 				find_category_analysis->v_blastp_data_combined_by_category.push_back(itr_blastp_data);
 			}
 			else {
-				double temp_category_score = double();
+				double temp_category_score{};
 				temp_category_analysis.p_FASTA_category = itr_blastp_data.p_FASTA_category;
 				temp_category_analysis.v_blastp_data_combined_by_category.push_back(itr_blastp_data);
 				temp_category_analysis.category_score = temp_category_score;
@@ -72,7 +72,7 @@ namespace fpf_data_analysis {
 						if (find_peptide_data->v_denovo_peptide_data.size() == 0) {
 							std::cout << "\n\n ERROR: ";
 							std::cout << "\n\n find_peptide_data->v_s_denovo_peptide.size() == 0";
-							string str_catch_error;
+							string str_catch_error{};
 							std::cin >> str_catch_error;
 						}
 						else {
@@ -159,7 +159,7 @@ namespace fpf_data_analysis {
 		vector<category_analysis> temp_v_category_analysis_selected_by_polymorphism{};
 		for (const auto itr_v_category_analysis : par_filesystem.v_category_analysis) {
 			if (itr_v_category_analysis.p_FASTA_category->category_type == "IG") {
-				string category_name_polymorphism_reduced = string();
+				string category_name_polymorphism_reduced{};
 				bool switch_category_name_polymorphism = bool();
 				for (const auto& itr_category_name : itr_v_category_analysis.p_FASTA_category->category_name) {
 					if (itr_category_name == '*') {
