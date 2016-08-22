@@ -113,37 +113,37 @@ namespace fpf_blastp_analysis {
 			char blastp_data_read{};
 			vector<blastp_data> temp_v_blastp_data{};
 			blastp_data temp_blastp_data{};
-			string con_str_parse_blastp{};
+			string temp_parse_blastp{};
 			while (fin_input_blastp.get(blastp_data_read)) {
 				if ((blastp_data_read != ',') && (blastp_data_read != '\n')) {
-					con_str_parse_blastp += blastp_data_read;
+					temp_parse_blastp += blastp_data_read;
 				}
 				if (blastp_data_read == ',') {
 					if (blastp_data_count_delimit % 10 == 1) {
-						temp_blastp_data.blastp_query = con_str_parse_blastp;
+						temp_blastp_data.blastp_query = temp_parse_blastp;
 					}
 					if (blastp_data_count_delimit % 10 == 2) {
-						temp_blastp_data.blastp_query_aligned = con_str_parse_blastp;
+						temp_blastp_data.blastp_query_aligned = temp_parse_blastp;
 					}
 					if (blastp_data_count_delimit % 10 == 3) {
-						temp_blastp_data.blastp_subject = con_str_parse_blastp;
+						temp_blastp_data.blastp_subject = temp_parse_blastp;
 					}
 					if (blastp_data_count_delimit % 10 == 4) {
-						temp_blastp_data.blastp_subject_accession = con_str_parse_blastp;
+						temp_blastp_data.blastp_subject_accession = temp_parse_blastp;
 					}
 					if (blastp_data_count_delimit % 10 == 5) {
-						temp_blastp_data.blastp_query_alignment_index = std::stoi(con_str_parse_blastp);
+						temp_blastp_data.blastp_query_alignment_index = std::stoi(temp_parse_blastp);
 					}
 					if (blastp_data_count_delimit % 10 == 6) {
-						temp_blastp_data.blastp_subject_alignment_index = std::stoi(con_str_parse_blastp);
+						temp_blastp_data.blastp_subject_alignment_index = std::stoi(temp_parse_blastp);
 					}
-					con_str_parse_blastp.clear();
+					temp_parse_blastp.clear();
 					++blastp_data_count_delimit;
 				}
 				if (blastp_data_read == '\n') {
-					temp_blastp_data.blastp_evalue = std::stod(con_str_parse_blastp);
+					temp_blastp_data.blastp_evalue = std::stod(temp_parse_blastp);
 					temp_v_blastp_data.push_back(temp_blastp_data);
-					con_str_parse_blastp.clear();
+					temp_parse_blastp.clear();
 				}
 			}
 			par_filesystem.v_blastp_data = std::move(temp_v_blastp_data);
@@ -186,34 +186,34 @@ namespace fpf_blastp_analysis {
 	}
 
 	void create_str_query_alignment(filesystem& par_filesystem) {
-		string con_str_query_alignment{};
+		string temp_query_alignment{};
 		size_t st_index_match = 1;
 		for (auto& itr_v_s_blastp : par_filesystem.v_blastp_data) {
 			for (auto itr_str_protein : itr_v_s_blastp.p_FASTA_category->category_protein) {
 				if (st_index_match == itr_v_s_blastp.blastp_subject_alignment_index) {
-					if (con_str_query_alignment.length() >= itr_v_s_blastp.blastp_query_alignment_index) {
-						con_str_query_alignment.resize(con_str_query_alignment.length() - itr_v_s_blastp.blastp_query_alignment_index + 1);
+					if (temp_query_alignment.length() >= itr_v_s_blastp.blastp_query_alignment_index) {
+						temp_query_alignment.resize(temp_query_alignment.length() - itr_v_s_blastp.blastp_query_alignment_index + 1);
 					}
 					else {
-						con_str_query_alignment.resize(0);
+						temp_query_alignment.resize(0);
 					}
-					con_str_query_alignment += itr_v_s_blastp.blastp_query;
+					temp_query_alignment += itr_v_s_blastp.blastp_query;
 					for (size_t i = 0; i < (itr_v_s_blastp.blastp_query_alignment_index - 1); ++i) {
-						con_str_query_alignment += ".";
+						temp_query_alignment += ".";
 					}
 				}
 				else {
-					con_str_query_alignment += ".";
+					temp_query_alignment += ".";
 				}
 				++st_index_match;
 			}
-			if (con_str_query_alignment.length() > itr_v_s_blastp.blastp_query.length() + 1) {
-				con_str_query_alignment.resize(con_str_query_alignment.length() - itr_v_s_blastp.blastp_query.length() + 1);
+			if (temp_query_alignment.length() > itr_v_s_blastp.blastp_query.length() + 1) {
+				temp_query_alignment.resize(temp_query_alignment.length() - itr_v_s_blastp.blastp_query.length() + 1);
 			} else {
 				std::cout << "\n\n ~~~ possible bad query: " << itr_v_s_blastp.p_FASTA_category->category_protein;
 			}
-			itr_v_s_blastp.query_alignment = con_str_query_alignment;
-			con_str_query_alignment.clear();
+			itr_v_s_blastp.query_alignment = temp_query_alignment;
+			temp_query_alignment.clear();
 			st_index_match = 1;
 		}
 	}
@@ -221,19 +221,19 @@ namespace fpf_blastp_analysis {
 	void modify_v_s_filesystem_blastp_data(filesystem& par_filesystem) {
 		for (auto& itr_v_c_blastp : par_filesystem.v_blastp_data) {
 			bool b_parse_query_accession{};
-			string con_str_parse_query_accession{};
+			string temp_parse_query_accession{};
 			for (auto ch_blastp_query_accession : itr_v_c_blastp.blastp_subject_accession) {
 				if ((ch_blastp_query_accession == '|') && (b_parse_query_accession)) {
 					b_parse_query_accession = false;
-					itr_v_c_blastp.blastp_subject_accession = con_str_parse_query_accession;
-					con_str_parse_query_accession.clear();
+					itr_v_c_blastp.blastp_subject_accession = temp_parse_query_accession;
+					temp_parse_query_accession.clear();
 					break;
 				}
 				if ((ch_blastp_query_accession == '|') && (!b_parse_query_accession)) {
 					b_parse_query_accession = true;
 				}
 				if ((b_parse_query_accession) && (ch_blastp_query_accession != '|')) {
-					con_str_parse_query_accession += ch_blastp_query_accession;
+					temp_parse_query_accession += ch_blastp_query_accession;
 				}
 			}
 		}

@@ -142,121 +142,121 @@ namespace fpf_filesystem {
 	}
 
 	vector<filesystem> read_filesystem(vector<string> par_root_dir) {
-		filesystem con_s_filesystem{};
-		vector<filesystem> con_v_s_filesystem{};
+		filesystem temp_filesystem{};
+		vector<filesystem> temp_v_filesystem{};
 		std::cout << "\n";
 		for (vector<string>::iterator itr_root_dir = par_root_dir.begin(); itr_root_dir != par_root_dir.end(); ++itr_root_dir) {		
 			string stream_str_filesytem = *itr_root_dir + "filesystem.data";
 			std::ifstream fin_input_filesystem(stream_str_filesytem);
-			char c_stream_fin_filesystem{};
-			string str_stream_fin_filesystem{};
-			size_t sw_stream_fin_filesystem{};
-			pair<string, string> con_p_filesystem_id{};
-			string con_str_filesystem_date{};
-			string con_str_filesystem_filename{};
-			string con_str_filesystem_version{};
-			string con_str_filesystem_status{};
-			string con_str_filesystem_enzyme{};
-			string con_str_filesystem_denovo_deltamass{};
-			string con_str_filesystem_replicatedate{};
-			size_t sw_filesystem_replicatepair{};
-			vector<pair<string, string>> v_p_filesystem_replicates{};	
-			while (fin_input_filesystem.std::istream::get(c_stream_fin_filesystem)) {
-				if ((c_stream_fin_filesystem != ';') && (c_stream_fin_filesystem != '\n') && (c_stream_fin_filesystem != ',')) {
-					str_stream_fin_filesystem += c_stream_fin_filesystem;
+			char read_fin_filesystem{};
+			string stream_fin_filesystem{};
+			size_t switch_fin_filesystem{};
+			pair<string, string> temp_filesystem_id{};
+			string temp_filesystem_date{};
+			string temp_filesystem_filename{};
+			string temp_filesystem_version{};
+			string temp_filesystem_status{};
+			string temp_filesystem_enzyme{};
+			string temp_filesystem_denovo_deltamass{};
+			string temp_filesystem_replicatedate{};
+			size_t switch__filesystem_replicatepair{};
+			vector<pair<string, string>> v_filesystem_replicates{};	
+			while (fin_input_filesystem.std::istream::get(read_fin_filesystem)) {
+				if ((read_fin_filesystem != ';') && (read_fin_filesystem != '\n') && (read_fin_filesystem != ',')) {
+					stream_fin_filesystem += read_fin_filesystem;
 				}
-				if (sw_filesystem_replicatepair == 2) {
-					sw_filesystem_replicatepair = 0;
+				if (switch__filesystem_replicatepair == 2) {
+					switch__filesystem_replicatepair = 0;
 				}
-				if ((sw_stream_fin_filesystem == 1) && (c_stream_fin_filesystem == ',')) {
-					con_str_filesystem_date = str_stream_fin_filesystem;
-					str_stream_fin_filesystem.clear();
+				if ((switch_fin_filesystem == 1) && (read_fin_filesystem == ',')) {
+					temp_filesystem_date = stream_fin_filesystem;
+					stream_fin_filesystem.clear();
 				}
-				if (str_stream_fin_filesystem == "ID: ") {
-					str_stream_fin_filesystem.clear();
-					sw_stream_fin_filesystem = 1;
+				if (stream_fin_filesystem == "ID: ") {
+					stream_fin_filesystem.clear();
+					switch_fin_filesystem = 1;
 				}
-				if (str_stream_fin_filesystem == "FILE: ") {
-					str_stream_fin_filesystem.clear();
-					sw_stream_fin_filesystem = 2;
+				if (stream_fin_filesystem == "FILE: ") {
+					stream_fin_filesystem.clear();
+					switch_fin_filesystem = 2;
 				}
-				if (str_stream_fin_filesystem == "VERSION: ") {
-					str_stream_fin_filesystem.clear();
-					sw_stream_fin_filesystem = 3;
+				if (stream_fin_filesystem == "VERSION: ") {
+					stream_fin_filesystem.clear();
+					switch_fin_filesystem = 3;
 				}
-				if ((sw_stream_fin_filesystem == 4) && (c_stream_fin_filesystem == ',') && (sw_filesystem_replicatepair == 1)) {
-					v_p_filesystem_replicates.push_back(std::make_pair(con_str_filesystem_replicatedate, str_stream_fin_filesystem));
-					sw_filesystem_replicatepair = 2;
-					con_str_filesystem_replicatedate.clear();
-					str_stream_fin_filesystem.clear();
+				if ((switch_fin_filesystem == 4) && (read_fin_filesystem == ',') && (switch__filesystem_replicatepair == 1)) {
+					v_filesystem_replicates.push_back(std::make_pair(temp_filesystem_replicatedate, stream_fin_filesystem));
+					switch__filesystem_replicatepair = 2;
+					temp_filesystem_replicatedate.clear();
+					stream_fin_filesystem.clear();
 				}
-				if ((sw_stream_fin_filesystem == 4) && (c_stream_fin_filesystem == ',') && (sw_filesystem_replicatepair == 0)) {
-					con_str_filesystem_replicatedate = str_stream_fin_filesystem;
-					sw_filesystem_replicatepair = 1;
-					str_stream_fin_filesystem.clear();
+				if ((switch_fin_filesystem == 4) && (read_fin_filesystem == ',') && (switch__filesystem_replicatepair == 0)) {
+					temp_filesystem_replicatedate = stream_fin_filesystem;
+					switch__filesystem_replicatepair = 1;
+					stream_fin_filesystem.clear();
 				}
-				if (str_stream_fin_filesystem == "REPLICATES: ") {
-					str_stream_fin_filesystem.clear();
-					sw_stream_fin_filesystem = 4;
+				if (stream_fin_filesystem == "REPLICATES: ") {
+					stream_fin_filesystem.clear();
+					switch_fin_filesystem = 4;
 				}
-				if (str_stream_fin_filesystem == "STATUS: ") {
-					str_stream_fin_filesystem.clear();
-					sw_stream_fin_filesystem = 5;
+				if (stream_fin_filesystem == "STATUS: ") {
+					stream_fin_filesystem.clear();
+					switch_fin_filesystem = 5;
 				}
-				if (str_stream_fin_filesystem == "ENZYME: ") {
-					str_stream_fin_filesystem.clear();
-					sw_stream_fin_filesystem = 6;
+				if (stream_fin_filesystem == "ENZYME: ") {
+					stream_fin_filesystem.clear();
+					switch_fin_filesystem = 6;
 				}
-				if (str_stream_fin_filesystem == "DENOVO_DELTAMASS: ") {
-					str_stream_fin_filesystem.clear();
-					sw_stream_fin_filesystem = 7;
+				if (stream_fin_filesystem == "DENOVO_DELTAMASS: ") {
+					stream_fin_filesystem.clear();
+					switch_fin_filesystem = 7;
 				}
-				if (c_stream_fin_filesystem == ';') {
-					if (sw_stream_fin_filesystem == 1) {
-						con_p_filesystem_id = make_pair(con_str_filesystem_date, str_stream_fin_filesystem);
-						con_str_filesystem_date.clear();
-						str_stream_fin_filesystem.clear();
+				if (read_fin_filesystem == ';') {
+					if (switch_fin_filesystem == 1) {
+						temp_filesystem_id = make_pair(temp_filesystem_date, stream_fin_filesystem);
+						temp_filesystem_date.clear();
+						stream_fin_filesystem.clear();
 					}
-					if (sw_stream_fin_filesystem == 2) {
-						con_str_filesystem_filename = str_stream_fin_filesystem;
-						str_stream_fin_filesystem.clear();
+					if (switch_fin_filesystem == 2) {
+						temp_filesystem_filename = stream_fin_filesystem;
+						stream_fin_filesystem.clear();
 					}
-					if (sw_stream_fin_filesystem == 3) {
-						con_str_filesystem_version = str_stream_fin_filesystem;
-						str_stream_fin_filesystem.clear();
+					if (switch_fin_filesystem == 3) {
+						temp_filesystem_version = stream_fin_filesystem;
+						stream_fin_filesystem.clear();
 					}
-					if (sw_stream_fin_filesystem == 4) {
-						if (str_stream_fin_filesystem != "") {
-							v_p_filesystem_replicates.push_back(std::make_pair(con_str_filesystem_replicatedate, str_stream_fin_filesystem));
+					if (switch_fin_filesystem == 4) {
+						if (stream_fin_filesystem != "") {
+							v_filesystem_replicates.push_back(std::make_pair(temp_filesystem_replicatedate, stream_fin_filesystem));
 						}
-						sw_filesystem_replicatepair = size_t();
-						con_str_filesystem_replicatedate.clear();
-						str_stream_fin_filesystem.clear();
+						switch__filesystem_replicatepair = size_t();
+						temp_filesystem_replicatedate.clear();
+						stream_fin_filesystem.clear();
 					}
-					if (sw_stream_fin_filesystem == 5) {
-						con_str_filesystem_status = str_stream_fin_filesystem;
-						str_stream_fin_filesystem.clear();
+					if (switch_fin_filesystem == 5) {
+						temp_filesystem_status = stream_fin_filesystem;
+						stream_fin_filesystem.clear();
 					}
-					if (sw_stream_fin_filesystem == 6) {
-						con_str_filesystem_enzyme = str_stream_fin_filesystem;
-						str_stream_fin_filesystem.clear();
+					if (switch_fin_filesystem == 6) {
+						temp_filesystem_enzyme = stream_fin_filesystem;
+						stream_fin_filesystem.clear();
 					}
-					if (sw_stream_fin_filesystem == 7) {
-						con_str_filesystem_denovo_deltamass = str_stream_fin_filesystem;
-						str_stream_fin_filesystem.clear();
-						con_s_filesystem.directory = *itr_root_dir;
-						con_s_filesystem.filesystem_id = con_p_filesystem_id;
-						con_s_filesystem.filename = con_str_filesystem_filename;
-						con_s_filesystem.fileversion = con_str_filesystem_version;
-						con_s_filesystem.patientstatus = con_str_filesystem_status;
-						con_s_filesystem.v_filesystem_replicates = v_p_filesystem_replicates;
-						con_s_filesystem.enzyme = con_str_filesystem_enzyme;
-						con_s_filesystem.denono_deltamass = con_str_filesystem_denovo_deltamass;
-						con_s_filesystem.filesystem_replicate_count = size_t{ 1 };
-						v_p_filesystem_replicates.clear();
-						con_v_s_filesystem.push_back(con_s_filesystem);
-						std::cout << "\n * reading: " << con_str_filesystem_filename << "   version - " << con_str_filesystem_version;
-						if (con_str_filesystem_version == IgFamily::version) {
+					if (switch_fin_filesystem == 7) {
+						temp_filesystem_denovo_deltamass = stream_fin_filesystem;
+						stream_fin_filesystem.clear();
+						temp_filesystem.directory = *itr_root_dir;
+						temp_filesystem.filesystem_id = temp_filesystem_id;
+						temp_filesystem.filename = temp_filesystem_filename;
+						temp_filesystem.fileversion = temp_filesystem_version;
+						temp_filesystem.patientstatus = temp_filesystem_status;
+						temp_filesystem.v_filesystem_replicates = v_filesystem_replicates;
+						temp_filesystem.enzyme = temp_filesystem_enzyme;
+						temp_filesystem.denono_deltamass = temp_filesystem_denovo_deltamass;
+						temp_filesystem.filesystem_replicate_count = size_t{ 1 };
+						v_filesystem_replicates.clear();
+						temp_v_filesystem.push_back(temp_filesystem);
+						std::cout << "\n * reading: " << temp_filesystem_filename << "   version - " << temp_filesystem_version;
+						if (temp_filesystem_version == IgFamily::version) {
 							std::cout << "   ! up to date !";
 						}
 					}
@@ -265,72 +265,72 @@ namespace fpf_filesystem {
 			fin_input_filesystem.clear();
 			fin_input_filesystem.seekg(0, std::ios::beg);
 		}
-		return con_v_s_filesystem;
+		return temp_v_filesystem;
 	}
 
 	void perform_fileconversion(filesystem& par_filesystem) {
 		par_filesystem.fileconversion_parameters = fpf_convert::create_fileconversion_parameters(fpf_convert::prompt_defaultconversion());
-		string str_fileconversion_command{};
-		str_fileconversion_command += "msconvert.exe ";
-		str_fileconversion_command += "\"Z:\\Lukah_Dykes\\IgFamily\\";
-		str_fileconversion_command += par_filesystem.directory;
-		str_fileconversion_command += par_filesystem.filename;
-		str_fileconversion_command += ".wiff\"";
-		str_fileconversion_command += " --64";
-		str_fileconversion_command += " --mz64";
-		str_fileconversion_command += " -v";
-		str_fileconversion_command += " --mgf";
+		string fileconversion_command{};
+		fileconversion_command += "msconvert.exe ";
+		fileconversion_command += "\"Z:\\Lukah_Dykes\\IgFamily\\";
+		fileconversion_command += par_filesystem.directory;
+		fileconversion_command += par_filesystem.filename;
+		fileconversion_command += ".wiff\"";
+		fileconversion_command += " --64";
+		fileconversion_command += " --mz64";
+		fileconversion_command += " -v";
+		fileconversion_command += " --mgf";
 		if (par_filesystem.fileconversion_parameters.s_peakpicking.b_peakpicking) {
-			str_fileconversion_command += " --filter \"peakPicking cwt ";
-			//str_fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_from);
-			//str_fileconversion_command += "-";
-			//str_fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_to);
-			str_fileconversion_command += "\"";
+			fileconversion_command += " --filter \"peakPicking cwt ";
+			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_from);
+			//fileconversion_command += "-";
+			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_to);
+			fileconversion_command += "\"";
 		}
 		if (par_filesystem.fileconversion_parameters.s_threshold.b_threshold) {
-			str_fileconversion_command += " --filter \"threshold absolute ";
-			str_fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_threshold.st_threshold);
-			str_fileconversion_command += " most-intense\"";
+			fileconversion_command += " --filter \"threshold absolute ";
+			fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_threshold.st_threshold);
+			fileconversion_command += " most-intense\"";
 		}
 		if (par_filesystem.fileconversion_parameters.s_ms2denoise.b_ms2denoise) {
-			str_fileconversion_command += " --filter \"MS2Denoise ";
-			str_fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_peaksinwindow);
-			str_fileconversion_command += " ";
-			str_fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_windowwidth);
-			str_fileconversion_command += " true\"";
+			fileconversion_command += " --filter \"MS2Denoise ";
+			fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_peaksinwindow);
+			fileconversion_command += " ";
+			fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_windowwidth);
+			fileconversion_command += " true\"";
 		}
 		if (par_filesystem.fileconversion_parameters.s_ms2deisotope.b_ms2deisotope) {
-			str_fileconversion_command += " --filter MS2Deisotope";
+			fileconversion_command += " --filter MS2Deisotope";
 		}
 		if (par_filesystem.fileconversion_parameters.s_chargestatepredictor.b_chargestatepredictor) {
-			//str_fileconversion_command += " --filter \"chargeStatePredictor true ";
-			//str_fileconversion_command += std::to_string(par_filesystem.fileconversion.s_chargestatepredictor.st_chargestatepredictor_mincharge);
-			//str_fileconversion_command += " ";
-			//str_fileconversion_command += std::to_string(par_filesystem.fileconversion.s_chargestatepredictor.st_chargestatepredictor_maxcharge);
-			//str_fileconversion_command += " ";
-			//str_fileconversion_command += std::to_string(par_filesystem.fileconversion.s_chargestatepredictor.d_chargestatepredictor_chargefraction);
-			//str_fileconversion_command += "\"";
+			//fileconversion_command += " --filter \"chargeStatePredictor true ";
+			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_chargestatepredictor.st_chargestatepredictor_mincharge);
+			//fileconversion_command += " ";
+			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_chargestatepredictor.st_chargestatepredictor_maxcharge);
+			//fileconversion_command += " ";
+			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_chargestatepredictor.d_chargestatepredictor_chargefraction);
+			//fileconversion_command += "\"";
 		}
-		str_fileconversion_command += " -o Z:\\Lukah_Dykes\\IgFamily\\";
-		str_fileconversion_command += par_filesystem.directory;
-		//std::cout << "\n\n" << str_fileconversion_command;
-		fpf_convert::sys_msconvert(str_fileconversion_command, par_filesystem.directory);
+		fileconversion_command += " -o Z:\\Lukah_Dykes\\IgFamily\\";
+		fileconversion_command += par_filesystem.directory;
+		//std::cout << "\n\n" << fileconversion_command;
+		fpf_convert::sys_msconvert(fileconversion_command, par_filesystem.directory);
 	}
 
 	string read_filesystem_proteinpeptides(string par_IgFamily_root_dir) {
-		string con_str_root_proteinpeptides = par_IgFamily_root_dir + "protein_peptides.csv";
-		return con_str_root_proteinpeptides;
+		string temp_root_proteinpeptides = par_IgFamily_root_dir + "protein_peptides.csv";
+		return temp_root_proteinpeptides;
 	}
 
 	string read_filesystem_denovopeptides(string par_IgFamily_root_dir) {
-		string con_str_root_denovopeptides{};
+		string temp_root_denovopeptides{};
 		if (IgFamily::NOVOR_DENOVO) {
-			con_str_root_denovopeptides = par_IgFamily_root_dir + "denovo_peptides_NOVOR.csv";
+			temp_root_denovopeptides = par_IgFamily_root_dir + "denovo_peptides_NOVOR.csv";
 		}
 		else {
-			con_str_root_denovopeptides = par_IgFamily_root_dir + "denovo_peptides.csv";
+			temp_root_denovopeptides = par_IgFamily_root_dir + "denovo_peptides.csv";
 		}
-		return con_str_root_denovopeptides;
+		return temp_root_denovopeptides;
 	}
 
 	vector<csv_data> parse_filesystem_proteinpeptides(string par_str_fin_root) {
