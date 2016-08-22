@@ -53,12 +53,16 @@ namespace fpf_parse {
 			FASTA_accession = par_FASTA_accession;
 		};
 
-		inline void set_FASTA_genefamily(string par_FASTA_genefamily) {
-			FASTA_genefamily = par_FASTA_genefamily;
+		inline void set_FASTA_name(string par_FASTA_name) {
+			FASTA_name = par_FASTA_name;
 		};
 
-		inline void set_FASTA_genefamily_class(string par_FASTA_genefamily_class) {
-			FASTA_genefamily_class = par_FASTA_genefamily_class;
+		inline void set_FASTA_class(string par_FASTA_class) {
+			FASTA_class = par_FASTA_class;
+		};
+
+		inline void set_FASTA_type(string par_FASTA_type) {
+			FASTA_type = par_FASTA_type;
 		};
 
 		inline void set_FASTA_species(string par_FASTA_species) {
@@ -73,12 +77,16 @@ namespace fpf_parse {
 			return FASTA_accession;
 		};
 
-		inline const string return_FASTA_genefamily() const {
-			return FASTA_genefamily;
+		inline const string return_FASTA_name() const {
+			return FASTA_name;
 		};
 
-		inline const string return_FASTA_genefamily_class() const {
-			return FASTA_genefamily_class;
+		inline const string return_FASTA_class() const {
+			return FASTA_class;
+		};
+
+		inline const string return_FASTA_type() const {
+			return FASTA_type;
 		};
 
 		inline const string return_FASTA_species() const {
@@ -92,8 +100,9 @@ namespace fpf_parse {
 	private:
 		string FASTA_accession;
 		string FASTA_protein_delimited;
-		string FASTA_genefamily;
-		string FASTA_genefamily_class;
+		string FASTA_name;
+		string FASTA_class;
+		string FASTA_type;
 		string FASTA_species;
 		string FASTA_protein;
 	};
@@ -642,9 +651,10 @@ namespace fpf_parse {
 		size_t FASTA_condition_switch_2 = size_t();
 		size_t FASTA_count_accession = size_t();
 		string temp_FASTA_accession = string();
-		string temp_FASTA_category_name = string();
-		string temp_FASTA_category_class = string();
-		string tenp_FASTA_category_species = string();
+		string temp_FASTA_name = string();
+		string temp_FASTA_class = string();
+		string temp_FASTA_type = string();
+		string tenp_FASTA_species = string();
 		string temp_FASTA_element = string();
 		FASTA_data temp_FASTA_data = FASTA_data();
 		vector<FASTA_data> temp_v_FASTA_data = vector<FASTA_data>();
@@ -663,67 +673,71 @@ namespace fpf_parse {
 				FASTA_condition_switch = 3;
 			}
 			if (FASTA_condition_switch == 2) {
-				tenp_FASTA_category_species += FASTA_read;
+				tenp_FASTA_species += FASTA_read;
 			}
 			if ((FASTA_condition_switch == 1) && (FASTA_read == '|')) {
 				FASTA_condition_switch = 2;
 			}
 			if (FASTA_condition_switch == 1) {
 				if (FASTA_read != '_') {
-					if (temp_FASTA_category_name == "IGHV") {
-						temp_FASTA_category_class = "IGHV";
+					if (temp_FASTA_name == "IGHV") {
+						temp_FASTA_class = "IGHV";
+						temp_FASTA_type = "IG";				
 					}
-					if (temp_FASTA_category_name == "IGKV") {
-						temp_FASTA_category_class = "IGKV";
+					if (temp_FASTA_name == "IGKV") {
+						temp_FASTA_class = "IGKV";
+						temp_FASTA_type = "IG";
 					}
-					if (temp_FASTA_category_name == "IGLV") {
-						temp_FASTA_category_class = "IGLV";
+					if (temp_FASTA_name == "IGLV") {
+						temp_FASTA_class = "IGLV";
+						temp_FASTA_type = "IG";
 					}
-					if (temp_FASTA_category_name == "IGKJ") {
-						temp_FASTA_category_class = "IGKJ_IGLJ_IGKC_IGLC";
+					if (temp_FASTA_name == "IGKJ") {
+						temp_FASTA_class = "IGKJ_IGLJ_IGKC_IGLC";
 					}
-					if (temp_FASTA_category_name == "IGLJ") {
-						temp_FASTA_category_class = "IGKJ_IGLJ_IGKC_IGLC";
+					if (temp_FASTA_name == "IGLJ") {
+						temp_FASTA_class = "IGKJ_IGLJ_IGKC_IGLC";
 					}
-					if (temp_FASTA_category_name == "IGHJ") {
-						temp_FASTA_category_class = "IGHJ_IGHC";
+					if (temp_FASTA_name == "IGHJ") {
+						temp_FASTA_class = "IGHJ_IGHC";
 					}
-					if (temp_FASTA_category_name == "MIGHV") {
-						temp_FASTA_category_class = temp_FASTA_category_name;
+					if (temp_FASTA_name == "MIGHV") {
+						temp_FASTA_class = temp_FASTA_name;
 					}
-					if (temp_FASTA_category_name == "mA") {
-						temp_FASTA_category_class = "mAB";
+					if (temp_FASTA_name == "mA") {
+						temp_FASTA_class = "mAB";
 					}
-					if (temp_FASTA_category_name == "CON") {
-						temp_FASTA_category_class = "CONT";
+					if (temp_FASTA_name == "CON") {
+						temp_FASTA_class = "CONT";
 					}
-					if (temp_FASTA_category_name == "UNIPROT") {
-						temp_FASTA_category_class = "UNIPROT";
+					if (temp_FASTA_name == "UNIPROT") {
+						temp_FASTA_class = "UNIPROT";
 					}
 					if (FASTA_read == ' ') {
-						temp_FASTA_category_name += "_";
+						temp_FASTA_name += "_";
 					}
 					else {
-						temp_FASTA_category_name += FASTA_read;
+						temp_FASTA_name += FASTA_read;
 					}
 				}
 				else {
-					temp_FASTA_category_name += '*';
+					temp_FASTA_name += '*';
 				}
 			}
 			if ((FASTA_condition_switch == 0) && (FASTA_read == '|')) {
-				temp_FASTA_category_name.clear();
+				temp_FASTA_name.clear();
 				FASTA_condition_switch = 1;
 			}
 			if ((FASTA_condition_switch == 0) && (FASTA_read != '>')) {
 				temp_FASTA_accession += FASTA_read;
 			}
 			if ((FASTA_condition_switch_2 == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
-				if (temp_FASTA_category_class != "MIGHV") {
+				if (temp_FASTA_class != "MIGHV") {
 					temp_FASTA_data.set_FASTA_accession(temp_FASTA_accession);
-					temp_FASTA_data.set_FASTA_genefamily(temp_FASTA_category_name);
-					temp_FASTA_data.set_FASTA_genefamily_class(temp_FASTA_category_class);
-					temp_FASTA_data.set_FASTA_species(tenp_FASTA_category_species);
+					temp_FASTA_data.set_FASTA_name(temp_FASTA_name);
+					temp_FASTA_data.set_FASTA_class(temp_FASTA_class);
+					temp_FASTA_data.set_FASTA_type(temp_FASTA_type);
+					temp_FASTA_data.set_FASTA_species(tenp_FASTA_species);
 					temp_FASTA_data.set_FASTA_protein(temp_FASTA_element);
 					temp_v_FASTA_data.push_back(temp_FASTA_data);
 				}
@@ -740,9 +754,10 @@ namespace fpf_parse {
 				FASTA_condition_switch_2 = 0;
 				temp_FASTA_accession.clear();
 				temp_FASTA_element.clear();
-				temp_FASTA_category_name.clear();
-				temp_FASTA_category_class.clear();
-				tenp_FASTA_category_species.clear();
+				temp_FASTA_name.clear();
+				temp_FASTA_class.clear();
+				temp_FASTA_type.clear();
+				tenp_FASTA_species.clear();
 			}
 		}
 
@@ -802,7 +817,7 @@ namespace fpf_parse {
 		if (IgFamily::OUTPUT_FASTA == 1) {
 			for (const auto& itr_v_FASTA_data : par_v_FASTA_data) {
 				fout_FASTA_filtered << ">" << itr_v_FASTA_data.return_FASTA_accession();
-				fout_FASTA_filtered << "|" << itr_v_FASTA_data.return_FASTA_genefamily();
+				fout_FASTA_filtered << "|" << itr_v_FASTA_data.return_FASTA_name();
 				fout_FASTA_filtered << "|" << itr_v_FASTA_data.return_FASTA_species();
 				fout_FASTA_filtered << "|";
 				for (auto i = 0; i < itr_v_FASTA_data.return_FASTA_protein().length(); ++i) {
@@ -823,7 +838,7 @@ namespace fpf_parse {
 		if (IgFamily::OUTPUT_FASTA == 1) {
 			for (const auto& itr_v_FASTA_DATA : par_v_FASTA_data) {
 				fout_FASTA_filtered << ">" << itr_v_FASTA_DATA.return_FASTA_accession();
-				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_genefamily();
+				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_name();
 				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_species();
 				fout_FASTA_filtered << "|";
 				for (auto i = 0; i < itr_v_FASTA_DATA.return_FASTA_protein().length(); ++i) {

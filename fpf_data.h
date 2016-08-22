@@ -29,7 +29,7 @@ namespace fpf_data {
 	struct peptide_data;
 	struct denovo_peptide;
 	struct denovo_aminoacid;
-	struct multinomial_category;
+	struct FASTA_category;
 	struct blastp_data;
 	struct proteinconstruct_from_denovo;
 	struct category_analysis;
@@ -57,10 +57,11 @@ namespace fpf_data {
 		vector<tuple<string, size_t, size_t>> v_filesystem_sample_replicate_data;
 	};
 
-	struct multinomial_category {
+	struct FASTA_category {
 	public:
 		string category_name;
 		string category_class;
+		string category_type;
 		string category_protein;
 		string category_species;
 	};
@@ -76,7 +77,8 @@ namespace fpf_data {
 		size_t blastp_subject_alignment_index;
 		double blastp_evalue;
 		double blastp_evalue_transformed;
-		string category_protein;
+		double blastp_parameter_density;
+		FASTA_category* p_FASTA_category;
 		string query_alignment;
 		denovo_peptide denovo_peptide_best_averagelocalconfidence;
 		size_t denovo_replicate_count;
@@ -89,10 +91,8 @@ namespace fpf_data {
 
 	struct category_analysis {
 	public:
+		FASTA_category* p_FASTA_category;
 		vector<blastp_data> v_blastp_data_combined_by_category;
-		string category_name;
-		string category_class;
-		string category_protein;
 		double category_score;
 		vector<proteinconstruct_from_denovo> proteinconstruct_from_denovo;
 	};
@@ -107,25 +107,26 @@ namespace fpf_data {
 		vector<vector<double>> v2_density;
 	};
 
-	vector<multinomial_category> create_multinomial_category(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
-		vector<multinomial_category> temp_v_multinomial_category;
-		multinomial_category temp_multinomial_category;
+	vector<FASTA_category> create_FASTA_category(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
+		vector<FASTA_category> temp_v_FASTA_category;
 		for (const auto itr_parse_FASTA : par_parse_FASTA) {
-			const auto find_v_s_multinomial_element_data = std::find_if(temp_v_multinomial_category.begin(), temp_v_multinomial_category.end(),
-				[itr_parse_FASTA](const multinomial_category& par_s_multinomial_element_data) {
-				return par_s_multinomial_element_data.category_name == itr_parse_FASTA.return_FASTA_genefamily(); });
-			if (find_v_s_multinomial_element_data == temp_v_multinomial_category.end()) {
-				temp_multinomial_category.category_name = itr_parse_FASTA.return_FASTA_genefamily();
-				temp_multinomial_category.category_class = itr_parse_FASTA.return_FASTA_genefamily_class();
-				temp_multinomial_category.category_species = itr_parse_FASTA.return_FASTA_species();
-				temp_multinomial_category.category_protein = itr_parse_FASTA.return_FASTA_protein();
-				temp_v_multinomial_category.push_back(temp_multinomial_category);
+			const auto find_v_FASTA_element = std::find_if(temp_v_FASTA_category.begin(), temp_v_FASTA_category.end(),
+				[itr_parse_FASTA](const FASTA_category& par_FASTA_element) {
+				return par_FASTA_element.category_name == itr_parse_FASTA.return_FASTA_name(); });
+			if (find_v_FASTA_element == temp_v_FASTA_category.end()) {
+				FASTA_category temp_FASTA_category;
+				temp_FASTA_category.category_name = itr_parse_FASTA.return_FASTA_name();
+				temp_FASTA_category.category_class = itr_parse_FASTA.return_FASTA_class();
+				temp_FASTA_category.category_type = itr_parse_FASTA.return_FASTA_type();
+				temp_FASTA_category.category_species = itr_parse_FASTA.return_FASTA_species();
+				temp_FASTA_category.category_protein = itr_parse_FASTA.return_FASTA_protein();
+				temp_v_FASTA_category.push_back(temp_FASTA_category);
 			}
 			else {
-				find_v_s_multinomial_element_data->category_protein = find_v_s_multinomial_element_data->category_name + itr_parse_FASTA.return_FASTA_protein();
+				find_v_FASTA_element->category_protein = find_v_FASTA_element->category_name + itr_parse_FASTA.return_FASTA_protein();
 			}
 		}
-		return temp_v_multinomial_category;
+		return temp_v_FASTA_category;
 	}
 
 	vector<peptide_data> create_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data) {

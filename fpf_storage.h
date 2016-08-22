@@ -79,7 +79,7 @@
 //							for (vector<pair<string, string>>::iterator itr_v_p_replicates_2 = itr_v_s_filesystem->v_filesystem_replicates.begin(); itr_v_p_replicates_2 != itr_v_s_filesystem->v_filesystem_replicates.end(); ++itr_v_p_replicates_2) {
 //								std::cout << "\n\n * " << std::get<0>(*itr_v_p_replicates_2) << "   " << std::get<1>(*itr_v_p_replicates_2);
 //							}
-//							for (vector<fpf_data::c_genefamily_data>::iterator itr_v_c_analysis = itr_v_s_filesystem_replicate_combined.v_multinomial_category.begin(); itr_v_c_analysis != itr_v_s_filesystem_replicate_combined.v_multinomial_category.end(); ++itr_v_c_analysis) {
+//							for (vector<fpf_data::c_genefamily_data>::iterator itr_v_c_analysis = itr_v_s_filesystem_replicate_combined.v_FASTA_category.begin(); itr_v_c_analysis != itr_v_s_filesystem_replicate_combined.v_FASTA_category.end(); ++itr_v_c_analysis) {
 //								itr_v_c_analysis->ref_v_c_analysis_polyassociation().clear();
 //								itr_v_c_analysis->set_d_score(1);
 //							}
@@ -90,31 +90,31 @@
 //							vector<fpf_data::c_peptide_data> filesystem_v_c_peptide_data_distinct = fpf_data::create_v_c_peptide_data_distinct(itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
 //							vector<fpf_data::c_peptide_data> filesystem_v_c_peptide_data_filtered_distinct = fpf_data::create_v_c_peptide_data_filtered_distinct(filesystem_v_c_peptide_data_filtered);
 //
-//							itr_v_s_filesystem_replicate_combined.v_c_multinomial_catagory_distinct = fpf_data::create_v_c_analysis_distinct(itr_v_s_filesystem_replicate_combined.v_multinomial_category);
-//							create_global_score_mean(itr_v_s_filesystem_replicate_combined.v_multinomial_category);
+//							itr_v_s_filesystem_replicate_combined.v_c_multinomial_catagory_distinct = fpf_data::create_v_c_analysis_distinct(itr_v_s_filesystem_replicate_combined.v_FASTA_category);
+//							create_global_score_mean(itr_v_s_filesystem_replicate_combined.v_FASTA_category);
 //
 //							if (SIMPLE_SCORE) {
 //								std::cout << "\n\n ...assigning peptides to gene families";
-//								fpf_data::create_v_c_analysis_v_c_peptide_data(itr_v_s_filesystem_replicate_combined.v_multinomial_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
-//								fpf_data::create_v_c_analysis_v_c_peptide_data_distinct_filtered(itr_v_s_filesystem_replicate_combined.v_multinomial_category, filesystem_v_c_peptide_data_filtered_distinct);
-//								fpf_data::create_v_c_analysis_str_alignment(itr_v_s_filesystem_replicate_combined.v_multinomial_category);
+//								fpf_data::create_v_c_analysis_v_c_peptide_data(itr_v_s_filesystem_replicate_combined.v_FASTA_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
+//								fpf_data::create_v_c_analysis_v_c_peptide_data_distinct_filtered(itr_v_s_filesystem_replicate_combined.v_FASTA_category, filesystem_v_c_peptide_data_filtered_distinct);
+//								fpf_data::create_v_c_analysis_str_alignment(itr_v_s_filesystem_replicate_combined.v_FASTA_category);
 //								std::cout << "\n\n ...determining sequence coverage and total spectral count";
-//								fpf_data::create_v_c_analysis_st_totalspectralcount(itr_v_s_filesystem_replicate_combined.v_multinomial_category);
-//								fpf_data::create_v_c_analysis_d_coverage(itr_v_s_filesystem_replicate_combined.v_multinomial_category);
+//								fpf_data::create_v_c_analysis_st_totalspectralcount(itr_v_s_filesystem_replicate_combined.v_FASTA_category);
+//								fpf_data::create_v_c_analysis_d_coverage(itr_v_s_filesystem_replicate_combined.v_FASTA_category);
 //								std::cout << "\n\n ...determining peptide association co-occurence";
-//								fpf_data::create_v_c_peptide_v_p_peptideassociation(itr_v_s_filesystem_replicate_combined.v_multinomial_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
+//								fpf_data::create_v_c_peptide_v_p_peptideassociation(itr_v_s_filesystem_replicate_combined.v_FASTA_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
 //								fpf_data::create_v_c_peptide_v_str_peptideassociation_distinct(itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
 //								fpf_data::create_v_c_peptide_v_p_peptideassociation_distinct(itr_v_s_filesystem_replicate_combined.v_c_multinomial_catagory_distinct, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
-//								fpf_data::create_v_c_analysis_v_c_peptide_data(itr_v_s_filesystem_replicate_combined.v_multinomial_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
+//								fpf_data::create_v_c_analysis_v_c_peptide_data(itr_v_s_filesystem_replicate_combined.v_FASTA_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
 //								std::cout << "\n\n ...calculating score";
-//								fpf_data::create_v_c_analysis_d_score(itr_v_s_filesystem_replicate_combined.v_c_peptide_data, itr_v_s_filesystem_replicate_combined.v_multinomial_category, itr_v_s_filesystem_replicate_combined.v_c_multinomial_catagory_distinct);
-//								fpf_data::create_v_c_analysis_v_c_peptide_data(itr_v_s_filesystem_replicate_combined.v_multinomial_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
+//								fpf_data::create_v_c_analysis_d_score(itr_v_s_filesystem_replicate_combined.v_c_peptide_data, itr_v_s_filesystem_replicate_combined.v_FASTA_category, itr_v_s_filesystem_replicate_combined.v_c_multinomial_catagory_distinct);
+//								fpf_data::create_v_c_analysis_v_c_peptide_data(itr_v_s_filesystem_replicate_combined.v_FASTA_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
 //								std::cout << "\n\n ...training score";
-//								fpf_data::train_v_c_analysis_d_score(itr_v_s_filesystem_replicate_combined.v_c_peptide_data, itr_v_s_filesystem_replicate_combined.v_multinomial_category, itr_v_s_filesystem_replicate_combined.v_c_multinomial_catagory_distinct);
+//								fpf_data::train_v_c_analysis_d_score(itr_v_s_filesystem_replicate_combined.v_c_peptide_data, itr_v_s_filesystem_replicate_combined.v_FASTA_category, itr_v_s_filesystem_replicate_combined.v_c_multinomial_catagory_distinct);
 //								std::cout << "\n\n ...formatting output";
 //								fpf_data::sort_v_c_peptide_data_str_peptide(itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
 //								fpf_data::sort_v_c_peptide_data_str_peptide(filesystem_v_c_peptide_data_filtered_distinct);
-//								fpf_data::create_v_c_analysis_v_c_peptide_data(itr_v_s_filesystem_replicate_combined.v_multinomial_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
+//								fpf_data::create_v_c_analysis_v_c_peptide_data(itr_v_s_filesystem_replicate_combined.v_FASTA_category, itr_v_s_filesystem_replicate_combined.v_c_peptide_data);
 //								fpf_data::update_v_c_analysis_distinct(itr_v_s_filesystem_replicate_combined.v_c_multinomial_catagory_distinct);
 //								std::cout << "\n\n ...streaming output";
 //								fpf_filesystem_analysis::fout_file_genefamily_summary(itr_v_s_filesystem_replicate_combined);

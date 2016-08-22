@@ -30,7 +30,7 @@ namespace fpf_filesystem {
 
 	typedef fpf_convert::fileconversion_parameters fileconversion_parameters;
 	typedef fpf_data::peptide_data peptide_data;
-	typedef fpf_data::multinomial_category multinomial_category;
+	typedef fpf_data::FASTA_category FASTA_category;
 	typedef fpf_data::blastp_data blastp_data;
 	typedef fpf_data::multinomial multinomial;
 	typedef fpf_data::category_analysis category_analysis;
@@ -69,8 +69,8 @@ namespace fpf_filesystem {
 
 		/* sample data */
 
-		vector<multinomial_category> v_multinomial_category;
-		vector<multinomial_category*> pv_multinomial_category_distinct_polymorphism;
+		vector<FASTA_category> v_multinomial_category;
+		vector<FASTA_category*> pv_multinomial_category_distinct_polymorphism;
 		vector<peptide_data> v_peptide_data;
 
 		/* blastp data */

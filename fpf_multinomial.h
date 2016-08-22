@@ -30,8 +30,8 @@ namespace fpf_multinomial {
 
 	void create_filesystem_multinomial_data(filesystem& par_filesystem) {
 		for (const auto& itr_v_category_analysis : par_filesystem.v_category_analysis_selected_by_polymorphism) {
-			par_filesystem.multinomial_data.v_category_name.push_back(itr_v_category_analysis.category_name);
-			par_filesystem.multinomial_data.v_category_class.push_back(itr_v_category_analysis.category_class);
+			par_filesystem.multinomial_data.v_category_name.push_back(itr_v_category_analysis.p_FASTA_category->category_name);
+			par_filesystem.multinomial_data.v_category_class.push_back(itr_v_category_analysis.p_FASTA_category->category_class);
 		}
 		for (const auto& itr_v_peptide_data : par_filesystem.v_peptide_data) {
 			par_filesystem.multinomial_data.v_element_name.push_back(itr_v_peptide_data.peptide_filtered);
@@ -86,7 +86,7 @@ namespace fpf_multinomial {
 	}
 
 	struct multinomial_frequency_type {
-		string multinomial_category;
+		string FASTA_category;
 		double multinomial_frequency;
 	};
 
@@ -120,14 +120,14 @@ namespace fpf_multinomial {
 			vector<multinomial_frequency_type> temp_v_multinomial_frequency;
 			for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
 				multinomial_frequency_type temp_multinomial_frequency;
-				temp_multinomial_frequency.multinomial_category = par_filesystem.multinomial_data.v_category_name[j];
+				temp_multinomial_frequency.FASTA_category = par_filesystem.multinomial_data.v_category_name[j];
 				temp_multinomial_frequency.multinomial_frequency = par_filesystem.multinomial_data.v2_frequency[i][j];
 				temp_v_multinomial_frequency.push_back(temp_multinomial_frequency);
 			}
 			sort_v_multinomial_frequency(temp_v_multinomial_frequency);
 			for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
 				if (temp_v_multinomial_frequency[j].multinomial_frequency > 0.2) {
-					fout_multinomial_element << temp_v_multinomial_frequency[j].multinomial_category << " (";
+					fout_multinomial_element << temp_v_multinomial_frequency[j].FASTA_category << " (";
 					fout_multinomial_element << temp_v_multinomial_frequency[j].multinomial_frequency << "), ";
 				}
 			}
@@ -164,14 +164,14 @@ namespace fpf_multinomial {
 				vector<multinomial_frequency_type> temp_v_multinomial_frequency;
 				for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
 					multinomial_frequency_type temp_multinomial_frequency;
-					temp_multinomial_frequency.multinomial_category = par_filesystem.multinomial_data.v_category_name[j];
+					temp_multinomial_frequency.FASTA_category = par_filesystem.multinomial_data.v_category_name[j];
 					temp_multinomial_frequency.multinomial_frequency = par_filesystem.multinomial_data.v2_frequency[i][j];
 					temp_v_multinomial_frequency.push_back(temp_multinomial_frequency);
 				}
 				sort_v_multinomial_frequency(temp_v_multinomial_frequency);
 				for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
 					if (temp_v_multinomial_frequency[j].multinomial_frequency > 0.1) {
-						fout_multinomial_element_nomatch << temp_v_multinomial_frequency[j].multinomial_category << " (";
+						fout_multinomial_element_nomatch << temp_v_multinomial_frequency[j].FASTA_category << " (";
 						fout_multinomial_element_nomatch << temp_v_multinomial_frequency[j].multinomial_frequency << "), ";
 					}
 				}
