@@ -17,7 +17,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.7.3";
+	const string version = "v0.7.4";
 
 	const bool FILESYSTEM_UPDATE_ALL = 1;
 	const bool NOVOR_DENOVO = 0;
@@ -29,7 +29,7 @@ namespace IgFamily {
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_3.txt";
 	const string INPUT_CSV;
-	const string INPUT_FASTA = "FASTA\\MOST_RECENT_20160804.fasta";
+	const string INPUT_FASTA = "FASTA\\LUKAH_WITHUNIPROT_20160815.fasta";
 
 	const double BLASTP_THRESHOLD = 10000;
 	const double EVALUE_THRESHOLD = 20;

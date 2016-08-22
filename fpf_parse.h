@@ -732,14 +732,17 @@ namespace fpf_parse {
 				temp_FASTA_accession += FASTA_read;
 			}
 			if ((FASTA_condition_switch_2 == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
+				
 				if (temp_FASTA_class != "MIGHV") {
-					temp_FASTA_data.set_FASTA_accession(temp_FASTA_accession);
-					temp_FASTA_data.set_FASTA_name(temp_FASTA_name);
-					temp_FASTA_data.set_FASTA_class(temp_FASTA_class);
-					temp_FASTA_data.set_FASTA_type(temp_FASTA_type);
-					temp_FASTA_data.set_FASTA_species(tenp_FASTA_species);
-					temp_FASTA_data.set_FASTA_protein(temp_FASTA_element);
-					temp_v_FASTA_data.push_back(temp_FASTA_data);
+					if (!((temp_FASTA_class == "UNIPROT") && (temp_FASTA_name.find("Ig")))) {
+						temp_FASTA_data.set_FASTA_accession(temp_FASTA_accession);
+						temp_FASTA_data.set_FASTA_name(temp_FASTA_name);
+						temp_FASTA_data.set_FASTA_class(temp_FASTA_class);
+						temp_FASTA_data.set_FASTA_type(temp_FASTA_type);
+						temp_FASTA_data.set_FASTA_species(tenp_FASTA_species);
+						temp_FASTA_data.set_FASTA_protein(temp_FASTA_element);
+						temp_v_FASTA_data.push_back(temp_FASTA_data);
+					}
 				}
 				++FASTA_count_accession;
 				if (FASTA_count_accession % 1000 == 0) {

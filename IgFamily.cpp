@@ -1,4 +1,4 @@
-// * * IgFamily v0.7.3 * * 
+// * * IgFamily v0.7.4 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -114,6 +114,7 @@ int main() {
 			fpf_blastp_analysis::create_str_protein(itr_v_s_filesystem);
 			fpf_blastp_analysis::create_str_query_alignment(itr_v_s_filesystem);		
 			fpf_blastp_analysis::normalise_v_s_filesystem_blastp_data(itr_v_s_filesystem);
+			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_s_filesystem);
 			std::cout << "\n\n ...data structures assigned";
 			std::cout << "\n\n outputting homology summary...";
 			fpf_blastp_analysis::fout_blastp_summary(itr_v_s_filesystem);
@@ -149,6 +150,7 @@ int main() {
 			fpf_blastp_analysis::create_str_protein_from_category_analysis(itr_v_s_filesystem);
 			fpf_blastp_analysis::create_str_query_alignment(itr_v_s_filesystem);
 			fpf_blastp_analysis::normalise_v_s_filesystem_blastp_data(itr_v_s_filesystem);
+			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_s_filesystem);
 			std::cout << "\n\n ...data structures assigned";
 			std::cout << "\n\n outputting homology summary...";
 			fpf_blastp_analysis::fout_blastp_summary(itr_v_s_filesystem);

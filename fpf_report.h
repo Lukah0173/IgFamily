@@ -13,6 +13,7 @@
 #include <string>						// provides - std::string
 #include <vector>						// provides - vector
 #include <iomanip>						// provides - std::setprecision
+#include <math.h>						// provides - std::log10, std::floor
 
 #include "fpf_filesystem.h"
 
@@ -127,7 +128,26 @@ namespace fpf_report {
 					fout_html_report << "&nbsp";
 				}
 				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_evalue_transformed;
-				fout_html_report << "&nbsp&nbsp&nbsp" << itr_blastp_data.denovo_replicate_count;
+				if (itr_blastp_data.blastp_evalue_transformed < 1) {
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				}
+				else {
+					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_evalue_transformed))); ++j) {
+						fout_html_report << "&nbsp";
+					}
+				}
+				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_density;
+				fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
+				if (itr_blastp_data.blastp_parameter_score < 1) {
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				}
+				else {
+					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
+						fout_html_report << "&nbsp";
+					}
+				}
+				fout_html_report << itr_blastp_data.denovo_replicate_count;
 			}
 		}
 
@@ -229,7 +249,26 @@ namespace fpf_report {
 						fout_html_report << "&nbsp";
 					}
 					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_evalue_transformed;
-					fout_html_report << "&nbsp&nbsp&nbsp" << itr_blastp_data.denovo_replicate_count;
+					if (itr_blastp_data.blastp_evalue_transformed < 1) {
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+					}
+					else {
+						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_evalue_transformed))); ++j) {
+							fout_html_report << "&nbsp";
+						}
+					}
+					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_density;
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
+					if (itr_blastp_data.blastp_parameter_score < 1) {
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+					}
+					else {
+						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
+							fout_html_report << "&nbsp";
+						}
+					}
+					fout_html_report << itr_blastp_data.denovo_replicate_count;
 				}
 			}
 		}

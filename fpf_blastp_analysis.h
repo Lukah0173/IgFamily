@@ -254,7 +254,8 @@ namespace fpf_blastp_analysis {
 			if (itr_v_s_blastp.blastp_query != hold_str_blastp_subject) {
 				if (b_hold) {
 					for (auto& itr_hold_v_s_blastp : hold_v_s_blastp) {
-						itr_hold_v_s_blastp.blastp_evalue_transformed = log_base(((double(3) * PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 8);
+						//itr_hold_v_s_blastp.blastp_evalue_transformed = log_base(((double(3) * PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 2);
+						itr_hold_v_s_blastp.blastp_evalue_transformed = (itr_hold_v_s_blastp.blastp_evalue + 0.01);
 						con_v_s_blastp.push_back(itr_hold_v_s_blastp);
 					}
 				}
@@ -270,6 +271,19 @@ namespace fpf_blastp_analysis {
 			}
 		}
 		par_filesystem.v_blastp_data = con_v_s_blastp;
+	}
+
+	void determine_blastp_parameter_density(filesystem& par_filesystem) {
+		for (auto& itr_v_blastp : par_filesystem.v_blastp_data) {
+			double temp_evalue_transform_sum = double();
+			for (const auto& itr_v_blastp_2 : par_filesystem.v_blastp_data) {
+				if (itr_v_blastp.blastp_query == itr_v_blastp_2.blastp_query) {
+					temp_evalue_transform_sum += itr_v_blastp_2.blastp_evalue_transformed;
+				}
+			}
+			itr_v_blastp.blastp_parameter_density = (itr_v_blastp.blastp_evalue_transformed / temp_evalue_transform_sum);
+			itr_v_blastp.blastp_parameter_score = (itr_v_blastp.blastp_parameter_density * itr_v_blastp.blastp_evalue_transformed);
+		}
 	}
 
 	void fout_blastp_summary(filesystem par_filesystem) {
@@ -288,6 +302,8 @@ namespace fpf_blastp_analysis {
 			fout_blastp_summary << itr_v_s_blastp.blastp_subject_accession << ",";
 			fout_blastp_summary << itr_v_s_blastp.blastp_evalue << ",";
 			fout_blastp_summary << itr_v_s_blastp.blastp_evalue_transformed << ",";
+			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_density << ",";
+			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_score << ",";
 			fout_blastp_summary << "\n";
 		}
 		fout_blastp_summary.close();

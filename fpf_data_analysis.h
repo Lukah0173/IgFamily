@@ -84,10 +84,10 @@ namespace fpf_data_analysis {
 					}
 				}
 				if (itr_category_analysis.p_FASTA_category->category_class != "UNIPROT") {
-					itr_category_analysis.category_score += (itr_blastp_data.blastp_evalue_transformed * itr_blastp_data.denovo_replicate_count * 5);
+					itr_category_analysis.category_score += (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count * 5);
 				}
 				else {
-					itr_category_analysis.category_score += (itr_blastp_data.blastp_evalue_transformed * itr_blastp_data.denovo_replicate_count);
+					itr_category_analysis.category_score += (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
 				}
 			}
 		}
@@ -117,15 +117,15 @@ namespace fpf_data_analysis {
 							if ((itr_v_blastp.query_alignment.at(i) != '.') && (itr_v_s_blastp_2.query_alignment.at(i) != '.')) {
 								if (temp_blastp_query_alignment.query_alignment == "") {
 									temp_blastp_query_alignment.query_alignment = itr_v_blastp.query_alignment;
-									temp_blastp_query_alignment.blastp_evalue_transformed = itr_v_blastp.blastp_evalue_transformed;
+									temp_blastp_query_alignment.blastp_parameter_score = itr_v_blastp.blastp_parameter_score;
 									temp_blastp_query_alignment.denovo_replicate_count = itr_v_blastp.denovo_replicate_count;
 								}
-								if ((itr_v_s_blastp_2.blastp_evalue_transformed * itr_v_s_blastp_2.denovo_replicate_count) >= (temp_blastp_query_alignment.blastp_evalue_transformed * temp_blastp_query_alignment.denovo_replicate_count)) {
+								if ((itr_v_s_blastp_2.blastp_parameter_score * itr_v_s_blastp_2.denovo_replicate_count) >= (temp_blastp_query_alignment.blastp_parameter_score * temp_blastp_query_alignment.denovo_replicate_count)) {
 									if (temp_blastp_query_alignment.query_alignment != "") {
 										v_blastp_query_alignment_rejected.push_back(temp_blastp_query_alignment);
 									}
 									temp_blastp_query_alignment.query_alignment = itr_v_s_blastp_2.query_alignment;
-									temp_blastp_query_alignment.blastp_evalue_transformed = itr_v_s_blastp_2.blastp_evalue_transformed;
+									temp_blastp_query_alignment.blastp_parameter_score = itr_v_s_blastp_2.blastp_parameter_score;
 									temp_blastp_query_alignment.denovo_replicate_count = itr_v_s_blastp_2.denovo_replicate_count;
 								}
 								else {
@@ -195,7 +195,7 @@ namespace fpf_data_analysis {
 	}
 
 	inline bool predicate_blastp_data_with_spectralcount(const blastp_data& i, const blastp_data& j) {
-		return ((i.blastp_evalue_transformed * i.denovo_replicate_count) > (j.blastp_evalue_transformed * j.denovo_replicate_count));
+		return ((i.blastp_parameter_score * i.denovo_replicate_count) > (j.blastp_parameter_score * j.denovo_replicate_count));
 	}
 
 	inline void sort_v_blastp_data_with_spectralcount(vector<blastp_data>& par_v_blastp_data) {

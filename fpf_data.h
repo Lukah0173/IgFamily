@@ -78,6 +78,7 @@ namespace fpf_data {
 		double blastp_evalue;
 		double blastp_evalue_transformed;
 		double blastp_parameter_density;
+		double blastp_parameter_score;
 		FASTA_category* p_FASTA_category;
 		string query_alignment;
 		denovo_peptide denovo_peptide_best_averagelocalconfidence;
