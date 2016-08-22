@@ -56,30 +56,30 @@ int main() {
 
 	vector<string> v_str_root_dir = fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR);
 	vector<fpf_filesystem::filesystem> v_s_filesystem = fpf_filesystem::read_filesystem(v_str_root_dir);
-	for (auto& itr_v_s_filesystem : v_s_filesystem) {
-		if (itr_v_s_filesystem.fileconversion) {
-			//fpf_filesystem::perform_fileconversion(itr_v_s_filesystem);
+	for (auto& itr_v_filesystem : v_s_filesystem) {
+		if (itr_v_filesystem.fileconversion) {
+			//fpf_filesystem::perform_fileconversion(itr_v_filesystem);
 		}
 	}
 
 	vector<fpf_data::FASTA_category> main_v_s_multinomial_element_data = fpf_data::create_FASTA_category(main_v_c_parse_FASTA);
 
-	for (auto& itr_v_s_filesystem : v_s_filesystem) {
+	for (auto& itr_v_filesystem : v_s_filesystem) {
 		bool filesystem_modified = bool();
-		if ((IgFamily::FILESYSTEM_UPDATE_ALL) || (itr_v_s_filesystem.fileversion != IgFamily::version)) {
+		if ((IgFamily::FILESYSTEM_UPDATE_ALL) || (itr_v_filesystem.fileversion != IgFamily::version)) {
 			std::cout << "\n\n\n\n parsing data...";
-			main_v_c_parse_csv_proteinpeptides_data = fpf_filesystem::parse_filesystem_proteinpeptides(fpf_filesystem::read_filesystem_proteinpeptides(itr_v_s_filesystem.directory));
-			main_v_c_parse_csv_denovopeptides_data = fpf_filesystem::parse_filesystem_denovopeptides(fpf_filesystem::read_filesystem_denovopeptides(itr_v_s_filesystem.directory));
+			main_v_c_parse_csv_proteinpeptides_data = fpf_filesystem::parse_filesystem_proteinpeptides(fpf_filesystem::read_filesystem_proteinpeptides(itr_v_filesystem.directory));
+			main_v_c_parse_csv_denovopeptides_data = fpf_filesystem::parse_filesystem_denovopeptides(fpf_filesystem::read_filesystem_denovopeptides(itr_v_filesystem.directory));
 			filesystem_modified = true;
 		}
-		itr_v_s_filesystem.proteinpeptides_exist = fpf_parse::check_csv_proteinpeptides_empty(main_v_c_parse_csv_proteinpeptides_data, filesystem_modified);
-		itr_v_s_filesystem.denovopeptides_exist = fpf_parse::check_csv_denovopeptides_empty(main_v_c_parse_csv_denovopeptides_data, filesystem_modified);
+		itr_v_filesystem.proteinpeptides_exist = fpf_parse::check_csv_proteinpeptides_empty(main_v_c_parse_csv_proteinpeptides_data, filesystem_modified);
+		itr_v_filesystem.denovopeptides_exist = fpf_parse::check_csv_denovopeptides_empty(main_v_c_parse_csv_denovopeptides_data, filesystem_modified);
 
 		//if (fpf_filesystem::check_filesystem_current(main_v_c_parse_csv_proteinpeptides_data, main_v_c_parse_csv_denovopeptides_data, filesystem_modified)) {
 		//	return EXIT_FILESYTEM_CURRENT;
 		//}
 
-		if (itr_v_s_filesystem.proteinpeptides_exist) {
+		if (itr_v_filesystem.proteinpeptides_exist) {
 			std::cout << "\n\n * parsing " << main_v_c_parse_csv_proteinpeptides_data.begin()->csv_file;
 			std::cout << "\n\n ~ peptides parsed - " << main_v_c_parse_csv_proteinpeptides_data.size();
 			std::cout << "\n\n\n creating data structures...";
@@ -87,102 +87,101 @@ int main() {
 			std::cout << "\n\n ...data structures assigned";
 		}
 
-		if (itr_v_s_filesystem.denovopeptides_exist) {
+		if (itr_v_filesystem.denovopeptides_exist) {
 			std::cout << "\n\n * parsing " << main_v_c_parse_csv_denovopeptides_data.begin()->csv_file;
 			std::cout << "\n\n ~ peptides parsed - " << main_v_c_parse_csv_denovopeptides_data.size();
 			std::cout << "\n\n creating data structures...";
 			vector<fpf_data::peptide_data> main_v_c_denovopeptides_data = fpf_data::create_peptide_data(main_v_c_parse_csv_denovopeptides_data);
 			std::cout << "\n\n ...data structures assigned";
 
-			itr_v_s_filesystem.v_peptide_data = main_v_c_denovopeptides_data;
-			itr_v_s_filesystem.v_multinomial_category = main_v_s_multinomial_element_data;
+			itr_v_filesystem.v_peptide_data = main_v_c_denovopeptides_data;
+			itr_v_filesystem.v_multinomial_category = main_v_s_multinomial_element_data;
 		}
 	}
 
-	for (auto& itr_v_s_filesystem : v_s_filesystem) {
-		if (itr_v_s_filesystem.denovopeptides_exist) {
+	for (auto& itr_v_filesystem : v_s_filesystem) {
+		if (itr_v_filesystem.denovopeptides_exist) {
 			std::cout << "\n\n\n\n analysing homology for file ";
-			std::cout << itr_v_s_filesystem.filename;
+			std::cout << itr_v_filesystem.filename;
 			std::cout << "...";
-			fpf_blastp_analysis::create_blastp_input(itr_v_s_filesystem);
-			fpf_blastp_analysis::create_blastp_database(itr_v_s_filesystem);
-			fpf_blastp_analysis::sys_blastp(itr_v_s_filesystem);
+			fpf_blastp_analysis::create_blastp_input(itr_v_filesystem);
+			fpf_blastp_analysis::create_blastp_database(itr_v_filesystem);
+			fpf_blastp_analysis::sys_blastp(itr_v_filesystem);
 			std::cout << "\n\n\n ...homology analysis complete";
 			std::cout << "\n\n\n creating homology data structures...";
-			fpf_blastp_analysis::create_v_s_blastp(itr_v_s_filesystem);
-			fpf_blastp_analysis::modify_v_s_filesystem_blastp_data(itr_v_s_filesystem);
-			fpf_blastp_analysis::create_str_protein(itr_v_s_filesystem);
-			fpf_blastp_analysis::create_str_query_alignment(itr_v_s_filesystem);		
-			fpf_blastp_analysis::normalise_v_s_filesystem_blastp_data(itr_v_s_filesystem);
-			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_s_filesystem);
+			fpf_blastp_analysis::create_v_s_blastp(itr_v_filesystem);
+			fpf_blastp_analysis::modify_v_s_filesystem_blastp_data(itr_v_filesystem);
+			fpf_blastp_analysis::create_str_protein(itr_v_filesystem);
+			fpf_blastp_analysis::create_str_query_alignment(itr_v_filesystem);		
+			fpf_blastp_analysis::normalise_v_s_filesystem_blastp_data(itr_v_filesystem);
+			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem);
 			std::cout << "\n\n ...data structures assigned";
 			std::cout << "\n\n outputting homology summary...";
-			fpf_blastp_analysis::fout_blastp_summary(itr_v_s_filesystem);
+			fpf_blastp_analysis::fout_blastp_summary(itr_v_filesystem);
 			std::cout << "\n\n ...homology file ";
-			std::cout << itr_v_s_filesystem.filename;
+			std::cout << itr_v_filesystem.filename;
 			std::cout << " output";
 		}
 	}
 
 	std::cout << "\n\n\n\n scoring categories...\n";
-	for (auto& itr_v_s_filesystem : v_s_filesystem) {
-		if (itr_v_s_filesystem.denovopeptides_exist) {
-			fpf_data_analysis::create_category_analysis(itr_v_s_filesystem);
-			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_s_filesystem);
-			for (auto& itr_v_s_report : itr_v_s_filesystem.v_category_analysis) {
-				//fpf_report::sort_v_blastp_data(itr_v_s_report.v_blastp_data);
-				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_s_report.v_blastp_data_combined_by_category);
+	for (auto& itr_v_filesystem : v_s_filesystem) {
+		if (itr_v_filesystem.denovopeptides_exist) {
+			fpf_data_analysis::create_category_analysis(itr_v_filesystem);
+			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem);
+			for (auto& itr_v_category_analysis : itr_v_filesystem.v_category_analysis) {
+				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_category_analysis.v_blastp_data_combined_by_category);
 			}
-			fpf_data_analysis::sort_v_category_analysis(itr_v_s_filesystem.v_category_analysis);
+			fpf_data_analysis::sort_v_category_analysis(itr_v_filesystem.v_category_analysis);
 		}
 	}
 
 	std::cout << "\n\n\n\n determining most-probable germline representation...\n";
-	for (auto& itr_v_s_filesystem : v_s_filesystem) {
-		if (itr_v_s_filesystem.denovopeptides_exist) {
-			fpf_data_analysis::select_category_analysis_by_score(itr_v_s_filesystem);
-			fpf_blastp_analysis::create_blastp_database_refined(itr_v_s_filesystem);
-			fpf_blastp_analysis::sys_blastp(itr_v_s_filesystem);
+	for (auto& itr_v_filesystem : v_s_filesystem) {
+		if (itr_v_filesystem.denovopeptides_exist) {
+			fpf_data_analysis::select_category_analysis_by_score(itr_v_filesystem);
+			fpf_blastp_analysis::create_blastp_database_refined(itr_v_filesystem);
+			fpf_blastp_analysis::sys_blastp(itr_v_filesystem);
 			std::cout << "\n\n\n ...homology analysis complete";
 			std::cout << "\n\n\n creating homology data structures...";
-			fpf_blastp_analysis::create_v_s_blastp(itr_v_s_filesystem);
-			fpf_blastp_analysis::modify_v_s_filesystem_blastp_data(itr_v_s_filesystem);
-			fpf_blastp_analysis::create_str_protein_from_category_analysis(itr_v_s_filesystem);
-			fpf_blastp_analysis::create_str_query_alignment(itr_v_s_filesystem);
-			fpf_blastp_analysis::normalise_v_s_filesystem_blastp_data(itr_v_s_filesystem);
-			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_s_filesystem);
+			fpf_blastp_analysis::create_v_s_blastp(itr_v_filesystem);
+			fpf_blastp_analysis::modify_v_s_filesystem_blastp_data(itr_v_filesystem);
+			fpf_blastp_analysis::create_str_protein_from_category_analysis(itr_v_filesystem);
+			fpf_blastp_analysis::create_str_query_alignment(itr_v_filesystem);
+			fpf_blastp_analysis::normalise_v_s_filesystem_blastp_data(itr_v_filesystem);
+			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem);
 			std::cout << "\n\n ...data structures assigned";
 			std::cout << "\n\n outputting homology summary...";
-			fpf_blastp_analysis::fout_blastp_summary(itr_v_s_filesystem);
+			fpf_blastp_analysis::fout_blastp_summary(itr_v_filesystem);
 			std::cout << "\n\n ...homology file ";
-			std::cout << itr_v_s_filesystem.filename;
+			std::cout << itr_v_filesystem.filename;
 			std::cout << " output";
 		}
 	}
 
 	std::cout << "\n\n\n\n creating multinomial data frames...\n";
-	for (auto& itr_v_s_filesystem : v_s_filesystem) {
-		if (itr_v_s_filesystem.denovopeptides_exist) {
-			fpf_multinomial::create_filesystem_multinomial_data(itr_v_s_filesystem);
-			fpf_multinomial::fout_multinomial(itr_v_s_filesystem);
-			fpf_multinomial::fout_multinomial_element(itr_v_s_filesystem);
-			fpf_multinomial::fout_multinomial_element_nomatch(itr_v_s_filesystem);
+	for (auto& itr_v_filesystem : v_s_filesystem) {
+		if (itr_v_filesystem.denovopeptides_exist) {
+			fpf_multinomial::create_filesystem_multinomial_data(itr_v_filesystem);
+			fpf_multinomial::fout_multinomial(itr_v_filesystem);
+			fpf_multinomial::fout_multinomial_element(itr_v_filesystem);
+			fpf_multinomial::fout_multinomial_element_nomatch(itr_v_filesystem);
 		}
 	}
 
 	std::cout << "\n\n\n\n producing summary reports...\n";
-	for (auto& itr_v_s_filesystem : v_s_filesystem) {
-		if (itr_v_s_filesystem.denovopeptides_exist) {
-			std::cout << "\n\n ...generating multinomial report for " << itr_v_s_filesystem.filename;
-			fpf_report::fout_multinomial_comparison(itr_v_s_filesystem);
-			std::cout << "\n\n ...generating html report for " << itr_v_s_filesystem.filename;
-			fpf_report::fout_html_report(itr_v_s_filesystem);
-			fpf_report::fout_html_report_filtered(itr_v_s_filesystem);
+	for (auto& itr_v_filesystem : v_s_filesystem) {
+		if (itr_v_filesystem.denovopeptides_exist) {
+			std::cout << "\n\n ...generating multinomial report for " << itr_v_filesystem.filename;
+			fpf_report::fout_multinomial_comparison(itr_v_filesystem);
+			std::cout << "\n\n ...generating html report for " << itr_v_filesystem.filename;
+			fpf_report::fout_html_report(itr_v_filesystem);
+			fpf_report::fout_html_report_filtered(itr_v_filesystem);
 		}
 	}
 
-	for (auto itr_v_s_filesystem : v_s_filesystem) {
-		fpf_filesystem::fout_filesystem(itr_v_s_filesystem);
+	for (auto itr_v_filesystem : v_s_filesystem) {
+		fpf_filesystem::fout_filesystem(itr_v_filesystem);
 	}
 
 

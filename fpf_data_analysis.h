@@ -95,43 +95,47 @@ namespace fpf_data_analysis {
 		par_filesystem.v_category_analysis = temp_v_category_analysis;
 	}
 
+	inline bool predicate_blastp_data_with_spectralcount(const blastp_data& i, const blastp_data& j) {
+		return ((i.blastp_parameter_score * i.denovo_replicate_count) > (j.blastp_parameter_score * j.denovo_replicate_count));
+	}
+
+	inline void sort_v_blastp_data_with_spectralcount(vector<blastp_data>& par_v_blastp_data) {
+		std::sort(par_v_blastp_data.begin(), par_v_blastp_data.end(), predicate_blastp_data_with_spectralcount);
+	}
+
+	inline bool predicate_category_analysis(const category_analysis& i, const category_analysis& j) {
+		return (i.category_score > j.category_score);
+	}
+
+	inline void sort_v_category_analysis(vector<category_analysis>& par_v_blastp_data) {
+		std::sort(par_v_blastp_data.begin(), par_v_blastp_data.end(), predicate_category_analysis);
+	}
+
 	void create_proteinconstruct_from_denovo(filesystem& par_filesystem) {
 		for (auto& itr_category_analysis : par_filesystem.v_category_analysis) {
 			for (size_t i = 0; i < itr_category_analysis.p_FASTA_category->category_protein.length(); ++i) {
-				proteinconstruct_from_denovo temp_proteinconstruct_from_denovo = proteinconstruct_from_denovo();
+				proteinconstruct_from_denovo temp_proteinconstruct_from_denovo{};
 				temp_proteinconstruct_from_denovo.aminoacid = '.';
 				temp_proteinconstruct_from_denovo.aminoacid_score = 0;
 				itr_category_analysis.proteinconstruct_from_denovo.push_back(temp_proteinconstruct_from_denovo);
 			}
-			vector<blastp_data> v_blastp_query_alignment_selected = vector<blastp_data>();
-			vector<blastp_data> v_blastp_query_alignment_rejected = vector<blastp_data>();
-			for (const auto itr_v_blastp : itr_category_analysis.v_blastp_data_combined_by_category) {
-				const auto find_str_blastp_query_alignment_rejected = std::find_if(v_blastp_query_alignment_rejected.begin(), v_blastp_query_alignment_rejected.end(),
-					[itr_v_blastp](const blastp_data par_s_blastp) {
-					return par_s_blastp.query_alignment == itr_v_blastp.query_alignment;
+			sort_v_blastp_data_with_spectralcount(itr_category_analysis.v_blastp_data_combined_by_category);
+			vector<blastp_data> v_blastp_query_alignment_selected{};
+			vector<blastp_data> v_blastp_query_alignment_rejected{};
+			for (const auto itr_v_blastp_data : itr_category_analysis.v_blastp_data_combined_by_category) {
+				const auto find_blastp_query_alignment_rejected = std::find_if(v_blastp_query_alignment_rejected.begin(), v_blastp_query_alignment_rejected.end(),
+					[itr_v_blastp_data](const blastp_data par_s_blastp) {
+					return par_s_blastp.query_alignment == itr_v_blastp_data.query_alignment;
 				});
-				if (find_str_blastp_query_alignment_rejected == v_blastp_query_alignment_rejected.end()) {
-					blastp_data temp_blastp_query_alignment = blastp_data();
-					for (const auto itr_v_s_blastp_2 : itr_category_analysis.v_blastp_data_combined_by_category) {
-						for (auto i = 0; i < itr_v_blastp.query_alignment.length(); ++i) {
-							if ((itr_v_blastp.query_alignment.at(i) != '.') && (itr_v_s_blastp_2.query_alignment.at(i) != '.')) {
-								if (temp_blastp_query_alignment.query_alignment == "") {
-									temp_blastp_query_alignment.query_alignment = itr_v_blastp.query_alignment;
-									temp_blastp_query_alignment.blastp_parameter_score = itr_v_blastp.blastp_parameter_score;
-									temp_blastp_query_alignment.denovo_replicate_count = itr_v_blastp.denovo_replicate_count;
-								}
-								if ((itr_v_s_blastp_2.blastp_parameter_score * itr_v_s_blastp_2.denovo_replicate_count) >= (temp_blastp_query_alignment.blastp_parameter_score * temp_blastp_query_alignment.denovo_replicate_count)) {
-									if (temp_blastp_query_alignment.query_alignment != "") {
-										v_blastp_query_alignment_rejected.push_back(temp_blastp_query_alignment);
-									}
-									temp_blastp_query_alignment.query_alignment = itr_v_s_blastp_2.query_alignment;
-									temp_blastp_query_alignment.blastp_parameter_score = itr_v_s_blastp_2.blastp_parameter_score;
-									temp_blastp_query_alignment.denovo_replicate_count = itr_v_s_blastp_2.denovo_replicate_count;
-								}
-								else {
-									v_blastp_query_alignment_rejected.push_back(itr_v_s_blastp_2);
-								}
-								break;
+				if (find_blastp_query_alignment_rejected == v_blastp_query_alignment_rejected.end()) {
+					blastp_data temp_blastp_query_alignment{};
+					temp_blastp_query_alignment.query_alignment = itr_v_blastp_data.query_alignment;
+					temp_blastp_query_alignment.blastp_parameter_score = itr_v_blastp_data.blastp_parameter_score;
+					temp_blastp_query_alignment.denovo_replicate_count = itr_v_blastp_data.denovo_replicate_count;
+					for (const auto itr_v_blastp_data_2 : itr_category_analysis.v_blastp_data_combined_by_category) {
+						for (auto i = 0; i < itr_v_blastp_data.query_alignment.length(); ++i) {
+							if ((itr_v_blastp_data.query_alignment.at(i) != '.') && (itr_v_blastp_data_2.query_alignment.at(i) != '.')) {
+								v_blastp_query_alignment_rejected.push_back(itr_v_blastp_data_2);
 							}
 						}
 					}
@@ -152,7 +156,7 @@ namespace fpf_data_analysis {
 	}
 
 	void select_category_analysis_by_score(filesystem& par_filesystem) {
-		vector<category_analysis> temp_v_category_analysis_selected_by_polymorphism = vector<category_analysis>();
+		vector<category_analysis> temp_v_category_analysis_selected_by_polymorphism{};
 		for (const auto itr_v_category_analysis : par_filesystem.v_category_analysis) {
 			if (itr_v_category_analysis.p_FASTA_category->category_type == "IG") {
 				string category_name_polymorphism_reduced = string();
@@ -184,30 +188,6 @@ namespace fpf_data_analysis {
 			}
 		}
 		par_filesystem.v_category_analysis_selected_by_polymorphism = temp_v_category_analysis_selected_by_polymorphism;
-	}
-
-	inline bool predicate_blastp_data(const blastp_data& i, const blastp_data& j) {
-		return (i.blastp_evalue_transformed > j.blastp_evalue_transformed);
-	}
-
-	inline void sort_v_blastp_data(vector<blastp_data>& par_v_blastp_data) {
-		std::sort(par_v_blastp_data.begin(), par_v_blastp_data.end(), predicate_blastp_data);
-	}
-
-	inline bool predicate_blastp_data_with_spectralcount(const blastp_data& i, const blastp_data& j) {
-		return ((i.blastp_parameter_score * i.denovo_replicate_count) > (j.blastp_parameter_score * j.denovo_replicate_count));
-	}
-
-	inline void sort_v_blastp_data_with_spectralcount(vector<blastp_data>& par_v_blastp_data) {
-		std::sort(par_v_blastp_data.begin(), par_v_blastp_data.end(), predicate_blastp_data_with_spectralcount);
-	}
-
-	inline bool predicate_category_analysis(const category_analysis& i, const category_analysis& j) {
-		return (i.category_score > j.category_score);
-	}
-
-	inline void sort_v_category_analysis(vector<category_analysis>& par_v_blastp_data) {
-		std::sort(par_v_blastp_data.begin(), par_v_blastp_data.end(), predicate_category_analysis);
 	}
 }
 

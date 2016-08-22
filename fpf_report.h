@@ -77,7 +77,7 @@ namespace fpf_report {
 					if ((itr_proteinconstruct_from_denovo.aminoacid_score <= 5) && (itr_proteinconstruct_from_denovo.aminoacid_score > 2)) {
 						fout_html_report << "<font color=\"#E67E22\">";
 					}
-					if (itr_proteinconstruct_from_denovo.aminoacid_score < 2) {
+					if (itr_proteinconstruct_from_denovo.aminoacid_score <= 2) {
 						fout_html_report << "<font color=\"red\">";
 					}					
 				}
@@ -207,7 +207,7 @@ namespace fpf_report {
 						if ((itr_proteinconstruct_from_denovo.aminoacid_score <= 5) && (itr_proteinconstruct_from_denovo.aminoacid_score > 2)) {
 							fout_html_report << "<font color=\"#E67E22\">";
 						}
-						if (itr_proteinconstruct_from_denovo.aminoacid_score < 2) {
+						if (itr_proteinconstruct_from_denovo.aminoacid_score <= 2) {
 							fout_html_report << "<font color=\"red\">";
 						}
 					}

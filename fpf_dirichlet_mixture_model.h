@@ -76,14 +76,14 @@ namespace fpf_dirichlet_mixture_model {
 	//	}
 	//	for (auto itr_v_blastp_filesystem_data : par_v_blastp_filesystem_data) {
 	//		con_s_model_data.v_str_mnom_xlabel.push_back(itr_v_blastp_filesystem_data.str_blastp_file);
-	//		for (auto itr_v_s_filesystem_mnom : itr_v_blastp_filesystem_data.v_s_filesystem_mnom) {
+	//		for (auto itr_v_filesystem_mnom : itr_v_blastp_filesystem_data.v_s_filesystem_mnom) {
 	//			auto find_v_str_mnom_xlabel = std::find_if(con_s_model_data.v_str_mnom_xlabel.begin(),
 	//													   con_s_model_data.v_str_mnom_xlabel.end(),
-	//													   [itr_v_s_filesystem_mnom](string par_str_mnom_xlabel) {
-	//				return par_str_mnom_xlabel == itr_v_s_filesystem_mnom.str_mnom_comp;
+	//													   [itr_v_filesystem_mnom](string par_str_mnom_xlabel) {
+	//				return par_str_mnom_xlabel == itr_v_filesystem_mnom.str_mnom_comp;
 	//			});
 	//			auto index_mnom_xlabel = std::distance(con_s_model_data.v_str_mnom_xlabel.begin(), find_v_str_mnom_xlabel);
-	//			con_v2_d_mnom_val[index_mnom_xlabel].push_back(itr_v_s_filesystem_mnom.d_mnom_value);
+	//			con_v2_d_mnom_val[index_mnom_xlabel].push_back(itr_v_filesystem_mnom.d_mnom_value);
 	//		}
 	//	}
 	//	return con_s_model_data;

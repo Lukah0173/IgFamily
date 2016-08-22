@@ -123,9 +123,6 @@ namespace fpf_data {
 					itr_parse_FASTA.return_FASTA_protein()};
 				temp_v_FASTA_category.push_back(temp_FASTA_category);
 			}
-			//else {
-			//	find_v_FASTA_element->category_protein = find_v_FASTA_element->category_name + itr_parse_FASTA.return_FASTA_protein();
-			//}
 		}
 		return temp_v_FASTA_category;
 	}
