@@ -55,7 +55,7 @@ namespace fpf_blastp_analysis {
 		string output_blastp_database_FASTA = "blast_directory\\blastp_database.fasta";
 		std::ofstream fout_blastp_database_FASTA;
 		fout_blastp_database_FASTA.open(output_blastp_database_FASTA);
-		for (auto itr_v_multinomial_category : par_filesystem.v_multinomial_category) {
+		for (auto itr_v_multinomial_category : par_filesystem.v_FASTA_category) {
 			fout_blastp_database_FASTA << ">" << itr_v_multinomial_category.category_name << "\n";
 			for (size_t i = 0; i < itr_v_multinomial_category.category_protein.length(); ++i) {
 				if ((i % 60 == 0) && (i != 0)) {
@@ -105,7 +105,7 @@ namespace fpf_blastp_analysis {
 		system(string_system.c_str());
 	}
 
-	void create_v_s_blastp(filesystem& par_filesystem) {
+	void create_v_blastp_data(filesystem& par_filesystem) {
 		if (par_filesystem.denovopeptides_exist) {
 			size_t blastp_data_count_delimit = size_t(1);
 			string blastp_data_output = "blast_directory\\" + par_filesystem.filename + "_blastp_output.csv";
@@ -151,24 +151,24 @@ namespace fpf_blastp_analysis {
 	}
 
 	void create_str_protein(filesystem& par_filesystem) {
-		for (auto& itr_v_s_blastp : par_filesystem.v_blastp_data) {
-			auto& find_str_genefamily = std::find_if(par_filesystem.v_multinomial_category.begin(), par_filesystem.v_multinomial_category.end(),
-				[itr_v_s_blastp](FASTA_category par_s_multinomial_element_data) {
-				return par_s_multinomial_element_data.category_name == itr_v_s_blastp.blastp_subject_accession;
+		for (auto& itr_v_blastp_data : par_filesystem.v_blastp_data) {
+			auto& find_category_name = std::find_if(par_filesystem.v_FASTA_category.begin(), par_filesystem.v_FASTA_category.end(),
+				[itr_v_blastp_data](FASTA_category par_s_multinomial_element_data) {
+				return par_s_multinomial_element_data.category_name == itr_v_blastp_data.blastp_subject_accession;
 			});
-			if (find_str_genefamily == par_filesystem.v_multinomial_category.end()) {
+			if (find_category_name == par_filesystem.v_FASTA_category.end()) {
 				std::cout << "\n\n error - std::find_if returns nullptr";
-				std::cout << "\n\n" << itr_v_s_blastp.blastp_subject_accession;
+				std::cout << "\n\n" << itr_v_blastp_data.blastp_subject_accession;
 				string catch_error;
 				std::cin >> catch_error;
 			}
-			itr_v_s_blastp.p_FASTA_category = &(*find_str_genefamily);
-			itr_v_s_blastp.blastp_subject_accession_class = find_str_genefamily->category_class;
+			itr_v_blastp_data.p_FASTA_category = &(*find_category_name);
+			itr_v_blastp_data.blastp_subject_accession_class = find_category_name->category_class;
 
 		}
 	}
 
-	void create_str_protein_from_category_analysis(filesystem& par_filesystem) {
+	void create_protein_from_category_analysis(filesystem& par_filesystem) {
 		for (auto& itr_v_blastp_data : par_filesystem.v_blastp_data) {
 			auto find_category_name = std::find_if(par_filesystem.v_category_analysis_selected_by_polymorphism.begin(), par_filesystem.v_category_analysis_selected_by_polymorphism.end(),
 				[itr_v_blastp_data](category_analysis par_category_analysis) {
@@ -185,40 +185,40 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void create_str_query_alignment(filesystem& par_filesystem) {
+	void create_query_alignment(filesystem& par_filesystem) {
 		string temp_query_alignment{};
-		size_t st_index_match = 1;
-		for (auto& itr_v_s_blastp : par_filesystem.v_blastp_data) {
-			for (auto itr_str_protein : itr_v_s_blastp.p_FASTA_category->category_protein) {
-				if (st_index_match == itr_v_s_blastp.blastp_subject_alignment_index) {
-					if (temp_query_alignment.length() >= itr_v_s_blastp.blastp_query_alignment_index) {
-						temp_query_alignment.resize(temp_query_alignment.length() - itr_v_s_blastp.blastp_query_alignment_index + 1);
+		size_t index_match = 1;
+		for (auto& itr_v_blastp_data : par_filesystem.v_blastp_data) {
+			for (auto itr_category_protein : itr_v_blastp_data.p_FASTA_category->category_protein) {
+				if (index_match == itr_v_blastp_data.blastp_subject_alignment_index) {
+					if (temp_query_alignment.length() >= itr_v_blastp_data.blastp_query_alignment_index) {
+						temp_query_alignment.resize(temp_query_alignment.length() - itr_v_blastp_data.blastp_query_alignment_index + 1);
 					}
 					else {
 						temp_query_alignment.resize(0);
 					}
-					temp_query_alignment += itr_v_s_blastp.blastp_query;
-					for (size_t i = 0; i < (itr_v_s_blastp.blastp_query_alignment_index - 1); ++i) {
+					temp_query_alignment += itr_v_blastp_data.blastp_query;
+					for (size_t i = 0; i < (itr_v_blastp_data.blastp_query_alignment_index - 1); ++i) {
 						temp_query_alignment += ".";
 					}
 				}
 				else {
 					temp_query_alignment += ".";
 				}
-				++st_index_match;
+				++index_match;
 			}
-			if (temp_query_alignment.length() > itr_v_s_blastp.blastp_query.length() + 1) {
-				temp_query_alignment.resize(temp_query_alignment.length() - itr_v_s_blastp.blastp_query.length() + 1);
+			if (temp_query_alignment.length() > itr_v_blastp_data.blastp_query.length() + 1) {
+				temp_query_alignment.resize(temp_query_alignment.length() - itr_v_blastp_data.blastp_query.length() + 1);
 			} else {
-				std::cout << "\n\n ~~~ possible bad query: " << itr_v_s_blastp.p_FASTA_category->category_protein;
+				std::cout << "\n\n ~~~ possible bad query: " << itr_v_blastp_data.p_FASTA_category->category_protein;
 			}
-			itr_v_s_blastp.query_alignment = temp_query_alignment;
+			itr_v_blastp_data.query_alignment = temp_query_alignment;
 			temp_query_alignment.clear();
-			st_index_match = 1;
+			index_match = 1;
 		}
 	}
 
-	void modify_v_s_filesystem_blastp_data(filesystem& par_filesystem) {
+	void modify_filesystem_blastp_data(filesystem& par_filesystem) {
 		for (auto& itr_v_c_blastp : par_filesystem.v_blastp_data) {
 			bool b_parse_query_accession{};
 			string temp_parse_query_accession{};
@@ -243,7 +243,7 @@ namespace fpf_blastp_analysis {
 		return (log(d) / log(base));
 	}
 
-	void normalise_v_s_filesystem_blastp_data(filesystem& par_filesystem) {
+	void normalise_blastp_data(filesystem& par_filesystem) {
 		vector<blastp_data> temp_v_blastp_data{};
 		vector<blastp_data> hold_v_blastp_data{};
 		string hold_blastp_subject{};

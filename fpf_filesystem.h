@@ -69,8 +69,8 @@ namespace fpf_filesystem {
 
 		/* sample data */
 
-		vector<FASTA_category> v_multinomial_category;
-		vector<FASTA_category*> pv_multinomial_category_distinct_polymorphism;
+		vector<FASTA_category> v_FASTA_category;
+		vector<FASTA_category*> pv_FASTA_category_distinct_polymorphism;
 		vector<peptide_data> v_peptide_data;
 
 		/* blastp data */
