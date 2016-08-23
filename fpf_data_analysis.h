@@ -56,29 +56,30 @@ namespace fpf_data_analysis {
 		}
 		for (auto& itr_category_analysis : temp_v_category_analysis) {
 			for (auto& itr_blastp_data : itr_category_analysis.v_blastp_data_combined_by_category) {
-				const auto find_peptide_data = std::find_if(par_filesystem.v_peptide_data.begin(), par_filesystem.v_peptide_data.end(),
+				auto& find_peptide_data = std::find_if(par_filesystem.v_peptide_data.begin(), par_filesystem.v_peptide_data.end(),
 					[itr_blastp_data](const peptide_data par_peptide_data) {
 					return par_peptide_data.peptide_filtered == itr_blastp_data.blastp_query;
 				});
 				if (find_peptide_data == par_filesystem.v_peptide_data.end()) {
 					std::cout << "\n\n ERROR: ";
 					std::cout << "\n\n find_peptide_data == par_filesystem.v_peptide_data.end()";
-					string str_catch_error;
-					std::cin >> str_catch_error;
+					string catch_error{};
+					std::cin >> catch_error;
 				}
 				else {
-					itr_blastp_data.denovo_peptide_best_averagelocalconfidence = denovo_peptide();
-					for (const auto itr_denovo_peptide : find_peptide_data->v_denovo_peptide_data) {
+					itr_blastp_data.p_peptide_data = &(*find_peptide_data);
+					itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence = new denovo_peptide();
+					for (auto& itr_denovo_peptide : find_peptide_data->v_denovo_peptide_data) {						
 						if (find_peptide_data->v_denovo_peptide_data.size() == 0) {
 							std::cout << "\n\n ERROR: ";
-							std::cout << "\n\n find_peptide_data->v_s_denovo_peptide.size() == 0";
-							string str_catch_error{};
-							std::cin >> str_catch_error;
+							std::cout << "\n\n find_peptide_data->v_denovo_peptide.size() == 0";
+							string catch_error{};
+							std::cin >> catch_error;
 						}
 						else {
 							++itr_blastp_data.denovo_replicate_count;
-							if (itr_blastp_data.denovo_peptide_best_averagelocalconfidence.localconfidence_average < itr_denovo_peptide.localconfidence_average) {
-								itr_blastp_data.denovo_peptide_best_averagelocalconfidence = itr_denovo_peptide;
+							if (itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average < itr_denovo_peptide.localconfidence_average) {
+								itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence = &itr_denovo_peptide;
 							}
 						}
 					}
@@ -130,6 +131,7 @@ namespace fpf_data_analysis {
 				if (find_blastp_query_alignment_rejected == v_blastp_query_alignment_rejected.end()) {
 					blastp_data temp_blastp_query_alignment{};
 					temp_blastp_query_alignment.query_alignment = itr_v_blastp_data.query_alignment;
+					temp_blastp_query_alignment.blastp_evalue_transformed = itr_v_blastp_data.blastp_evalue_transformed;
 					temp_blastp_query_alignment.blastp_parameter_score = itr_v_blastp_data.blastp_parameter_score;
 					temp_blastp_query_alignment.denovo_replicate_count = itr_v_blastp_data.denovo_replicate_count;
 					for (const auto itr_v_blastp_data_2 : itr_category_analysis.v_blastp_data_combined_by_category) {
@@ -149,8 +151,10 @@ namespace fpf_data_analysis {
 			for (auto i = 0; i < itr_category_analysis.p_FASTA_category->category_protein.length(); ++i) {
 				for (const auto& itr_blastp_query_alignment_selected : v_blastp_query_alignment_selected) {
 					if (itr_blastp_query_alignment_selected.query_alignment.at(i) != '.') {
-						itr_category_analysis.proteinconstruct_from_denovo[i].aminoacid = itr_blastp_query_alignment_selected.query_alignment.at(i);
-						itr_category_analysis.proteinconstruct_from_denovo[i].aminoacid_score = itr_blastp_query_alignment_selected.blastp_evalue_transformed;
+						if (itr_blastp_query_alignment_selected.blastp_evalue_transformed > itr_category_analysis.proteinconstruct_from_denovo[i].aminoacid_score) {
+							itr_category_analysis.proteinconstruct_from_denovo[i].aminoacid = itr_blastp_query_alignment_selected.query_alignment.at(i);
+							itr_category_analysis.proteinconstruct_from_denovo[i].aminoacid_score = itr_blastp_query_alignment_selected.blastp_evalue_transformed;
+						}
 					}
 				}
 			}

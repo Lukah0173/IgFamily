@@ -106,8 +106,8 @@ namespace fpf_convert {
 			fileconversion.s_ms2denoise.st_ms2denoise_peaksinwindow = 6;
 			fileconversion.s_chargestatepredictor.b_chargestatepredictor = true;
 			fileconversion.s_chargestatepredictor.b_chargestatepredictor = true;
-			fileconversion.s_chargestatepredictor.st_chargestatepredictor_mincharge = 2;
 			fileconversion.s_chargestatepredictor.st_chargestatepredictor_maxcharge = 3;
+			fileconversion.s_chargestatepredictor.st_chargestatepredictor_mincharge = 2;
 			fileconversion.s_chargestatepredictor.d_chargestatepredictor_chargefraction = 0.9;
 		}
 		return fileconversion;
@@ -115,7 +115,7 @@ namespace fpf_convert {
 
 	void sys_msconvert(string par_str_msconvert_command, string par_str_filesystem_directory) {
 		std::cout << "\n\n";
-		string string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\ProteoWizard\\";
+		string string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\proteowizard\\";
 		string_system += " && ";
 		string_system += par_str_msconvert_command;
 		system(string_system.c_str());

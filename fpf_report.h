@@ -15,6 +15,7 @@
 #include <iomanip>						// provides - std::setprecision
 #include <math.h>						// provides - std::log10, std::floor
 
+#include "IgFamily.h"
 #include "fpf_filesystem.h"
 
 
@@ -38,7 +39,13 @@ namespace fpf_report {
 	}
 
 	void fout_html_report(filesystem& par_filesystem) {
-		std::string output_html_report = par_filesystem.directory + "report.html";
+		std::string output_html_report{};
+		if (IgFamily::NOVOR_DENOVO) {
+			output_html_report = par_filesystem.directory + "NOVOR_report.html";
+		}
+		else {
+			output_html_report = par_filesystem.directory + "report.html";
+		}
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);
 		vector<string> dummy;
@@ -71,15 +78,15 @@ namespace fpf_report {
 					if (itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(foo)) {
 						fout_html_report << "<span class=\"mismatch\">";
 					}
-					if (itr_proteinconstruct_from_denovo.aminoacid_score > 5) {
+					if (itr_proteinconstruct_from_denovo.aminoacid_score > 25) {
 						fout_html_report << "<font color=\"#239B56\">";
 					}
-					if ((itr_proteinconstruct_from_denovo.aminoacid_score <= 5) && (itr_proteinconstruct_from_denovo.aminoacid_score > 2)) {
+					if ((itr_proteinconstruct_from_denovo.aminoacid_score <= 25) && (itr_proteinconstruct_from_denovo.aminoacid_score > 15)) {
 						fout_html_report << "<font color=\"#E67E22\">";
 					}
-					if (itr_proteinconstruct_from_denovo.aminoacid_score <= 2) {
+					if (itr_proteinconstruct_from_denovo.aminoacid_score <= 15) {
 						fout_html_report << "<font color=\"red\">";
-					}					
+					}
 				}
 				fout_html_report << itr_proteinconstruct_from_denovo.aminoacid;
 				if (itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(foo)) {
@@ -102,7 +109,7 @@ namespace fpf_report {
 						++i;
 					}
 					else {
-						for (const auto& itr_denovo_aminoacid : itr_blastp_data.denovo_peptide_best_averagelocalconfidence.v_denovo_aminoacid) {
+						for (const auto& itr_denovo_aminoacid : itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
 							if ((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i))) {
 								fout_html_report << "<span class=\"mismatch\">";
 							}
@@ -167,7 +174,13 @@ namespace fpf_report {
 	}
 
 	void fout_html_report_filtered(filesystem& par_filesystem) {
-		std::string output_html_report = par_filesystem.directory + "report_IG.html";
+		std::string output_html_report{};
+		if (IgFamily::NOVOR_DENOVO) {
+			output_html_report = par_filesystem.directory + "NOVOR_report_IG.html";
+		}
+		else {
+			output_html_report = par_filesystem.directory + "report_IG.html";
+		}
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);
 		vector<string> dummy;
@@ -201,13 +214,13 @@ namespace fpf_report {
 						if (itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(foo)) {
 							fout_html_report << "<span class=\"mismatch\">";
 						}
-						if (itr_proteinconstruct_from_denovo.aminoacid_score > 5) {
+						if (itr_proteinconstruct_from_denovo.aminoacid_score > 25) {
 							fout_html_report << "<font color=\"#239B56\">";
 						}
-						if ((itr_proteinconstruct_from_denovo.aminoacid_score <= 5) && (itr_proteinconstruct_from_denovo.aminoacid_score > 2)) {
+						if ((itr_proteinconstruct_from_denovo.aminoacid_score <= 25) && (itr_proteinconstruct_from_denovo.aminoacid_score > 15)) {
 							fout_html_report << "<font color=\"#E67E22\">";
 						}
-						if (itr_proteinconstruct_from_denovo.aminoacid_score <= 2) {
+						if (itr_proteinconstruct_from_denovo.aminoacid_score <= 15) {
 							fout_html_report << "<font color=\"red\">";
 						}
 					}
@@ -232,7 +245,7 @@ namespace fpf_report {
 							++i;
 						}
 						else {
-							for (const auto& itr_denovo_aminoacid : itr_blastp_data.denovo_peptide_best_averagelocalconfidence.v_denovo_aminoacid) {
+							for (const auto& itr_denovo_aminoacid : itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
 								if ((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i))) {
 									fout_html_report << "<span class=\"mismatch\">";
 								}

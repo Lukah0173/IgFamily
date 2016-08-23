@@ -59,9 +59,9 @@ namespace fpf_dirichlet_mixture_model {
 	};
 
 	void initialise() {
-		std::cout << "\n\n\n\n" << " ...initialising Dirichlet mixture model";
-		//std::cout << "\n\n" << " Dirichlet mixture components? (Recommended: 5)";
-		std::cout << "\n\n";
+		//cout << "\n\n\n\n" << " ...initialising Dirichlet mixture model";
+		//cout << "\n\n" << " Dirichlet mixture components? (Recommended: 5)";
+		//cout << "\n\n";
 		//std::cin >> s_model_parameters.st_mix_comp;
 	}
 

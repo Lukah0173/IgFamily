@@ -52,6 +52,7 @@ namespace fpf_data {
 		size_t spectralcount;
 		size_t denovo_replicate_count;
 		vector<denovo_peptide> v_denovo_peptide_data;
+		denovo_peptide* p_denovo_peptide_best_by_averagelocalconfidence;
 		size_t filesystem_sample_replicate_count = size_t{ 1 };
 		bool filesystem_sample_replicate_merged = bool();
 		vector<tuple<string, size_t, size_t>> v_filesystem_sample_replicate_data;
@@ -68,6 +69,8 @@ namespace fpf_data {
 
 	struct blastp_data {
 	public:
+		FASTA_category* p_FASTA_category;
+		peptide_data* p_peptide_data;
 		string blastp_query;
 		string blastp_query_aligned;
 		string blastp_subject;
@@ -79,9 +82,7 @@ namespace fpf_data {
 		double blastp_evalue_transformed;
 		double blastp_parameter_density;
 		double blastp_parameter_score;
-		FASTA_category* p_FASTA_category;
 		string query_alignment;
-		denovo_peptide denovo_peptide_best_averagelocalconfidence;
 		size_t denovo_replicate_count;
 	};
 
@@ -171,8 +172,10 @@ namespace fpf_data {
 				}
 				temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
 				temp_peptide_data.v_denovo_peptide_data.push_back(temp_denovo_peptide);
-				++temp_peptide_data.denovo_replicate_count;
-				temp_v_peptide_data.push_back(temp_peptide_data);
+				if (temp_denovo_peptide.localconfidence_average > 70) {
+					++temp_peptide_data.denovo_replicate_count;
+					temp_v_peptide_data.push_back(temp_peptide_data);
+				}
 			}
 			else {
 				for (size_t i = 0; i < temp_peptide_filtered.size(); ++i) {
@@ -185,8 +188,10 @@ namespace fpf_data {
 					temp_denovo_peptide.localconfidence_average += itr_denovo_aminoacid.aminoacid_score;
 				}
 				temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
-				find_peptide_data->v_denovo_peptide_data.push_back(temp_denovo_peptide);
-				++find_peptide_data->denovo_replicate_count;
+				if (temp_denovo_peptide.localconfidence_average > 70) {
+					++temp_peptide_data.denovo_replicate_count;
+					temp_v_peptide_data.push_back(temp_peptide_data);
+				}
 			}
 		}
 		return temp_v_peptide_data;

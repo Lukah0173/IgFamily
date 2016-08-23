@@ -87,7 +87,35 @@ namespace fpf_filesystem {
 		multinomial multinomial_data;
 	};
 
+	void display_default() {
+		std::cout << " Current settings:";
+		std::cout << "\n\n\n";
+		std::cout << " FASTA file -           ";
+		std::cout << IgFamily::DEFAULT_INPUT_FASTA;
+		std::cout << "\n\n\n";
+		std::cout << " Workflow ~ ";
+		std::cout << "\n\n\n";
+		std::cout << "  [FILE].wiff + [FILE].wiff.scan";
+		std::cout << "\n\n";
+		std::cout << "     |\n";
+		std::cout << "     V";
+		std::cout << "\n\n";
+		std::cout << "  [FILE].mgf ";
+		std::cout << "\n\n";
+		std::cout << "     |\n";
+		std::cout << "     V";
+		std::cout << "\n\n";
+		std::cout << "  [FILE]_denovopeptides.csv    ";
+		std::cout << "\n\n";
+		std::cout << "     |\n";
+		std::cout << "     V";
+		std::cout << "\n\n";
+		std::cout << "  [FILE]_report.html        \n";
+		std::cout << "  [FILE]_report_IG.html      ";
+	}
+
 	string display_menu() {
+		std::cout << "\n\n";
 		std::cout << " FASTA utilities:     [F] ";
 		std::cout << "\n Continue:            [X]";
 		string menu_selection{};
@@ -110,10 +138,10 @@ namespace fpf_filesystem {
 				std::cin >> menu_selection;
 			}
 			if (menu_selection == "R") {
-				fpf_parse::check_FASTA_format(IgFamily::INPUT_FASTA);
+				fpf_parse::check_FASTA_format(IgFamily::DEFAULT_INPUT_FASTA);
 			}
 			if (menu_selection == "C") {
-				fpf_parse::output_custom_FASTA_format(IgFamily::INPUT_FASTA);
+				fpf_parse::output_custom_FASTA_format(IgFamily::DEFAULT_INPUT_FASTA);
 			}
 			return 0;
 		}
@@ -276,44 +304,45 @@ namespace fpf_filesystem {
 		fileconversion_command += par_filesystem.directory;
 		fileconversion_command += par_filesystem.filename;
 		fileconversion_command += ".wiff\"";
-		fileconversion_command += " --64";
-		fileconversion_command += " --mz64";
-		fileconversion_command += " -v";
-		fileconversion_command += " --mgf";
-		if (par_filesystem.fileconversion_parameters.s_peakpicking.b_peakpicking) {
-			fileconversion_command += " --filter \"peakPicking cwt ";
-			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_from);
-			//fileconversion_command += "-";
-			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_to);
-			fileconversion_command += "\"";
-		}
-		if (par_filesystem.fileconversion_parameters.s_threshold.b_threshold) {
-			fileconversion_command += " --filter \"threshold absolute ";
-			fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_threshold.st_threshold);
-			fileconversion_command += " most-intense\"";
-		}
-		if (par_filesystem.fileconversion_parameters.s_ms2denoise.b_ms2denoise) {
-			fileconversion_command += " --filter \"MS2Denoise ";
-			fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_peaksinwindow);
-			fileconversion_command += " ";
-			fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_windowwidth);
-			fileconversion_command += " true\"";
-		}
-		if (par_filesystem.fileconversion_parameters.s_ms2deisotope.b_ms2deisotope) {
-			fileconversion_command += " --filter MS2Deisotope";
-		}
-		if (par_filesystem.fileconversion_parameters.s_chargestatepredictor.b_chargestatepredictor) {
-			//fileconversion_command += " --filter \"chargeStatePredictor true ";
-			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_chargestatepredictor.st_chargestatepredictor_mincharge);
-			//fileconversion_command += " ";
-			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_chargestatepredictor.st_chargestatepredictor_maxcharge);
-			//fileconversion_command += " ";
-			//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_chargestatepredictor.d_chargestatepredictor_chargefraction);
-			//fileconversion_command += "\"";
-		}
-		fileconversion_command += " -o Z:\\Lukah_Dykes\\IgFamily\\";
-		fileconversion_command += par_filesystem.directory;
-		//std::cout << "\n\n" << fileconversion_command;
+		////fileconversion_command += " --64";
+		////fileconversion_command += " --mz64";
+		//fileconversion_command += " -v";
+		//fileconversion_command += " --mgf";
+		//if (par_filesystem.fileconversion_parameters.s_peakpicking.b_peakpicking) {
+		//	//fileconversion_command += " --filter \"peakPicking cwt ";
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_from);
+		//	//fileconversion_command += "-";
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_to);
+		//	//fileconversion_command += "\"";
+		//}
+		//if (par_filesystem.fileconversion_parameters.s_threshold.b_threshold) {
+		//	//fileconversion_command += " --filter \"threshold absolute ";
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_threshold.st_threshold);
+		//	//fileconversion_command += " most-intense\"";
+		//}
+		//if (par_filesystem.fileconversion_parameters.s_ms2denoise.b_ms2denoise) {
+		//	//fileconversion_command += " --filter \"MS2Denoise ";
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_peaksinwindow);
+		//	//fileconversion_command += " ";
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_windowwidth);
+		//	//fileconversion_command += " true\"";
+		//}
+		//if (par_filesystem.fileconversion_parameters.s_ms2deisotope.b_ms2deisotope) {
+		//	//fileconversion_command += " --filter MS2Deisotope";
+		//}
+		//if (par_filesystem.fileconversion_parameters.s_chargestatepredictor.b_chargestatepredictor) {
+		//	fileconversion_command += " --filter \"chargeStatePredictor true ";
+		//	fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_chargestatepredictor.st_chargestatepredictor_maxcharge);
+		//	fileconversion_command += " ";
+		//	fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_chargestatepredictor.st_chargestatepredictor_mincharge);
+		//	fileconversion_command += " ";
+		//	fileconversion_command += "0.9";
+		//	fileconversion_command += "\"";
+		//}
+		//fileconversion_command += " outdir=Z:\\Lukah_Dykes\\IgFamily\\";
+		//fileconversion_command += par_filesystem.directory;
+		fileconversion_command += " --mgf --filter \"chargeStatePredictor true 3 2 0.9\"";
+		std::cout << "\n\n" << fileconversion_command;
 		fpf_convert::sys_msconvert(fileconversion_command, par_filesystem.directory);
 	}
 

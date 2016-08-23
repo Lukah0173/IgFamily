@@ -150,16 +150,16 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void create_str_protein(filesystem& par_filesystem) {
+	void associate_FASTA_category_to_blastp_data(filesystem& par_filesystem) {
 		for (auto& itr_v_blastp_data : par_filesystem.v_blastp_data) {
 			auto& find_category_name = std::find_if(par_filesystem.v_FASTA_category.begin(), par_filesystem.v_FASTA_category.end(),
-				[itr_v_blastp_data](FASTA_category par_s_multinomial_element_data) {
-				return par_s_multinomial_element_data.category_name == itr_v_blastp_data.blastp_subject_accession;
+				[itr_v_blastp_data](FASTA_category par_FASTA_category) {
+				return par_FASTA_category.category_name == itr_v_blastp_data.blastp_subject_accession;
 			});
 			if (find_category_name == par_filesystem.v_FASTA_category.end()) {
 				std::cout << "\n\n error - std::find_if returns nullptr";
 				std::cout << "\n\n" << itr_v_blastp_data.blastp_subject_accession;
-				string catch_error;
+				string catch_error{};
 				std::cin >> catch_error;
 			}
 			itr_v_blastp_data.p_FASTA_category = &(*find_category_name);
@@ -181,7 +181,6 @@ namespace fpf_blastp_analysis {
 				std::cin >> catch_error;
 			}
 			itr_v_blastp_data.p_FASTA_category = find_category_name->p_FASTA_category;
-
 		}
 	}
 
