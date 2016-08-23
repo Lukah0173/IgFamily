@@ -135,7 +135,9 @@ namespace fpf_data_analysis {
 					for (const auto itr_v_blastp_data_2 : itr_category_analysis.v_blastp_data_combined_by_category) {
 						for (auto i = 0; i < itr_v_blastp_data.query_alignment.length(); ++i) {
 							if ((itr_v_blastp_data.query_alignment.at(i) != '.') && (itr_v_blastp_data_2.query_alignment.at(i) != '.')) {
-								v_blastp_query_alignment_rejected.push_back(itr_v_blastp_data_2);
+								if (itr_v_blastp_data.query_alignment.at(i) != itr_v_blastp_data_2.query_alignment.at(i)) {
+									v_blastp_query_alignment_rejected.push_back(itr_v_blastp_data_2);
+								}
 							}
 						}
 					}

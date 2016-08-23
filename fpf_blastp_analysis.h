@@ -87,12 +87,12 @@ namespace fpf_blastp_analysis {
 
 	void sys_blastp(filesystem par_filesystem) {
 		std::cout << "\n\n";
-		string string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
+		string string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
 		string_system += " && makeblastdb.exe -in ";
 		string_system += "blastp_database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
-		string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
+		string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
 		string_system += " && blastp.exe -query ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";
