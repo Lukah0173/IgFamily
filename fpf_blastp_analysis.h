@@ -29,6 +29,7 @@ namespace fpf_blastp_analysis {
 	using std::vector;
 
 	typedef fpf_data::FASTA_category FASTA_category;
+	typedef fpf_data::peptide_data peptide_data;
 	typedef fpf_data::blastp_data blastp_data;
 	typedef vector<fpf_data::blastp_data> v_s_blastp_tpye;
 	typedef fpf_data::multinomial s_multinomial_type;
@@ -87,12 +88,12 @@ namespace fpf_blastp_analysis {
 
 	void sys_blastp(filesystem par_filesystem) {
 		std::cout << "\n\n";
-		string string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && makeblastdb.exe -in ";
 		string_system += "blastp_database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
-		string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && blastp.exe -query ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";
@@ -150,7 +151,7 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void associate_FASTA_category_to_blastp_data(filesystem& par_filesystem) {
+	void associate_blastp_data_to_v_FASTA_category(filesystem& par_filesystem) {
 		for (auto& itr_v_blastp_data : par_filesystem.v_blastp_data) {
 			auto& find_category_name = std::find_if(par_filesystem.v_FASTA_category.begin(), par_filesystem.v_FASTA_category.end(),
 				[itr_v_blastp_data](FASTA_category par_FASTA_category) {
@@ -163,8 +164,22 @@ namespace fpf_blastp_analysis {
 				std::cin >> catch_error;
 			}
 			itr_v_blastp_data.p_FASTA_category = &(*find_category_name);
-			itr_v_blastp_data.blastp_subject_accession_class = find_category_name->category_class;
+		}
+	}
 
+	void associate_blastp_data_to_v_peptide_data(filesystem& par_filesystem) {
+		for (auto& itr_v_blastp_data : par_filesystem.v_blastp_data) {
+			auto& find_peptide_filtered = std::find_if(par_filesystem.v_peptide_data.begin(), par_filesystem.v_peptide_data.end(),
+				[itr_v_blastp_data](peptide_data par_peptide_data) {
+				return par_peptide_data.peptide_filtered == itr_v_blastp_data.blastp_query;
+			});
+			if (find_peptide_filtered == par_filesystem.v_peptide_data.end()) {
+				std::cout << "\n\n error - std::find_if returns nullptr";
+				std::cout << "\n\n" << itr_v_blastp_data.blastp_subject_accession;
+				string catch_error{};
+				std::cin >> catch_error;
+			}
+			itr_v_blastp_data.p_peptide_data = &(*find_peptide_filtered);
 		}
 	}
 
@@ -281,7 +296,7 @@ namespace fpf_blastp_analysis {
 				}
 			}
 			itr_v_blastp.blastp_parameter_density = (itr_v_blastp.blastp_evalue_transformed / temp_evalue_transform_sum);
-			itr_v_blastp.blastp_parameter_score = (itr_v_blastp.blastp_parameter_density * itr_v_blastp.blastp_evalue_transformed);
+			itr_v_blastp.blastp_parameter_score = (itr_v_blastp.blastp_parameter_density * itr_v_blastp.blastp_evalue_transformed * (itr_v_blastp.p_peptide_data->v_denovo_peptide_averagescore / 100));
 		}
 	}
 

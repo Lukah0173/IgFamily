@@ -17,10 +17,10 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.7.4";
+	const string version = "v0.7.5";
 
 	const bool FILESYSTEM_UPDATE_ALL = 1;
-	const bool NOVOR_DENOVO = 1;
+	const bool NOVOR_DENOVO = 0;
 	const bool MAP_FOUT_BY_SCORE = 1;
 	const bool MAP_FOUT_BY_DISTINCT = 1;
 	const bool MAP_FOUT_PEPTIDE_SUMMARY_BY_SPECTRALCOUNT = 1;

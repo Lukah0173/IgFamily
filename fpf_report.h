@@ -154,6 +154,24 @@ namespace fpf_report {
 						fout_html_report << "&nbsp";
 					}
 				}
+				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
+				if (itr_blastp_data.blastp_evalue_transformed < 1) {
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				}
+				else {
+					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average))); ++j) {
+						fout_html_report << "&nbsp";
+					}
+				}
+				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.p_peptide_data->v_denovo_peptide_averagescore;
+				if (itr_blastp_data.blastp_evalue_transformed < 1) {
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				}
+				else {
+					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.p_peptide_data->v_denovo_peptide_averagescore))); ++j) {
+						fout_html_report << "&nbsp";
+					}
+				}
 				fout_html_report << itr_blastp_data.denovo_replicate_count;
 				if (itr_blastp_data.denovo_replicate_count < 1) {
 					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -287,6 +305,24 @@ namespace fpf_report {
 					}
 					else {
 						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
+							fout_html_report << "&nbsp";
+						}
+					}
+					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
+					if (itr_blastp_data.blastp_evalue_transformed < 1) {
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+					}
+					else {
+						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average))); ++j) {
+							fout_html_report << "&nbsp";
+						}
+					}
+					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.p_peptide_data->v_denovo_peptide_averagescore;
+					if (itr_blastp_data.blastp_evalue_transformed < 1) {
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+					}
+					else {
+						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.p_peptide_data->v_denovo_peptide_averagescore))); ++j) {
 							fout_html_report << "&nbsp";
 						}
 					}

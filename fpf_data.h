@@ -53,6 +53,7 @@ namespace fpf_data {
 		size_t denovo_replicate_count;
 		vector<denovo_peptide> v_denovo_peptide_data;
 		denovo_peptide* p_denovo_peptide_best_by_averagelocalconfidence;
+		double v_denovo_peptide_averagescore;
 		size_t filesystem_sample_replicate_count = size_t{ 1 };
 		bool filesystem_sample_replicate_merged = bool();
 		vector<tuple<string, size_t, size_t>> v_filesystem_sample_replicate_data;
@@ -155,7 +156,7 @@ namespace fpf_data {
 				}
 			}
 			temp_peptide_data.peptide_filtered = temp_peptide_filtered;
-			const auto find_peptide_data = std::find_if(temp_v_peptide_data.begin(), temp_v_peptide_data.end(),
+			auto& find_peptide_data = std::find_if(temp_v_peptide_data.begin(), temp_v_peptide_data.end(),
 				[temp_peptide_filtered](peptide_data par_peptide_data) {
 				return par_peptide_data.peptide_filtered == temp_peptide_filtered;
 			});
@@ -173,6 +174,7 @@ namespace fpf_data {
 				temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
 				temp_peptide_data.v_denovo_peptide_data.push_back(temp_denovo_peptide);
 				if (temp_denovo_peptide.localconfidence_average > 70) {
+					temp_peptide_data.v_denovo_peptide_averagescore = temp_denovo_peptide.localconfidence_average;
 					++temp_peptide_data.denovo_replicate_count;
 					temp_v_peptide_data.push_back(temp_peptide_data);
 				}
@@ -189,8 +191,9 @@ namespace fpf_data {
 				}
 				temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
 				if (temp_denovo_peptide.localconfidence_average > 70) {
-					++temp_peptide_data.denovo_replicate_count;
-					temp_v_peptide_data.push_back(temp_peptide_data);
+					++find_peptide_data->denovo_replicate_count;
+					find_peptide_data->v_denovo_peptide_averagescore = ((find_peptide_data->v_denovo_peptide_averagescore * (find_peptide_data->denovo_replicate_count - 1)) + temp_denovo_peptide.localconfidence_average) / find_peptide_data->denovo_replicate_count;
+					find_peptide_data->v_denovo_peptide_data.push_back(temp_denovo_peptide);
 				}
 			}
 		}

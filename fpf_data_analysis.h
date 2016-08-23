@@ -54,6 +54,7 @@ namespace fpf_data_analysis {
 				temp_category_analysis.v_blastp_data_combined_by_category.clear();
 			}
 		}
+		denovo_peptide default_denovo_peptide{};
 		for (auto& itr_category_analysis : temp_v_category_analysis) {
 			for (auto& itr_blastp_data : itr_category_analysis.v_blastp_data_combined_by_category) {
 				auto& find_peptide_data = std::find_if(par_filesystem.v_peptide_data.begin(), par_filesystem.v_peptide_data.end(),
@@ -68,7 +69,7 @@ namespace fpf_data_analysis {
 				}
 				else {
 					itr_blastp_data.p_peptide_data = &(*find_peptide_data);
-					itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence = new denovo_peptide();
+					itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence = &default_denovo_peptide;
 					for (auto& itr_denovo_peptide : find_peptide_data->v_denovo_peptide_data) {						
 						if (find_peptide_data->v_denovo_peptide_data.size() == 0) {
 							std::cout << "\n\n ERROR: ";
@@ -97,7 +98,7 @@ namespace fpf_data_analysis {
 	}
 
 	inline bool predicate_blastp_data_with_spectralcount(const blastp_data& i, const blastp_data& j) {
-		return ((i.blastp_parameter_score * i.denovo_replicate_count) > (j.blastp_parameter_score * j.denovo_replicate_count));
+		return ((i.blastp_parameter_score * i.denovo_replicate_count * i.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average) > (j.blastp_parameter_score * j.denovo_replicate_count * i.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average));
 	}
 
 	inline void sort_v_blastp_data_with_spectralcount(vector<blastp_data>& par_v_blastp_data) {

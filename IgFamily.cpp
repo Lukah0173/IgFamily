@@ -1,4 +1,4 @@
-// * * IgFamily v0.7.4 * * 
+// * * IgFamily v0.7.5 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -112,7 +112,8 @@ int main() {
 			std::cout << "...";
 			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem);
 			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem);
-			fpf_blastp_analysis::associate_FASTA_category_to_blastp_data(itr_v_filesystem);
+			fpf_blastp_analysis::associate_blastp_data_to_v_FASTA_category(itr_v_filesystem);
+			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem);
 			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem);		
 			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem);
 			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem);
@@ -152,6 +153,8 @@ int main() {
 			std::cout << "...";
 			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem);
 			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem);
+			fpf_blastp_analysis::associate_blastp_data_to_v_FASTA_category(itr_v_filesystem);
+			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem);
 			fpf_blastp_analysis::create_protein_from_category_analysis(itr_v_filesystem);
 			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem);
 			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem);
