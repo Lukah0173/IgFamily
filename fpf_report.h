@@ -75,7 +75,7 @@ namespace fpf_report {
 			size_t foo = size_t();
 			for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.proteinconstruct_from_denovo) {
 				if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
-					if (itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(foo)) {
+					if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(foo)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(foo) == 'I'))) {
 						fout_html_report << "<span class=\"mismatch\">";
 					}
 					if (itr_proteinconstruct_from_denovo.aminoacid_score > 25) {
@@ -110,7 +110,7 @@ namespace fpf_report {
 					}
 					else {
 						for (const auto& itr_denovo_aminoacid : itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
-							if ((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i))) {
+							if (((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i)) && !((itr_denovo_aminoacid.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I')))) {
 								fout_html_report << "<span class=\"mismatch\">";
 							}
 							if (itr_denovo_aminoacid.aminoacid_score > 80) {
@@ -134,6 +134,33 @@ namespace fpf_report {
 				for (auto j = 0; j < (5 - st_mismatch); ++j) {
 					fout_html_report << "&nbsp";
 				}
+				fout_html_report << (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
+				if ((itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count) < 1) {
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				}
+				else {
+					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count))); ++j) {
+						fout_html_report << "&nbsp";
+					}
+				}
+				fout_html_report << itr_blastp_data.denovo_replicate_count;
+				if (itr_blastp_data.denovo_replicate_count < 1) {
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				}
+				else {
+					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.denovo_replicate_count))); ++j) {
+						fout_html_report << "&nbsp";
+					}
+				}
+				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
+				if (itr_blastp_data.blastp_parameter_score < 1) {
+					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				}
+				else {
+					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
+						fout_html_report << "&nbsp";
+					}
+				}
 				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_evalue_transformed;
 				if (itr_blastp_data.blastp_evalue_transformed < 1) {
 					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -145,15 +172,6 @@ namespace fpf_report {
 				}
 				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_density;
 				fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
-				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
-				if (itr_blastp_data.blastp_parameter_score < 1) {
-					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-				}
-				else {
-					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
-						fout_html_report << "&nbsp";
-					}
-				}
 				fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
 				if (itr_blastp_data.blastp_evalue_transformed < 1) {
 					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -172,16 +190,6 @@ namespace fpf_report {
 						fout_html_report << "&nbsp";
 					}
 				}
-				fout_html_report << itr_blastp_data.denovo_replicate_count;
-				if (itr_blastp_data.denovo_replicate_count < 1) {
-					fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-				}
-				else {
-					for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.denovo_replicate_count))); ++j) {
-						fout_html_report << "&nbsp";
-					}
-				}
-				fout_html_report << (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
 			}
 		}
 
@@ -229,7 +237,7 @@ namespace fpf_report {
 				size_t foo = size_t();
 				for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.proteinconstruct_from_denovo) {
 					if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
-						if (itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(foo)) {
+						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(foo)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L' ) && (itr_category_analysis.p_FASTA_category->category_protein.at(foo) == 'I'))) {
 							fout_html_report << "<span class=\"mismatch\">";
 						}
 						if (itr_proteinconstruct_from_denovo.aminoacid_score > 25) {
@@ -264,7 +272,7 @@ namespace fpf_report {
 						}
 						else {
 							for (const auto& itr_denovo_aminoacid : itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
-								if ((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i))) {
+								if (((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i)) && !((itr_denovo_aminoacid.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I')))) {
 									fout_html_report << "<span class=\"mismatch\">";
 								}
 								if (itr_denovo_aminoacid.aminoacid_score > 80) {
@@ -288,6 +296,33 @@ namespace fpf_report {
 					for (auto j = 0; j < (5 - st_mismatch); ++j) {
 						fout_html_report << "&nbsp";
 					}
+					fout_html_report << (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
+					if ((itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count) < 1) {
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+					}
+					else {
+						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count))); ++j) {
+							fout_html_report << "&nbsp";
+						}
+					}
+					fout_html_report << itr_blastp_data.denovo_replicate_count;
+					if (itr_blastp_data.denovo_replicate_count < 1) {
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+					}
+					else {
+						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.denovo_replicate_count))); ++j) {
+							fout_html_report << "&nbsp";
+						}
+					}
+					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
+					if (itr_blastp_data.blastp_parameter_score < 1) {
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+					}
+					else {
+						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
+							fout_html_report << "&nbsp";
+						}
+					}
 					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_evalue_transformed;
 					if (itr_blastp_data.blastp_evalue_transformed < 1) {
 						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -299,15 +334,6 @@ namespace fpf_report {
 					}
 					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_density;
 					fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
-					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
-					if (itr_blastp_data.blastp_parameter_score < 1) {
-						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-					}
-					else {
-						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
-							fout_html_report << "&nbsp";
-						}
-					}
 					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
 					if (itr_blastp_data.blastp_evalue_transformed < 1) {
 						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -326,16 +352,6 @@ namespace fpf_report {
 							fout_html_report << "&nbsp";
 						}
 					}
-					fout_html_report << itr_blastp_data.denovo_replicate_count;
-					if (itr_blastp_data.denovo_replicate_count < 1) {
-						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-					}
-					else {
-						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.denovo_replicate_count))); ++j) {
-							fout_html_report << "&nbsp";
-						}
-					}
-					fout_html_report << (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
 				}
 			}
 		}

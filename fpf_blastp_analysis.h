@@ -88,16 +88,16 @@ namespace fpf_blastp_analysis {
 
 	void sys_blastp(filesystem par_filesystem) {
 		std::cout << "\n\n";
-		string string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && makeblastdb.exe -in ";
 		string_system += "blastp_database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
-		string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && blastp.exe -query ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";
-		string_system += std::to_string(EVALUE_THRESHOLD);
+		string_system += std::to_string(BLASTP_EVALUE_THRESHOLD);
 		string_system += " -max_target_seqs 200 -out ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_output.csv -outfmt \"10 qacc qseq sseq sacc qstart sstart qlen pident ppos mismatch evalue\"";
@@ -268,8 +268,8 @@ namespace fpf_blastp_analysis {
 			if (itr_v_s_blastp.blastp_query != hold_blastp_subject) {
 				if (is_hold) {
 					for (auto& itr_hold_v_s_blastp : hold_v_blastp_data) {
-						itr_hold_v_s_blastp.blastp_evalue_transformed = log_base(((double(3) * PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 1.3);
-						//itr_hold_v_s_blastp.blastp_evalue_transformed = (itr_hold_v_s_blastp.blastp_evalue + 0.01);
+						itr_hold_v_s_blastp.blastp_evalue_transformed = log_base(((double(3) * BLASTP_PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 1.2);
+						//itr_hold_v_s_blastp.blastp_evalue_transformed = 1 / (itr_hold_v_s_blastp.blastp_evalue + 0.01);
 						temp_v_blastp_data.push_back(itr_hold_v_s_blastp);
 					}
 				}
