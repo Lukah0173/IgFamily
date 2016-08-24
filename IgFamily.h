@@ -17,10 +17,10 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.7.5";
+	const string version = "v0.7.6";
 
 	const bool FILESYSTEM_UPDATE_ALL = 1;
-	const bool NOVOR_DENOVO = 0;
+	const bool NOVOR_DENOVO = 1;
 	const bool MAP_FOUT_BY_SCORE = 1;
 	const bool MAP_FOUT_BY_DISTINCT = 1;
 	const bool MAP_FOUT_PEPTIDE_SUMMARY_BY_SPECTRALCOUNT = 1;
@@ -31,6 +31,7 @@ namespace IgFamily {
 	const string DEFAULT_INPUT_FASTA = "LUKAH_WITHUNIPROT_20160815.fasta";
 	const string DEFAULT_INPUT_FASTA_DIRECTORY = "FASTA\\" + DEFAULT_INPUT_FASTA;
 
+	const double DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD = 65;
 	const double BLASTP_THRESHOLD = 10000;
 	const double EVALUE_THRESHOLD = 20;
 	const double PARPROP_SCALE = EVALUE_THRESHOLD;

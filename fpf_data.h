@@ -173,7 +173,7 @@ namespace fpf_data {
 				}
 				temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
 				temp_peptide_data.v_denovo_peptide_data.push_back(temp_denovo_peptide);
-				if (temp_denovo_peptide.localconfidence_average > 70) {
+				if (temp_denovo_peptide.localconfidence_average > DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD) {
 					temp_peptide_data.v_denovo_peptide_averagescore = temp_denovo_peptide.localconfidence_average;
 					++temp_peptide_data.denovo_replicate_count;
 					temp_v_peptide_data.push_back(temp_peptide_data);
@@ -190,7 +190,7 @@ namespace fpf_data {
 					temp_denovo_peptide.localconfidence_average += itr_denovo_aminoacid.aminoacid_score;
 				}
 				temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
-				if (temp_denovo_peptide.localconfidence_average > 70) {
+				if (temp_denovo_peptide.localconfidence_average > DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD) {
 					++find_peptide_data->denovo_replicate_count;
 					find_peptide_data->v_denovo_peptide_averagescore = ((find_peptide_data->v_denovo_peptide_averagescore * (find_peptide_data->denovo_replicate_count - 1)) + temp_denovo_peptide.localconfidence_average) / find_peptide_data->denovo_replicate_count;
 					find_peptide_data->v_denovo_peptide_data.push_back(temp_denovo_peptide);
