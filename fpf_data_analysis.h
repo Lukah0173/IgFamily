@@ -152,29 +152,43 @@ namespace fpf_data_analysis {
 					}
 				}
 			}
-			for (const auto& itr_blastp_query_alignment_selected : v_blastp_query_alignment_selected) {
-				for (auto i = 0; i < itr_category_analysis.v_proteinconstruct_from_denovo.size(); i) {
-					if (itr_blastp_query_alignment_selected.query_alignment.at(i) == '.') {
-						++i;
+			for (auto i = 0; i < v_blastp_query_alignment_selected.size(); ++i) {
+				bool skip_blastp_query_alignment{};
+				for (auto j = 0; j < itr_category_analysis.v_proteinconstruct_from_denovo.size(); ++j) {
+					if ((itr_category_analysis.v_proteinconstruct_from_denovo[j].aminoacid != '.')
+						&& (v_blastp_query_alignment_selected[i].query_alignment.at(j) != '.')
+						&& (itr_category_analysis.v_proteinconstruct_from_denovo[j].aminoacid != v_blastp_query_alignment_selected[i].query_alignment.at(j))) {
+						if (v_blastp_query_alignment_selected[i].blastp_parameter_score < itr_category_analysis.v_proteinconstruct_from_denovo[j].aminoacid_parameter_score) {
+							skip_blastp_query_alignment = true;
+							break;
+						}
 					}
-					else {
-						for (const auto& itr_v_denovo_aminoacid : itr_blastp_query_alignment_selected.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
-							if (i == itr_category_analysis.v_proteinconstruct_from_denovo.size()) {
-								break;
-							}
-							else {
-								if (itr_blastp_query_alignment_selected.blastp_evalue_transformed > itr_category_analysis.v_proteinconstruct_from_denovo[i].aminoacid_evalue_transformed) {
-									if (itr_blastp_query_alignment_selected.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
-										itr_category_analysis.v_proteinconstruct_from_denovo[i].aminoacid = itr_blastp_query_alignment_selected.query_alignment.at(i);
-										itr_category_analysis.v_proteinconstruct_from_denovo[i].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
-										itr_category_analysis.v_proteinconstruct_from_denovo[i].aminoacid_evalue_transformed = itr_blastp_query_alignment_selected.blastp_evalue_transformed;
-									}
+				}
+				if (!skip_blastp_query_alignment) {
+					for (auto j = 0; j < itr_category_analysis.v_proteinconstruct_from_denovo.size(); j) {
+						if (v_blastp_query_alignment_selected[i].query_alignment.at(j) == '.') {
+							++j;
+						}
+						else {
+							for (const auto& itr_v_denovo_aminoacid : v_blastp_query_alignment_selected[i].p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
+								if (j == itr_category_analysis.v_proteinconstruct_from_denovo.size()) {
+									break;
 								}
-							++i;
+								else {
+									if (v_blastp_query_alignment_selected[i].blastp_parameter_score > itr_category_analysis.v_proteinconstruct_from_denovo[j].aminoacid_parameter_score) {
+										if (v_blastp_query_alignment_selected[i].blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
+											itr_category_analysis.v_proteinconstruct_from_denovo[j].aminoacid = v_blastp_query_alignment_selected[i].query_alignment.at(j);
+											itr_category_analysis.v_proteinconstruct_from_denovo[j].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
+											itr_category_analysis.v_proteinconstruct_from_denovo[j].aminoacid_evalue_transformed = v_blastp_query_alignment_selected[i].blastp_evalue_transformed;
+											itr_category_analysis.v_proteinconstruct_from_denovo[j].aminoacid_parameter_score = v_blastp_query_alignment_selected[i].blastp_parameter_score;
+										}
+									}
+									++j;
+								}
 							}
 						}
 					}
-				}		
+				}
 			}
 		}
 	}

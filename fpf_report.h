@@ -48,7 +48,6 @@ namespace fpf_report {
 		}
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);
-		vector<string> dummy;
 		fout_html_report << "\
 							<!DOCTYPE html>\n\
 							<head>\n\
@@ -73,9 +72,9 @@ namespace fpf_report {
 			fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_category_analysis.proteinconstruct_sequencecoverage << "%";
 			fout_html_report << "\n\n<br><br> " << itr_category_analysis.p_FASTA_category->category_protein;
 			fout_html_report << "\n\n<br> ";
-			size_t i = size_t();
+			size_t i{};
 			for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
-				if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD) {
+				if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 0) {
 					if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
 						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
 							fout_html_report << "<span class=\"mismatch\">";
@@ -103,6 +102,7 @@ namespace fpf_report {
 				}
 				++i;
 			}
+			fout_html_report << "&nbsp&nbsp&nbsp" << "Local&nbspconfidence";
 			fout_html_report << "\n\n<br> ";
 			i = size_t();
 			for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
@@ -129,7 +129,26 @@ namespace fpf_report {
 				}
 				++i;
 			}
-			fout_html_report << "\n\n<br><br>";
+			fout_html_report << "&nbsp&nbsp&nbsp" << "Homology";
+			fout_html_report << "\n\n<br><br><br>";
+			for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
+				fout_html_report << "&nbsp";
+			}
+			fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+			fout_html_report << "Total";
+			fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+			fout_html_report << "Spec";
+			fout_html_report << "&nbsp&nbsp";
+			fout_html_report << "Score";
+			fout_html_report << "&nbsp&nbsp&nbsp";
+			fout_html_report << "Homo";
+			fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+			fout_html_report << "Dist";
+			fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+			fout_html_report << "DN&nbspconf";
+			fout_html_report << "&nbsp&nbsp";
+			fout_html_report << "DN&nbspconf&nbspavr";
+			fout_html_report << "<br>";
 			for (const auto& itr_blastp_data : itr_category_analysis.v_blastp_data_combined_by_category) {
 				if (itr_blastp_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
 					fout_html_report << "\n<br> ";
@@ -187,10 +206,10 @@ namespace fpf_report {
 					}
 					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
 					if (itr_blastp_data.blastp_parameter_score < 1) {
-						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
 					}
 					else {
-						for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
+						for (auto j = 0; j < (4 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
 							fout_html_report << "&nbsp";
 						}
 					}
@@ -269,9 +288,9 @@ namespace fpf_report {
 				fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_category_analysis.proteinconstruct_sequencecoverage << "%";
 				fout_html_report << "\n\n<br><br> " << itr_category_analysis.p_FASTA_category->category_protein;
 				fout_html_report << "\n\n<br> ";
-				size_t i = size_t();
+				size_t i{};
 				for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
-					if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD) {
+					if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 0) {
 						if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
 							if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
 								fout_html_report << "<span class=\"mismatch\">";
@@ -299,6 +318,7 @@ namespace fpf_report {
 					}
 					++i;
 				}
+				fout_html_report << "&nbsp&nbsp&nbsp" << "Local&nbspconfidence";
 				fout_html_report << "\n\n<br> ";
 				i = size_t();
 				for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
@@ -325,7 +345,26 @@ namespace fpf_report {
 					}
 					++i;
 				}
-				fout_html_report << "\n\n<br><br>";
+				fout_html_report << "&nbsp&nbsp&nbsp" << "Homology";
+				fout_html_report << "\n\n<br><br><br>";
+				for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
+					fout_html_report << "&nbsp";
+				}
+				fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				fout_html_report << "Total";
+				fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+				fout_html_report << "Spec";
+				fout_html_report << "&nbsp&nbsp";
+				fout_html_report << "Score";
+				fout_html_report << "&nbsp&nbsp&nbsp";
+				fout_html_report << "Homo";
+				fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+				fout_html_report << "Dist";
+				fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+				fout_html_report << "DN&nbspconf";
+				fout_html_report << "&nbsp&nbsp";
+				fout_html_report << "DN&nbspconf&nbspavr";
+				fout_html_report << "<br>";
 				for (const auto& itr_blastp_data : itr_category_analysis.v_blastp_data_combined_by_category) {
 					if (itr_blastp_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
 						fout_html_report << "\n<br> ";
@@ -383,10 +422,10 @@ namespace fpf_report {
 						}
 						fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
 						if (itr_blastp_data.blastp_parameter_score < 1) {
-							fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+							fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
 						}
 						else {
-							for (auto j = 0; j < (5 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
+							for (auto j = 0; j < (4 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
 								fout_html_report << "&nbsp";
 							}
 						}

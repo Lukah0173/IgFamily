@@ -36,7 +36,7 @@ namespace fpf_parse {
 
 	struct csv_data {
 	public:
-		string csv_file;
+		string csv_scan;
 		string csv_peptide;
 		string csv_spectralcount;
 		string csv_IgP;
@@ -117,6 +117,7 @@ namespace fpf_parse {
 		size_t csv_condition_switch{};
 		size_t csv_ignore_header{};
 		char csv_read{};
+		string csv_scan{};
 		string csv_peptide{};
 		string csv_spectralcount{};
 		string csv_IgP{};
@@ -126,23 +127,23 @@ namespace fpf_parse {
 				csv_parse = csv_read;
 				if (csv_count_delimit == 18) {
 					if (temp_v_csv_data.size() == 0) {
-						csv_data temp_csv_data = csv_data();
-						temp_csv_data.csv_file = par_directory;
+						csv_data temp_csv_data{};
+						temp_csv_data.csv_scan = csv_scan;
 						temp_csv_data.csv_peptide = csv_peptide;
 						temp_csv_data.csv_spectralcount = csv_spectralcount;
 						temp_csv_data.csv_IgP = csv_IgP;
 						temp_v_csv_data.push_back(temp_csv_data);
 					}
 					else {
-						size_t count_v_c_parse_csv = size_t();
+						size_t count_v_csv_data{};
 						for (auto& itr_v_csv_data : temp_v_csv_data) {
-							++count_v_c_parse_csv;
+							++count_v_csv_data;
 							if (itr_v_csv_data.csv_peptide == csv_peptide) {
 								break;
 							}
-							if (count_v_c_parse_csv == temp_v_csv_data.size()) {
-								csv_data temp_csv_data = csv_data();
-								temp_csv_data.csv_file = par_directory;
+							if (count_v_csv_data == temp_v_csv_data.size()) {
+								csv_data temp_csv_data{};
+								temp_csv_data.csv_scan = csv_scan;
 								temp_csv_data.csv_peptide = csv_peptide;
 								temp_csv_data.csv_spectralcount = csv_spectralcount;
 								temp_csv_data.csv_IgP = csv_IgP;
@@ -158,6 +159,9 @@ namespace fpf_parse {
 				}
 				if (csv_parse == ",") {
 					++csv_count_delimit;
+				}
+				if ((csv_count_delimit == 1) && (csv_parse != ",")) {
+					csv_scan += csv_parse;
 				}
 				if ((csv_count_delimit == 3) && (csv_parse != ",")) {
 					if (csv_parse == "(") {
@@ -213,6 +217,7 @@ namespace fpf_parse {
 		size_t csv_condition_switch{};
 		size_t csv_ignore_header{};
 		char csv_read{};
+		string temp_csv_scan{};
 		string temp_csv_peptide{};
 		string temp_csv_denovo_localconfidence{};
 		vector<double> temp_v_csv_denovo_localconfidence{};
@@ -222,7 +227,7 @@ namespace fpf_parse {
 				csv_parse = csv_read;
 				if (csv_count_delimit == 16) {
 					csv_data temp_csv_data{};
-					temp_csv_data.csv_file = par_directory;
+					temp_csv_data.csv_scan = temp_csv_scan;
 					temp_csv_data.csv_peptide = temp_csv_peptide;
 					temp_csv_data.v_csv_denovo_localconfidence = temp_v_csv_denovo_localconfidence;
 					temp_v_csv_data.push_back(temp_csv_data);
@@ -232,6 +237,9 @@ namespace fpf_parse {
 				}
 				if (csv_parse == ",") {
 					++csv_count_delimit;
+				}
+				if ((csv_count_delimit == 0) && (csv_parse != ",")) {
+					temp_csv_scan += csv_parse;
 				}
 				if ((csv_count_delimit == 3) && (csv_parse != ",") && (csv_parse != " ")) {
 					if (csv_parse == "(") {
@@ -307,7 +315,6 @@ namespace fpf_parse {
 				if ((csv_count_delimit == 11) && (csv_read == ',')) {
 					temp_v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
 					csv_data temp_csv_data{};
-					temp_csv_data.csv_file = par_directory;
 					temp_csv_data.csv_peptide = temp_csv_peptide;
 					temp_csv_data.v_csv_denovo_localconfidence = temp_v_csv_denovo_localconfidence;
 					temp_v_csv_data.push_back(temp_csv_data);
@@ -735,7 +742,7 @@ namespace fpf_parse {
 			}
 			if ((FASTA_condition_switch_2 == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
 				
-				//if (temp_FASTA_class != "MIGHV") {
+				if (temp_FASTA_class != "MIGHV") {
 					if (!((temp_FASTA_class == "UNIPROT") && (temp_FASTA_name.find("Ig")))) {
 						temp_FASTA_data.set_FASTA_accession(temp_FASTA_accession);
 						temp_FASTA_data.set_FASTA_name(temp_FASTA_name);
@@ -745,7 +752,7 @@ namespace fpf_parse {
 						temp_FASTA_data.set_FASTA_protein(temp_FASTA_element);
 						temp_v_FASTA_data.push_back(temp_FASTA_data);
 					}
-				//}
+				}
 				++FASTA_count_accession;
 				if (FASTA_count_accession % 1000 == 0) {
 					std::cout << "\n FASTA accession parse #: ";

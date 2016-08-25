@@ -79,7 +79,7 @@ int main() {
 		//}
 
 		if (itr_v_filesystem.proteinpeptides_exist) {
-			std::cout << "\n\n * parsing " << main_v_csv_proteinpeptides.begin()->csv_file;
+			std::cout << "\n\n * parsing " << itr_v_filesystem.filename;
 			std::cout << "\n\n ~ peptides parsed - " << main_v_csv_proteinpeptides.size();
 			std::cout << "\n\n\n creating data structures...";
 			vector<fpf_data::peptide_data> main_v_peptide_data = fpf_data::create_peptide_data(main_v_csv_proteinpeptides);
@@ -87,7 +87,7 @@ int main() {
 		}
 
 		if (itr_v_filesystem.denovopeptides_exist) {
-			std::cout << "\n\n * parsing " << main_v_csv_denovopeptides.begin()->csv_file;
+			std::cout << "\n\n * parsing " << itr_v_filesystem.filename;
 			std::cout << "\n\n ~ peptides parsed - " << main_v_csv_denovopeptides.size();
 			std::cout << "\n\n creating data structures...";
 			vector<fpf_data::peptide_data> main_v_peptide_data = fpf_data::create_peptide_data(main_v_csv_denovopeptides);

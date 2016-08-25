@@ -91,6 +91,7 @@ namespace fpf_data {
 		char aminoacid;
 		double aminoacid_localconfidence;
 		double aminoacid_evalue_transformed;
+		double aminoacid_parameter_score;
 	};
 
 	struct category_analysis {
