@@ -30,7 +30,7 @@ namespace fpf_data_analysis {
 	typedef fpf_data::denovo_peptide denovo_peptide;
 	typedef fpf_data::FASTA_category FASTA_category;
 	typedef fpf_data::blastp_data blastp_data;
-	typedef fpf_data::proteinconstruct_from_denovo proteinconstruct_from_denovo;
+	typedef fpf_data::v_proteinconstruct_from_denovo v_proteinconstruct_from_denovo;
 	typedef fpf_data::category_analysis category_analysis;
 	typedef fpf_data::multinomial multinomial;
 
@@ -38,20 +38,22 @@ namespace fpf_data_analysis {
 		category_analysis temp_category_analysis{};
 		vector<category_analysis> temp_v_category_analysis{};
 		for (const auto itr_blastp_data : par_filesystem.v_blastp_data) {
-			auto find_category_analysis = std::find_if(temp_v_category_analysis.begin(), temp_v_category_analysis.end(),
-				[itr_blastp_data](const category_analysis par_category_analysis) {
-				return par_category_analysis.p_FASTA_category->category_name == itr_blastp_data.blastp_subject_accession;
-			});
-			if (find_category_analysis != temp_v_category_analysis.end()) {
-				find_category_analysis->v_blastp_data_combined_by_category.push_back(itr_blastp_data);
-			}
-			else {
-				double temp_category_score{};
-				temp_category_analysis.p_FASTA_category = itr_blastp_data.p_FASTA_category;
-				temp_category_analysis.v_blastp_data_combined_by_category.push_back(itr_blastp_data);
-				temp_category_analysis.category_score = temp_category_score;
-				temp_v_category_analysis.push_back(temp_category_analysis);
-				temp_category_analysis.v_blastp_data_combined_by_category.clear();
+			if (itr_blastp_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
+				auto find_category_analysis = std::find_if(temp_v_category_analysis.begin(), temp_v_category_analysis.end(),
+					[itr_blastp_data](const category_analysis par_category_analysis) {
+					return par_category_analysis.p_FASTA_category->category_name == itr_blastp_data.blastp_subject_accession;
+				});
+				if (find_category_analysis != temp_v_category_analysis.end()) {
+					find_category_analysis->v_blastp_data_combined_by_category.push_back(itr_blastp_data);
+				}
+				else {
+					double temp_category_score{};
+					temp_category_analysis.p_FASTA_category = itr_blastp_data.p_FASTA_category;
+					temp_category_analysis.v_blastp_data_combined_by_category.push_back(itr_blastp_data);
+					temp_category_analysis.category_score = temp_category_score;
+					temp_v_category_analysis.push_back(temp_category_analysis);
+					temp_category_analysis.v_blastp_data_combined_by_category.clear();
+				}
 			}
 		}
 		denovo_peptide default_denovo_peptide{};
@@ -116,10 +118,10 @@ namespace fpf_data_analysis {
 	void create_proteinconstruct_from_denovo(filesystem& par_filesystem) {
 		for (auto& itr_category_analysis : par_filesystem.v_category_analysis) {
 			for (size_t i = 0; i < itr_category_analysis.p_FASTA_category->category_protein.length(); ++i) {
-				proteinconstruct_from_denovo temp_proteinconstruct_from_denovo{};
+				v_proteinconstruct_from_denovo temp_proteinconstruct_from_denovo{};
 				temp_proteinconstruct_from_denovo.aminoacid = '.';
-				temp_proteinconstruct_from_denovo.aminoacid_score = 0;
-				itr_category_analysis.proteinconstruct_from_denovo.push_back(temp_proteinconstruct_from_denovo);
+				temp_proteinconstruct_from_denovo.aminoacid_evalue_transformed = 0;
+				itr_category_analysis.v_proteinconstruct_from_denovo.push_back(temp_proteinconstruct_from_denovo);
 			}
 			sort_v_blastp_data_with_spectralcount(itr_category_analysis.v_blastp_data_combined_by_category);
 			vector<blastp_data> v_blastp_query_alignment_selected{};
@@ -134,6 +136,7 @@ namespace fpf_data_analysis {
 					temp_blastp_query_alignment.query_alignment = itr_v_blastp_data.query_alignment;
 					temp_blastp_query_alignment.blastp_evalue_transformed = itr_v_blastp_data.blastp_evalue_transformed;
 					temp_blastp_query_alignment.blastp_parameter_score = itr_v_blastp_data.blastp_parameter_score;
+					temp_blastp_query_alignment.p_peptide_data = itr_v_blastp_data.p_peptide_data;
 					temp_blastp_query_alignment.denovo_replicate_count = itr_v_blastp_data.denovo_replicate_count;
 					for (const auto itr_v_blastp_data_2 : itr_category_analysis.v_blastp_data_combined_by_category) {
 						for (auto i = 0; i < itr_v_blastp_data.query_alignment.length(); ++i) {
@@ -149,16 +152,42 @@ namespace fpf_data_analysis {
 					}
 				}
 			}
-			for (auto i = 0; i < itr_category_analysis.p_FASTA_category->category_protein.length(); ++i) {
-				for (const auto& itr_blastp_query_alignment_selected : v_blastp_query_alignment_selected) {
-					if (itr_blastp_query_alignment_selected.query_alignment.at(i) != '.') {
-						if (itr_blastp_query_alignment_selected.blastp_evalue_transformed > itr_category_analysis.proteinconstruct_from_denovo[i].aminoacid_score) {
-							itr_category_analysis.proteinconstruct_from_denovo[i].aminoacid = itr_blastp_query_alignment_selected.query_alignment.at(i);
-							itr_category_analysis.proteinconstruct_from_denovo[i].aminoacid_score = itr_blastp_query_alignment_selected.blastp_evalue_transformed;
+			for (const auto& itr_blastp_query_alignment_selected : v_blastp_query_alignment_selected) {
+				for (auto i = 0; i < itr_category_analysis.v_proteinconstruct_from_denovo.size(); i) {
+					if (itr_blastp_query_alignment_selected.query_alignment.at(i) == '.') {
+						++i;
+					}
+					else {
+						for (const auto& itr_v_denovo_aminoacid : itr_blastp_query_alignment_selected.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
+							if (i == itr_category_analysis.v_proteinconstruct_from_denovo.size()) {
+								break;
+							}
+							else {
+								if (itr_blastp_query_alignment_selected.blastp_evalue_transformed > itr_category_analysis.v_proteinconstruct_from_denovo[i].aminoacid_evalue_transformed) {
+									if (itr_blastp_query_alignment_selected.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
+										itr_category_analysis.v_proteinconstruct_from_denovo[i].aminoacid = itr_blastp_query_alignment_selected.query_alignment.at(i);
+										itr_category_analysis.v_proteinconstruct_from_denovo[i].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
+										itr_category_analysis.v_proteinconstruct_from_denovo[i].aminoacid_evalue_transformed = itr_blastp_query_alignment_selected.blastp_evalue_transformed;
+									}
+								}
+							++i;
+							}
 						}
 					}
+				}		
+			}
+		}
+	}
+
+	void determine_sequence_coverage(filesystem& par_filesystem) {
+		for (auto& itr_category_analysis : par_filesystem.v_category_analysis) {
+			size_t temp_sequencetrue{};
+			for (const auto& itr_v_proteinconstruct : itr_category_analysis.v_proteinconstruct_from_denovo) {
+				if (itr_v_proteinconstruct.aminoacid != '.') {
+					++temp_sequencetrue;
 				}
 			}
+			itr_category_analysis.proteinconstruct_sequencecoverage = double(100 * (double(temp_sequencetrue) / itr_category_analysis.v_proteinconstruct_from_denovo.size()));
 		}
 	}
 

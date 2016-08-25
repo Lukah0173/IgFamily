@@ -1,4 +1,4 @@
-// * * IgFamily v0.7.7 * * 
+// * * IgFamily v0.7.8 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -30,7 +30,7 @@ int main() {
 
 	std::cout << "-- IgFamily " << IgFamily::version << " --\n\n\n";
 
-	fpf_filesystem::display_default();
+	//fpf_filesystem::display_default();
 
 	int catch_menu_selection;
 	catch_menu_selection = fpf_filesystem::perform_menu_selection(fpf_filesystem::display_menu());
@@ -131,6 +131,7 @@ int main() {
 		if (itr_v_filesystem.denovopeptides_exist) {
 			fpf_data_analysis::create_category_analysis(itr_v_filesystem);
 			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem);
+			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem);
 			for (auto& itr_v_category_analysis : itr_v_filesystem.v_category_analysis) {
 				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_category_analysis.v_blastp_data_combined_by_category);
 			}
@@ -165,6 +166,19 @@ int main() {
 			std::cout << "\n\n ...homology file ";
 			std::cout << itr_v_filesystem.filename;
 			std::cout << " output";
+		}
+	}
+
+	std::cout << "\n\n\n\n scoring categories...\n";
+	for (auto& itr_v_filesystem : v_filesystem) {
+		if (itr_v_filesystem.denovopeptides_exist) {
+			fpf_data_analysis::create_category_analysis(itr_v_filesystem);
+			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem);
+			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem);
+			for (auto& itr_v_category_analysis : itr_v_filesystem.v_category_analysis) {
+				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_category_analysis.v_blastp_data_combined_by_category);
+			}
+			fpf_data_analysis::sort_v_category_analysis(itr_v_filesystem.v_category_analysis);
 		}
 	}
 

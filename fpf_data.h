@@ -31,7 +31,7 @@ namespace fpf_data {
 	struct denovo_aminoacid;
 	struct FASTA_category;
 	struct blastp_data;
-	struct proteinconstruct_from_denovo;
+	struct v_proteinconstruct_from_denovo;
 	struct category_analysis;
 	struct multinomial;
 
@@ -42,7 +42,7 @@ namespace fpf_data {
 
 	struct denovo_aminoacid {
 		char aminoacid;
-		double aminoacid_score;
+		double aminoacid_localconfidence;
 	};
 
 	struct peptide_data {
@@ -87,9 +87,10 @@ namespace fpf_data {
 		size_t denovo_replicate_count;
 	};
 
-	struct proteinconstruct_from_denovo {
+	struct v_proteinconstruct_from_denovo {
 		char aminoacid;
-		double aminoacid_score;
+		double aminoacid_localconfidence;
+		double aminoacid_evalue_transformed;
 	};
 
 	struct category_analysis {
@@ -97,7 +98,8 @@ namespace fpf_data {
 		FASTA_category* p_FASTA_category;
 		vector<blastp_data> v_blastp_data_combined_by_category;
 		double category_score;
-		vector<proteinconstruct_from_denovo> proteinconstruct_from_denovo;
+		vector<v_proteinconstruct_from_denovo> v_proteinconstruct_from_denovo;
+		double proteinconstruct_sequencecoverage;
 	};
 
 	struct multinomial {
@@ -164,12 +166,12 @@ namespace fpf_data {
 				temp_peptide_data.peptide_withmod = itr_parse_csv_peptide_data.csv_peptide;
 				for (size_t i = 0; i < temp_peptide_filtered.size(); ++i) {
 					temp_denovo_aminoacid.aminoacid = temp_peptide_filtered[i];
-					temp_denovo_aminoacid.aminoacid_score = itr_parse_csv_peptide_data.v_csv_denovo_localconfidence[i];
+					temp_denovo_aminoacid.aminoacid_localconfidence = itr_parse_csv_peptide_data.v_csv_denovo_localconfidence[i];
 					temp_denovo_peptide.v_denovo_aminoacid.push_back(temp_denovo_aminoacid);
 				}
 				temp_denovo_peptide.localconfidence_average = double();
 				for (const auto itr_s_denovo_aminoacid : temp_denovo_peptide.v_denovo_aminoacid) {
-					temp_denovo_peptide.localconfidence_average += itr_s_denovo_aminoacid.aminoacid_score;
+					temp_denovo_peptide.localconfidence_average += itr_s_denovo_aminoacid.aminoacid_localconfidence;
 				}
 				temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
 				temp_peptide_data.v_denovo_peptide_data.push_back(temp_denovo_peptide);
@@ -182,12 +184,12 @@ namespace fpf_data {
 			else {
 				for (size_t i = 0; i < temp_peptide_filtered.size(); ++i) {
 					temp_denovo_aminoacid.aminoacid = temp_peptide_filtered[i];
-					temp_denovo_aminoacid.aminoacid_score = itr_parse_csv_peptide_data.v_csv_denovo_localconfidence[i];
+					temp_denovo_aminoacid.aminoacid_localconfidence = itr_parse_csv_peptide_data.v_csv_denovo_localconfidence[i];
 					temp_denovo_peptide.v_denovo_aminoacid.push_back(temp_denovo_aminoacid);
 				}
 				temp_denovo_peptide.localconfidence_average = double();
 				for (const auto itr_denovo_aminoacid : temp_denovo_peptide.v_denovo_aminoacid) {
-					temp_denovo_peptide.localconfidence_average += itr_denovo_aminoacid.aminoacid_score;
+					temp_denovo_peptide.localconfidence_average += itr_denovo_aminoacid.aminoacid_localconfidence;
 				}
 				temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
 				if (temp_denovo_peptide.localconfidence_average > DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD) {
