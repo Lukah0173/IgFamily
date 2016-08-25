@@ -10,11 +10,11 @@
 #define	FPF_MULTINOMIAL
 
 #include <cstdlib>						// provides - size_t
-#include <string>						// provides - string
-#include <vector>						// provides - vector
+#include <string>						// provides - std::string
+#include <vector>						// provides - std::vector
 #include <iomanip>						// provides - std::setprecision
 #include <iostream>						// provides - std::get
-#include <utility>						// provides - pair
+#include <utility>						// provides - std::pair
 
 #include "fpf_data.h"
 #include "fpf_filesystem.h"

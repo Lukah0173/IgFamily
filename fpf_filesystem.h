@@ -10,11 +10,11 @@
 #define	FPF_FILESYSTEM
 
 #include <cstdlib> // provides - size_t
-#include <vector> // provides - vector
-#include <utility> // provides - pair
+#include <vector> // provides - std::vector
+#include <utility> // provides - std::pair
 #include <iostream> // provides - std::istream
 #include <algorithm> // provides - std::find
-#include <tuple> // provides - tuple
+#include <tuple> // provides - std::tuple
 
 #include "IgFamily.h"
 #include "fpf_parse.h"

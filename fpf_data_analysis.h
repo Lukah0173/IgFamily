@@ -10,11 +10,11 @@
 #define	FPF_DATA_ANALYSIS
 
 #include <cstdlib>						// provides - size_t
-#include <string>						// provides - string
-#include <vector>						// provides - vector
+#include <string>						// provides - std::string
+#include <vector>						// provides - std::vector
 #include <iomanip>						// provides - std::setprecision
 #include <iostream>						// provides - std::get
-#include <utility>						// provides - pair
+#include <utility>						// provides - std::pair
 
 #include "fpf_filesystem.h"
 #include "fpf_data.h"
@@ -87,12 +87,7 @@ namespace fpf_data_analysis {
 						}
 					}
 				}
-				if (itr_category_analysis.p_FASTA_category->category_class != "UNIPROT") {
-					itr_category_analysis.category_score += (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count * 5);
-				}
-				else {
-					itr_category_analysis.category_score += (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
-				}
+				itr_category_analysis.category_score += (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
 			}
 		}
 

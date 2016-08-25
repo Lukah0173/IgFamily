@@ -10,12 +10,12 @@
 #define	FPF_BLASTP_ANALYSIS
 
 #include <cstdlib> // provides - size_t
-#include <string> // provides - string
-#include <vector> // provides - vector
+#include <string> // provides - std::string
+#include <vector> // provides - std::vector
 #include <fstream> // provides - std::ifstream
 #include <iostream> // provides - std::ofstream
-#include <utility> // provides - pair
-#include <math.h> // provides - log10
+#include <utility> // provides - std::pair
+#include <math.h> // provides - std::log10
 #include <algorithm> // provides - std::find_if
 
 #include "fpf_filesystem.h"
@@ -88,12 +88,12 @@ namespace fpf_blastp_analysis {
 
 	void sys_blastp(filesystem par_filesystem) {
 		std::cout << "\n\n";
-		string string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && makeblastdb.exe -in ";
 		string_system += "blastp_database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
-		string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && blastp.exe -query ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";

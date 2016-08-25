@@ -11,7 +11,7 @@
 
 #include <cstdlib>						// provides - size_t
 #include <string>						// provides - std::string
-#include <vector>						// provides - vector
+#include <vector>						// provides - std::vector
 #include <iomanip>						// provides - std::setprecision
 #include <math.h>						// provides - std::log10, std::floor
 
@@ -79,7 +79,10 @@ namespace fpf_report {
 						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
 							fout_html_report << "<span class=\"mismatch\">";
 						}
-						if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 80) {
+						if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 90) {
+							fout_html_report << "<font color=\"#4c62d6\">";
+						}
+						if ((itr_proteinconstruct_from_denovo.aminoacid_localconfidence <= 90) && (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 80)) {
 							fout_html_report << "<font color=\"#239B56\">";
 						}
 						if ((itr_proteinconstruct_from_denovo.aminoacid_localconfidence <= 80) && (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 60)) {
@@ -144,7 +147,7 @@ namespace fpf_report {
 			fout_html_report << "Homo";
 			fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 			fout_html_report << "Dist";
-			fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+			fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 			fout_html_report << "DN&nbspconf";
 			fout_html_report << "&nbsp&nbsp";
 			fout_html_report << "DN&nbspconf&nbspavr";
@@ -164,8 +167,11 @@ namespace fpf_report {
 							for (const auto& itr_denovo_aminoacid : itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
 								if (((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i)) && !((itr_denovo_aminoacid.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I')))) {
 									fout_html_report << "<span class=\"mismatch\">";
+								}							
+								if (itr_denovo_aminoacid.aminoacid_localconfidence > 90) {
+									fout_html_report << "<font color=\"#4c62d6\">" << itr_denovo_aminoacid.aminoacid << "</font>";
 								}
-								if (itr_denovo_aminoacid.aminoacid_localconfidence > 80) {
+								if ((itr_denovo_aminoacid.aminoacid_localconfidence <= 90) && (itr_denovo_aminoacid.aminoacid_localconfidence > 80)) {
 									fout_html_report << "<font color=\"#239B56\">" << itr_denovo_aminoacid.aminoacid << "</font>";
 								}
 								if ((itr_denovo_aminoacid.aminoacid_localconfidence <= 80) && (itr_denovo_aminoacid.aminoacid_localconfidence > 60)) {
@@ -206,7 +212,7 @@ namespace fpf_report {
 					}
 					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
 					if (itr_blastp_data.blastp_parameter_score < 1) {
-						fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 					}
 					else {
 						for (auto j = 0; j < (4 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
@@ -222,7 +228,7 @@ namespace fpf_report {
 							fout_html_report << "&nbsp";
 						}
 					}
-					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_density;
+					fout_html_report << std::fixed << std::setprecision(3) << itr_blastp_data.blastp_parameter_density;
 					fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
 					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
 					if (itr_blastp_data.blastp_evalue_transformed < 1) {
@@ -295,7 +301,10 @@ namespace fpf_report {
 							if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
 								fout_html_report << "<span class=\"mismatch\">";
 							}
-							if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 80) {
+							if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 90) {
+								fout_html_report << "<font color=\"#4c62d6\">";
+							}							
+							if ((itr_proteinconstruct_from_denovo.aminoacid_localconfidence <= 90) && (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 80)) {
 								fout_html_report << "<font color=\"#239B56\">";
 							}
 							if ((itr_proteinconstruct_from_denovo.aminoacid_localconfidence <= 80) && (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 60)) {
@@ -360,7 +369,7 @@ namespace fpf_report {
 				fout_html_report << "Homo";
 				fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 				fout_html_report << "Dist";
-				fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+				fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 				fout_html_report << "DN&nbspconf";
 				fout_html_report << "&nbsp&nbsp";
 				fout_html_report << "DN&nbspconf&nbspavr";
@@ -381,7 +390,10 @@ namespace fpf_report {
 									if (((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i)) && !((itr_denovo_aminoacid.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I')))) {
 										fout_html_report << "<span class=\"mismatch\">";
 									}
-									if (itr_denovo_aminoacid.aminoacid_localconfidence > 80) {
+									if (itr_denovo_aminoacid.aminoacid_localconfidence > 90) {
+										fout_html_report << "<font color=\"#4c62d6\">" << itr_denovo_aminoacid.aminoacid << "</font>";
+									}
+									if ((itr_denovo_aminoacid.aminoacid_localconfidence <= 90) && (itr_denovo_aminoacid.aminoacid_localconfidence > 80)) {
 										fout_html_report << "<font color=\"#239B56\">" << itr_denovo_aminoacid.aminoacid << "</font>";
 									}
 									if ((itr_denovo_aminoacid.aminoacid_localconfidence <= 80) && (itr_denovo_aminoacid.aminoacid_localconfidence > 60)) {
@@ -438,8 +450,8 @@ namespace fpf_report {
 								fout_html_report << "&nbsp";
 							}
 						}
-						fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_density;
-						fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+						fout_html_report << std::fixed << std::setprecision(3) << itr_blastp_data.blastp_parameter_density;
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.p_peptide_data->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
 						if (itr_blastp_data.blastp_evalue_transformed < 1) {
 							fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
