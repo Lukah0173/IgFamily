@@ -39,6 +39,17 @@ namespace fpf_filesystem {
 	typedef fpf_parse::FASTA_data FASTA_data;
 
 	struct filesystem;
+	struct sample_analysis;
+	
+	struct sample_analysis {
+		vector<protein_data> v_protein_data;
+		vector<peptide_data> v_peptide_data;
+		vector<peptide_analysis> v_peptide_analysis;
+		vector<blastp_data> v_blastp_data;
+		vector<protein_analysis> v_protein_analysis;
+		vector<protein_analysis> v_protein_analysis_selected_by_polymorphism;
+		multinomial multinomial_data;
+	};
 
 	struct filesystem {
 	public:
@@ -68,24 +79,11 @@ namespace fpf_filesystem {
 
 		string denono_deltamass;
 
-		/* sample data */
+		/* sample analysis */
 
-		vector<protein_data> v_protein_data;
-		vector<peptide_data> v_replicate_peptide_data;
-		vector<peptide_analysis> v_peptide_analysis;
-
-		/* blastp data */
-
-		vector<blastp_data> v_blastp_data;
-
-		/* protein analysis */
-
-		vector<protein_analysis> v_protein_analysis;
-		vector<protein_analysis> v_protein_analysis_selected_by_polymorphism;
-
-		/* multinomial data */
-		
-		multinomial multinomial_data;
+		sample_analysis sample_PEAKS_database_analysis;
+		sample_analysis sample_PEAKS_denovo_analysis;
+		sample_analysis sample_NOVOR_denovo_analysis;
 	};
 
 	void display_default() {

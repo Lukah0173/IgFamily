@@ -1,4 +1,4 @@
-// * * IgFamily v0.7.9 * * 
+// * * IgFamily v0.7.10 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -62,8 +62,6 @@ int main() {
 		}
 	}
 
-	vector<fpf_data::protein_data> main_v_protein_data = fpf_data::create_protein_data(main_FASTA);
-
 	for (auto& itr_v_filesystem : v_filesystem) {
 		bool filesystem_modified = bool();
 		if ((IgFamily::FILESYSTEM_UPDATE_ALL) || (itr_v_filesystem.fileversion != IgFamily::version)) {
@@ -89,9 +87,12 @@ int main() {
 
 			static vector<fpf_data::peptide_data> main_v_peptide_data = std::move(main_v_peptide_data_PEAKS_denovo);
 			static vector<fpf_data::peptide_analysis> main_v_peptide_analysis = std::move(main_v_peptide_analysis_PEAKS_denovo);
-			itr_v_filesystem.v_replicate_peptide_data = main_v_peptide_data;
-			itr_v_filesystem.v_peptide_analysis = main_v_peptide_analysis;
-			itr_v_filesystem.v_protein_data = main_v_protein_data;
+			static vector<fpf_data::protein_data> main_v_protein_data = fpf_data::create_protein_data(main_FASTA);
+			fpf_filesystem::sample_analysis main_sample_analysis{};
+			main_sample_analysis.v_peptide_data = main_v_peptide_data;
+			main_sample_analysis.v_peptide_analysis = main_v_peptide_analysis;
+			main_sample_analysis.v_protein_data = main_v_protein_data;
+			itr_v_filesystem.sample_PEAKS_denovo_analysis = main_sample_analysis;
 		}
 	}
 
@@ -100,25 +101,25 @@ int main() {
 			std::cout << "\n\n\n\n analysing homology for file ";
 			std::cout << itr_v_filesystem.filename;
 			std::cout << "...";
-			fpf_blastp_analysis::create_blastp_input(itr_v_filesystem);			
-			fpf_blastp_analysis::create_blastp_database(itr_v_filesystem);	
+			fpf_blastp_analysis::create_blastp_input(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::create_blastp_database(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n\n * * * Calling blastp.exe * * *";
-			fpf_blastp_analysis::sys_blastp(itr_v_filesystem);
+			fpf_blastp_analysis::sys_blastp(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n\n * * * Closing blastp.exe * * *";
 			std::cout << "\n\n\n ...homology analysis complete";
 			std::cout << "\n\n\n creating homology data structures for file ";
 			std::cout << itr_v_filesystem.filename;
 			std::cout << "...";
-			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem);
-			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem);
-			fpf_blastp_analysis::associate_blastp_data_to_v_protein_data(itr_v_filesystem);
-			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem);
-			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem);		
-			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem);
-			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem);
+			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::associate_blastp_data_to_v_protein_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n ...data structures assigned";
 			std::cout << "\n\n outputting homology summary...";
-			fpf_blastp_analysis::fout_blastp_summary(itr_v_filesystem);
+			fpf_blastp_analysis::fout_blastp_summary(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n ...homology file ";
 			std::cout << itr_v_filesystem.filename;
 			std::cout << " output";
@@ -128,42 +129,42 @@ int main() {
 	std::cout << "\n\n\n\n scoring categories...\n";
 	for (auto& itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.denovopeptides_exist) {
-			fpf_data_analysis::create_protein_analysis(itr_v_filesystem);
-			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem);
-			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem);
-			for (auto& itr_v_protein_analysis : itr_v_filesystem.v_protein_analysis) {
+			fpf_data_analysis::create_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			for (auto& itr_v_protein_analysis : itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis) {
 				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_protein_analysis.v_blastp_data_combined_by_protein);
 			}
-			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.v_protein_analysis);
+			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis);
 		}
 	}
 
 	for (auto& itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.denovopeptides_exist) {
 			std::cout << "\n\n\n\n determining most-probable germline representation...\n";
-			fpf_data_analysis::select_protein_analysis_by_score(itr_v_filesystem);
+			fpf_data_analysis::select_protein_analysis_by_score(itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n\n analysing post-hoc homology for file ";
 			std::cout << itr_v_filesystem.filename;
 			std::cout << "...";
-			fpf_blastp_analysis::create_blastp_database_refined(itr_v_filesystem);
+			fpf_blastp_analysis::create_blastp_database_refined(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n\n * * * Calling blastp.exe * * *";
-			fpf_blastp_analysis::sys_blastp(itr_v_filesystem);
+			fpf_blastp_analysis::sys_blastp(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n\n * * * Closing blastp.exe * * *";
 			std::cout << "\n\n\n ...homology analysis complete";
 			std::cout << "\n\n\n creating homology data structures for file ";
 			std::cout << itr_v_filesystem.filename;
 			std::cout << "...";
-			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem);
-			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem);
-			fpf_blastp_analysis::associate_blastp_data_to_v_protein_data(itr_v_filesystem);
-			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem);
-			fpf_blastp_analysis::create_protein_from_protein_analysis(itr_v_filesystem);
-			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem);
-			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem);
-			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem);
+			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::associate_blastp_data_to_v_protein_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::create_protein_from_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n ...data structures assigned";
 			std::cout << "\n\n outputting homology summary...";
-			fpf_blastp_analysis::fout_blastp_summary(itr_v_filesystem);
+			fpf_blastp_analysis::fout_blastp_summary(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n ...homology file ";
 			std::cout << itr_v_filesystem.filename;
 			std::cout << " output";
@@ -173,13 +174,13 @@ int main() {
 	std::cout << "\n\n\n\n scoring categories...\n";
 	for (auto& itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.denovopeptides_exist) {
-			fpf_data_analysis::create_protein_analysis(itr_v_filesystem);
-			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem);
-			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem);
-			for (auto& itr_v_protein_analysis : itr_v_filesystem.v_protein_analysis) {
+			fpf_data_analysis::create_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			for (auto& itr_v_protein_analysis : itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis) {
 				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_protein_analysis.v_blastp_data_combined_by_protein);
 			}
-			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.v_protein_analysis);
+			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis);
 		}
 	}
 
@@ -190,10 +191,10 @@ int main() {
 	std::cout << "\n\n\n\n creating multinomial data frames...\n";
 	for (auto& itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.denovopeptides_exist) {
-			fpf_multinomial::create_filesystem_multinomial_data(itr_v_filesystem);
-			fpf_multinomial::fout_multinomial(itr_v_filesystem);
-			fpf_multinomial::fout_multinomial_element(itr_v_filesystem);
-			fpf_multinomial::fout_multinomial_element_nomatch(itr_v_filesystem);
+			fpf_multinomial::create_filesystem_multinomial_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_multinomial::fout_multinomial(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_multinomial::fout_multinomial_element(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_multinomial::fout_multinomial_element_nomatch(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 		}
 	}
 
@@ -201,10 +202,10 @@ int main() {
 	for (auto& itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.denovopeptides_exist) {
 			std::cout << "\n\n ...generating multinomial report for " << itr_v_filesystem.filename;
-			fpf_report::fout_multinomial_comparison(itr_v_filesystem);
+			fpf_report::fout_multinomial_comparison(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			std::cout << "\n\n ...generating html report for " << itr_v_filesystem.filename;
-			fpf_report::fout_html_report(itr_v_filesystem);
-			fpf_report::fout_html_report_filtered(itr_v_filesystem);
+			fpf_report::fout_html_report(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
+			fpf_report::fout_html_report_filtered(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 		}
 	}
 

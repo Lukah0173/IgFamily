@@ -25,6 +25,7 @@ namespace fpf_filesystem_analysis {
 	using std::pair;
 	
 	typedef fpf_filesystem::filesystem filesystem;
+	typedef fpf_filesystem::sample_analysis sample_analysis;
 	typedef fpf_data::peptide_data peptide_data;
 
 	struct filesystem_analysis;
@@ -34,66 +35,6 @@ namespace fpf_filesystem_analysis {
 		vector<fpf_data::peptide_data> v_replicate_peptide_data;
 		vector<fpf_data::peptide_data> v_replicate_peptide_data_filtered;
 	};
-
-	vector<string> create_v_replicate_peptide_data_total_observed(vector<filesystem> par_v_filesystem) {
-		vector<string> temp_v_replicate_peptide_data_total_observed = vector<string>();
-		for (const auto& itr_v_filesystem : par_v_filesystem) { 
-			const auto& temp_v_replicate_peptide_data = itr_v_filesystem.v_replicate_peptide_data;
-			for (const auto& itr_v_replicate_peptide_data : temp_v_replicate_peptide_data) {
-				if (std::find(temp_v_replicate_peptide_data_total_observed.begin(), temp_v_replicate_peptide_data_total_observed.end(), itr_v_replicate_peptide_data.peptide_withmod)
-					== temp_v_replicate_peptide_data_total_observed.end()) {
-					temp_v_replicate_peptide_data_total_observed.push_back(itr_v_replicate_peptide_data.peptide_withmod);
-				}
-			}
-		}
-		std::sort(temp_v_replicate_peptide_data_total_observed.begin(), temp_v_replicate_peptide_data_total_observed.end());
-		return temp_v_replicate_peptide_data_total_observed;
-	}
-
-	vector<string> create_v_replicate_peptide_data_filtered_total_observed(vector<filesystem> par_v_filesystem) {
-		vector<string> temp_v_replicate_peptide_data_total_observed = vector<string>();
-		for (const auto& itr_v_filesystem : par_v_filesystem) {
-			const auto& temp_v_replicate_peptide_data = itr_v_filesystem.v_replicate_peptide_data;
-			for (const auto itr_v_replicate_peptide_data : temp_v_replicate_peptide_data) {
-				if (std::find(temp_v_replicate_peptide_data_total_observed.begin(), temp_v_replicate_peptide_data_total_observed.end(), itr_v_replicate_peptide_data.peptide_withmod)
-					== temp_v_replicate_peptide_data_total_observed.end()) {
-					temp_v_replicate_peptide_data_total_observed.push_back(itr_v_replicate_peptide_data.peptide_filtered);
-				}
-			}
-		}
-		std::sort(temp_v_replicate_peptide_data_total_observed.begin(), temp_v_replicate_peptide_data_total_observed.end());
-		return temp_v_replicate_peptide_data_total_observed;
-	}
-
-	filesystem_analysis create_filesystem_analysis(filesystem& par_filesystem, vector<string>& par_v_replicate_peptide_data_total_observed, vector<string>& par_v_replicate_peptide_data_filtered_total_observed) {
-		filesystem_analysis temp_filesystem_analysis = filesystem_analysis();
-		peptide_data temp_peptide_data = peptide_data();
-		for (const auto itr_v_peptide_total_observed : par_v_replicate_peptide_data_total_observed) {
-			const auto find_v_replicate_peptide_data = std::find_if(par_filesystem.v_replicate_peptide_data.begin(), par_filesystem.v_replicate_peptide_data.end(), 
-				[itr_v_peptide_total_observed](fpf_data::peptide_data par_peptide_data) {
-				return par_peptide_data.peptide_withmod == itr_v_peptide_total_observed; });
-			if (find_v_replicate_peptide_data != par_filesystem.v_replicate_peptide_data.end()) {
-				temp_filesystem_analysis.v_replicate_peptide_data.push_back(*find_v_replicate_peptide_data);
-			}
-			else {
-				temp_filesystem_analysis.v_replicate_peptide_data.push_back(temp_peptide_data);
-			}
-		}
-		peptide_data temp_peptide_data_filtered = peptide_data();
-		for (const auto itr_v_peptide_total_observed : par_v_replicate_peptide_data_filtered_total_observed) {
-			const auto find_v_replicate_peptide_data = std::find_if(par_filesystem.v_replicate_peptide_data.begin(), par_filesystem.v_replicate_peptide_data.end(),
-				[itr_v_peptide_total_observed](fpf_data::peptide_data par_peptide_data) {
-				return par_peptide_data.peptide_withmod == itr_v_peptide_total_observed; });
-			if (find_v_replicate_peptide_data != par_filesystem.v_replicate_peptide_data.end()) {
-				temp_filesystem_analysis.v_replicate_peptide_data.push_back(*find_v_replicate_peptide_data);
-			}
-			else {
-				temp_filesystem_analysis.v_replicate_peptide_data.push_back(temp_peptide_data);
-			}
-		}
-		temp_filesystem_analysis.filesystem = &par_filesystem;
-		return temp_filesystem_analysis;
-	}
 
 	void fout_filesystem_peptide_data_summary(vector<filesystem_analysis>& par_v_filesystem_analysis, vector<string> par_v_replicate_peptide_data_total_observed, string par_output) {
 		std::string output_v_filesystem_analysis_peptide_summary = "summary_data\\" + par_output;

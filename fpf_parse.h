@@ -6,14 +6,12 @@
 
 
 
-#include <cstdlib> // provides - size_t
-#include <string> // provides - std::string
-#include <iostream> // provides - std::cin, std::cout
-#include <fstream> // provides - std::ifstream, std::ofstream
-#include <istream> // provides - std::istream::get
-#include <vector> // provides - std::vector
-#include <map> // provides - std::map
-#include <set>
+#include <cstdlib>				// provides - size_t
+#include <string>				// provides - std::string
+#include <iostream>				// provides - std::cin, std::cout
+#include <fstream>				// provides - std::ifstream, std::ofstream
+#include <istream>				// provides - std::istream::get
+#include <vector>				// provides - std::vector
 #include <algorithm>
 #include <sstream>
 #include <iomanip>

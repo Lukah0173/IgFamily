@@ -25,12 +25,13 @@ namespace fpf_report {
 	using std::vector;
 
 	typedef fpf_filesystem::filesystem filesystem;
+	typedef fpf_filesystem::sample_analysis sample_analysis;
 
-	void fout_multinomial_comparison(filesystem& par_filesystem) {
+	void fout_multinomial_comparison(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::string output_multinomial_comparison = par_filesystem.directory + "multinomial_comparison.csv";
 		std::ofstream fout_multinomial_comparison;
 		fout_multinomial_comparison.open(output_multinomial_comparison);
-		for (const auto& itr_v_protein_analysis : par_filesystem.v_protein_analysis_selected_by_polymorphism) {
+		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
 				fout_multinomial_comparison << itr_v_protein_analysis.p_protein_data->protein_name << ",";
 				fout_multinomial_comparison << itr_v_protein_analysis.protein_score << "\n";
@@ -38,7 +39,7 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_html_report(filesystem& par_filesystem) {
+	void fout_html_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::string output_html_report{};
 		if (IgFamily::NOVOR_DENOVO) {
 			output_html_report = par_filesystem.directory + "NOVOR_report.html";
@@ -66,7 +67,7 @@ namespace fpf_report {
 		fout_html_report << "\n\n<br><br>" << par_filesystem.fileversion;
 		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
 		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
-		for (const auto& itr_protein_analysis : par_filesystem.v_protein_analysis_selected_by_polymorphism) {
+		for (const auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
 			fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;
 			fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_protein_analysis.protein_score;
 			fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_protein_analysis.proteinconstruct_sequencecoverage << "%";
@@ -261,7 +262,7 @@ namespace fpf_report {
 </html>\n ";
 	}
 
-	void fout_html_report_filtered(filesystem& par_filesystem) {
+	void fout_html_report_filtered(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::string output_html_report{};
 		if (IgFamily::NOVOR_DENOVO) {
 			output_html_report = par_filesystem.directory + "NOVOR_report_IG.html";
@@ -290,7 +291,7 @@ namespace fpf_report {
 		fout_html_report << "\n\n<br><br>" << par_filesystem.fileversion;
 		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
 		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
-		for (const auto& itr_protein_analysis : par_filesystem.v_protein_analysis_selected_by_polymorphism) {
+		for (const auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
 			if (itr_protein_analysis.p_protein_data->protein_type == "IG") {
 				fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;
 				fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_protein_analysis.protein_score;

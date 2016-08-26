@@ -34,13 +34,14 @@ namespace fpf_data_analysis {
 	typedef fpf_data::multinomial multinomial;
 	typedef fpf_data::proteinconstruct_aminoacid proteinconstruct_aminoacid;
 	typedef fpf_filesystem::filesystem filesystem;
+	typedef fpf_filesystem::sample_analysis sample_analysis;
 	typedef fpf_parse::csv_data csv_data;
 	typedef fpf_parse::FASTA_data FASTA_data;
 
-	void create_protein_analysis(filesystem& par_filesystem) {
+	void create_protein_analysis(sample_analysis& par_sample_analysis) {
 		protein_analysis temp_protein_analysis{};
 		vector<protein_analysis> temp_v_protein_analysis{};
-		for (const auto itr_blastp_data : par_filesystem.v_blastp_data) {
+		for (const auto itr_blastp_data : par_sample_analysis.v_blastp_data) {
 			if (itr_blastp_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
 				auto find_protein_analysis = std::find_if(temp_v_protein_analysis.begin(), temp_v_protein_analysis.end(),
 					[itr_blastp_data](const protein_analysis par_protein_analysis) {
@@ -62,13 +63,13 @@ namespace fpf_data_analysis {
 		denovo_peptide default_denovo_peptide{};
 		for (auto& itr_protein_analysis : temp_v_protein_analysis) {
 			for (auto& itr_blastp_data : itr_protein_analysis.v_blastp_data_combined_by_protein) {
-				auto& find_peptide_analysis = std::find_if(par_filesystem.v_peptide_analysis.begin(), par_filesystem.v_peptide_analysis.end(),
+				auto& find_peptide_analysis = std::find_if(par_sample_analysis.v_peptide_analysis.begin(), par_sample_analysis.v_peptide_analysis.end(),
 					[itr_blastp_data](const peptide_analysis par_peptide_analysis) {
 					return par_peptide_analysis.peptide_filtered == itr_blastp_data.blastp_query;
 				});
 				itr_blastp_data.p_peptide_analysis = &(*find_peptide_analysis);
 				itr_blastp_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &default_denovo_peptide;
-				for (auto& itr_peptide_data : find_peptide_analysis->v_replicate_peptide_data) {
+				for (auto& itr_peptide_data : find_peptide_analysis->v_peptide_data) {
 					++itr_blastp_data.denovo_replicate_count;
 					if (itr_blastp_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average < itr_peptide_data->denovo_peptide_data.localconfidence_average) {
 						itr_blastp_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &itr_peptide_data->denovo_peptide_data;
@@ -77,7 +78,7 @@ namespace fpf_data_analysis {
 				itr_protein_analysis.protein_score += (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
 			}
 		}
-		par_filesystem.v_protein_analysis = temp_v_protein_analysis;
+		par_sample_analysis.v_protein_analysis = temp_v_protein_analysis;
 	}
 
 	inline bool predicate_blastp_data_with_spectralcount(const blastp_data& i, const blastp_data& j) {
@@ -96,8 +97,8 @@ namespace fpf_data_analysis {
 		std::sort(par_v_blastp_data.begin(), par_v_blastp_data.end(), predicate_protein_analysis);
 	}
 
-	void create_proteinconstruct_from_denovo(filesystem& par_filesystem) {
-		for (auto& itr_protein_analysis : par_filesystem.v_protein_analysis) {
+	void create_proteinconstruct_from_denovo(sample_analysis& par_sample_analysis) {
+		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			for (size_t i = 0; i < itr_protein_analysis.p_protein_data->protein_protein.length(); ++i) {
 				proteinconstruct_aminoacid temp_proteinconstruct_from_denovo{};
 				temp_proteinconstruct_from_denovo.aminoacid = '.';
@@ -174,8 +175,8 @@ namespace fpf_data_analysis {
 		}
 	}
 
-	void determine_sequence_coverage(filesystem& par_filesystem) {
-		for (auto& itr_protein_analysis : par_filesystem.v_protein_analysis) {
+	void determine_sequence_coverage(sample_analysis& par_sample_analysis) {
+		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			size_t temp_sequencetrue{};
 			for (const auto& itr_v_proteinconstruct : itr_protein_analysis.proteinconstruct_from_denovo) {
 				if (itr_v_proteinconstruct.aminoacid != '.') {
@@ -186,9 +187,9 @@ namespace fpf_data_analysis {
 		}
 	}
 
-	void select_protein_analysis_by_score(filesystem& par_filesystem) {
+	void select_protein_analysis_by_score(sample_analysis& par_sample_analysis) {
 		vector<protein_analysis> temp_v_protein_analysis_selected_by_polymorphism{};
-		for (const auto itr_v_protein_analysis : par_filesystem.v_protein_analysis) {
+		for (const auto itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
 				string protein_name_polymorphism_reduced{};
 				bool switch_protein_name_polymorphism = bool();
@@ -218,7 +219,7 @@ namespace fpf_data_analysis {
 				temp_v_protein_analysis_selected_by_polymorphism.push_back(itr_v_protein_analysis);
 			}
 		}
-		par_filesystem.v_protein_analysis_selected_by_polymorphism = temp_v_protein_analysis_selected_by_polymorphism;
+		par_sample_analysis.v_protein_analysis_selected_by_polymorphism = temp_v_protein_analysis_selected_by_polymorphism;
 	}
 }
 

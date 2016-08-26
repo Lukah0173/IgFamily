@@ -15,7 +15,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.7.9";
+	const string version = "v0.7.10";
 
 	const bool FILESYSTEM_UPDATE_ALL = 1;
 	const bool NOVOR_DENOVO = 0;

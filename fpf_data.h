@@ -57,7 +57,7 @@ namespace fpf_data {
 	struct peptide_analysis {
 		string peptide_filtered;
 		size_t replicate_count;
-		vector<peptide_data*> v_replicate_peptide_data; 
+		vector<peptide_data*> v_peptide_data; 
 		denovo_peptide* p_denovo_peptide_best_by_averagelocalconfidence;
 		double v_denovo_peptide_averagescore;
 	};
@@ -192,13 +192,13 @@ namespace fpf_data {
 			if (find_peptide_analysis == temp_v_peptide_analysis.end()) {
 				temp_peptide_analysis.peptide_filtered = itr_v_peptide_data.peptide_filtered;
 				++temp_peptide_analysis.replicate_count;
-				temp_peptide_analysis.v_replicate_peptide_data.push_back(&itr_v_peptide_data);
+				temp_peptide_analysis.v_peptide_data.push_back(&itr_v_peptide_data);
 				temp_peptide_analysis.v_denovo_peptide_averagescore = itr_v_peptide_data.denovo_peptide_data.localconfidence_average;
 				temp_v_peptide_analysis.push_back(temp_peptide_analysis);
 			}
 			else {
 				++find_peptide_analysis->replicate_count;
-				find_peptide_analysis->v_replicate_peptide_data.push_back(&itr_v_peptide_data);
+				find_peptide_analysis->v_peptide_data.push_back(&itr_v_peptide_data);
 				find_peptide_analysis->v_denovo_peptide_averagescore
 					= ((find_peptide_analysis->v_denovo_peptide_averagescore * (find_peptide_analysis->replicate_count - 1)) + itr_v_peptide_data.denovo_peptide_data.localconfidence_average) / find_peptide_analysis->replicate_count;
 			}
