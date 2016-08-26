@@ -9,32 +9,32 @@
 #ifndef FPF_FILESYSTEM
 #define	FPF_FILESYSTEM
 
-#include <cstdlib> // provides - size_t
-#include <vector> // provides - std::vector
-#include <utility> // provides - std::pair
-#include <iostream> // provides - std::istream
 #include <algorithm> // provides - std::find
+#include <cstdlib> // provides - size_t
+#include <iostream> // provides - std::istream
 #include <tuple> // provides - std::tuple
+#include <utility> // provides - std::pair
+#include <vector> // provides - std::vector
 
 #include "IgFamily.h"
-#include "fpf_parse.h"
-#include "fpf_data.h"
 #include "fpf_convert.h"
+#include "fpf_data.h"
+#include "fpf_parse.h"
 
 
 namespace fpf_filesystem {
 
+	using std::pair;
 	using std::string;
 	using std::vector;
-	using std::pair;
 
 	typedef fpf_convert::fileconversion_parameters fileconversion_parameters;
-	typedef fpf_data::peptide_data peptide_data;
-	typedef fpf_data::peptide_analysis peptide_analysis;
-	typedef fpf_data::FASTA_category FASTA_category;
 	typedef fpf_data::blastp_data blastp_data;
+	typedef fpf_data::protein_data protein_data;
+	typedef fpf_data::peptide_analysis peptide_analysis;
+	typedef fpf_data::peptide_data peptide_data;
+	typedef fpf_data::protein_analysis protein_analysis;
 	typedef fpf_data::multinomial multinomial;
-	typedef fpf_data::category_analysis category_analysis;
 	typedef fpf_parse::csv_data csv_data;
 	typedef fpf_parse::FASTA_data FASTA_data;
 
@@ -70,18 +70,18 @@ namespace fpf_filesystem {
 
 		/* sample data */
 
-		vector<FASTA_category> v_FASTA_category;
-		vector<peptide_data> v_peptide_data;
+		vector<protein_data> v_protein_data;
+		vector<peptide_data> v_replicate_peptide_data;
 		vector<peptide_analysis> v_peptide_analysis;
 
 		/* blastp data */
 
 		vector<blastp_data> v_blastp_data;
 
-		/* category analysis */
+		/* protein analysis */
 
-		vector<category_analysis> v_category_analysis;
-		vector<category_analysis> v_category_analysis_selected_by_polymorphism;
+		vector<protein_analysis> v_protein_analysis;
+		vector<protein_analysis> v_protein_analysis_selected_by_polymorphism;
 
 		/* multinomial data */
 		

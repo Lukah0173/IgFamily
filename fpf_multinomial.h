@@ -10,11 +10,11 @@
 #define	FPF_MULTINOMIAL
 
 #include <cstdlib>						// provides - size_t
-#include <string>						// provides - std::string
-#include <vector>						// provides - std::vector
 #include <iomanip>						// provides - std::setprecision
 #include <iostream>						// provides - std::get
+#include <string>						// provides - std::string
 #include <utility>						// provides - std::pair
+#include <vector>						// provides - std::vector
 
 #include "fpf_data.h"
 #include "fpf_filesystem.h"
@@ -29,24 +29,24 @@ namespace fpf_multinomial {
 	typedef fpf_filesystem::filesystem filesystem;
 
 	void create_filesystem_multinomial_data(filesystem& par_filesystem) {
-		for (const auto& itr_v_category_analysis : par_filesystem.v_category_analysis_selected_by_polymorphism) {
-			par_filesystem.multinomial_data.v_category_name.push_back(itr_v_category_analysis.p_FASTA_category->category_name);
-			par_filesystem.multinomial_data.v_category_class.push_back(itr_v_category_analysis.p_FASTA_category->category_class);
+		for (const auto& itr_v_protein_analysis : par_filesystem.v_protein_analysis_selected_by_polymorphism) {
+			par_filesystem.multinomial_data.v_protein_name.push_back(itr_v_protein_analysis.p_protein_data->protein_name);
+			par_filesystem.multinomial_data.v_protein_class.push_back(itr_v_protein_analysis.p_protein_data->protein_class);
 		}
-		for (const auto& itr_v_peptide_data : par_filesystem.v_peptide_data) {
+		for (const auto& itr_v_peptide_data : par_filesystem.v_replicate_peptide_data) {
 			par_filesystem.multinomial_data.v_element_name.push_back(itr_v_peptide_data.peptide_filtered);
 		}
-		par_filesystem.multinomial_data.v2_frequency = vector<vector<double>>(par_filesystem.multinomial_data.v_element_name.size(), vector<double>(par_filesystem.multinomial_data.v_category_name.size(), 0));
-		par_filesystem.multinomial_data.v2_density = vector<vector<double>>(par_filesystem.multinomial_data.v_element_name.size(), vector<double>(par_filesystem.multinomial_data.v_category_name.size(), 0));
+		par_filesystem.multinomial_data.v2_frequency = vector<vector<double>>(par_filesystem.multinomial_data.v_element_name.size(), vector<double>(par_filesystem.multinomial_data.v_protein_name.size(), 0));
+		par_filesystem.multinomial_data.v2_density = vector<vector<double>>(par_filesystem.multinomial_data.v_element_name.size(), vector<double>(par_filesystem.multinomial_data.v_protein_name.size(), 0));
 		par_filesystem.multinomial_data.v_frequency_marginal_sum = vector<double>(par_filesystem.multinomial_data.v_element_name.size(), 0);
 
 		for (const auto itr_v_blastp_data : par_filesystem.v_blastp_data) {
 			const auto find_multinomial_element = std::find(par_filesystem.multinomial_data.v_element_name.begin(), par_filesystem.multinomial_data.v_element_name.end(), itr_v_blastp_data.blastp_query);		
-			const auto find_multinomial_category = std::find(par_filesystem.multinomial_data.v_category_name.begin(), par_filesystem.multinomial_data.v_category_name.end(), itr_v_blastp_data.blastp_subject_accession);			
+			const auto find_multinomial_protein = std::find(par_filesystem.multinomial_data.v_protein_name.begin(), par_filesystem.multinomial_data.v_protein_name.end(), itr_v_blastp_data.blastp_subject_accession);			
 			
-			if ((find_multinomial_element != par_filesystem.multinomial_data.v_element_name.end()) && (find_multinomial_category) != par_filesystem.multinomial_data.v_category_name.end()){
+			if ((find_multinomial_element != par_filesystem.multinomial_data.v_element_name.end()) && (find_multinomial_protein) != par_filesystem.multinomial_data.v_protein_name.end()){
 				const int i = (find_multinomial_element - par_filesystem.multinomial_data.v_element_name.begin());
-				const int j = (find_multinomial_category - par_filesystem.multinomial_data.v_category_name.begin());
+				const int j = (find_multinomial_protein - par_filesystem.multinomial_data.v_protein_name.begin());
 				par_filesystem.multinomial_data.v2_frequency[i][j] = itr_v_blastp_data.blastp_evalue_transformed;
 				par_filesystem.multinomial_data.v_frequency_marginal_sum[i] += itr_v_blastp_data.blastp_evalue_transformed;
 			}
@@ -66,19 +66,19 @@ namespace fpf_multinomial {
 		std::cout << "\n\n ...outputting multinomial data frame for " << par_filesystem.filename;
 		fout_multinomial << ",";
 		fout_multinomial << "TOTAL,";
-		for (const auto& itr_multinomial_category : par_filesystem.multinomial_data.v_category_name) {
-			fout_multinomial << itr_multinomial_category << ",";
+		for (const auto& itr_multinomial_protein : par_filesystem.multinomial_data.v_protein_name) {
+			fout_multinomial << itr_multinomial_protein << ",";
 		}
 		fout_multinomial << "\n";
 		fout_multinomial << ",,";
-		for (const auto& itr_multinomial_category_class : par_filesystem.multinomial_data.v_category_class) {
-			fout_multinomial << itr_multinomial_category_class << ",";
+		for (const auto& itr_multinomial_protein_class : par_filesystem.multinomial_data.v_protein_class) {
+			fout_multinomial << itr_multinomial_protein_class << ",";
 		}
 		fout_multinomial << "\n";
 		for (auto i = 0; i < par_filesystem.multinomial_data.v_element_name.size(); ++i) {
 			fout_multinomial << par_filesystem.multinomial_data.v_element_name[i] << ",";
 			fout_multinomial << par_filesystem.multinomial_data.v_frequency_marginal_sum[i] << ",";
-			for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
+			for (auto j = 0; j < par_filesystem.multinomial_data.v_protein_name.size(); ++j) {
 				fout_multinomial << par_filesystem.multinomial_data.v2_frequency[i][j] << ",";
 			}
 			fout_multinomial << "\n";
@@ -86,7 +86,7 @@ namespace fpf_multinomial {
 	}
 
 	struct multinomial_frequency_type {
-		string FASTA_category;
+		string protein_data;
 		double multinomial_frequency;
 	};
 
@@ -118,16 +118,16 @@ namespace fpf_multinomial {
 				fout_multinomial_element << " ";
 			}
 			vector<multinomial_frequency_type> temp_v_multinomial_frequency;
-			for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
+			for (auto j = 0; j < par_filesystem.multinomial_data.v_protein_name.size(); ++j) {
 				multinomial_frequency_type temp_multinomial_frequency;
-				temp_multinomial_frequency.FASTA_category = par_filesystem.multinomial_data.v_category_name[j];
+				temp_multinomial_frequency.protein_data = par_filesystem.multinomial_data.v_protein_name[j];
 				temp_multinomial_frequency.multinomial_frequency = par_filesystem.multinomial_data.v2_frequency[i][j];
 				temp_v_multinomial_frequency.push_back(temp_multinomial_frequency);
 			}
 			sort_v_multinomial_frequency(temp_v_multinomial_frequency);
-			for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
+			for (auto j = 0; j < par_filesystem.multinomial_data.v_protein_name.size(); ++j) {
 				if (temp_v_multinomial_frequency[j].multinomial_frequency > 0.2) {
-					fout_multinomial_element << temp_v_multinomial_frequency[j].FASTA_category << " (";
+					fout_multinomial_element << temp_v_multinomial_frequency[j].protein_data << " (";
 					fout_multinomial_element << temp_v_multinomial_frequency[j].multinomial_frequency << "), ";
 				}
 			}
@@ -151,7 +151,7 @@ namespace fpf_multinomial {
 		}
 		for (auto i = 0; i < par_filesystem.multinomial_data.v_element_name.size(); ++i) {
 			double format_frequency_threshold = double();
-			for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
+			for (auto j = 0; j < par_filesystem.multinomial_data.v_protein_name.size(); ++j) {
 				if (par_filesystem.multinomial_data.v2_frequency[i][j] > format_frequency_threshold) {
 					format_frequency_threshold = par_filesystem.multinomial_data.v2_frequency[i][j];
 				}
@@ -162,16 +162,16 @@ namespace fpf_multinomial {
 					fout_multinomial_element_nomatch << " ";
 				}
 				vector<multinomial_frequency_type> temp_v_multinomial_frequency;
-				for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
+				for (auto j = 0; j < par_filesystem.multinomial_data.v_protein_name.size(); ++j) {
 					multinomial_frequency_type temp_multinomial_frequency;
-					temp_multinomial_frequency.FASTA_category = par_filesystem.multinomial_data.v_category_name[j];
+					temp_multinomial_frequency.protein_data = par_filesystem.multinomial_data.v_protein_name[j];
 					temp_multinomial_frequency.multinomial_frequency = par_filesystem.multinomial_data.v2_frequency[i][j];
 					temp_v_multinomial_frequency.push_back(temp_multinomial_frequency);
 				}
 				sort_v_multinomial_frequency(temp_v_multinomial_frequency);
-				for (auto j = 0; j < par_filesystem.multinomial_data.v_category_name.size(); ++j) {
+				for (auto j = 0; j < par_filesystem.multinomial_data.v_protein_name.size(); ++j) {
 					if (temp_v_multinomial_frequency[j].multinomial_frequency > 0.1) {
-						fout_multinomial_element_nomatch << temp_v_multinomial_frequency[j].FASTA_category << " (";
+						fout_multinomial_element_nomatch << temp_v_multinomial_frequency[j].protein_data << " (";
 						fout_multinomial_element_nomatch << temp_v_multinomial_frequency[j].multinomial_frequency << "), ";
 					}
 				}

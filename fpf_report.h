@@ -10,10 +10,10 @@
 #define	FPF_REPORT
 
 #include <cstdlib>						// provides - size_t
-#include <string>						// provides - std::string
-#include <vector>						// provides - std::vector
 #include <iomanip>						// provides - std::setprecision
 #include <math.h>						// provides - std::log10, std::floor
+#include <string>						// provides - std::string
+#include <vector>						// provides - std::vector
 
 #include "IgFamily.h"
 #include "fpf_filesystem.h"
@@ -30,10 +30,10 @@ namespace fpf_report {
 		std::string output_multinomial_comparison = par_filesystem.directory + "multinomial_comparison.csv";
 		std::ofstream fout_multinomial_comparison;
 		fout_multinomial_comparison.open(output_multinomial_comparison);
-		for (const auto& itr_v_category_analysis : par_filesystem.v_category_analysis_selected_by_polymorphism) {
-			if (itr_v_category_analysis.p_FASTA_category->category_type == "IG") {
-				fout_multinomial_comparison << itr_v_category_analysis.p_FASTA_category->category_name << ",";
-				fout_multinomial_comparison << itr_v_category_analysis.category_score << "\n";
+		for (const auto& itr_v_protein_analysis : par_filesystem.v_protein_analysis_selected_by_polymorphism) {
+			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
+				fout_multinomial_comparison << itr_v_protein_analysis.p_protein_data->protein_name << ",";
+				fout_multinomial_comparison << itr_v_protein_analysis.protein_score << "\n";
 			}
 		}
 	}
@@ -66,17 +66,17 @@ namespace fpf_report {
 		fout_html_report << "\n\n<br><br>" << par_filesystem.fileversion;
 		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
 		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
-		for (const auto& itr_category_analysis : par_filesystem.v_category_analysis_selected_by_polymorphism) {
-			fout_html_report << "\n\n\n<br><br><br> " << itr_category_analysis.p_FASTA_category->category_name;
-			fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_category_analysis.category_score;
-			fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_category_analysis.proteinconstruct_sequencecoverage << "%";
-			fout_html_report << "\n\n<br><br> " << itr_category_analysis.p_FASTA_category->category_protein;
+		for (const auto& itr_protein_analysis : par_filesystem.v_protein_analysis_selected_by_polymorphism) {
+			fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;
+			fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_protein_analysis.protein_score;
+			fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_protein_analysis.proteinconstruct_sequencecoverage << "%";
+			fout_html_report << "\n\n<br><br> " << itr_protein_analysis.p_protein_data->protein_protein;
 			fout_html_report << "\n\n<br> ";
 			size_t i{};
-			for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
+			for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
 				if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 0) {
 					if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
-						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
+						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 							fout_html_report << "<span class=\"mismatch\">";
 						}
 						if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 90) {
@@ -93,7 +93,7 @@ namespace fpf_report {
 						}
 					}
 					fout_html_report << itr_proteinconstruct_from_denovo.aminoacid;
-					if (itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) {
+					if (itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) {
 						fout_html_report << "</span>";
 					}
 					if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
@@ -108,9 +108,9 @@ namespace fpf_report {
 			fout_html_report << "&nbsp&nbsp&nbsp" << "Local&nbspconfidence";
 			fout_html_report << "\n\n<br> ";
 			i = size_t();
-			for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
+			for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
 				if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
-					if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
+					if ((itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 						fout_html_report << "<span class=\"mismatch\">";
 					}
 					if (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 35) {
@@ -127,7 +127,7 @@ namespace fpf_report {
 					}
 				}
 				fout_html_report << itr_proteinconstruct_from_denovo.aminoacid;
-				if (itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) {
+				if (itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) {
 					fout_html_report << "</span>";
 				}
 				if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
@@ -137,7 +137,7 @@ namespace fpf_report {
 			}
 			fout_html_report << "&nbsp&nbsp&nbsp" << "Homology";
 			fout_html_report << "\n\n<br><br><br>";
-			for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
+			for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
 				fout_html_report << "&nbsp";
 			}
 			fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -155,20 +155,20 @@ namespace fpf_report {
 			fout_html_report << "&nbsp&nbsp";
 			fout_html_report << "DN&nbspconf&nbspavr";
 			fout_html_report << "<br>";
-			for (const auto& itr_blastp_data : itr_category_analysis.v_blastp_data_combined_by_category) {
+			for (const auto& itr_blastp_data : itr_protein_analysis.v_blastp_data_combined_by_protein) {
 				if (itr_blastp_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
 					fout_html_report << "\n<br> ";
 					int st_mismatch = int();
 					for (auto i = 0; i < itr_blastp_data.query_alignment.length(); i) {
 						if (itr_blastp_data.query_alignment.at(i) == '.') {
-							if (i < itr_blastp_data.p_FASTA_category->category_protein.length()) {
+							if (i < itr_blastp_data.p_protein_data->protein_protein.length()) {
 								fout_html_report << ".";
 							}
 							++i;
 						}
 						else {
 							for (const auto& itr_denovo_aminoacid : itr_blastp_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
-								if (((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i)) && !((itr_denovo_aminoacid.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I')))) {
+								if (((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_protein_data->protein_protein.at(i)) && !((itr_denovo_aminoacid.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I')))) {
 									fout_html_report << "<span class=\"mismatch\">";
 								}							
 								if (itr_denovo_aminoacid.aminoacid_localconfidence > 90) {
@@ -183,7 +183,7 @@ namespace fpf_report {
 								if (itr_denovo_aminoacid.aminoacid_localconfidence <= 60) {
 									fout_html_report << "<font color=\"red\">" << itr_denovo_aminoacid.aminoacid << "</font>";
 								}
-								if ((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i))) {
+								if ((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_protein_data->protein_protein.at(i))) {
 									fout_html_report << "</span>";
 								}
 								++i;
@@ -290,18 +290,18 @@ namespace fpf_report {
 		fout_html_report << "\n\n<br><br>" << par_filesystem.fileversion;
 		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
 		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
-		for (const auto& itr_category_analysis : par_filesystem.v_category_analysis_selected_by_polymorphism) {
-			if (itr_category_analysis.p_FASTA_category->category_type == "IG") {
-				fout_html_report << "\n\n\n<br><br><br> " << itr_category_analysis.p_FASTA_category->category_name;
-				fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_category_analysis.category_score;
-				fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_category_analysis.proteinconstruct_sequencecoverage << "%";
-				fout_html_report << "\n\n<br><br> " << itr_category_analysis.p_FASTA_category->category_protein;
+		for (const auto& itr_protein_analysis : par_filesystem.v_protein_analysis_selected_by_polymorphism) {
+			if (itr_protein_analysis.p_protein_data->protein_type == "IG") {
+				fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;
+				fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_protein_analysis.protein_score;
+				fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_protein_analysis.proteinconstruct_sequencecoverage << "%";
+				fout_html_report << "\n\n<br><br> " << itr_protein_analysis.p_protein_data->protein_protein;
 				fout_html_report << "\n\n<br> ";
 				size_t i{};
-				for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
+				for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
 					if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 0) {
 						if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
-							if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
+							if ((itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 								fout_html_report << "<span class=\"mismatch\">";
 							}
 							if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 90) {
@@ -318,7 +318,7 @@ namespace fpf_report {
 							}
 						}
 						fout_html_report << itr_proteinconstruct_from_denovo.aminoacid;
-						if (itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) {
+						if (itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) {
 							fout_html_report << "</span>";
 						}
 						if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
@@ -333,9 +333,9 @@ namespace fpf_report {
 				fout_html_report << "&nbsp&nbsp&nbsp" << "Local&nbspconfidence";
 				fout_html_report << "\n\n<br> ";
 				i = size_t();
-				for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
+				for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
 					if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
-						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
+						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 							fout_html_report << "<span class=\"mismatch\">";
 						}
 						if (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 35) {
@@ -352,7 +352,7 @@ namespace fpf_report {
 						}
 					}
 					fout_html_report << itr_proteinconstruct_from_denovo.aminoacid;
-					if (itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) {
+					if (itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) {
 						fout_html_report << "</span>";
 					}
 					if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
@@ -362,7 +362,7 @@ namespace fpf_report {
 				}
 				fout_html_report << "&nbsp&nbsp&nbsp" << "Homology";
 				fout_html_report << "\n\n<br><br><br>";
-				for (const auto& itr_proteinconstruct_from_denovo : itr_category_analysis.v_proteinconstruct_from_denovo) {
+				for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
 					fout_html_report << "&nbsp";
 				}
 				fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -380,20 +380,20 @@ namespace fpf_report {
 				fout_html_report << "&nbsp&nbsp";
 				fout_html_report << "DN&nbspconf&nbspavr";
 				fout_html_report << "<br>";
-				for (const auto& itr_blastp_data : itr_category_analysis.v_blastp_data_combined_by_category) {
+				for (const auto& itr_blastp_data : itr_protein_analysis.v_blastp_data_combined_by_protein) {
 					if (itr_blastp_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
 						fout_html_report << "\n<br> ";
 						int st_mismatch = int();
 						for (auto i = 0; i < itr_blastp_data.query_alignment.length(); i) {
 							if (itr_blastp_data.query_alignment.at(i) == '.') {
-								if (i < itr_blastp_data.p_FASTA_category->category_protein.length()) {
+								if (i < itr_blastp_data.p_protein_data->protein_protein.length()) {
 									fout_html_report << ".";
 								}
 								++i;
 							}
 							else {
 								for (const auto& itr_denovo_aminoacid : itr_blastp_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
-									if (((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i)) && !((itr_denovo_aminoacid.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I')))) {
+									if (((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_protein_data->protein_protein.at(i)) && !((itr_denovo_aminoacid.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I')))) {
 										fout_html_report << "<span class=\"mismatch\">";
 									}
 									if (itr_denovo_aminoacid.aminoacid_localconfidence > 90) {
@@ -408,7 +408,7 @@ namespace fpf_report {
 									if (itr_denovo_aminoacid.aminoacid_localconfidence <= 60) {
 										fout_html_report << "<font color=\"red\">" << itr_denovo_aminoacid.aminoacid << "</font>";
 									}
-									if ((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_FASTA_category->category_protein.at(i))) {
+									if ((i >= itr_blastp_data.query_alignment.length()) || (itr_denovo_aminoacid.aminoacid != itr_blastp_data.p_protein_data->protein_protein.at(i))) {
 										fout_html_report << "</span>";
 									}
 									++i;

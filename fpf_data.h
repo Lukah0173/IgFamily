@@ -24,16 +24,16 @@
 namespace fpf_data {
 
 	using std::string;
-	using std::vector;
 	using std::tuple;
+	using std::vector;
 
-	struct peptide_data;
 	struct denovo_peptide;
 	struct denovo_aminoacid;
-	struct FASTA_category;
+	struct protein_data;
 	struct blastp_data;
+	struct peptide_data;
+	struct protein_analysis;
 	struct v_proteinconstruct_from_denovo;
-	struct category_analysis;
 	struct multinomial;
 
 	struct denovo_peptide {
@@ -57,24 +57,33 @@ namespace fpf_data {
 	struct peptide_analysis {
 		string peptide_filtered;
 		size_t replicate_count;
-		vector<peptide_data*> v_peptide_data; 
+		vector<peptide_data*> v_replicate_peptide_data; 
 		denovo_peptide* p_denovo_peptide_best_by_averagelocalconfidence;
 		double v_denovo_peptide_averagescore;
 	};
 
-	struct FASTA_category {
+	struct protein_data {
 	public:
-		string category_name;
-		string category_class;
-		string category_type;
-		string category_species;
-		string category_protein;
+		string protein_name;
+		string protein_class;
+		string protein_type;
+		string protein_species;
+		string protein_protein;
+	};
+
+	struct protein_analysis {
+	public:
+		protein_data* p_protein_data;
+		vector<blastp_data> v_blastp_data_combined_by_protein;
+		double protein_score;
+		vector<v_proteinconstruct_from_denovo> v_proteinconstruct_from_denovo;
+		double proteinconstruct_sequencecoverage;
 	};
 
 	struct blastp_data {
 	public:
-		FASTA_category* p_FASTA_category;
 		peptide_analysis* p_peptide_analysis;
+		protein_data* p_protein_data;
 		string blastp_query;
 		string blastp_query_aligned;
 		string blastp_subject;
@@ -97,42 +106,33 @@ namespace fpf_data {
 		double aminoacid_parameter_score;
 	};
 
-	struct category_analysis {
-	public:
-		FASTA_category* p_FASTA_category;
-		vector<blastp_data> v_blastp_data_combined_by_category;
-		double category_score;
-		vector<v_proteinconstruct_from_denovo> v_proteinconstruct_from_denovo;
-		double proteinconstruct_sequencecoverage;
-	};
-
 	struct multinomial {
 	public:
-		vector<string> v_category_name;
-		vector<string> v_category_class;
+		vector<string> v_protein_name;
+		vector<string> v_protein_class;
 		vector<string> v_element_name;
 		vector<vector<double>> v2_frequency;
 		vector<double> v_frequency_marginal_sum;
 		vector<vector<double>> v2_density;
 	};
 
-	vector<FASTA_category> create_FASTA_category(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
-		vector<FASTA_category> temp_v_FASTA_category{};
+	vector<protein_data> create_protein_data(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
+		vector<protein_data> temp_v_protein_data{};
 		for (const auto itr_parse_FASTA : par_parse_FASTA) {
-			const auto find_v_FASTA_element = std::find_if(temp_v_FASTA_category.begin(), temp_v_FASTA_category.end(),
-				[itr_parse_FASTA](const FASTA_category& par_FASTA_element) {
-				return par_FASTA_element.category_name == itr_parse_FASTA.return_FASTA_name(); });
-			if (find_v_FASTA_element == temp_v_FASTA_category.end()) {
-				FASTA_category temp_FASTA_category{
+			const auto find_v_FASTA_element = std::find_if(temp_v_protein_data.begin(), temp_v_protein_data.end(),
+				[itr_parse_FASTA](const protein_data& par_FASTA_element) {
+				return par_FASTA_element.protein_name == itr_parse_FASTA.return_FASTA_name(); });
+			if (find_v_FASTA_element == temp_v_protein_data.end()) {
+				protein_data temp_protein_data{
 					itr_parse_FASTA.return_FASTA_name(),
 					itr_parse_FASTA.return_FASTA_class(),
 					itr_parse_FASTA.return_FASTA_type(),
 					itr_parse_FASTA.return_FASTA_species(),
-					itr_parse_FASTA.return_FASTA_protein()};
-				temp_v_FASTA_category.push_back(temp_FASTA_category);
+					itr_parse_FASTA.return_protein_data()};
+				temp_v_protein_data.push_back(temp_protein_data);
 			}
 		}
-		return temp_v_FASTA_category;
+		return temp_v_protein_data;
 	}
 
 	vector<peptide_data> create_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data) {
@@ -192,13 +192,13 @@ namespace fpf_data {
 			if (find_peptide_analysis == temp_v_peptide_analysis.end()) {
 				temp_peptide_analysis.peptide_filtered = itr_v_peptide_data.peptide_filtered;
 				++temp_peptide_analysis.replicate_count;
-				temp_peptide_analysis.v_peptide_data.push_back(&itr_v_peptide_data);
+				temp_peptide_analysis.v_replicate_peptide_data.push_back(&itr_v_peptide_data);
 				temp_peptide_analysis.v_denovo_peptide_averagescore = itr_v_peptide_data.denovo_peptide_data.localconfidence_average;
 				temp_v_peptide_analysis.push_back(temp_peptide_analysis);
 			}
 			else {
 				++find_peptide_analysis->replicate_count;
-				find_peptide_analysis->v_peptide_data.push_back(&itr_v_peptide_data);
+				find_peptide_analysis->v_replicate_peptide_data.push_back(&itr_v_peptide_data);
 				find_peptide_analysis->v_denovo_peptide_averagescore
 					= ((find_peptide_analysis->v_denovo_peptide_averagescore * (find_peptide_analysis->replicate_count - 1)) + itr_v_peptide_data.denovo_peptide_data.localconfidence_average) / find_peptide_analysis->replicate_count;
 			}

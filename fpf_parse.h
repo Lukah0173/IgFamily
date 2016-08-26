@@ -71,8 +71,8 @@ namespace fpf_parse {
 			FASTA_species = par_FASTA_species;
 		};
 
-		inline void set_FASTA_protein(string par_FASTA_protein) {
-			FASTA_protein = par_FASTA_protein;
+		inline void set_protein_data(string par_protein_data) {
+			protein_data = par_protein_data;
 		};
 
 		inline const string return_FASTA_accession() const {
@@ -95,18 +95,18 @@ namespace fpf_parse {
 			return FASTA_species;
 		};
 
-		inline const string return_FASTA_protein() const {
-			return FASTA_protein;
+		inline const string return_protein_data() const {
+			return protein_data;
 		};
 
 	private:
 		string FASTA_accession;
-		string FASTA_protein_delimited;
+		string protein_data_delimited;
 		string FASTA_name;
 		string FASTA_class;
 		string FASTA_type;
 		string FASTA_species;
-		string FASTA_protein;
+		string protein_data;
 	};
 
 	vector<csv_data> parse_proteinpeptides(std::ifstream& par_fin_csv_proteinpeptides, string par_directory) {
@@ -750,7 +750,7 @@ namespace fpf_parse {
 						temp_FASTA_data.set_FASTA_class(temp_FASTA_class);
 						temp_FASTA_data.set_FASTA_type(temp_FASTA_type);
 						temp_FASTA_data.set_FASTA_species(tenp_FASTA_species);
-						temp_FASTA_data.set_FASTA_protein(temp_FASTA_element);
+						temp_FASTA_data.set_protein_data(temp_FASTA_element);
 						temp_v_FASTA_data.push_back(temp_FASTA_data);
 					}
 				}
@@ -833,11 +833,11 @@ namespace fpf_parse {
 				fout_FASTA_filtered << "|" << itr_v_FASTA_data.return_FASTA_name();
 				fout_FASTA_filtered << "|" << itr_v_FASTA_data.return_FASTA_species();
 				fout_FASTA_filtered << "|";
-				for (auto i = 0; i < itr_v_FASTA_data.return_FASTA_protein().length(); ++i) {
-					if ((i % 60 == 0) && ((i + 1) < itr_v_FASTA_data.return_FASTA_protein().length())) {
+				for (auto i = 0; i < itr_v_FASTA_data.return_protein_data().length(); ++i) {
+					if ((i % 60 == 0) && ((i + 1) < itr_v_FASTA_data.return_protein_data().length())) {
 						fout_FASTA_filtered << "\n";
 					}
-					fout_FASTA_filtered << itr_v_FASTA_data.return_FASTA_protein().at(i);
+					fout_FASTA_filtered << itr_v_FASTA_data.return_protein_data().at(i);
 				}
 				fout_FASTA_filtered << "\n";
 			}
@@ -854,11 +854,11 @@ namespace fpf_parse {
 				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_name();
 				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_species();
 				fout_FASTA_filtered << "|";
-				for (auto i = 0; i < itr_v_FASTA_DATA.return_FASTA_protein().length(); ++i) {
-					if ((i % 60 == 0) && ((i + 1) < itr_v_FASTA_DATA.return_FASTA_protein().length())) {
+				for (auto i = 0; i < itr_v_FASTA_DATA.return_protein_data().length(); ++i) {
+					if ((i % 60 == 0) && ((i + 1) < itr_v_FASTA_DATA.return_protein_data().length())) {
 						fout_FASTA_filtered << "\n";
 					}
-					fout_FASTA_filtered << itr_v_FASTA_DATA.return_FASTA_protein().at(i);
+					fout_FASTA_filtered << itr_v_FASTA_DATA.return_protein_data().at(i);
 				}
 				fout_FASTA_filtered << "\n";
 			}

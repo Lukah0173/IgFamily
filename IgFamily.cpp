@@ -62,7 +62,7 @@ int main() {
 		}
 	}
 
-	vector<fpf_data::FASTA_category> main_v_FASTA_category = fpf_data::create_FASTA_category(main_FASTA);
+	vector<fpf_data::protein_data> main_v_protein_data = fpf_data::create_protein_data(main_FASTA);
 
 	for (auto& itr_v_filesystem : v_filesystem) {
 		bool filesystem_modified = bool();
@@ -89,9 +89,9 @@ int main() {
 
 			static vector<fpf_data::peptide_data> main_v_peptide_data = std::move(main_v_peptide_data_PEAKS_denovo);
 			static vector<fpf_data::peptide_analysis> main_v_peptide_analysis = std::move(main_v_peptide_analysis_PEAKS_denovo);
-			itr_v_filesystem.v_peptide_data = main_v_peptide_data;
+			itr_v_filesystem.v_replicate_peptide_data = main_v_peptide_data;
 			itr_v_filesystem.v_peptide_analysis = main_v_peptide_analysis;
-			itr_v_filesystem.v_FASTA_category = main_v_FASTA_category;
+			itr_v_filesystem.v_protein_data = main_v_protein_data;
 		}
 	}
 
@@ -111,7 +111,7 @@ int main() {
 			std::cout << "...";
 			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem);
 			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem);
-			fpf_blastp_analysis::associate_blastp_data_to_v_FASTA_category(itr_v_filesystem);
+			fpf_blastp_analysis::associate_blastp_data_to_v_protein_data(itr_v_filesystem);
 			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem);
 			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem);		
 			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem);
@@ -128,20 +128,20 @@ int main() {
 	std::cout << "\n\n\n\n scoring categories...\n";
 	for (auto& itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.denovopeptides_exist) {
-			fpf_data_analysis::create_category_analysis(itr_v_filesystem);
+			fpf_data_analysis::create_protein_analysis(itr_v_filesystem);
 			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem);
 			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem);
-			for (auto& itr_v_category_analysis : itr_v_filesystem.v_category_analysis) {
-				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_category_analysis.v_blastp_data_combined_by_category);
+			for (auto& itr_v_protein_analysis : itr_v_filesystem.v_protein_analysis) {
+				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_protein_analysis.v_blastp_data_combined_by_protein);
 			}
-			fpf_data_analysis::sort_v_category_analysis(itr_v_filesystem.v_category_analysis);
+			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.v_protein_analysis);
 		}
 	}
 
 	for (auto& itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.denovopeptides_exist) {
 			std::cout << "\n\n\n\n determining most-probable germline representation...\n";
-			fpf_data_analysis::select_category_analysis_by_score(itr_v_filesystem);
+			fpf_data_analysis::select_protein_analysis_by_score(itr_v_filesystem);
 			std::cout << "\n\n\n analysing post-hoc homology for file ";
 			std::cout << itr_v_filesystem.filename;
 			std::cout << "...";
@@ -155,9 +155,9 @@ int main() {
 			std::cout << "...";
 			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem);
 			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem);
-			fpf_blastp_analysis::associate_blastp_data_to_v_FASTA_category(itr_v_filesystem);
+			fpf_blastp_analysis::associate_blastp_data_to_v_protein_data(itr_v_filesystem);
 			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem);
-			fpf_blastp_analysis::create_protein_from_category_analysis(itr_v_filesystem);
+			fpf_blastp_analysis::create_protein_from_protein_analysis(itr_v_filesystem);
 			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem);
 			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem);
 			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem);
@@ -173,13 +173,13 @@ int main() {
 	std::cout << "\n\n\n\n scoring categories...\n";
 	for (auto& itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.denovopeptides_exist) {
-			fpf_data_analysis::create_category_analysis(itr_v_filesystem);
+			fpf_data_analysis::create_protein_analysis(itr_v_filesystem);
 			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem);
 			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem);
-			for (auto& itr_v_category_analysis : itr_v_filesystem.v_category_analysis) {
-				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_category_analysis.v_blastp_data_combined_by_category);
+			for (auto& itr_v_protein_analysis : itr_v_filesystem.v_protein_analysis) {
+				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_protein_analysis.v_blastp_data_combined_by_protein);
 			}
-			fpf_data_analysis::sort_v_category_analysis(itr_v_filesystem.v_category_analysis);
+			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.v_protein_analysis);
 		}
 	}
 

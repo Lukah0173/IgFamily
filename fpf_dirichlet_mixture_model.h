@@ -25,7 +25,7 @@ namespace fpf_dirichlet_mixture_model {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_data::FASTA_category FASTA_category;
+	typedef fpf_data::protein_data protein_data;
 
 	struct def_s_model_data;
 	struct def_s_model_parameters;
@@ -66,7 +66,7 @@ namespace fpf_dirichlet_mixture_model {
 	}
 
 	//def_s_model_data create_s_model_data(vector<s_filesystem_blastp> par_v_blastp_filesystem_data, 
-	//									 vector<FASTA_category> par_v_s_multinomial_element_data) {
+	//									 vector<protein_data> par_v_s_multinomial_element_data) {
 	//	def_s_model_data con_s_model_data;
 	//	con_s_model_data.st_N = par_v_blastp_filesystem_data.size();
 	//	con_s_model_data.st_S = par_v_s_multinomial_element_data.size();

@@ -9,18 +9,18 @@
 #ifndef FPF_BLASTP_ANALYSIS 
 #define	FPF_BLASTP_ANALYSIS
 
+#include <algorithm> // provides - std::find_if
 #include <cstdlib> // provides - size_t
-#include <string> // provides - std::string
-#include <vector> // provides - std::vector
 #include <fstream> // provides - std::ifstream
 #include <iostream> // provides - std::ofstream
-#include <utility> // provides - std::pair
 #include <math.h> // provides - std::log10
-#include <algorithm> // provides - std::find_if
+#include <string> // provides - std::string
+#include <utility> // provides - std::pair
+#include <vector> // provides - std::vector
 
+#include "fpf_data.h"
 #include "fpf_filesystem.h"
 #include "fpf_filesystem_analysis.h"
-#include "fpf_data.h"
 
 
 namespace fpf_blastp_analysis {
@@ -28,13 +28,13 @@ namespace fpf_blastp_analysis {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_data::FASTA_category FASTA_category;
-	typedef fpf_data::peptide_data peptide_data;
-	typedef fpf_data::peptide_analysis peptide_analysis;
 	typedef fpf_data::blastp_data blastp_data;
-	typedef vector<fpf_data::blastp_data> v_s_blastp_tpye;
+	typedef vector<fpf_data::blastp_data> v_blastp_type;
 	typedef fpf_data::multinomial s_multinomial_type;
-	typedef fpf_data::category_analysis category_analysis;
+	typedef fpf_data::peptide_analysis peptide_analysis;
+	typedef fpf_data::peptide_data peptide_data;
+	typedef fpf_data::protein_data protein_data;
+	typedef fpf_data::protein_analysis protein_analysis;
 	typedef fpf_filesystem::filesystem filesystem;
 	typedef vector<fpf_filesystem::filesystem> v_filesystem_type;
 
@@ -57,13 +57,13 @@ namespace fpf_blastp_analysis {
 		string output_blastp_database_FASTA = "blast_directory\\blastp_database.fasta";
 		std::ofstream fout_blastp_database_FASTA;
 		fout_blastp_database_FASTA.open(output_blastp_database_FASTA);
-		for (auto itr_v_multinomial_category : par_filesystem.v_FASTA_category) {
-			fout_blastp_database_FASTA << ">" << itr_v_multinomial_category.category_name << "\n";
-			for (size_t i = 0; i < itr_v_multinomial_category.category_protein.length(); ++i) {
+		for (auto itr_v_multinomial_protein : par_filesystem.v_protein_data) {
+			fout_blastp_database_FASTA << ">" << itr_v_multinomial_protein.protein_name << "\n";
+			for (size_t i = 0; i < itr_v_multinomial_protein.protein_protein.length(); ++i) {
 				if ((i % 60 == 0) && (i != 0)) {
 					fout_blastp_database_FASTA << "\n";
 				}
-				fout_blastp_database_FASTA << itr_v_multinomial_category.category_protein.at(i);
+				fout_blastp_database_FASTA << itr_v_multinomial_protein.protein_protein.at(i);
 			}
 			fout_blastp_database_FASTA << "\n";
 		}
@@ -74,13 +74,13 @@ namespace fpf_blastp_analysis {
 		string output_blastp_database_FASTA = "blast_directory\\blastp_database.fasta";
 		std::ofstream fout_blastp_database_FASTA;
 		fout_blastp_database_FASTA.open(output_blastp_database_FASTA);
-		for (auto itr_v_category_analysis : par_filesystem.v_category_analysis_selected_by_polymorphism) {
-			fout_blastp_database_FASTA << ">" << itr_v_category_analysis.p_FASTA_category->category_name << "\n";
-			for (size_t i = 0; i < itr_v_category_analysis.p_FASTA_category->category_protein.length(); ++i) {
+		for (auto itr_v_protein_analysis : par_filesystem.v_protein_analysis_selected_by_polymorphism) {
+			fout_blastp_database_FASTA << ">" << itr_v_protein_analysis.p_protein_data->protein_name << "\n";
+			for (size_t i = 0; i < itr_v_protein_analysis.p_protein_data->protein_protein.length(); ++i) {
 				if ((i % 60 == 0) && (i != 0)) {
 					fout_blastp_database_FASTA << "\n";
 				}
-				fout_blastp_database_FASTA << itr_v_category_analysis.p_FASTA_category->category_protein.at(i);
+				fout_blastp_database_FASTA << itr_v_protein_analysis.p_protein_data->protein_protein.at(i);
 			}
 			fout_blastp_database_FASTA << "\n";
 		}
@@ -89,12 +89,12 @@ namespace fpf_blastp_analysis {
 
 	void sys_blastp(filesystem par_filesystem) {
 		std::cout << "\n\n";
-		string string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && makeblastdb.exe -in ";
 		string_system += "blastp_database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
-		string_system = "CD Z:\\Lukah_Dykes\\IgFamily\\blast_directory\\";
+		string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 		string_system += " && blastp.exe -query ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";
@@ -152,19 +152,19 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void associate_blastp_data_to_v_FASTA_category(filesystem& par_filesystem) {
+	void associate_blastp_data_to_v_protein_data(filesystem& par_filesystem) {
 		for (auto& itr_v_blastp_data : par_filesystem.v_blastp_data) {
-			auto& find_category_name = std::find_if(par_filesystem.v_FASTA_category.begin(), par_filesystem.v_FASTA_category.end(),
-				[itr_v_blastp_data](FASTA_category par_FASTA_category) {
-				return par_FASTA_category.category_name == itr_v_blastp_data.blastp_subject_accession;
+			auto& find_protein_name = std::find_if(par_filesystem.v_protein_data.begin(), par_filesystem.v_protein_data.end(),
+				[itr_v_blastp_data](protein_data par_protein_data) {
+				return par_protein_data.protein_name == itr_v_blastp_data.blastp_subject_accession;
 			});
-			if (find_category_name == par_filesystem.v_FASTA_category.end()) {
+			if (find_protein_name == par_filesystem.v_protein_data.end()) {
 				std::cout << "\n\n error - std::find_if returns nullptr";
 				std::cout << "\n\n" << itr_v_blastp_data.blastp_subject_accession;
 				string catch_error{};
 				std::cin >> catch_error;
 			}
-			itr_v_blastp_data.p_FASTA_category = &(*find_category_name);
+			itr_v_blastp_data.p_protein_data = &(*find_protein_name);
 		}
 	}
 
@@ -184,19 +184,19 @@ namespace fpf_blastp_analysis {
 		}
 	}
 
-	void create_protein_from_category_analysis(filesystem& par_filesystem) {
+	void create_protein_from_protein_analysis(filesystem& par_filesystem) {
 		for (auto& itr_v_blastp_data : par_filesystem.v_blastp_data) {
-			auto find_category_name = std::find_if(par_filesystem.v_category_analysis_selected_by_polymorphism.begin(), par_filesystem.v_category_analysis_selected_by_polymorphism.end(),
-				[itr_v_blastp_data](category_analysis par_category_analysis) {
-				return par_category_analysis.p_FASTA_category->category_name == itr_v_blastp_data.blastp_subject_accession;
+			auto find_protein_name = std::find_if(par_filesystem.v_protein_analysis_selected_by_polymorphism.begin(), par_filesystem.v_protein_analysis_selected_by_polymorphism.end(),
+				[itr_v_blastp_data](protein_analysis par_protein_analysis) {
+				return par_protein_analysis.p_protein_data->protein_name == itr_v_blastp_data.blastp_subject_accession;
 			});
-			if (find_category_name == par_filesystem.v_category_analysis_selected_by_polymorphism.end()) {
+			if (find_protein_name == par_filesystem.v_protein_analysis_selected_by_polymorphism.end()) {
 				std::cout << "\n\n error - std::find_if returns nullptr";
 				std::cout << "\n\n" << itr_v_blastp_data.blastp_subject_accession;
 				string catch_error{};
 				std::cin >> catch_error;
 			}
-			itr_v_blastp_data.p_FASTA_category = find_category_name->p_FASTA_category;
+			itr_v_blastp_data.p_protein_data = find_protein_name->p_protein_data;
 		}
 	}
 
@@ -204,7 +204,7 @@ namespace fpf_blastp_analysis {
 		string temp_query_alignment{};
 		size_t index_match = 1;
 		for (auto& itr_v_blastp_data : par_filesystem.v_blastp_data) {
-			for (auto itr_category_protein : itr_v_blastp_data.p_FASTA_category->category_protein) {
+			for (auto itr_protein_protein : itr_v_blastp_data.p_protein_data->protein_protein) {
 				if (index_match == itr_v_blastp_data.blastp_subject_alignment_index) {
 					if (temp_query_alignment.length() >= itr_v_blastp_data.blastp_query_alignment_index) {
 						temp_query_alignment.resize(temp_query_alignment.length() - itr_v_blastp_data.blastp_query_alignment_index + 1);
@@ -225,7 +225,7 @@ namespace fpf_blastp_analysis {
 			if (temp_query_alignment.length() > itr_v_blastp_data.blastp_query.length() + 1) {
 				temp_query_alignment.resize(temp_query_alignment.length() - itr_v_blastp_data.blastp_query.length() + 1);
 			} else {
-				std::cout << "\n\n ~~~ possible bad query: " << itr_v_blastp_data.p_FASTA_category->category_protein;
+				std::cout << "\n\n ~~~ possible bad query: " << itr_v_blastp_data.p_protein_data->protein_protein;
 			}
 			itr_v_blastp_data.query_alignment = temp_query_alignment;
 			temp_query_alignment.clear();
