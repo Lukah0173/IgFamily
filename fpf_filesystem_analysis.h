@@ -116,10 +116,6 @@ namespace fpf_filesystem_analysis {
 		for (auto itr_v_peptide_data_analysis = size_t(); itr_v_peptide_data_analysis < par_v_filesystem_analysis.begin()->v_peptide_data.size(); ++itr_v_peptide_data_analysis) {
 			fout_v_filesystem_analysis_peptide_summary << par_v_peptide_data_total_observed[itr_v_peptide_data_analysis];
 			fout_v_filesystem_analysis_peptide_summary << ",";
-			for (const auto& itr_v_filesystem_analysis : par_v_filesystem_analysis) {
-				fout_v_filesystem_analysis_peptide_summary << itr_v_filesystem_analysis.v_peptide_data[itr_v_peptide_data_analysis].spectralcount;
-				fout_v_filesystem_analysis_peptide_summary << ",";
-			}
 			fout_v_filesystem_analysis_peptide_summary << std::endl;
 		}
 	}

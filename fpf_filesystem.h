@@ -30,6 +30,7 @@ namespace fpf_filesystem {
 
 	typedef fpf_convert::fileconversion_parameters fileconversion_parameters;
 	typedef fpf_data::peptide_data peptide_data;
+	typedef fpf_data::peptide_analysis peptide_analysis;
 	typedef fpf_data::FASTA_category FASTA_category;
 	typedef fpf_data::blastp_data blastp_data;
 	typedef fpf_data::multinomial multinomial;
@@ -70,8 +71,8 @@ namespace fpf_filesystem {
 		/* sample data */
 
 		vector<FASTA_category> v_FASTA_category;
-		vector<FASTA_category*> pv_FASTA_category_distinct_polymorphism;
 		vector<peptide_data> v_peptide_data;
+		vector<peptide_analysis> v_peptide_analysis;
 
 		/* blastp data */
 

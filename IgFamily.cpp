@@ -1,4 +1,4 @@
-// * * IgFamily v0.7.8 * * 
+// * * IgFamily v0.7.9 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -6,10 +6,11 @@
 
 
 
-#include <string> // provides - string
-#include <iostream> // provides - std::cin, std::cout
-#include <iomanip> // provides - std::setprecision
-#include <fstream> // provides - std::ifstream
+#include <string>			// provides - string
+#include <iostream>			// provides - std::cin, std::cout
+#include <iomanip>			// provides - std::setprecision
+#include <fstream>			// provides - std::ifstream
+#include <utility>			// provides - std::move
 
 #include "IgFamily.h"
 #include "fpf_filesystem.h"
@@ -82,12 +83,14 @@ int main() {
 			std::cout << "\n\n * parsing " << itr_v_filesystem.filename;
 			std::cout << "\n\n ~ peptides parsed - " << main_v_csv_denovopeptides.size();
 			std::cout << "\n\n creating data structures...";
-			vector<fpf_data::scan_data> main_v_scan_data_PEAKS_denovo{};
-			vector<fpf_data::peptide_data> main_v_peptide_data_PEAKS_denovo = fpf_data::create_peptide_data(main_v_csv_denovopeptides, main_v_scan_data_PEAKS_denovo);
+			vector<fpf_data::peptide_data> main_v_peptide_data_PEAKS_denovo = fpf_data::create_peptide_data(main_v_csv_denovopeptides);
+			vector<fpf_data::peptide_analysis> main_v_peptide_analysis_PEAKS_denovo = fpf_data::create_peptide_analysis(main_v_peptide_data_PEAKS_denovo);
 			std::cout << "\n\n ...data structures assigned";
 
-			vector<fpf_data::peptide_data> main_v_peptide_data = main_v_peptide_data_PEAKS_denovo;
+			static vector<fpf_data::peptide_data> main_v_peptide_data = std::move(main_v_peptide_data_PEAKS_denovo);
+			static vector<fpf_data::peptide_analysis> main_v_peptide_analysis = std::move(main_v_peptide_analysis_PEAKS_denovo);
 			itr_v_filesystem.v_peptide_data = main_v_peptide_data;
+			itr_v_filesystem.v_peptide_analysis = main_v_peptide_analysis;
 			itr_v_filesystem.v_FASTA_category = main_v_FASTA_category;
 		}
 	}
@@ -97,9 +100,11 @@ int main() {
 			std::cout << "\n\n\n\n analysing homology for file ";
 			std::cout << itr_v_filesystem.filename;
 			std::cout << "...";
-			fpf_blastp_analysis::create_blastp_input(itr_v_filesystem);
-			fpf_blastp_analysis::create_blastp_database(itr_v_filesystem);
+			fpf_blastp_analysis::create_blastp_input(itr_v_filesystem);			
+			fpf_blastp_analysis::create_blastp_database(itr_v_filesystem);	
+			std::cout << "\n\n\n * * * Calling blastp.exe * * *";
 			fpf_blastp_analysis::sys_blastp(itr_v_filesystem);
+			std::cout << "\n\n\n * * * Closing blastp.exe * * *";
 			std::cout << "\n\n\n ...homology analysis complete";
 			std::cout << "\n\n\n creating homology data structures for file ";
 			std::cout << itr_v_filesystem.filename;
@@ -141,7 +146,9 @@ int main() {
 			std::cout << itr_v_filesystem.filename;
 			std::cout << "...";
 			fpf_blastp_analysis::create_blastp_database_refined(itr_v_filesystem);
+			std::cout << "\n\n\n * * * Calling blastp.exe * * *";
 			fpf_blastp_analysis::sys_blastp(itr_v_filesystem);
+			std::cout << "\n\n\n * * * Closing blastp.exe * * *";
 			std::cout << "\n\n\n ...homology analysis complete";
 			std::cout << "\n\n\n creating homology data structures for file ";
 			std::cout << itr_v_filesystem.filename;
