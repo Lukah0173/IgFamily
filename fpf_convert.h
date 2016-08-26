@@ -9,8 +9,8 @@
 #ifndef FPF_CONVERT
 #define	FPF_CONVERT
 #include <cstdlib>						// provides - size_t
-#include <string>						// provides - string
-#include <vector>						// provides - vector
+#include <string>						// provides - std::string
+#include <vector>						// provides - std::vector
 
 
 
@@ -27,41 +27,41 @@ namespace fpf_convert {
 	struct fileconversion_parameters;
 
 	struct threshold_type {
-		bool b_threshold;
-		size_t st_threshold;
+		bool intensity_threshold;
+		size_t threshold;
 	};
 
 	struct peakpicking_type {
-		bool b_peakpicking;
-		size_t st_peakpicking_mslevel_from;
-		size_t st_peakpicking_mslevel_to;
+		bool peakpicking;
+		size_t peakpicking_mslevel_from;
+		size_t peakpicking_mslevel_to;
 	};
 
 	struct ms2deisotope_type {
-		bool b_ms2deisotope;
+		bool ms2deisotope;
 	};
 
 	struct ms2denoise_type {
-		bool b_ms2denoise;
-		size_t st_ms2denoise_windowwidth;
-		size_t st_ms2denoise_peaksinwindow;
+		bool ms2denoise;
+		size_t ms2denoise_windowwidth;
+		size_t ms2denoise_peaksinwindow;
 	};
 
 	struct chargestatepredictor_type {
 	public:
-		bool b_chargestatepredictor;
-		bool b_chargestateoverride;
-		size_t st_chargestatepredictor_maxcharge;
-		size_t st_chargestatepredictor_mincharge;
-		double d_chargestatepredictor_chargefraction;
+		bool chargestatepredictor;
+		bool chargestateoverride;
+		size_t chargestatepredictor_maxcharge;
+		size_t chargestatepredictor_mincharge;
+		double chargestatepredictor_chargefraction;
 	};
 
 	struct fileconversion_parameters {
-		threshold_type s_threshold;
-		peakpicking_type s_peakpicking;
-		ms2deisotope_type s_ms2deisotope;
-		ms2denoise_type s_ms2denoise;
-		chargestatepredictor_type s_chargestatepredictor;
+		threshold_type threshold;
+		peakpicking_type peakpicking;
+		ms2deisotope_type ms2deisotope;
+		ms2denoise_type ms2denoise;
+		chargestatepredictor_type chargestatepredictor;
 	};
 
 	bool prompt_defaultconversion() {
@@ -95,20 +95,20 @@ namespace fpf_convert {
 	fileconversion_parameters create_fileconversion_parameters(bool par_defaultconversion) {
 		fileconversion_parameters fileconversion = fileconversion_parameters();
 		if (par_defaultconversion) {
-			fileconversion.s_threshold.b_threshold = true;
-			fileconversion.s_threshold.st_threshold = 3;
-			fileconversion.s_peakpicking.b_peakpicking = true;
-			fileconversion.s_peakpicking.st_peakpicking_mslevel_from = 1;
-			fileconversion.s_peakpicking.st_peakpicking_mslevel_to = 2;
-			fileconversion.s_ms2deisotope.b_ms2deisotope = true;
-			fileconversion.s_ms2denoise.b_ms2denoise = true;
-			fileconversion.s_ms2denoise.st_ms2denoise_windowwidth = 30;
-			fileconversion.s_ms2denoise.st_ms2denoise_peaksinwindow = 6;
-			fileconversion.s_chargestatepredictor.b_chargestatepredictor = true;
-			fileconversion.s_chargestatepredictor.b_chargestatepredictor = true;
-			fileconversion.s_chargestatepredictor.st_chargestatepredictor_maxcharge = 3;
-			fileconversion.s_chargestatepredictor.st_chargestatepredictor_mincharge = 2;
-			fileconversion.s_chargestatepredictor.d_chargestatepredictor_chargefraction = 0.9;
+			fileconversion.threshold.intensity_threshold = true;
+			fileconversion.threshold.threshold = 3;
+			fileconversion.peakpicking.peakpicking = true;
+			fileconversion.peakpicking.peakpicking_mslevel_from = 1;
+			fileconversion.peakpicking.peakpicking_mslevel_to = 2;
+			fileconversion.ms2deisotope.ms2deisotope = true;
+			fileconversion.ms2denoise.ms2denoise = true;
+			fileconversion.ms2denoise.ms2denoise_windowwidth = 30;
+			fileconversion.ms2denoise.ms2denoise_peaksinwindow = 6;
+			fileconversion.chargestatepredictor.chargestatepredictor = true;
+			fileconversion.chargestatepredictor.chargestatepredictor = true;
+			fileconversion.chargestatepredictor.chargestatepredictor_maxcharge = 3;
+			fileconversion.chargestatepredictor.chargestatepredictor_mincharge = 2;
+			fileconversion.chargestatepredictor.chargestatepredictor_chargefraction = 0.9;
 		}
 		return fileconversion;
 	}

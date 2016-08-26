@@ -25,7 +25,7 @@ namespace IgFamily {
 	const bool DEBUG_MODE = 0;
 	const bool OUTPUT_FASTA = 1;
 
-	const string IGFAMILY_ROOT_DIR = "IgFamily_root_4.txt";
+	const string IGFAMILY_ROOT_DIR = "IgFamily_root_3.txt";
 	const string DEFAULT_INPUT_FASTA = "LUKAH_WITHUNIPROT_20160815.fasta";
 	const string DEFAULT_INPUT_FASTA_DIRECTORY = "FASTA\\" + DEFAULT_INPUT_FASTA;
 

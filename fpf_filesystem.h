@@ -308,33 +308,33 @@ namespace fpf_filesystem {
 		////fileconversion_command += " --mz64";
 		//fileconversion_command += " -v";
 		//fileconversion_command += " --mgf";
-		//if (par_filesystem.fileconversion_parameters.s_peakpicking.b_peakpicking) {
+		//if (par_filesystem.fileconversion_parameters.peakpicking.peakpicking) {
 		//	//fileconversion_command += " --filter \"peakPicking cwt ";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_from);
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.peakpicking.peakpicking_mslevel_from);
 		//	//fileconversion_command += "-";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.s_peakpicking.st_peakpicking_mslevel_to);
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.peakpicking.peakpicking_mslevel_to);
 		//	//fileconversion_command += "\"";
 		//}
-		//if (par_filesystem.fileconversion_parameters.s_threshold.b_threshold) {
+		//if (par_filesystem.fileconversion_parameters.threshold.intensity_threshold) {
 		//	//fileconversion_command += " --filter \"threshold absolute ";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_threshold.st_threshold);
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.threshold.threshold);
 		//	//fileconversion_command += " most-intense\"";
 		//}
-		//if (par_filesystem.fileconversion_parameters.s_ms2denoise.b_ms2denoise) {
+		//if (par_filesystem.fileconversion_parameters.ms2denoise.ms2denoise) {
 		//	//fileconversion_command += " --filter \"MS2Denoise ";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_peaksinwindow);
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.ms2denoise.ms2denoise_peaksinwindow);
 		//	//fileconversion_command += " ";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_ms2denoise.st_ms2denoise_windowwidth);
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.ms2denoise.ms2denoise_windowwidth);
 		//	//fileconversion_command += " true\"";
 		//}
-		//if (par_filesystem.fileconversion_parameters.s_ms2deisotope.b_ms2deisotope) {
+		//if (par_filesystem.fileconversion_parameters.ms2deisotope.ms2deisotope) {
 		//	//fileconversion_command += " --filter MS2Deisotope";
 		//}
-		//if (par_filesystem.fileconversion_parameters.s_chargestatepredictor.b_chargestatepredictor) {
+		//if (par_filesystem.fileconversion_parameters.chargestatepredictor.chargestatepredictor) {
 		//	fileconversion_command += " --filter \"chargeStatePredictor true ";
-		//	fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_chargestatepredictor.st_chargestatepredictor_maxcharge);
+		//	fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.chargestatepredictor.chargestatepredictor_maxcharge);
 		//	fileconversion_command += " ";
-		//	fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.s_chargestatepredictor.st_chargestatepredictor_mincharge);
+		//	fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.chargestatepredictor.chargestatepredictor_mincharge);
 		//	fileconversion_command += " ";
 		//	fileconversion_command += "0.9";
 		//	fileconversion_command += "\"";

@@ -36,7 +36,7 @@ namespace fpf_parse {
 
 	struct csv_data {
 	public:
-		string csv_scan;
+		string csv_scan_ID;
 		string csv_peptide;
 		string csv_spectralcount;
 		string csv_IgP;
@@ -117,7 +117,7 @@ namespace fpf_parse {
 		size_t csv_condition_switch{};
 		size_t csv_ignore_header{};
 		char csv_read{};
-		string csv_scan{};
+		string csv_scan_ID{};
 		string csv_peptide{};
 		string csv_spectralcount{};
 		string csv_IgP{};
@@ -128,7 +128,7 @@ namespace fpf_parse {
 				if (csv_count_delimit == 18) {
 					if (temp_v_csv_data.size() == 0) {
 						csv_data temp_csv_data{};
-						temp_csv_data.csv_scan = csv_scan;
+						temp_csv_data.csv_scan_ID = csv_scan_ID;
 						temp_csv_data.csv_peptide = csv_peptide;
 						temp_csv_data.csv_spectralcount = csv_spectralcount;
 						temp_csv_data.csv_IgP = csv_IgP;
@@ -143,7 +143,7 @@ namespace fpf_parse {
 							}
 							if (count_v_csv_data == temp_v_csv_data.size()) {
 								csv_data temp_csv_data{};
-								temp_csv_data.csv_scan = csv_scan;
+								temp_csv_data.csv_scan_ID = csv_scan_ID;
 								temp_csv_data.csv_peptide = csv_peptide;
 								temp_csv_data.csv_spectralcount = csv_spectralcount;
 								temp_csv_data.csv_IgP = csv_IgP;
@@ -161,7 +161,7 @@ namespace fpf_parse {
 					++csv_count_delimit;
 				}
 				if ((csv_count_delimit == 1) && (csv_parse != ",")) {
-					csv_scan += csv_parse;
+					csv_scan_ID += csv_parse;
 				}
 				if ((csv_count_delimit == 3) && (csv_parse != ",")) {
 					if (csv_parse == "(") {
@@ -227,18 +227,19 @@ namespace fpf_parse {
 				csv_parse = csv_read;
 				if (csv_count_delimit == 16) {
 					csv_data temp_csv_data{};
-					temp_csv_data.csv_scan = temp_csv_scan;
+					temp_csv_data.csv_scan_ID = temp_csv_scan;
 					temp_csv_data.csv_peptide = temp_csv_peptide;
 					temp_csv_data.v_csv_denovo_localconfidence = temp_v_csv_denovo_localconfidence;
 					temp_v_csv_data.push_back(temp_csv_data);
-					temp_v_csv_denovo_localconfidence.clear();
+					temp_csv_scan.clear();
 					temp_csv_peptide.clear();
+					temp_v_csv_denovo_localconfidence.clear();
 					csv_count_delimit = 0;
 				}
 				if (csv_parse == ",") {
 					++csv_count_delimit;
 				}
-				if ((csv_count_delimit == 0) && (csv_parse != ",")) {
+				if ((csv_count_delimit == 1) && (csv_parse != ",")) {
 					temp_csv_scan += csv_parse;
 				}
 				if ((csv_count_delimit == 3) && (csv_parse != ",") && (csv_parse != " ")) {

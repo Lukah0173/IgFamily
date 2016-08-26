@@ -58,6 +58,11 @@ namespace fpf_data {
 		bool filesystem_sample_replicate_merged = bool();
 		vector<tuple<string, size_t, size_t>> v_filesystem_sample_replicate_data;
 	};
+	
+	struct scan_data {
+		size_t scan_ID;
+		peptide_data* peptide_data;
+	};
 
 	struct FASTA_category {
 	public:
@@ -132,7 +137,8 @@ namespace fpf_data {
 		return temp_v_FASTA_category;
 	}
 
-	vector<peptide_data> create_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data) {
+	vector<peptide_data> create_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data, vector<scan_data>& par_v_scan_data) {
+		scan_data temp_scan_data{};
 		vector<peptide_data> temp_v_peptide_data{};
 		for (const auto itr_parse_csv_peptide_data : par_parse_csv_peptide_data) {
 			peptide_data temp_peptide_data{};
@@ -180,6 +186,9 @@ namespace fpf_data {
 					temp_peptide_data.v_denovo_peptide_averagescore = temp_denovo_peptide.localconfidence_average;
 					++temp_peptide_data.denovo_replicate_count;
 					temp_v_peptide_data.push_back(temp_peptide_data);
+					temp_scan_data.peptide_data = &temp_peptide_data;
+					temp_scan_data.scan_ID = std::stoi(itr_parse_csv_peptide_data.csv_scan_ID);
+					par_v_scan_data.push_back(temp_scan_data);
 				}
 			}
 			else {
@@ -197,6 +206,9 @@ namespace fpf_data {
 					++find_peptide_data->denovo_replicate_count;
 					find_peptide_data->v_denovo_peptide_averagescore = ((find_peptide_data->v_denovo_peptide_averagescore * (find_peptide_data->denovo_replicate_count - 1)) + temp_denovo_peptide.localconfidence_average) / find_peptide_data->denovo_replicate_count;
 					find_peptide_data->v_denovo_peptide_data.push_back(temp_denovo_peptide);
+					temp_scan_data.peptide_data = &(*find_peptide_data);
+					temp_scan_data.scan_ID = std::stoi(itr_parse_csv_peptide_data.csv_scan_ID);
+					par_v_scan_data.push_back(temp_scan_data);
 				}
 			}
 		}

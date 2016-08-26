@@ -78,21 +78,15 @@ int main() {
 		//	return EXIT_FILESYTEM_CURRENT;
 		//}
 
-		if (itr_v_filesystem.proteinpeptides_exist) {
-			std::cout << "\n\n * parsing " << itr_v_filesystem.filename;
-			std::cout << "\n\n ~ peptides parsed - " << main_v_csv_proteinpeptides.size();
-			std::cout << "\n\n\n creating data structures...";
-			vector<fpf_data::peptide_data> main_v_peptide_data = fpf_data::create_peptide_data(main_v_csv_proteinpeptides);
-			std::cout << "\n\n ...data structures assigned";
-		}
-
 		if (itr_v_filesystem.denovopeptides_exist) {
 			std::cout << "\n\n * parsing " << itr_v_filesystem.filename;
 			std::cout << "\n\n ~ peptides parsed - " << main_v_csv_denovopeptides.size();
 			std::cout << "\n\n creating data structures...";
-			vector<fpf_data::peptide_data> main_v_peptide_data = fpf_data::create_peptide_data(main_v_csv_denovopeptides);
+			vector<fpf_data::scan_data> main_v_scan_data_PEAKS_denovo{};
+			vector<fpf_data::peptide_data> main_v_peptide_data_PEAKS_denovo = fpf_data::create_peptide_data(main_v_csv_denovopeptides, main_v_scan_data_PEAKS_denovo);
 			std::cout << "\n\n ...data structures assigned";
 
+			vector<fpf_data::peptide_data> main_v_peptide_data = main_v_peptide_data_PEAKS_denovo;
 			itr_v_filesystem.v_peptide_data = main_v_peptide_data;
 			itr_v_filesystem.v_FASTA_category = main_v_FASTA_category;
 		}
@@ -180,6 +174,10 @@ int main() {
 			}
 			fpf_data_analysis::sort_v_category_analysis(itr_v_filesystem.v_category_analysis);
 		}
+	}
+
+	for (auto itr_v_filesystem = v_filesystem.begin(); itr_v_filesystem != v_filesystem.end(); ++itr_v_filesystem) {
+		std::cout << itr_v_filesystem->directory;
 	}
 
 	std::cout << "\n\n\n\n creating multinomial data frames...\n";

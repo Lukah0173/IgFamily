@@ -113,7 +113,10 @@ namespace fpf_report {
 					if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
 						fout_html_report << "<span class=\"mismatch\">";
 					}
-					if (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 25) {
+					if (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 35) {
+						fout_html_report << "<font color=\"#4c62d6\">";
+					}
+					if ((itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed <= 35) && (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 25)) {
 						fout_html_report << "<font color=\"#239B56\">";
 					}
 					if ((itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed <= 25) && (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 15)) {
@@ -212,7 +215,7 @@ namespace fpf_report {
 					}
 					fout_html_report << std::fixed << std::setprecision(2) << itr_blastp_data.blastp_parameter_score;
 					if (itr_blastp_data.blastp_parameter_score < 1) {
-						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
 					}
 					else {
 						for (auto j = 0; j < (4 - std::floor(std::log10(itr_blastp_data.blastp_parameter_score))); ++j) {
@@ -335,7 +338,10 @@ namespace fpf_report {
 						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_category_analysis.p_FASTA_category->category_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_category_analysis.p_FASTA_category->category_protein.at(i) == 'I'))) {
 							fout_html_report << "<span class=\"mismatch\">";
 						}
-						if (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 25) {
+						if (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 35) {
+							fout_html_report << "<font color=\"#4c62d6\">";
+						}
+						if ((itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed <= 35) && (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 25)) {
 							fout_html_report << "<font color=\"#239B56\">";
 						}
 						if ((itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed <= 25) && (itr_proteinconstruct_from_denovo.aminoacid_evalue_transformed > 15)) {
