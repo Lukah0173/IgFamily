@@ -33,7 +33,7 @@ namespace fpf_data {
 	struct blastp_data;
 	struct peptide_data;
 	struct protein_analysis;
-	struct v_proteinconstruct_from_denovo;
+	struct proteinconstruct_denovo_aminoacid;
 	struct multinomial;
 
 	struct denovo_peptide {
@@ -76,7 +76,7 @@ namespace fpf_data {
 		protein_data* p_protein_data;
 		vector<blastp_data> v_blastp_data_combined_by_protein;
 		double protein_score;
-		vector<v_proteinconstruct_from_denovo> v_proteinconstruct_from_denovo;
+		vector<proteinconstruct_denovo_aminoacid> proteinconstruct_denovo_aminoacid;
 		double proteinconstruct_sequencecoverage;
 	};
 
@@ -99,7 +99,7 @@ namespace fpf_data {
 		size_t denovo_replicate_count;
 	};
 
-	struct v_proteinconstruct_from_denovo {
+	struct proteinconstruct_denovo_aminoacid {
 		char aminoacid;
 		double aminoacid_localconfidence;
 		double aminoacid_evalue_transformed;

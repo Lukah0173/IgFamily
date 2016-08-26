@@ -73,7 +73,7 @@ namespace fpf_report {
 			fout_html_report << "\n\n<br><br> " << itr_protein_analysis.p_protein_data->protein_protein;
 			fout_html_report << "\n\n<br> ";
 			size_t i{};
-			for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
+			for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.proteinconstruct_denovo_aminoacid) {
 				if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 0) {
 					if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
 						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
@@ -108,7 +108,7 @@ namespace fpf_report {
 			fout_html_report << "&nbsp&nbsp&nbsp" << "Local&nbspconfidence";
 			fout_html_report << "\n\n<br> ";
 			i = size_t();
-			for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
+			for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.proteinconstruct_denovo_aminoacid) {
 				if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
 					if ((itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 						fout_html_report << "<span class=\"mismatch\">";
@@ -137,7 +137,7 @@ namespace fpf_report {
 			}
 			fout_html_report << "&nbsp&nbsp&nbsp" << "Homology";
 			fout_html_report << "\n\n<br><br><br>";
-			for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
+			for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.proteinconstruct_denovo_aminoacid) {
 				fout_html_report << "&nbsp";
 			}
 			fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -298,7 +298,7 @@ namespace fpf_report {
 				fout_html_report << "\n\n<br><br> " << itr_protein_analysis.p_protein_data->protein_protein;
 				fout_html_report << "\n\n<br> ";
 				size_t i{};
-				for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
+				for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.proteinconstruct_denovo_aminoacid) {
 					if (itr_proteinconstruct_from_denovo.aminoacid_localconfidence > 0) {
 						if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
 							if ((itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
@@ -333,7 +333,7 @@ namespace fpf_report {
 				fout_html_report << "&nbsp&nbsp&nbsp" << "Local&nbspconfidence";
 				fout_html_report << "\n\n<br> ";
 				i = size_t();
-				for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
+				for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.proteinconstruct_denovo_aminoacid) {
 					if (itr_proteinconstruct_from_denovo.aminoacid != '.') {
 						if ((itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 							fout_html_report << "<span class=\"mismatch\">";
@@ -362,7 +362,7 @@ namespace fpf_report {
 				}
 				fout_html_report << "&nbsp&nbsp&nbsp" << "Homology";
 				fout_html_report << "\n\n<br><br><br>";
-				for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.v_proteinconstruct_from_denovo) {
+				for (const auto& itr_proteinconstruct_from_denovo : itr_protein_analysis.proteinconstruct_denovo_aminoacid) {
 					fout_html_report << "&nbsp";
 				}
 				fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";

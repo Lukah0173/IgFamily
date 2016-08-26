@@ -32,7 +32,7 @@ namespace fpf_data_analysis {
 	typedef fpf_data::peptide_data peptide_data;
 	typedef fpf_data::protein_analysis protein_analysis;
 	typedef fpf_data::multinomial multinomial;
-	typedef fpf_data::v_proteinconstruct_from_denovo v_proteinconstruct_from_denovo;
+	typedef fpf_data::proteinconstruct_denovo_aminoacid proteinconstruct_denovo_aminoacid;
 	typedef fpf_filesystem::filesystem filesystem;
 	typedef fpf_parse::csv_data csv_data;
 	typedef fpf_parse::FASTA_data FASTA_data;
@@ -99,10 +99,10 @@ namespace fpf_data_analysis {
 	void create_proteinconstruct_from_denovo(filesystem& par_filesystem) {
 		for (auto& itr_protein_analysis : par_filesystem.v_protein_analysis) {
 			for (size_t i = 0; i < itr_protein_analysis.p_protein_data->protein_protein.length(); ++i) {
-				v_proteinconstruct_from_denovo temp_proteinconstruct_from_denovo{};
+				proteinconstruct_denovo_aminoacid temp_proteinconstruct_from_denovo{};
 				temp_proteinconstruct_from_denovo.aminoacid = '.';
 				temp_proteinconstruct_from_denovo.aminoacid_evalue_transformed = 0;
-				itr_protein_analysis.v_proteinconstruct_from_denovo.push_back(temp_proteinconstruct_from_denovo);
+				itr_protein_analysis.proteinconstruct_denovo_aminoacid.push_back(temp_proteinconstruct_from_denovo);
 			}
 			sort_v_blastp_data_with_spectralcount(itr_protein_analysis.v_blastp_data_combined_by_protein);
 			vector<blastp_data> v_blastp_query_alignment_selected{};
@@ -135,33 +135,33 @@ namespace fpf_data_analysis {
 			}
 			for (auto i = 0; i < v_blastp_query_alignment_selected.size(); ++i) {
 				bool skip_blastp_query_alignment{};
-				for (auto j = 0; j < itr_protein_analysis.v_proteinconstruct_from_denovo.size(); ++j) {
-					if ((itr_protein_analysis.v_proteinconstruct_from_denovo[j].aminoacid != '.')
+				for (auto j = 0; j < itr_protein_analysis.proteinconstruct_denovo_aminoacid.size(); ++j) {
+					if ((itr_protein_analysis.proteinconstruct_denovo_aminoacid[j].aminoacid != '.')
 						&& (v_blastp_query_alignment_selected[i].query_alignment.at(j) != '.')
-						&& (itr_protein_analysis.v_proteinconstruct_from_denovo[j].aminoacid != v_blastp_query_alignment_selected[i].query_alignment.at(j))) {
-						if (v_blastp_query_alignment_selected[i].blastp_parameter_score < itr_protein_analysis.v_proteinconstruct_from_denovo[j].aminoacid_parameter_score) {
+						&& (itr_protein_analysis.proteinconstruct_denovo_aminoacid[j].aminoacid != v_blastp_query_alignment_selected[i].query_alignment.at(j))) {
+						if (v_blastp_query_alignment_selected[i].blastp_parameter_score < itr_protein_analysis.proteinconstruct_denovo_aminoacid[j].aminoacid_parameter_score) {
 							skip_blastp_query_alignment = true;
 							break;
 						}
 					}
 				}
 				if (!skip_blastp_query_alignment) {
-					for (auto j = 0; j < itr_protein_analysis.v_proteinconstruct_from_denovo.size(); j) {
+					for (auto j = 0; j < itr_protein_analysis.proteinconstruct_denovo_aminoacid.size(); j) {
 						if (v_blastp_query_alignment_selected[i].query_alignment.at(j) == '.') {
 							++j;
 						}
 						else {
 							for (const auto& itr_v_denovo_aminoacid : v_blastp_query_alignment_selected[i].p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
-								if (j == itr_protein_analysis.v_proteinconstruct_from_denovo.size()) {
+								if (j == itr_protein_analysis.proteinconstruct_denovo_aminoacid.size()) {
 									break;
 								}
 								else {
-									if (v_blastp_query_alignment_selected[i].blastp_parameter_score > itr_protein_analysis.v_proteinconstruct_from_denovo[j].aminoacid_parameter_score) {
+									if (v_blastp_query_alignment_selected[i].blastp_parameter_score > itr_protein_analysis.proteinconstruct_denovo_aminoacid[j].aminoacid_parameter_score) {
 										if (v_blastp_query_alignment_selected[i].blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
-											itr_protein_analysis.v_proteinconstruct_from_denovo[j].aminoacid = v_blastp_query_alignment_selected[i].query_alignment.at(j);
-											itr_protein_analysis.v_proteinconstruct_from_denovo[j].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
-											itr_protein_analysis.v_proteinconstruct_from_denovo[j].aminoacid_evalue_transformed = v_blastp_query_alignment_selected[i].blastp_evalue_transformed;
-											itr_protein_analysis.v_proteinconstruct_from_denovo[j].aminoacid_parameter_score = v_blastp_query_alignment_selected[i].blastp_parameter_score;
+											itr_protein_analysis.proteinconstruct_denovo_aminoacid[j].aminoacid = v_blastp_query_alignment_selected[i].query_alignment.at(j);
+											itr_protein_analysis.proteinconstruct_denovo_aminoacid[j].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
+											itr_protein_analysis.proteinconstruct_denovo_aminoacid[j].aminoacid_evalue_transformed = v_blastp_query_alignment_selected[i].blastp_evalue_transformed;
+											itr_protein_analysis.proteinconstruct_denovo_aminoacid[j].aminoacid_parameter_score = v_blastp_query_alignment_selected[i].blastp_parameter_score;
 										}
 									}
 									++j;
@@ -177,12 +177,12 @@ namespace fpf_data_analysis {
 	void determine_sequence_coverage(filesystem& par_filesystem) {
 		for (auto& itr_protein_analysis : par_filesystem.v_protein_analysis) {
 			size_t temp_sequencetrue{};
-			for (const auto& itr_v_proteinconstruct : itr_protein_analysis.v_proteinconstruct_from_denovo) {
+			for (const auto& itr_v_proteinconstruct : itr_protein_analysis.proteinconstruct_denovo_aminoacid) {
 				if (itr_v_proteinconstruct.aminoacid != '.') {
 					++temp_sequencetrue;
 				}
 			}
-			itr_protein_analysis.proteinconstruct_sequencecoverage = double(100 * (double(temp_sequencetrue) / itr_protein_analysis.v_proteinconstruct_from_denovo.size()));
+			itr_protein_analysis.proteinconstruct_sequencecoverage = double(100 * (double(temp_sequencetrue) / itr_protein_analysis.proteinconstruct_denovo_aminoacid.size()));
 		}
 	}
 
