@@ -1,4 +1,4 @@
-// * * IgFamily v0.7.10 * * 
+// * * IgFamily v0.7.11 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -14,13 +14,13 @@
 
 #include "IgFamily.h"
 #include "fpf_core.h"
+#include "fpf_data_analysis.h"
+#include "fpf_dirichlet_mixture_model.h"
 #include "fpf_filesystem.h"
 #include "fpf_filesystem_analysis.h"
-#include "fpf_data_analysis.h"
 #include "fpf_homology_analysis.h"
-#include "fpf_dirichlet_mixture_model.h"
-#include "fpf_report.h"
 #include "fpf_multinomial.h"
+#include "fpf_report.h"
 
 
 int main() {
@@ -98,65 +98,12 @@ int main() {
 	}
 
 	for (auto& itr_v_filesystem : v_filesystem) {
-		fpf_core::core_homology(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis, false);
-	}
-
-	std::cout << "\n\n\n\n scoring categories...\n";
-	for (auto& itr_v_filesystem : v_filesystem) {
-		if (itr_v_filesystem.denovopeptides_exist) {
-			fpf_data_analysis::create_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			for (auto& itr_v_protein_analysis : itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis) {
-				fpf_data_analysis::sort_v_homology_data_with_spectralcount(itr_v_protein_analysis.v_homology_data_combined_by_protein);
-			}
-			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis);
-		}
-	}
-
-	for (auto& itr_v_filesystem : v_filesystem) {
-		fpf_core::core_homology(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis, true);
-	}
-
-	std::cout << "\n\n\n\n scoring categories...\n";
-	for (auto& itr_v_filesystem : v_filesystem) {
-		if (itr_v_filesystem.denovopeptides_exist) {
-			fpf_data_analysis::create_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			for (auto& itr_v_protein_analysis : itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis) {
-				fpf_data_analysis::sort_v_homology_data_with_spectralcount(itr_v_protein_analysis.v_homology_data_combined_by_protein);
-			}
-			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis);
-		}
-	}
-
-	for (auto itr_v_filesystem = v_filesystem.begin(); itr_v_filesystem != v_filesystem.end(); ++itr_v_filesystem) {
-		std::cout << itr_v_filesystem->directory;
-	}
-
-	std::cout << "\n\n\n\n creating multinomial data frames...\n";
-	for (auto& itr_v_filesystem : v_filesystem) {
-		if (itr_v_filesystem.denovopeptides_exist) {
-			fpf_multinomial::create_filesystem_multinomial_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_multinomial::fout_multinomial(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_multinomial::fout_multinomial_element(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_multinomial::fout_multinomial_element_nomatch(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-		}
-	}
-
-	std::cout << "\n\n\n\n producing summary reports...\n";
-	for (auto& itr_v_filesystem : v_filesystem) {
-		if (itr_v_filesystem.denovopeptides_exist) {
-			std::cout << "\n\n ...generating multinomial report for " << itr_v_filesystem.filename;
-			fpf_report::fout_multinomial_comparison(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n ...generating html report for " << itr_v_filesystem.filename;
-			fpf_report::fout_html_report(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_report::fout_html_report_filtered(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-		}
-	}
-
-	for (auto itr_v_filesystem : v_filesystem) {
+		fpf_core::core_homology_analysis(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis, false);
+		fpf_core::core_data_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+		fpf_core::core_homology_analysis(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis, true);
+		fpf_core::core_data_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis);
+		fpf_core::core_multinomial(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
+		fpf_core::core_report(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
 		fpf_filesystem::fout_filesystem(itr_v_filesystem);
 	}
 

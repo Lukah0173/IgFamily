@@ -13,6 +13,8 @@
 #include "fpf_data_analysis.h"
 #include "fpf_filesystem.h"
 #include "fpf_homology_analysis.h"
+#include "fpf_multinomial.h"
+#include "fpf_report.h"
 
 
 namespace fpf_core {
@@ -23,7 +25,7 @@ namespace fpf_core {
 	typedef fpf_filesystem::filesystem filesystem;
 	typedef fpf_filesystem::sample_analysis sample_analysis;
 
-	void core_homology(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_refined) {
+	void core_homology_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_refined) {
 		if (!par_refined) {
 			std::cout << "\n\n\n\n analysing homology for file ";
 			std::cout << par_filesystem.filename;
@@ -62,6 +64,35 @@ namespace fpf_core {
 		std::cout << "\n\n ...homology file ";
 		std::cout << par_filesystem.filename;
 		std::cout << " output";
+	}
+
+	void core_data_analysis(sample_analysis& par_sample_analysis) {
+		std::cout << "\n\n\n\n scoring categories...\n";
+		fpf_data_analysis::create_protein_analysis(par_sample_analysis);
+		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
+		fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
+		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			fpf_data_analysis::sort_v_homology_data_with_spectralcount(itr_v_protein_analysis.v_homology_data_combined_by_protein);
+		}
+		fpf_data_analysis::sort_v_protein_analysis(par_sample_analysis.v_protein_analysis);
+	}
+
+	void core_multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+		std::cout << "\n\n\n\n creating multinomial data frames...\n";
+		fpf_multinomial::create_filesystem_multinomial_data(par_sample_analysis);
+		fpf_multinomial::fout_multinomial(par_filesystem, par_sample_analysis);
+		fpf_multinomial::fout_multinomial_element(par_filesystem, par_sample_analysis);
+		fpf_multinomial::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
+	}
+
+	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+		std::cout << "\n\n\n\n producing summary reports...\n";
+		std::cout << "\n\n ...generating multinomial report for " << par_filesystem.filename;
+		fpf_report::fout_multinomial_comparison(par_filesystem, par_sample_analysis);
+		std::cout << "\n\n ...generating html report for " << par_filesystem.filename;
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis);
+		fpf_report::fout_html_report_filtered(par_filesystem, par_sample_analysis);
+		std::cout << "\n\n";
 	}
 }
 #endif

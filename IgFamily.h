@@ -17,7 +17,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.7.10";
+	const string version = "v0.7.11";
 
 	const bool FILESYSTEM_UPDATE_ALL = 1;
 	const bool NOVOR_DENOVO = 0;
@@ -28,7 +28,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA = 1;
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_4.txt";
-	const string DEFAULT_INPUT_FASTA = "MOST_RECENT_20160804.fasta";
+	const string DEFAULT_INPUT_FASTA = "LUKAH_WITHUNIPROT_20160815.fasta";
 	const string DEFAULT_INPUT_FASTA_DIRECTORY = "FASTA\\" + DEFAULT_INPUT_FASTA;
 
 	const double DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD = 50;
