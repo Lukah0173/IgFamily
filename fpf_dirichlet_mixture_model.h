@@ -14,7 +14,7 @@
 #include "fpf_data.h"
 #include "fpf_filesystem.h"
 #include "fpf_filesystem_analysis.h"
-#include "fpf_blastp_analysis.h"
+#include "fpf_homology_analysis.h"
 
 /*Eigen*/
 

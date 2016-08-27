@@ -13,10 +13,11 @@
 #include <utility>			// provides - std::move
 
 #include "IgFamily.h"
+#include "fpf_core.h"
 #include "fpf_filesystem.h"
 #include "fpf_filesystem_analysis.h"
 #include "fpf_data_analysis.h"
-#include "fpf_blastp_analysis.h"
+#include "fpf_homology_analysis.h"
 #include "fpf_dirichlet_mixture_model.h"
 #include "fpf_report.h"
 #include "fpf_multinomial.h"
@@ -97,33 +98,7 @@ int main() {
 	}
 
 	for (auto& itr_v_filesystem : v_filesystem) {
-		if (itr_v_filesystem.denovopeptides_exist) {
-			std::cout << "\n\n\n\n analysing homology for file ";
-			std::cout << itr_v_filesystem.filename;
-			std::cout << "...";
-			fpf_blastp_analysis::create_blastp_input(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::create_blastp_database(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n\n * * * Calling blastp.exe * * *";
-			fpf_blastp_analysis::sys_blastp(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n\n * * * Closing blastp.exe * * *";
-			std::cout << "\n\n\n ...homology analysis complete";
-			std::cout << "\n\n\n creating homology data structures for file ";
-			std::cout << itr_v_filesystem.filename;
-			std::cout << "...";
-			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::associate_blastp_data_to_v_protein_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n ...data structures assigned";
-			std::cout << "\n\n outputting homology summary...";
-			fpf_blastp_analysis::fout_blastp_summary(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n ...homology file ";
-			std::cout << itr_v_filesystem.filename;
-			std::cout << " output";
-		}
+		fpf_core::core_homology(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis, false);
 	}
 
 	std::cout << "\n\n\n\n scoring categories...\n";
@@ -133,42 +108,14 @@ int main() {
 			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			for (auto& itr_v_protein_analysis : itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis) {
-				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_protein_analysis.v_blastp_data_combined_by_protein);
+				fpf_data_analysis::sort_v_homology_data_with_spectralcount(itr_v_protein_analysis.v_homology_data_combined_by_protein);
 			}
 			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis);
 		}
 	}
 
 	for (auto& itr_v_filesystem : v_filesystem) {
-		if (itr_v_filesystem.denovopeptides_exist) {
-			std::cout << "\n\n\n\n determining most-probable germline representation...\n";
-			fpf_data_analysis::select_protein_analysis_by_score(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n\n analysing post-hoc homology for file ";
-			std::cout << itr_v_filesystem.filename;
-			std::cout << "...";
-			fpf_blastp_analysis::create_blastp_database_refined(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n\n * * * Calling blastp.exe * * *";
-			fpf_blastp_analysis::sys_blastp(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n\n * * * Closing blastp.exe * * *";
-			std::cout << "\n\n\n ...homology analysis complete";
-			std::cout << "\n\n\n creating homology data structures for file ";
-			std::cout << itr_v_filesystem.filename;
-			std::cout << "...";
-			fpf_blastp_analysis::create_v_blastp_data(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::modify_filesystem_blastp_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::associate_blastp_data_to_v_protein_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::associate_blastp_data_to_v_peptide_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::create_protein_from_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::create_query_alignment(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::normalise_blastp_data(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			fpf_blastp_analysis::determine_blastp_parameter_density(itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n ...data structures assigned";
-			std::cout << "\n\n outputting homology summary...";
-			fpf_blastp_analysis::fout_blastp_summary(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis);
-			std::cout << "\n\n ...homology file ";
-			std::cout << itr_v_filesystem.filename;
-			std::cout << " output";
-		}
+		fpf_core::core_homology(itr_v_filesystem, itr_v_filesystem.sample_PEAKS_denovo_analysis, true);
 	}
 
 	std::cout << "\n\n\n\n scoring categories...\n";
@@ -178,7 +125,7 @@ int main() {
 			fpf_data_analysis::create_proteinconstruct_from_denovo(itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			fpf_data_analysis::determine_sequence_coverage(itr_v_filesystem.sample_PEAKS_denovo_analysis);
 			for (auto& itr_v_protein_analysis : itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis) {
-				fpf_data_analysis::sort_v_blastp_data_with_spectralcount(itr_v_protein_analysis.v_blastp_data_combined_by_protein);
+				fpf_data_analysis::sort_v_homology_data_with_spectralcount(itr_v_protein_analysis.v_homology_data_combined_by_protein);
 			}
 			fpf_data_analysis::sort_v_protein_analysis(itr_v_filesystem.sample_PEAKS_denovo_analysis.v_protein_analysis);
 		}

@@ -29,7 +29,7 @@ namespace fpf_filesystem {
 	using std::vector;
 
 	typedef fpf_convert::fileconversion_parameters fileconversion_parameters;
-	typedef fpf_data::blastp_data blastp_data;
+	typedef fpf_data::homology_data homology_data;
 	typedef fpf_data::protein_data protein_data;
 	typedef fpf_data::peptide_analysis peptide_analysis;
 	typedef fpf_data::peptide_data peptide_data;
@@ -45,7 +45,7 @@ namespace fpf_filesystem {
 		vector<protein_data> v_protein_data;
 		vector<peptide_data> v_peptide_data;
 		vector<peptide_analysis> v_peptide_analysis;
-		vector<blastp_data> v_blastp_data;
+		vector<homology_data> v_homology_data;
 		vector<protein_analysis> v_protein_analysis;
 		vector<protein_analysis> v_protein_analysis_selected_by_polymorphism;
 		multinomial multinomial_data;

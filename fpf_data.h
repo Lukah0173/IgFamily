@@ -30,7 +30,7 @@ namespace fpf_data {
 	struct denovo_peptide;
 	struct denovo_aminoacid;
 	struct protein_data;
-	struct blastp_data;
+	struct homology_data;
 	struct peptide_data;
 	struct protein_analysis;
 	struct proteinconstruct_aminoacid;
@@ -74,13 +74,13 @@ namespace fpf_data {
 	struct protein_analysis {
 	public:
 		protein_data* p_protein_data;
-		vector<blastp_data> v_blastp_data_combined_by_protein;
+		vector<homology_data> v_homology_data_combined_by_protein;
 		double protein_score;
 		vector<proteinconstruct_aminoacid> proteinconstruct_from_denovo;
 		double proteinconstruct_sequencecoverage;
 	};
 
-	struct blastp_data {
+	struct homology_data {
 	public:
 		peptide_analysis* p_peptide_analysis;
 		protein_data* p_protein_data;

@@ -40,15 +40,15 @@ namespace fpf_multinomial {
 		par_sample_analysis.multinomial_data.v2_density = vector<vector<double>>(par_sample_analysis.multinomial_data.v_element_name.size(), vector<double>(par_sample_analysis.multinomial_data.v_protein_name.size(), 0));
 		par_sample_analysis.multinomial_data.v_frequency_marginal_sum = vector<double>(par_sample_analysis.multinomial_data.v_element_name.size(), 0);
 
-		for (const auto itr_v_blastp_data : par_sample_analysis.v_blastp_data) {
-			const auto find_multinomial_element = std::find(par_sample_analysis.multinomial_data.v_element_name.begin(), par_sample_analysis.multinomial_data.v_element_name.end(), itr_v_blastp_data.blastp_query);		
-			const auto find_multinomial_protein = std::find(par_sample_analysis.multinomial_data.v_protein_name.begin(), par_sample_analysis.multinomial_data.v_protein_name.end(), itr_v_blastp_data.blastp_subject_accession);			
+		for (const auto itr_v_homology_data : par_sample_analysis.v_homology_data) {
+			const auto find_multinomial_element = std::find(par_sample_analysis.multinomial_data.v_element_name.begin(), par_sample_analysis.multinomial_data.v_element_name.end(), itr_v_homology_data.blastp_query);		
+			const auto find_multinomial_protein = std::find(par_sample_analysis.multinomial_data.v_protein_name.begin(), par_sample_analysis.multinomial_data.v_protein_name.end(), itr_v_homology_data.blastp_subject_accession);			
 			
 			if ((find_multinomial_element != par_sample_analysis.multinomial_data.v_element_name.end()) && (find_multinomial_protein) != par_sample_analysis.multinomial_data.v_protein_name.end()){
 				const int i = (find_multinomial_element - par_sample_analysis.multinomial_data.v_element_name.begin());
 				const int j = (find_multinomial_protein - par_sample_analysis.multinomial_data.v_protein_name.begin());
-				par_sample_analysis.multinomial_data.v2_frequency[i][j] = itr_v_blastp_data.blastp_evalue_transformed;
-				par_sample_analysis.multinomial_data.v_frequency_marginal_sum[i] += itr_v_blastp_data.blastp_evalue_transformed;
+				par_sample_analysis.multinomial_data.v2_frequency[i][j] = itr_v_homology_data.blastp_evalue_transformed;
+				par_sample_analysis.multinomial_data.v_frequency_marginal_sum[i] += itr_v_homology_data.blastp_evalue_transformed;
 			}
 			else {
 				std::cout << "\n\n ~~~ query / peptide or subject / accession mismatch";

@@ -25,7 +25,7 @@ namespace fpf_data_analysis {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_data::blastp_data blastp_data;
+	typedef fpf_data::homology_data homology_data;
 	typedef fpf_data::denovo_peptide denovo_peptide;
 	typedef fpf_data::protein_data protein_data;
 	typedef fpf_data::peptide_analysis peptide_analysis;
@@ -41,60 +41,60 @@ namespace fpf_data_analysis {
 	void create_protein_analysis(sample_analysis& par_sample_analysis) {
 		protein_analysis temp_protein_analysis{};
 		vector<protein_analysis> temp_v_protein_analysis{};
-		for (const auto itr_blastp_data : par_sample_analysis.v_blastp_data) {
-			if (itr_blastp_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
+		for (const auto itr_homology_data : par_sample_analysis.v_homology_data) {
+			if (itr_homology_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
 				auto find_protein_analysis = std::find_if(temp_v_protein_analysis.begin(), temp_v_protein_analysis.end(),
-					[itr_blastp_data](const protein_analysis par_protein_analysis) {
-					return par_protein_analysis.p_protein_data->protein_name == itr_blastp_data.blastp_subject_accession;
+					[itr_homology_data](const protein_analysis par_protein_analysis) {
+					return par_protein_analysis.p_protein_data->protein_name == itr_homology_data.blastp_subject_accession;
 				});
 				if (find_protein_analysis != temp_v_protein_analysis.end()) {
-					find_protein_analysis->v_blastp_data_combined_by_protein.push_back(itr_blastp_data);
+					find_protein_analysis->v_homology_data_combined_by_protein.push_back(itr_homology_data);
 				}
 				else {
 					double temp_protein_score{};
-					temp_protein_analysis.p_protein_data = itr_blastp_data.p_protein_data;
-					temp_protein_analysis.v_blastp_data_combined_by_protein.push_back(itr_blastp_data);
+					temp_protein_analysis.p_protein_data = itr_homology_data.p_protein_data;
+					temp_protein_analysis.v_homology_data_combined_by_protein.push_back(itr_homology_data);
 					temp_protein_analysis.protein_score = temp_protein_score;
 					temp_v_protein_analysis.push_back(temp_protein_analysis);
-					temp_protein_analysis.v_blastp_data_combined_by_protein.clear();
+					temp_protein_analysis.v_homology_data_combined_by_protein.clear();
 				}
 			}
 		}
 		denovo_peptide default_denovo_peptide{};
 		for (auto& itr_protein_analysis : temp_v_protein_analysis) {
-			for (auto& itr_blastp_data : itr_protein_analysis.v_blastp_data_combined_by_protein) {
+			for (auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
 				auto& find_peptide_analysis = std::find_if(par_sample_analysis.v_peptide_analysis.begin(), par_sample_analysis.v_peptide_analysis.end(),
-					[itr_blastp_data](const peptide_analysis par_peptide_analysis) {
-					return par_peptide_analysis.peptide_filtered == itr_blastp_data.blastp_query;
+					[itr_homology_data](const peptide_analysis par_peptide_analysis) {
+					return par_peptide_analysis.peptide_filtered == itr_homology_data.blastp_query;
 				});
-				itr_blastp_data.p_peptide_analysis = &(*find_peptide_analysis);
-				itr_blastp_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &default_denovo_peptide;
+				itr_homology_data.p_peptide_analysis = &(*find_peptide_analysis);
+				itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &default_denovo_peptide;
 				for (auto& itr_peptide_data : find_peptide_analysis->v_peptide_data) {
-					++itr_blastp_data.denovo_replicate_count;
-					if (itr_blastp_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average < itr_peptide_data->denovo_peptide_data.localconfidence_average) {
-						itr_blastp_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &itr_peptide_data->denovo_peptide_data;
+					++itr_homology_data.denovo_replicate_count;
+					if (itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average < itr_peptide_data->denovo_peptide_data.localconfidence_average) {
+						itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &itr_peptide_data->denovo_peptide_data;
 					}
 				}
-				itr_protein_analysis.protein_score += (itr_blastp_data.blastp_parameter_score * itr_blastp_data.denovo_replicate_count);
+				itr_protein_analysis.protein_score += (itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count);
 			}
 		}
 		par_sample_analysis.v_protein_analysis = temp_v_protein_analysis;
 	}
 
-	inline bool predicate_blastp_data_with_spectralcount(const blastp_data& i, const blastp_data& j) {
+	inline bool predicate_homology_data_with_spectralcount(const homology_data& i, const homology_data& j) {
 		return ((i.blastp_parameter_score * i.denovo_replicate_count * i.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average) > (j.blastp_parameter_score * j.denovo_replicate_count * i.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average));
 	}
 
-	inline void sort_v_blastp_data_with_spectralcount(vector<blastp_data>& par_v_blastp_data) {
-		std::sort(par_v_blastp_data.begin(), par_v_blastp_data.end(), predicate_blastp_data_with_spectralcount);
+	inline void sort_v_homology_data_with_spectralcount(vector<homology_data>& par_v_homology_data) {
+		std::sort(par_v_homology_data.begin(), par_v_homology_data.end(), predicate_homology_data_with_spectralcount);
 	}
 
 	inline bool predicate_protein_analysis(const protein_analysis& i, const protein_analysis& j) {
 		return (i.protein_score > j.protein_score);
 	}
 
-	inline void sort_v_protein_analysis(vector<protein_analysis>& par_v_blastp_data) {
-		std::sort(par_v_blastp_data.begin(), par_v_blastp_data.end(), predicate_protein_analysis);
+	inline void sort_v_protein_analysis(vector<protein_analysis>& par_v_homology_data) {
+		std::sort(par_v_homology_data.begin(), par_v_homology_data.end(), predicate_protein_analysis);
 	}
 
 	void create_proteinconstruct_from_denovo(sample_analysis& par_sample_analysis) {
@@ -105,26 +105,26 @@ namespace fpf_data_analysis {
 				temp_proteinconstruct_from_denovo.aminoacid_evalue_transformed = 0;
 				itr_protein_analysis.proteinconstruct_from_denovo.push_back(temp_proteinconstruct_from_denovo);
 			}
-			sort_v_blastp_data_with_spectralcount(itr_protein_analysis.v_blastp_data_combined_by_protein);
-			vector<blastp_data> v_blastp_query_alignment_selected{};
-			vector<blastp_data> v_blastp_query_alignment_rejected{};
-			for (const auto itr_v_blastp_data : itr_protein_analysis.v_blastp_data_combined_by_protein) {
+			sort_v_homology_data_with_spectralcount(itr_protein_analysis.v_homology_data_combined_by_protein);
+			vector<homology_data> v_blastp_query_alignment_selected{};
+			vector<homology_data> v_blastp_query_alignment_rejected{};
+			for (const auto itr_v_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
 				const auto find_blastp_query_alignment_rejected = std::find_if(v_blastp_query_alignment_rejected.begin(), v_blastp_query_alignment_rejected.end(),
-					[itr_v_blastp_data](const blastp_data par_s_blastp) {
-					return par_s_blastp.query_alignment == itr_v_blastp_data.query_alignment;
+					[itr_v_homology_data](const homology_data par_s_blastp) {
+					return par_s_blastp.query_alignment == itr_v_homology_data.query_alignment;
 				});
 				if (find_blastp_query_alignment_rejected == v_blastp_query_alignment_rejected.end()) {
-					blastp_data temp_blastp_query_alignment{};
-					temp_blastp_query_alignment.query_alignment = itr_v_blastp_data.query_alignment;
-					temp_blastp_query_alignment.blastp_evalue_transformed = itr_v_blastp_data.blastp_evalue_transformed;
-					temp_blastp_query_alignment.blastp_parameter_score = itr_v_blastp_data.blastp_parameter_score;
-					temp_blastp_query_alignment.p_peptide_analysis = itr_v_blastp_data.p_peptide_analysis;
-					temp_blastp_query_alignment.denovo_replicate_count = itr_v_blastp_data.denovo_replicate_count;
-					for (const auto itr_v_blastp_data_2 : itr_protein_analysis.v_blastp_data_combined_by_protein) {
-						for (auto i = 0; i < itr_v_blastp_data.query_alignment.length(); ++i) {
-							if ((itr_v_blastp_data.query_alignment.at(i) != '.') && (itr_v_blastp_data_2.query_alignment.at(i) != '.')) {
-								if (itr_v_blastp_data.query_alignment.at(i) != itr_v_blastp_data_2.query_alignment.at(i)) {
-									v_blastp_query_alignment_rejected.push_back(itr_v_blastp_data_2);
+					homology_data temp_blastp_query_alignment{};
+					temp_blastp_query_alignment.query_alignment = itr_v_homology_data.query_alignment;
+					temp_blastp_query_alignment.blastp_evalue_transformed = itr_v_homology_data.blastp_evalue_transformed;
+					temp_blastp_query_alignment.blastp_parameter_score = itr_v_homology_data.blastp_parameter_score;
+					temp_blastp_query_alignment.p_peptide_analysis = itr_v_homology_data.p_peptide_analysis;
+					temp_blastp_query_alignment.denovo_replicate_count = itr_v_homology_data.denovo_replicate_count;
+					for (const auto itr_v_homology_data_2 : itr_protein_analysis.v_homology_data_combined_by_protein) {
+						for (auto i = 0; i < itr_v_homology_data.query_alignment.length(); ++i) {
+							if ((itr_v_homology_data.query_alignment.at(i) != '.') && (itr_v_homology_data_2.query_alignment.at(i) != '.')) {
+								if (itr_v_homology_data.query_alignment.at(i) != itr_v_homology_data_2.query_alignment.at(i)) {
+									v_blastp_query_alignment_rejected.push_back(itr_v_homology_data_2);
 								}
 							}
 						}

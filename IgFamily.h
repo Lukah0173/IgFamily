@@ -5,11 +5,13 @@
 // * * * * *
 
 
-#include <cstdlib>
-#include <string> // provides - std::string
 
 #ifndef IgFamily
 #define	IgFamily
+
+#include <cstdlib>
+#include <string> // provides - std::string
+
 
 namespace IgFamily {
 

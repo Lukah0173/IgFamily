@@ -6,6 +6,9 @@
 
 
 
+#ifndef FPF_PARSE
+#define	FPF_PARSE
+
 #include <cstdlib>				// provides - size_t
 #include <string>				// provides - std::string
 #include <iostream>				// provides - std::cin, std::cout
@@ -18,9 +21,6 @@
 
 #include "IgFamily.h"
 
-
-#ifndef FPF_PARSE
-#define	FPF_PARSE
 
 namespace fpf_parse {
 
