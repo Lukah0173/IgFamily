@@ -109,7 +109,9 @@ namespace fpf_filesystem {
 		return menu_selection;
 	}
 
-	void display_FASTA_menu(string par_FASTA_setting_current) {
+	string perform_FASTA_selection(string par_FASTA_setting_current);
+
+	string display_FASTA_menu(string par_FASTA_setting_current) {
 		std::cout << "\n\n Current setting - " << par_FASTA_setting_current;
 		std::cout << "\n";
 		std::cout << "\n [0] IGHV_IGLV_IGKV_20160827.fasta";
@@ -123,17 +125,11 @@ namespace fpf_filesystem {
 		std::cout << "\n [8] IGH_IGL_IGK_mAB_20160827.fasta";
 		std::cout << "\n [9] IGH_IGL_IGK_mAB_CONT_20160827.fasta";
 		std::cout << "\n [X] Use current setting";
-	}
-
-	void display_peptide_method_menu() {
 		std::cout << "\n\n";
-		std::cout << "\n [0] PEAKS database match";
-		std::cout << "\n [1] PEAKS de novo";
-		std::cout << "\n [2] NOVOR de novo";
+		return perform_FASTA_selection(par_FASTA_setting_current);
 	}
 
-	int perform_FASTA_selection(string par_FASTA_setting_current) {
-		display_FASTA_menu(par_FASTA_setting_current);
+	string perform_FASTA_selection(string par_FASTA_setting_current) {
 		string menu_selection{};
 		while ((menu_selection != ("0"))
 			&& (menu_selection != ("1"))
@@ -151,39 +147,76 @@ namespace fpf_filesystem {
 			std::cin >> menu_selection;
 		}
 		if (menu_selection == "0") {
-			return std::stoi("0");
+			return "IGHV_IGLV_IGKV_20160827.fasta";
 		}
 		if (menu_selection == "1") {
-			return std::stoi("1");
+			return "IGHV_IGLV_IGKV_CONT_20160827.fasta";
 		}
 		if (menu_selection == "2") {
-			return std::stoi("2");
+			return "IGHV_IGLV_IGKV_CONT_UNIPROT_20160827.fasta";
 		}
 		if (menu_selection == "3") {
-			return std::stoi("3");
+			return "IGHV_IGLV_IGKV_MIGHV_MIGKV_MIGLV_20160827.fasta";
 		}
 		if (menu_selection == "4") {
-			return std::stoi("4");
+			return "IGHV_IGKV_IGLV_MIGHV_MIGKV_MIGLV_CONT_20160827.fasta";
 		}
 		if (menu_selection == "5") {
-			return std::stoi("5");
+			return "IGH_IGL_IGK_20160827.fasta";
 		}
 		if (menu_selection == "6") {
-			return std::stoi("6");
+			return "IGH_IGL_IGK_CONT_20160827.fasta";
 		}
 		if (menu_selection == "7") {
-			return std::stoi("7");
+			return "IGH_IGL_IGK_CONT_UNIPROT_20160827.fasta";
 		}
 		if (menu_selection == "8") {
-			return std::stoi("8");
+			return "IGH_IGL_IGK_mAB_20160827.fasta";
 		}
 		if (menu_selection == "9") {
-			return std::stoi("9");
+			return "IGH_IGL_IGK_mAB_CONT_20160827.fasta";
 		}
 		if (menu_selection == "X") {
-			return -1;
+			return par_FASTA_setting_current;
 		}
-		return -1;
+		return par_FASTA_setting_current;
+	}
+
+	string perform_peptide_method_selection(string par_peptide_method_setting_current);
+
+	string display_peptide_assignment_menu(string par_peptide_method_setting_current) {
+		std::cout << "\n\n Current setting - " << par_peptide_method_setting_current;
+		std::cout << "\n";
+		std::cout << "\n [0] PEAKS database match";
+		std::cout << "\n [1] PEAKS de novo";
+		std::cout << "\n [2] NOVOR de novo";
+		std::cout << "\n [X] Use current setting";
+		return perform_peptide_method_selection(par_peptide_method_setting_current);
+	}
+
+	string perform_peptide_method_selection(string par_peptide_method_setting_current) {
+		string menu_selection{};
+		while ((menu_selection != ("0"))
+			&& (menu_selection != ("1"))
+			&& (menu_selection != ("2"))
+			&& (menu_selection != ("X"))) {
+			menu_selection.clear();
+			std::cout << "\n\n Input selection: --> ";
+			std::cin >> menu_selection;
+		}
+		if (menu_selection == "0") {
+			return "PEAKS database match";
+		}
+		if (menu_selection == "1") {
+			return "PEAKS de novo";
+		}
+		if (menu_selection == "2") {
+			return "NOVOR de novo";
+		}
+		if (menu_selection == "X") {
+			return par_peptide_method_setting_current;
+		}
+		return par_peptide_method_setting_current;
 	}
 
 	vector<string> read_root_dir(string par_root_directory) {

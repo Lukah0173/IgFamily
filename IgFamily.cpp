@@ -1,4 +1,4 @@
-// * * IgFamily v0.7.12 * * 
+// * * IgFamily v0.7.13 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -30,20 +30,27 @@ int main() {
 
 	std::cout << "-- IgFamily " << IgFamily::version << " --\n\n\n";
 
-	string FASTA_setting{ DEFAULT_INPUT_FASTA_DIRECTORY };
-	//string peptide_assignment_setting{ 
+	string select_FASTA{ IgFamily::DEFAULT_INPUT_FASTA };
+	string select_peptide_assignment{ IgFamily::DEFAULT_PEPTIDE_ASSIGNMENT_METHOD };
 
-	fpf_filesystem::display_settings(IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY, "ping");
-
+	fpf_filesystem::display_settings(select_FASTA, select_peptide_assignment);
 	string menu_selection{ fpf_filesystem::display_menu() };
-	if (menu_selection == "F") {
-		
-	}
-	if (menu_selection == "P") {
-	
-	}
-	if (menu_selection == "X") {
 
+	bool menu_continue{};
+	while (!menu_continue) {
+		if (menu_selection == "F") {
+			select_FASTA = fpf_filesystem::display_FASTA_menu(select_FASTA);	
+			fpf_filesystem::display_settings(select_FASTA, select_peptide_assignment);
+			menu_selection = fpf_filesystem::display_menu();
+		}
+		if (menu_selection == "P") {
+			select_peptide_assignment = fpf_filesystem::display_peptide_assignment_menu(select_peptide_assignment);
+			fpf_filesystem::display_settings(select_FASTA, select_peptide_assignment);
+			menu_selection = fpf_filesystem::display_menu();
+		}
+		if (menu_selection == "X") {
+			menu_continue = true;
+		}
 	}
 
 	std::cout << "\n\n\n reading root directory...\n";
