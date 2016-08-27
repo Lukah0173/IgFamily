@@ -9,13 +9,13 @@
 #ifndef FPF_DATA
 #define	FPF_DATA
 
-#include <cstdlib>			// provides - size_t
-#include <vector>			// provides - std::vector
-#include <sstream>			// provides - std::istringstream
-#include <algorithm>		// provides - std::find
-#include <string>			// provides - std::string, string::pop_back
-#include <utility>			// provides - std::move
-#include <math.h>			// provides - std::floor
+#include <cstdlib>
+#include <vector>
+#include <sstream>
+#include <algorithm>
+#include <string>
+#include <utility>
+#include <math.h>
 
 #include "IgFamily.h"
 #include "fpf_parse.h"

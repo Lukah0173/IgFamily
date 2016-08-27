@@ -9,12 +9,12 @@
 #ifndef FPF_PARSE
 #define	FPF_PARSE
 
-#include <cstdlib>				// provides - size_t
-#include <string>				// provides - std::string
-#include <iostream>				// provides - std::cin, std::cout
-#include <fstream>				// provides - std::ifstream, std::ofstream
-#include <istream>				// provides - std::istream::get
-#include <vector>				// provides - std::vector
+#include <cstdlib>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <istream>
+#include <vector>
 #include <algorithm>
 #include <sstream>
 #include <iomanip>

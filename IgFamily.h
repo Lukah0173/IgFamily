@@ -9,8 +9,7 @@
 #ifndef IgFamily
 #define	IgFamily
 
-#include <cstdlib>
-#include <string> // provides - std::string
+#include <string>
 
 
 namespace IgFamily {
@@ -27,7 +26,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA = 1;
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_4.txt";
-	const string DEFAULT_INPUT_FASTA = "IGHV_IGLV_IGKV_20160827.fasta";
+	const string DEFAULT_INPUT_FASTA = "IGHV_IGLV_IGKV_CONT_20160827.fasta";
 	const string DEFAULT_INPUT_FASTA_DIRECTORY = "FASTA\\" + DEFAULT_INPUT_FASTA;
 
 	const double DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD = 50;

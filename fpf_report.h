@@ -9,11 +9,11 @@
 #ifndef FPF_REPORT
 #define	FPF_REPORT
 
-#include <cstdlib>						// provides - size_t
-#include <iomanip>						// provides - std::setprecision
-#include <math.h>						// provides - std::log10, std::floor
-#include <string>						// provides - std::string
-#include <vector>						// provides - std::vector
+#include <cstdlib>
+#include <iomanip>
+#include <math.h>
+#include <string>
+#include <vector>
 
 #include "IgFamily.h"
 #include "fpf_filesystem.h"

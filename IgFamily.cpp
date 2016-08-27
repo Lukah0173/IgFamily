@@ -6,11 +6,11 @@
 
 
 
-#include <string>			// provides - string
-#include <iostream>			// provides - std::cin, std::cout
-#include <iomanip>			// provides - std::setprecision
-#include <fstream>			// provides - std::ifstream
-#include <utility>			// provides - std::move
+#include <string>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <utility>
 
 #include "IgFamily.h"
 #include "fpf_core.h"
@@ -28,27 +28,23 @@ int main() {
 	using std::string;
 	using std::vector;
 
-	typedef std::string string;
-
 	std::cout << "-- IgFamily " << IgFamily::version << " --\n\n\n";
 
-	//fpf_filesystem::display_default();
+	string FASTA_setting{ DEFAULT_INPUT_FASTA_DIRECTORY };
+	//string peptide_assignment_setting{ 
 
-	int catch_menu_selection;
-	catch_menu_selection = fpf_filesystem::perform_menu_selection(fpf_filesystem::display_menu());
-	if (catch_menu_selection == 1) {
+	fpf_filesystem::display_settings(IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY, "ping");
+
+	string menu_selection{ fpf_filesystem::display_menu() };
+	if (menu_selection == "F") {
+		
 	}
+	if (menu_selection == "P") {
+	
+	}
+	if (menu_selection == "X") {
 
-	std::ifstream fin_FASTA(IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY);
-
-	fpf_parse::custom_FASTA_output(IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY);
-
-	std::cout << "\n\n\n * parsing FASTA file... \n\n";
-
-	vector<fpf_parse::FASTA_data> main_FASTA = fpf_parse::parse_FASTA(fin_FASTA);
-	if (check_FASTA_file_empty(main_FASTA)) { return 1; };
-	fpf_parse::output_v_FASTA_data(main_FASTA);
-	fpf_parse::output_v_FASTA_data_to_blastdirectory(main_FASTA);
+	}
 
 	std::cout << "\n\n\n reading root directory...\n";
 
@@ -61,6 +57,15 @@ int main() {
 	}
 
 	for (auto& itr_v_filesystem : v_filesystem) {
+		std::ifstream fin_FASTA(IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY);
+		fpf_parse::custom_FASTA_output(IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY);
+		std::cout << "\n\n\n * parsing FASTA file... \n\n";
+		vector<fpf_parse::FASTA_data> main_FASTA = fpf_parse::parse_FASTA(fin_FASTA);
+
+		if (check_FASTA_file_empty(main_FASTA)) { return 1; };
+		fpf_parse::output_v_FASTA_data(main_FASTA);
+		fpf_parse::output_v_FASTA_data_to_blastdirectory(main_FASTA);
+
 		bool filesystem_modified = bool();
 		vector<fpf_parse::csv_data> main_v_csv_PEAKS_database_peptides;
 		vector<fpf_parse::csv_data> main_v_csv_PEAKS_denovo_peptides;

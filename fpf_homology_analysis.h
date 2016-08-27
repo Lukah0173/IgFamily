@@ -9,14 +9,14 @@
 #ifndef FPF_HOMOLOGY_ANALYSIS
 #define	FPF_HOMOLOGY_ANALYSIS
 
-#include <algorithm> // provides - std::find_if
-#include <cstdlib> // provides - size_t
-#include <fstream> // provides - std::ifstream
-#include <iostream> // provides - std::ofstream
-#include <math.h> // provides - std::log10
-#include <string> // provides - std::string
-#include <utility> // provides - std::pair
-#include <vector> // provides - std::vector
+#include <algorithm>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <math.h>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "fpf_data.h"
 #include "fpf_filesystem.h"

@@ -9,12 +9,12 @@
 #ifndef FPF_MULTINOMIAL
 #define	FPF_MULTINOMIAL
 
-#include <cstdlib>						// provides - size_t
-#include <iomanip>						// provides - std::setprecision
-#include <iostream>						// provides - std::get
-#include <string>						// provides - std::string
-#include <utility>						// provides - std::pair
-#include <vector>						// provides - std::vector
+#include <cstdlib>
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "fpf_data.h"
 #include "fpf_filesystem.h"

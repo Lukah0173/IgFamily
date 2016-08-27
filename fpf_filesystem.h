@@ -9,12 +9,12 @@
 #ifndef FPF_FILESYSTEM
 #define	FPF_FILESYSTEM
 
-#include <algorithm> // provides - std::find
-#include <cstdlib> // provides - size_t
-#include <iostream> // provides - std::istream
-#include <tuple> // provides - std::tuple
-#include <utility> // provides - std::pair
-#include <vector> // provides - std::vector
+#include <algorithm>
+#include <cstdlib>
+#include <iostream>
+#include <tuple>
+#include <utility>
+#include <vector>
 
 #include "IgFamily.h"
 #include "fpf_convert.h"
@@ -88,39 +88,20 @@ namespace fpf_filesystem {
 		sample_analysis sample_NOVOR_denovo_analysis;
 	};
 
-	void display_default() {
+	void display_settings(string par_FASTA_setting, string par_spectra_assignment_method) {
 		std::cout << " Current settings:";
 		std::cout << "\n\n\n";
-		std::cout << " FASTA file -           ";
-		std::cout << IgFamily::DEFAULT_INPUT_FASTA;
-		std::cout << "\n\n\n";
-		std::cout << " Workflow ~ ";
-		std::cout << "\n\n\n";
-		std::cout << "  [FILE].wiff + [FILE].wiff.scan";
-		std::cout << "\n\n";
-		std::cout << "     |\n";
-		std::cout << "     V";
-		std::cout << "\n\n";
-		std::cout << "  [FILE].mgf ";
-		std::cout << "\n\n";
-		std::cout << "     |\n";
-		std::cout << "     V";
-		std::cout << "\n\n";
-		std::cout << "  [FILE]_denovopeptides.csv    ";
-		std::cout << "\n\n";
-		std::cout << "     |\n";
-		std::cout << "     V";
-		std::cout << "\n\n";
-		std::cout << "  [FILE]_report.html        \n";
-		std::cout << "  [FILE]_report_IG.html      ";
+		std::cout << " FASTA file -                     " << par_FASTA_setting;
+		std::cout << "\n Spectra assignment method -      " << par_spectra_assignment_method;
 	}
 
 	string display_menu() {
 		std::cout << "\n\n";
-		std::cout << " FASTA utilities:     [F] ";
-		std::cout << "\n Continue:            [X]";
+		std::cout << " Select FASTA file:                         [F] ";
+		std::cout << "\n Select spectra assignment method:          [P]";
+		std::cout << "\n Continue with current settings:            [X]";
 		string menu_selection{};
-		while ((menu_selection != ("F")) && (menu_selection != ("X"))) {
+		while ((menu_selection != ("F")) && (menu_selection != ("P")) && (menu_selection != ("X"))) {
 			menu_selection.clear();
 			std::cout << "\n\n Input selection: \n\n > ";
 			std::cin >> menu_selection;
@@ -128,28 +109,81 @@ namespace fpf_filesystem {
 		return menu_selection;
 	}
 
-	int perform_menu_selection(string par_menu_selection) {
-		if (par_menu_selection == "F") {
-			std::cout << "\n Read FASTA format:              [R] ";
-			std::cout << "\n Output custom FASTA format:     [C] ";
-			string menu_selection{};
-			while ((menu_selection != ("R")) && (menu_selection != ("C"))) {
-				menu_selection.clear();
-				std::cout << "\n\n Input selection: \n\n > ";
-				std::cin >> menu_selection;
-			}
-			if (menu_selection == "R") {
-				fpf_parse::check_FASTA_format(IgFamily::DEFAULT_INPUT_FASTA);
-			}
-			if (menu_selection == "C") {
-				fpf_parse::output_custom_FASTA_format(IgFamily::DEFAULT_INPUT_FASTA);
-			}
-			return 0;
+	void display_FASTA_menu(string par_FASTA_setting_current) {
+		std::cout << "\n\n Current setting - " << par_FASTA_setting_current;
+		std::cout << "\n";
+		std::cout << "\n [0] IGHV_IGLV_IGKV_20160827.fasta";
+		std::cout << "\n [1] IGHV_IGLV_IGKV_CONT_20160827.fasta";
+		std::cout << "\n [2] IGHV_IGLV_IGKV_CONT_UNIPROT_20160827.fasta";
+		std::cout << "\n [3] IGHV_IGLV_IGKV_MIGHV_MIGKV_MIGLV_20160827.fasta";
+		std::cout << "\n [4] IGHV_IGKV_IGLV_MIGHV_MIGKV_MIGLV_CONT_20160827.fasta";
+		std::cout << "\n [5] IGH_IGL_IGK_20160827.fasta";
+		std::cout << "\n [6] IGH_IGL_IGK_CONT_20160827.fasta";
+		std::cout << "\n [7] IGH_IGL_IGK_CONT_UNIPROT_20160827.fasta";
+		std::cout << "\n [8] IGH_IGL_IGK_mAB_20160827.fasta";
+		std::cout << "\n [9] IGH_IGL_IGK_mAB_CONT_20160827.fasta";
+		std::cout << "\n [X] Use current setting";
+	}
+
+	void display_peptide_method_menu() {
+		std::cout << "\n\n";
+		std::cout << "\n [0] PEAKS database match";
+		std::cout << "\n [1] PEAKS de novo";
+		std::cout << "\n [2] NOVOR de novo";
+	}
+
+	int perform_FASTA_selection(string par_FASTA_setting_current) {
+		display_FASTA_menu(par_FASTA_setting_current);
+		string menu_selection{};
+		while ((menu_selection != ("0"))
+			&& (menu_selection != ("1"))
+			&& (menu_selection != ("2"))
+			&& (menu_selection != ("3"))
+			&& (menu_selection != ("4"))
+			&& (menu_selection != ("5"))
+			&& (menu_selection != ("6"))
+			&& (menu_selection != ("7"))
+			&& (menu_selection != ("8"))
+			&& (menu_selection != ("9"))
+			&& (menu_selection != ("X"))) {
+			menu_selection.clear();
+			std::cout << "\n\n Input selection: --> ";
+			std::cin >> menu_selection;
 		}
-		if (par_menu_selection == "X") {
-			return 0;
+		if (menu_selection == "0") {
+			return std::stoi("0");
 		}
-		return 1;
+		if (menu_selection == "1") {
+			return std::stoi("1");
+		}
+		if (menu_selection == "2") {
+			return std::stoi("2");
+		}
+		if (menu_selection == "3") {
+			return std::stoi("3");
+		}
+		if (menu_selection == "4") {
+			return std::stoi("4");
+		}
+		if (menu_selection == "5") {
+			return std::stoi("5");
+		}
+		if (menu_selection == "6") {
+			return std::stoi("6");
+		}
+		if (menu_selection == "7") {
+			return std::stoi("7");
+		}
+		if (menu_selection == "8") {
+			return std::stoi("8");
+		}
+		if (menu_selection == "9") {
+			return std::stoi("9");
+		}
+		if (menu_selection == "X") {
+			return -1;
+		}
+		return -1;
 	}
 
 	vector<string> read_root_dir(string par_root_directory) {
