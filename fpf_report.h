@@ -39,14 +39,9 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_html_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+	void fout_html_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis, string& par_output_filename) {
 		std::string output_html_report{};
-		if (IgFamily::NOVOR_DENOVO) {
-			output_html_report = par_filesystem.directory + "NOVOR_report.html";
-		}
-		else {
-			output_html_report = par_filesystem.directory + "report.html";
-		}
+		output_html_report = par_filesystem.directory + "report_" + par_output_filename + ".html";
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);
 		fout_html_report << "\
@@ -262,14 +257,9 @@ namespace fpf_report {
 </html>\n ";
 	}
 
-	void fout_html_report_filtered(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+	void fout_html_report_filtered(filesystem& par_filesystem, sample_analysis& par_sample_analysis, string& par_output_filename) {
 		std::string output_html_report{};
-		if (IgFamily::NOVOR_DENOVO) {
-			output_html_report = par_filesystem.directory + "NOVOR_report_IG.html";
-		}
-		else {
-			output_html_report = par_filesystem.directory + "report_IG.html";
-		}
+		output_html_report = par_filesystem.directory + "report_IG_" + par_output_filename + ".html";
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);
 		vector<string> dummy;

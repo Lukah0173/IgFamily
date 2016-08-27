@@ -742,7 +742,7 @@ namespace fpf_parse {
 			if ((FASTA_condition_switch_2 == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
 				
 				if (temp_FASTA_class != "MIGHV") {
-					if (!((temp_FASTA_class == "UNIPROT") && (temp_FASTA_name.find("Ig")))) {
+					if (!((temp_FASTA_class == "UNIPROT") && (temp_FASTA_name.find("Ig") != std::string::npos))) {
 						temp_FASTA_data.set_FASTA_accession(temp_FASTA_accession);
 						temp_FASTA_data.set_FASTA_name(temp_FASTA_name);
 						temp_FASTA_data.set_FASTA_class(temp_FASTA_class);
@@ -778,32 +778,48 @@ namespace fpf_parse {
 		return temp_v_FASTA_data;
 	}
 
-	bool check_csv_proteinpeptides_empty(vector<fpf_parse::csv_data> par_v_csv_data, bool par_filesystem_modified) {
+	bool check_csv_PEAKS_database_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data, bool par_filesystem_modified) {
 		if (par_v_csv_data.empty()) {
 			if (par_filesystem_modified) {
-				std::cout << "\n\n --- the protein_peptides file is empty or does not exist";
+				std::cout << "\n\n --- the PEAKS database matched peptides file is empty or does not exist";
 			}
 			return false;
 		}
 		if (!par_v_csv_data.empty()) {
 			if (par_filesystem_modified) {
-				std::cout << "\n\n --- protein_peptides file found";
+				std::cout << "\n\n --- database matched peptides file found";
 			}
 			return true;
 		}
 		return false;
 	}
 
-	bool check_csv_denovopeptides_empty(vector<fpf_parse::csv_data> par_v_csv_data, bool par_filesystem_modified) {
+	bool check_csv_PEAKS_denovo_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data, bool par_filesystem_modified) {
 		if (par_v_csv_data.empty()) {
 			if (par_filesystem_modified) {
-				std::cout << "\n\n --- the denovo_peptides file is empty or does not exist";
+				std::cout << "\n\n --- the PEAKS de novo peptides file is empty or does not exist";
 			}
 			return false;
 		}
 		if (!par_v_csv_data.empty()) {
 			if (par_filesystem_modified) {
-				std::cout << "\n\n --- denovo_peptides file found";
+				std::cout << "\n\n --- PEAKS de novo peptides file found";
+			}
+			return true;
+		}
+		return false;
+	}
+
+	bool check_csv_NOVOR_denovo_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data, bool par_filesystem_modified) {
+		if (par_v_csv_data.empty()) {
+			if (par_filesystem_modified) {
+				std::cout << "\n\n --- the NOVOR de novo peptides file is empty or does not exist";
+			}
+			return false;
+		}
+		if (!par_v_csv_data.empty()) {
+			if (par_filesystem_modified) {
+				std::cout << "\n\n --- NOVOR de novo peptides file found";
 			}
 			return true;
 		}
