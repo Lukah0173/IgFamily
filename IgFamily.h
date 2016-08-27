@@ -34,7 +34,6 @@ namespace IgFamily {
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_4.txt";
 	const string DEFAULT_INPUT_FASTA = "IGHV_IGLV_IGKV_CONT_20160827.fasta";
-	const string DEFAULT_INPUT_FASTA_DIRECTORY = "FASTA\\" + DEFAULT_INPUT_FASTA;
 	const string DEFAULT_PEPTIDE_ASSIGNMENT_METHOD = "PEAKS de novo";
 
 	const double DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD = 50;

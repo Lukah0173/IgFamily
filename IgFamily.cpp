@@ -49,6 +49,7 @@ int main() {
 			menu_selection = fpf_filesystem::display_menu();
 		}
 		if (menu_selection == "X") {
+			select_FASTA = "FASTA\\" + select_FASTA;
 			menu_continue = true;
 		}
 	}
@@ -64,16 +65,7 @@ int main() {
 	}
 
 	for (auto& itr_v_filesystem : v_filesystem) {
-		std::ifstream fin_FASTA(IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY);
-		fpf_parse::custom_FASTA_output(IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY);
-		std::cout << "\n\n\n * parsing FASTA file... \n\n";
-		vector<fpf_parse::FASTA_data> main_FASTA = fpf_parse::parse_FASTA(fin_FASTA);
-
-		if (check_FASTA_file_empty(main_FASTA)) { return 1; };
-		fpf_parse::output_v_FASTA_data(main_FASTA);
-		fpf_parse::output_v_FASTA_data_to_blastdirectory(main_FASTA);
-
-		bool filesystem_modified = bool();
+		bool filesystem_modified{};
 		vector<fpf_parse::csv_data> main_v_csv_PEAKS_database_peptides;
 		vector<fpf_parse::csv_data> main_v_csv_PEAKS_denovo_peptides;
 		vector<fpf_parse::csv_data> main_v_csv_NOVOR_denovo_peptides;
@@ -85,14 +77,29 @@ int main() {
 			filesystem_modified = true;
 		}
 
-		itr_v_filesystem.PEAKS_database_exists = fpf_parse::check_csv_PEAKS_database_peptides_empty(main_v_csv_PEAKS_database_peptides, filesystem_modified);
-		itr_v_filesystem.PEAKS_denovo_exists = fpf_parse::check_csv_PEAKS_denovo_peptides_empty(main_v_csv_PEAKS_denovo_peptides, filesystem_modified);
-		itr_v_filesystem.NOVOR_denovo_exists = fpf_parse::check_csv_NOVOR_denovo_peptides_empty(main_v_csv_NOVOR_denovo_peptides, filesystem_modified);
+		if (select_peptide_assignment == "PEAKS database match") {
+			itr_v_filesystem.PEAKS_database_exists = fpf_parse::check_csv_PEAKS_database_peptides_empty(main_v_csv_PEAKS_database_peptides, filesystem_modified);
+		}
+		if (select_peptide_assignment == "PEAKS de novo") {
+			itr_v_filesystem.PEAKS_denovo_exists = fpf_parse::check_csv_PEAKS_denovo_peptides_empty(main_v_csv_PEAKS_denovo_peptides, filesystem_modified);
+		}
+		if (select_peptide_assignment == "NOVOR de novo") {
+			itr_v_filesystem.NOVOR_denovo_exists = fpf_parse::check_csv_NOVOR_denovo_peptides_empty(main_v_csv_NOVOR_denovo_peptides, filesystem_modified);
+		}
 
 		if (itr_v_filesystem.PEAKS_database_exists) {
-			std::cout << "\n\n * parsing " << itr_v_filesystem.filename << " PEAKS database matched peptides...";
-			std::cout << "\n\n ~ peptides parsed - " << main_v_csv_PEAKS_database_peptides.size();
-			std::cout << "\n\n creating data structures...";
+			std::ifstream fin_FASTA(select_FASTA);
+			fpf_parse::custom_FASTA_output(select_FASTA);
+			std::cout << "\n\n\n * parsing FASTA file... \n";
+			vector<fpf_parse::FASTA_data> main_FASTA = fpf_parse::parse_FASTA(fin_FASTA);
+
+			if (check_FASTA_file_empty(main_FASTA)) { return 1; };
+			fpf_parse::output_v_FASTA_data(main_FASTA);
+			fpf_parse::output_v_FASTA_data_to_blastdirectory(main_FASTA);
+
+			std::cout << "\n\n\n * parsing " << itr_v_filesystem.filename << " PEAKS database matched peptides...";
+			std::cout << "\n\n peptides parsed - " << main_v_csv_PEAKS_database_peptides.size();
+			std::cout << "\n\n\n\n creating data structures...";
 			fpf_filesystem::sample_analysis main_sample_analysis{};
 			main_sample_analysis.v_peptide_data = fpf_data::create_peptide_data(main_v_csv_PEAKS_database_peptides);
 			main_sample_analysis.v_peptide_analysis = fpf_data::create_peptide_analysis(main_sample_analysis.v_peptide_data);
@@ -110,9 +117,17 @@ int main() {
 		}
 
 		if (itr_v_filesystem.PEAKS_denovo_exists) {
-			std::cout << "\n\n * parsing " << itr_v_filesystem.filename << " PEAKS de novo matched peptides...";
-			std::cout << "\n\n ~ peptides parsed - " << main_v_csv_PEAKS_denovo_peptides.size();
-			std::cout << "\n\n creating data structures...";
+			std::ifstream fin_FASTA(select_FASTA);
+			fpf_parse::custom_FASTA_output(select_FASTA);
+			std::cout << "\n\n\n * parsing FASTA file... \n";
+			vector<fpf_parse::FASTA_data> main_FASTA = fpf_parse::parse_FASTA(fin_FASTA);
+
+			if (check_FASTA_file_empty(main_FASTA)) { return 1; };
+			fpf_parse::output_v_FASTA_data(main_FASTA);
+			fpf_parse::output_v_FASTA_data_to_blastdirectory(main_FASTA);
+			std::cout << "\n\n\n * parsing " << itr_v_filesystem.filename << " PEAKS de novo matched peptides...";
+			std::cout << "\n\n peptides parsed - " << main_v_csv_PEAKS_denovo_peptides.size();
+			std::cout << "\n\n\n\n creating data structures...";
 			fpf_filesystem::sample_analysis main_sample_analysis{};
 			main_sample_analysis.v_peptide_data = fpf_data::create_peptide_data(main_v_csv_PEAKS_denovo_peptides);
 			main_sample_analysis.v_peptide_analysis = fpf_data::create_peptide_analysis(main_sample_analysis.v_peptide_data);
@@ -130,9 +145,17 @@ int main() {
 		}
 
 		if (itr_v_filesystem.NOVOR_denovo_exists) {
-			std::cout << "\n\n * parsing " << itr_v_filesystem.filename << " NOVOR de novo matched peptides...";
-			std::cout << "\n\n ~ peptides parsed - " << main_v_csv_NOVOR_denovo_peptides.size();
-			std::cout << "\n\n creating data structures...";
+			std::ifstream fin_FASTA(select_FASTA);
+			fpf_parse::custom_FASTA_output(select_FASTA);
+			std::cout << "\n\n\n * parsing FASTA file... \n";
+			vector<fpf_parse::FASTA_data> main_FASTA = fpf_parse::parse_FASTA(fin_FASTA);
+
+			if (check_FASTA_file_empty(main_FASTA)) { return 1; };
+			fpf_parse::output_v_FASTA_data(main_FASTA);
+			fpf_parse::output_v_FASTA_data_to_blastdirectory(main_FASTA);
+			std::cout << "\n\n\n * parsing " << itr_v_filesystem.filename << " NOVOR de novo matched peptides...";
+			std::cout << "\n\n peptides parsed - " << main_v_csv_NOVOR_denovo_peptides.size();
+			std::cout << "\n\n\n\n creating data structures...";
 			fpf_filesystem::sample_analysis main_sample_analysis{};
 			main_sample_analysis.v_peptide_data = fpf_data::create_peptide_data(main_v_csv_NOVOR_denovo_peptides);
 			main_sample_analysis.v_peptide_analysis = fpf_data::create_peptide_analysis(main_sample_analysis.v_peptide_data);
