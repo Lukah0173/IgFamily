@@ -63,7 +63,7 @@ namespace fpf_multinomial {
 		string output_multinomial = par_filesystem.directory + "multinomial_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_multinomial;
 		fout_multinomial.open(output_multinomial);
-		std::cout << "\n\n ...outputting multinomial data frame for " << par_filesystem.filename;
+		std::cout << " ...outputting multinomial data frame for " << par_filesystem.filename;
 		fout_multinomial << ",";
 		fout_multinomial << "TOTAL,";
 		for (const auto& itr_multinomial_protein : par_sample_analysis.multinomial_data.v_protein_name) {
@@ -102,7 +102,7 @@ namespace fpf_multinomial {
 		string output_multinomial_element = par_filesystem.directory + "multinomial_peptide_" + par_sample_analysis.peptide_assignment_method + ".txt";
 		std::ofstream fout_multinomial_element;
 		fout_multinomial_element.open(output_multinomial_element);
-		std::cout << "\n\n ...outputting multinomial peptide list for " << par_filesystem.filename;
+		std::cout << "\n ...outputting multinomial peptide list for " << par_filesystem.filename;
 		fout_multinomial_element << "\n";
 		fout_multinomial_element << par_filesystem.filename;
 		fout_multinomial_element << "\n\n\n";
@@ -139,7 +139,7 @@ namespace fpf_multinomial {
 		string output_multinomial_element_nomatch = par_filesystem.directory + "multinomial_peptide_filtered_" + par_sample_analysis.peptide_assignment_method + ".txt";
 		std::ofstream fout_multinomial_element_nomatch;
 		fout_multinomial_element_nomatch.open(output_multinomial_element_nomatch);
-		std::cout << "\n\n ...outputting filtered multinomial peptide list for " << par_filesystem.filename;
+		std::cout << "\n ...outputting filtered multinomial peptide list for " << par_filesystem.filename;
 		fout_multinomial_element_nomatch << "\n";
 		fout_multinomial_element_nomatch << par_filesystem.filename;
 		fout_multinomial_element_nomatch << "\n\n\n";

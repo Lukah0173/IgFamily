@@ -1,4 +1,4 @@
-// * * IgFamily v0.8.0 * * 
+// * * IgFamily v0.8.1 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -57,7 +57,6 @@ int main() {
 	}
 
 	std::cout << "\n\n\n reading root directory...\n";
-
 	vector<string> v_root_directory = fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR);
 	vector<fpf_filesystem::filesystem> v_filesystem = fpf_filesystem::read_filesystem(v_root_directory);
 	
@@ -130,11 +129,13 @@ int main() {
 				}
 
 				std::cout << "\n\n peptides parsed - " << main_v_csv_peptides.size();
-				std::cout << "\n\n\n\n creating data structures...";
+				std::cout << "\n\n\n\n creating data structures for file ";
+				std::cout << itr_v_filesystem.filename;
+				std::cout << "...";
 				itr_v_sample_analysis.v_peptide_data = fpf_data::create_peptide_data(main_v_csv_peptides);
 				itr_v_sample_analysis.v_peptide_analysis = fpf_data::create_peptide_analysis(itr_v_sample_analysis.v_peptide_data);
 				itr_v_sample_analysis.v_protein_data = fpf_data::create_protein_data(main_FASTA);
-				std::cout << "\n\n ...data structures assigned";
+				std::cout << "\n ...data structures assigned";
 
 				fpf_core::core_homology_analysis(itr_v_filesystem, itr_v_sample_analysis, false);
 				fpf_core::core_data_analysis(itr_v_sample_analysis);
@@ -154,13 +155,13 @@ int main() {
 			}
 		}
 		else {
-			std::cout << "\n\n ...no data file found";
+			std::cout << "\n ...no data file found";
 		}
 	}
 
 	string farewell;
-	std::cout << "\n\n\n\n program complete...";
-	std::cout << "\n\n\n\n input any key to exit...\n\n > ";
+	std::cout << "\n\n\n program complete...";
+	std::cout << "\n\n\n input any key to exit...\n\n > ";
 	std::cin >> farewell;
 
 	return 0;

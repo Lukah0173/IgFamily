@@ -88,7 +88,7 @@ namespace fpf_filesystem {
 
 	void display_settings(string par_FASTA_setting, vector<string> par_v_spectra_assignment_method) {
 		std::cout << "\n\n Current settings:";
-		std::cout << "\n\n\n";
+		std::cout << "\n\n";
 		std::cout << " FASTA file -                     ";
 		std::cout << par_FASTA_setting;
 		std::cout << "\n Spectra assignment method -      ";
@@ -432,7 +432,7 @@ namespace fpf_filesystem {
 		}
 		else {
 			std::cout << "\n * reading: Local file";
-			temp_filesystem.filename = "Local_file";
+			temp_filesystem.filename = "local_file";
 			temp_filesystem.fileversion = IgFamily::version;
 			temp_v_filesystem.push_back(temp_filesystem);
 		}

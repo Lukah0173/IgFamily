@@ -753,12 +753,8 @@ namespace fpf_parse {
 					}
 				}
 				++FASTA_count_accession;
-				if (FASTA_count_accession % 1000 == 0) {
-					std::cout << "\n FASTA accession parse #: ";
-					std::cout << FASTA_count_accession;
-				}
 				if ((par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof())) {
-					std::cout << "\n FASTA accession parse #: ";
+					std::cout << "\n FASTA accessions parsed - ";
 					std::cout << FASTA_count_accession;
 				}
 				FASTA_condition_switch = 0;

@@ -54,7 +54,7 @@ namespace fpf_homology_analysis {
 		fout_blastp_input_FASTA.close();
 	}
 
-	void create_homology_database(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+	void create_blastp_database(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		string output_homology_database_FASTA = DEFAULT_BLASTP_DIRECTORY + "homology_database.fasta";
 		std::ofstream fout_homology_database_FASTA;
 		fout_homology_database_FASTA.open(output_homology_database_FASTA);
@@ -71,7 +71,7 @@ namespace fpf_homology_analysis {
 		fout_homology_database_FASTA.close();
 	}
 
-	void create_homology_database_refined(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+	void create_blastp_database_refined(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		string output_homology_database_FASTA = DEFAULT_BLASTP_DIRECTORY + "homology_database.fasta";
 		std::ofstream fout_homology_database_FASTA;
 		fout_homology_database_FASTA.open(output_homology_database_FASTA);
@@ -88,7 +88,7 @@ namespace fpf_homology_analysis {
 		fout_homology_database_FASTA.close();
 	}
 
-	void sys_blastp(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+	void systemcall_blastp(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n";
 		string string_system = "CD " + DEFAULT_BLASTP_DIRECTORY;
 		string_system += " && makeblastdb.exe -in ";
@@ -100,7 +100,7 @@ namespace fpf_homology_analysis {
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";
 		string_system += std::to_string(BLASTP_EVALUE_THRESHOLD);
-		string_system += " -max_target_seqs 200 -out ";
+		string_system += " -max_target_seqs 100 -out ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_output.csv -outfmt \"10 qacc qseq sseq sacc qstart sstart qlen pident ppos mismatch evalue\"";
 		system(string_system.c_str());
@@ -311,6 +311,8 @@ namespace fpf_homology_analysis {
 		fout_blastp_summary << "query_accession,";
 		fout_blastp_summary << "e_value,";
 		fout_blastp_summary << "par_prop,";
+		fout_blastp_summary << "par_dens,";
+		fout_blastp_summary << "par_score,";
 		fout_blastp_summary << "\n";
 		for (auto itr_v_s_blastp : par_sample_analysis.v_homology_data) {
 			fout_blastp_summary << itr_v_s_blastp.blastp_query << ",";
@@ -326,6 +328,8 @@ namespace fpf_homology_analysis {
 		fout_blastp_summary_local << "query_accession,";
 		fout_blastp_summary_local << "e_value,";
 		fout_blastp_summary_local << "par_prop,";
+		fout_blastp_summary_local << "par_dens,";
+		fout_blastp_summary_local << "par_score,";
 		fout_blastp_summary_local << "\n";
 		for (auto itr_v_s_blastp : par_sample_analysis.v_homology_data) {
 			fout_blastp_summary_local << itr_v_s_blastp.blastp_query << ",";
