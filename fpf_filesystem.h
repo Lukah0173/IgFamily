@@ -42,6 +42,9 @@ namespace fpf_filesystem {
 	struct sample_analysis;
 	
 	struct sample_analysis {
+		bool PEAKS_database_exists;
+		bool PEAKS_denovo_exists;
+		bool NOVOR_denovo_exists;
 		vector<protein_data> v_protein_data;
 		vector<peptide_data> v_peptide_data;
 		vector<peptide_analysis> v_peptide_analysis;
@@ -79,13 +82,7 @@ namespace fpf_filesystem {
 
 		/* sample analysis */
 
-		bool PEAKS_database_exists;
-		bool PEAKS_denovo_exists;
-		bool NOVOR_denovo_exists;
-
-		sample_analysis sample_PEAKS_database_analysis;
-		sample_analysis sample_PEAKS_denovo_analysis;
-		sample_analysis sample_NOVOR_denovo_analysis;
+		std::vector<sample_analysis> v_sample_analysis;
 	};
 
 	void display_settings(string par_FASTA_setting, string par_spectra_assignment_method) {
