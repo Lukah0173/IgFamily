@@ -268,7 +268,7 @@ namespace fpf_homology_analysis {
 			if (itr_v_s_blastp.blastp_query != hold_blastp_subject) {
 				if (is_hold) {
 					for (auto& itr_hold_v_s_blastp : hold_v_homology_data) {
-						itr_hold_v_s_blastp.blastp_evalue_transformed = log_base(((double(3) * BLASTP_PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 1.2);
+						itr_hold_v_s_blastp.blastp_evalue_transformed = std::pow(log_base(((double(1) * BLASTP_PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 1.2), 1.15);
 						temp_v_homology_data.push_back(itr_hold_v_s_blastp);
 					}
 				}
@@ -304,6 +304,8 @@ namespace fpf_homology_analysis {
 		output_blastp_summary += par_filesystem.filename;
 		output_blastp_summary += "_blastp_summary.csv";
 		std::ofstream fout_blastp_summary;
+		string output_blastp_summary_local = "blastp_summary_" + par_sample_analysis.peptide_assignment_method + ".csv";
+		std::ofstream fout_blastp_summary_local;
 		fout_blastp_summary.open(output_blastp_summary);
 		fout_blastp_summary << "subject,";
 		fout_blastp_summary << "query_accession,";
@@ -319,7 +321,22 @@ namespace fpf_homology_analysis {
 			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_score << ",";
 			fout_blastp_summary << "\n";
 		}
-		fout_blastp_summary.close();
+		fout_blastp_summary_local.open(output_blastp_summary_local);
+		fout_blastp_summary_local << "subject,";
+		fout_blastp_summary_local << "query_accession,";
+		fout_blastp_summary_local << "e_value,";
+		fout_blastp_summary_local << "par_prop,";
+		fout_blastp_summary_local << "\n";
+		for (auto itr_v_s_blastp : par_sample_analysis.v_homology_data) {
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_query << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_subject_accession << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_evalue << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_evalue_transformed << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_parameter_density << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_parameter_score << ",";
+			fout_blastp_summary_local << "\n";
+		}
+		fout_blastp_summary_local.close();
 	}
 }
 

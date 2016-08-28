@@ -433,6 +433,7 @@ namespace fpf_filesystem {
 		else {
 			std::cout << "\n * reading: Local file";
 			temp_filesystem.filename = "Local_file";
+			temp_filesystem.fileversion = IgFamily::version;
 			temp_v_filesystem.push_back(temp_filesystem);
 		}
 		return temp_v_filesystem;
