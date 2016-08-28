@@ -36,7 +36,7 @@ namespace fpf_core {
 		else {
 			std::cout << "\n\n\n\n determining most-probable germline representation...\n";
 			fpf_data_analysis::select_protein_analysis_by_score(par_sample_analysis);
-			std::cout << "\n\n\n analysing post-hoc homology for file ";
+			std::cout << "\n\n\n reanalysing homology for file ";
 			std::cout << par_filesystem.filename;
 			std::cout << "...";
 			fpf_homology_analysis::create_homology_database_refined(par_filesystem, par_sample_analysis);

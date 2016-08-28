@@ -25,18 +25,20 @@ namespace IgFamily {
 
 	const string version = "v0.8.0";
 
-	const bool FILESYSTEM_MODE = 0;
+	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
 	const bool MAP_FOUT_BY_SCORE = 1;
 	const bool MAP_FOUT_BY_DISTINCT = 1;
 	const bool MAP_FOUT_PEPTIDE_SUMMARY_BY_SPECTRALCOUNT = 1;
-	const bool DEBUG_MODE = 0;
 	const bool OUTPUT_FASTA = 1;
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_4.txt";
 	const string DEFAULT_INPUT_FASTA = "IGHV_IGLV_IGKV_CONT_20160827.fasta";
-	const string DEFAULT_INPUT_FASTA_DIRECTORY = "C:\\Users\\LJ\\IgFamily\\FASTA\\";
-	const string DEFAULT_BLASTP_DIRECTORY = "C:\\Users\\LJ\\IgFamily\\blast_directory\\";
+	const string DEFAULT_IGFAMILY_DIRECTORY = "C:\\Users\\LJ\\IgFamily\\";
+	const string DEFAULT_INPUT_FASTA_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\";
+	const string DEFAULT_BLASTP_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "blast_directory\\";
+	const string DEFAULT_MSCONVERT_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "msconvert\\";
+	const string DEFAULT_NOVOR_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "novor\\win\\";
 	const string DEFAULT_PEPTIDE_ASSIGNMENT_METHOD = "PEAKS de novo";
 
 	const double DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD = 50;
@@ -48,7 +50,6 @@ namespace IgFamily {
 	const double REPORT_SCORE_THRESHOLD = 5;
 	const double REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD = 0.1;
 	const double REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD = 0.1;
-
 
 
 

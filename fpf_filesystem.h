@@ -28,7 +28,7 @@ namespace fpf_filesystem {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_convert::fileconversion_parameters fileconversion_parameters;
+	typedef fpf_convert::file_conversion file_conversion;
 	typedef fpf_data::homology_data homology_data;
 	typedef fpf_data::protein_data protein_data;
 	typedef fpf_data::peptide_analysis peptide_analysis;
@@ -75,7 +75,7 @@ namespace fpf_filesystem {
 		/* mgf conversion parameters */
 
 		bool fileconversion = true;
-		fileconversion_parameters fileconversion_parameters;
+		file_conversion file_conversion;
 
 		/* de novo parameters */
 
@@ -124,13 +124,13 @@ namespace fpf_filesystem {
 		std::cout << "\n [0] IGHV_IGLV_IGKV_20160827.fasta";
 		std::cout << "\n [1] IGHV_IGLV_IGKV_CONT_20160827.fasta";
 		std::cout << "\n [2] IGHV_IGLV_IGKV_CONT_UNIPROT_20160827.fasta";
-		std::cout << "\n [3] IGHV_IGLV_IGKV_MIGHV_MIGKV_MIGLV_20160827.fasta";
-		std::cout << "\n [4] IGHV_IGKV_IGLV_MIGHV_MIGKV_MIGLV_CONT_20160827.fasta";
-		std::cout << "\n [5] IGH_IGL_IGK_20160827.fasta";
-		std::cout << "\n [6] IGH_IGL_IGK_CONT_20160827.fasta";
-		std::cout << "\n [7] IGH_IGL_IGK_CONT_UNIPROT_20160827.fasta";
-		std::cout << "\n [8] IGH_IGL_IGK_mAB_20160827.fasta";
-		std::cout << "\n [9] IGH_IGL_IGK_mAB_CONT_20160827.fasta";
+		std::cout << "\n [3] IGHV_IGLV_IGKV_mABV_CONT_20160827.fasta";
+		std::cout << "\n [4] IGHV_IGLV_IGKV_MIGHV_MIGKV_MIGLV_20160827.fasta";
+		std::cout << "\n [5] IGHV_IGKV_IGLV_MIGHV_MIGKV_MIGLV_CONT_20160827.fasta";
+		std::cout << "\n [6] IGH_IGL_IGK_20160827.fasta";
+		std::cout << "\n [7] IGH_IGL_IGK_CONT_20160827.fasta";
+		std::cout << "\n [8] IGH_IGL_IGK_CONT_UNIPROT_20160827.fasta";
+		std::cout << "\n [9] IGH_IGL_IGK_mABV_CONT_20160827.fasta";
 		std::cout << "\n [X] Use current setting";
 		return perform_FASTA_selection(par_FASTA_setting_current);
 	}
@@ -162,25 +162,25 @@ namespace fpf_filesystem {
 			return "IGHV_IGLV_IGKV_CONT_UNIPROT_20160827.fasta";
 		}
 		if (menu_selection == "3") {
-			return "IGHV_IGLV_IGKV_MIGHV_MIGKV_MIGLV_20160827.fasta";
+			return "IGHV_IGLV_IGKV_mABV_CONT_20160827.fasta";
 		}
 		if (menu_selection == "4") {
-			return "IGHV_IGKV_IGLV_MIGHV_MIGKV_MIGLV_CONT_20160827.fasta";
+			return "IGHV_IGLV_IGKV_MIGHV_MIGKV_MIGLV_20160827.fasta";
 		}
 		if (menu_selection == "5") {
-			return "IGH_IGL_IGK_20160827.fasta";
+			return "IGHV_IGKV_IGLV_MIGHV_MIGKV_MIGLV_CONT_20160827.fasta";
 		}
 		if (menu_selection == "6") {
-			return "IGH_IGL_IGK_CONT_20160827.fasta";
+			return "IGH_IGL_IGK_20160827.fasta";
 		}
 		if (menu_selection == "7") {
-			return "IGH_IGL_IGK_CONT_UNIPROT_20160827.fasta";
+			return "IGH_IGL_IGK_CONT_20160827.fasta";
 		}
 		if (menu_selection == "8") {
-			return "IGH_IGL_IGK_mAB_20160827.fasta";
+			return "IGH_IGL_IGK_CONT_UNIPROT_20160827.fasta";
 		}
 		if (menu_selection == "9") {
-			return "IGH_IGL_IGK_mAB_CONT_20160827.fasta";
+			return "IGH_IGL_IGK_mABV_CONT_20160827.fasta";
 		}
 		if (menu_selection == "X") {
 			return par_FASTA_setting_current;
@@ -440,10 +440,10 @@ namespace fpf_filesystem {
 	}
 
 	void perform_fileconversion(filesystem& par_filesystem) {
-		par_filesystem.fileconversion_parameters = fpf_convert::create_fileconversion_parameters(fpf_convert::prompt_defaultconversion());
+		par_filesystem.file_conversion = fpf_convert::create_fileconversion_parameters(fpf_convert::prompt_defaultconversion());
 		string fileconversion_command{};
 		fileconversion_command += "msconvert.exe ";
-		fileconversion_command += "\"Z:\\Lukah_Dykes\\IgFamily\\";
+		fileconversion_command += "\"" + DEFAULT_IGFAMILY_DIRECTORY;
 		fileconversion_command += par_filesystem.directory;
 		fileconversion_command += par_filesystem.filename;
 		fileconversion_command += ".wiff\"";
@@ -451,33 +451,33 @@ namespace fpf_filesystem {
 		////fileconversion_command += " --mz64";
 		//fileconversion_command += " -v";
 		//fileconversion_command += " --mgf";
-		//if (par_filesystem.fileconversion_parameters.peakpicking.peakpicking) {
+		//if (par_filesystem.file_conversion.peakpicking.peakpicking) {
 		//	//fileconversion_command += " --filter \"peakPicking cwt ";
 		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.peakpicking.peakpicking_mslevel_from);
 		//	//fileconversion_command += "-";
 		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.peakpicking.peakpicking_mslevel_to);
 		//	//fileconversion_command += "\"";
 		//}
-		//if (par_filesystem.fileconversion_parameters.threshold.intensity_threshold) {
+		//if (par_filesystem.file_conversion.threshold.intensity_threshold) {
 		//	//fileconversion_command += " --filter \"threshold absolute ";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.threshold.threshold);
+		//	//fileconversion_command += std::to_string(par_filesystem.file_conversion.threshold.threshold);
 		//	//fileconversion_command += " most-intense\"";
 		//}
-		//if (par_filesystem.fileconversion_parameters.ms2denoise.ms2denoise) {
+		//if (par_filesystem.file_conversion.ms2denoise.ms2denoise) {
 		//	//fileconversion_command += " --filter \"MS2Denoise ";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.ms2denoise.ms2denoise_peaksinwindow);
+		//	//fileconversion_command += std::to_string(par_filesystem.file_conversion.ms2denoise.ms2denoise_peaksinwindow);
 		//	//fileconversion_command += " ";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.ms2denoise.ms2denoise_windowwidth);
+		//	//fileconversion_command += std::to_string(par_filesystem.file_conversion.ms2denoise.ms2denoise_windowwidth);
 		//	//fileconversion_command += " true\"";
 		//}
-		//if (par_filesystem.fileconversion_parameters.ms2deisotope.ms2deisotope) {
+		//if (par_filesystem.file_conversion.ms2deisotope.ms2deisotope) {
 		//	//fileconversion_command += " --filter MS2Deisotope";
 		//}
-		//if (par_filesystem.fileconversion_parameters.chargestatepredictor.chargestatepredictor) {
+		//if (par_filesystem.file_conversion.chargestatepredictor.chargestatepredictor) {
 		//	fileconversion_command += " --filter \"chargeStatePredictor true ";
-		//	fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.chargestatepredictor.chargestatepredictor_maxcharge);
+		//	fileconversion_command += std::to_string(par_filesystem.file_conversion.chargestatepredictor.chargestatepredictor_maxcharge);
 		//	fileconversion_command += " ";
-		//	fileconversion_command += std::to_string(par_filesystem.fileconversion_parameters.chargestatepredictor.chargestatepredictor_mincharge);
+		//	fileconversion_command += std::to_string(par_filesystem.file_conversion.chargestatepredictor.chargestatepredictor_mincharge);
 		//	fileconversion_command += " ";
 		//	fileconversion_command += "0.9";
 		//	fileconversion_command += "\"";

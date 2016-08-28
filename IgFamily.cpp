@@ -16,6 +16,7 @@
 #include "IgFamily.h"
 #include "fpf_core.h"
 #include "fpf_data_analysis.h"
+#include "fpf_denovo.h"
 #include "fpf_dirichlet_mixture_model.h"
 #include "fpf_filesystem.h"
 #include "fpf_filesystem_analysis.h"
@@ -59,9 +60,13 @@ int main() {
 
 	vector<string> v_root_directory = fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR);
 	vector<fpf_filesystem::filesystem> v_filesystem = fpf_filesystem::read_filesystem(v_root_directory);
+	
 	for (auto itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.fileconversion) {
 			//fpf_filesystem::perform_fileconversion(itr_v_filesystem);
+			//fpf_denovo::perform_novor_denovo(itr_v_filesystem);
+			//string catchin{};
+			//std::cin >> catchin;
 		}
 	}
 
