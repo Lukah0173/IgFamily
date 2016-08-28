@@ -86,13 +86,13 @@ namespace fpf_core {
 		fpf_multinomial::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
 	}
 
-	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis, string par_output_filename) {
+	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n\n\n producing summary reports...";
 		std::cout << "\n\n ...generating multinomial report for " << par_filesystem.filename;
 		fpf_report::fout_multinomial_comparison(par_filesystem, par_sample_analysis);
 		std::cout << "\n\n ...generating html report for " << par_filesystem.filename;
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, par_output_filename);
-		fpf_report::fout_html_report_filtered(par_filesystem, par_sample_analysis, par_output_filename);
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis);
+		fpf_report::fout_html_report_filtered(par_filesystem, par_sample_analysis);
 		std::cout << "\n\n";
 	}
 }

@@ -23,8 +23,9 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.7.13";
+	const string version = "v0.8.0";
 
+	const bool FILESYSTEM_MODE = 0;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
 	const bool MAP_FOUT_BY_SCORE = 1;
 	const bool MAP_FOUT_BY_DISTINCT = 1;
@@ -34,6 +35,8 @@ namespace IgFamily {
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_4.txt";
 	const string DEFAULT_INPUT_FASTA = "IGHV_IGLV_IGKV_CONT_20160827.fasta";
+	const string DEFAULT_INPUT_FASTA_DIRECTORY = "C:\\Users\\LJ\\IgFamily\\FASTA\\";
+	const string DEFAULT_BLASTP_DIRECTORY = "C:\\Users\\LJ\\IgFamily\\blast_directory\\";
 	const string DEFAULT_PEPTIDE_ASSIGNMENT_METHOD = "PEAKS de novo";
 
 	const double DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD = 50;

@@ -1,4 +1,4 @@
-// * * IgFamily v0.7.13 * * 
+// * * IgFamily v0.8.0 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -6,6 +6,7 @@
 
 
 
+#include <algorithm>
 #include <string>
 #include <iostream>
 #include <iomanip>
@@ -28,28 +29,28 @@ int main() {
 	using std::string;
 	using std::vector;
 
-	std::cout << "-- IgFamily " << IgFamily::version << " --\n\n\n";
+	std::cout << "\n -- IgFamily " << IgFamily::version << " --\n";
 
 	string select_FASTA{ IgFamily::DEFAULT_INPUT_FASTA };
-	string select_peptide_assignment{ IgFamily::DEFAULT_PEPTIDE_ASSIGNMENT_METHOD };
+	vector<string> v_select_spectra_assignment{ IgFamily::DEFAULT_PEPTIDE_ASSIGNMENT_METHOD };
 
-	fpf_filesystem::display_settings(select_FASTA, select_peptide_assignment);
+	fpf_filesystem::display_settings(select_FASTA, v_select_spectra_assignment);
 	string menu_selection{ fpf_filesystem::display_menu() };
 
 	bool menu_continue{};
 	while (!menu_continue) {
 		if (menu_selection == "F") {
 			select_FASTA = fpf_filesystem::display_FASTA_menu(select_FASTA);	
-			fpf_filesystem::display_settings(select_FASTA, select_peptide_assignment);
+			fpf_filesystem::display_settings(select_FASTA, v_select_spectra_assignment);
 			menu_selection = fpf_filesystem::display_menu();
 		}
 		if (menu_selection == "P") {
-			select_peptide_assignment = fpf_filesystem::display_peptide_assignment_menu(select_peptide_assignment);
-			fpf_filesystem::display_settings(select_FASTA, select_peptide_assignment);
+			*v_select_spectra_assignment.begin() = fpf_filesystem::display_peptide_assignment_menu(*v_select_spectra_assignment.begin());
+			fpf_filesystem::display_settings(select_FASTA, v_select_spectra_assignment);
 			menu_selection = fpf_filesystem::display_menu();
 		}
 		if (menu_selection == "X") {
-			select_FASTA = "FASTA\\" + select_FASTA;
+			select_FASTA = IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY + select_FASTA;
 			menu_continue = true;
 		}
 	}
@@ -67,7 +68,6 @@ int main() {
 	for (auto& itr_v_filesystem : v_filesystem) {
 		bool filesystem_modified{};
 		fpf_filesystem::sample_analysis temp_sample_analysis{};
-		itr_v_filesystem.v_sample_analysis.push_back(temp_sample_analysis);
 		vector<fpf_parse::csv_data> main_v_csv_PEAKS_database_peptides;
 		vector<fpf_parse::csv_data> main_v_csv_PEAKS_denovo_peptides;
 		vector<fpf_parse::csv_data> main_v_csv_NOVOR_denovo_peptides;
@@ -79,19 +79,28 @@ int main() {
 			filesystem_modified = true;
 		}
 
-		for (auto& itr_v_sample_analysis : itr_v_filesystem.v_sample_analysis) {
-			if (select_peptide_assignment == "PEAKS database match") {
-				itr_v_sample_analysis.PEAKS_database_exists = fpf_parse::check_csv_PEAKS_database_peptides_empty(main_v_csv_PEAKS_database_peptides, filesystem_modified);
+		bool file_found{};
+		for (const auto& itr_v_select_spectra_assignment : v_select_spectra_assignment) {
+			if (itr_v_select_spectra_assignment == "PEAKS database match") {
+				temp_sample_analysis.PEAKS_database_exists = fpf_parse::check_csv_PEAKS_database_peptides_empty(main_v_csv_PEAKS_database_peptides, filesystem_modified);
+				temp_sample_analysis.peptide_assignment_method = "PEAKS_database";
+				file_found = temp_sample_analysis.PEAKS_database_exists;
 			}
-			if (select_peptide_assignment == "PEAKS de novo") {
-				itr_v_sample_analysis.PEAKS_denovo_exists = fpf_parse::check_csv_PEAKS_denovo_peptides_empty(main_v_csv_PEAKS_denovo_peptides, filesystem_modified);
+			if (itr_v_select_spectra_assignment == "PEAKS de novo") {
+				temp_sample_analysis.PEAKS_denovo_exists = fpf_parse::check_csv_PEAKS_denovo_peptides_empty(main_v_csv_PEAKS_denovo_peptides, filesystem_modified);
+				temp_sample_analysis.peptide_assignment_method = "PEAKS_denono";
+				file_found = temp_sample_analysis.PEAKS_denovo_exists;
 			}
-			if (select_peptide_assignment == "NOVOR de novo") {
-				itr_v_sample_analysis.NOVOR_denovo_exists = fpf_parse::check_csv_NOVOR_denovo_peptides_empty(main_v_csv_NOVOR_denovo_peptides, filesystem_modified);
+			if (itr_v_select_spectra_assignment == "NOVOR de novo") {
+				temp_sample_analysis.NOVOR_denovo_exists = fpf_parse::check_csv_NOVOR_denovo_peptides_empty(main_v_csv_NOVOR_denovo_peptides, filesystem_modified);
+				temp_sample_analysis.peptide_assignment_method = "NOVOR_denono";
+				file_found = temp_sample_analysis.NOVOR_denovo_exists;
 			}
+			itr_v_filesystem.v_sample_analysis.push_back(temp_sample_analysis);
 		}
 
-		for (auto& itr_v_sample_analysis : itr_v_filesystem.v_sample_analysis) {
+		if (file_found) {
+			for (auto& itr_v_sample_analysis : itr_v_filesystem.v_sample_analysis) {
 				std::ifstream fin_FASTA(select_FASTA);
 				fpf_parse::custom_FASTA_output(select_FASTA);
 				std::cout << "\n\n\n * parsing FASTA file... \n";
@@ -128,19 +137,21 @@ int main() {
 				fpf_core::core_data_analysis(itr_v_sample_analysis);
 				fpf_core::core_multinomial(itr_v_filesystem, itr_v_sample_analysis);
 				if (itr_v_sample_analysis.PEAKS_database_exists) {
-					fpf_core::core_report(itr_v_filesystem, itr_v_sample_analysis, "PEAKS_database");
+					fpf_core::core_report(itr_v_filesystem, itr_v_sample_analysis);
 				}
 				if (itr_v_sample_analysis.PEAKS_denovo_exists) {
-					fpf_core::core_report(itr_v_filesystem, itr_v_sample_analysis, "PEAKS_denono");
+					fpf_core::core_report(itr_v_filesystem, itr_v_sample_analysis);
 				}
 				if (itr_v_sample_analysis.NOVOR_denovo_exists) {
-					fpf_core::core_report(itr_v_filesystem, itr_v_sample_analysis, "NOVOR_denono");
+					fpf_core::core_report(itr_v_filesystem, itr_v_sample_analysis);
 				}
 				fpf_filesystem::fout_filesystem(itr_v_filesystem);
+			}
+		}
+		else {
+			std::cout << "\n\n ...no data file found";
 		}
 	}
-
-
 
 	string farewell;
 	std::cout << "\n\n\n\n program complete...";

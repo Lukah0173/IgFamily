@@ -45,6 +45,7 @@ namespace fpf_filesystem {
 		bool PEAKS_database_exists;
 		bool PEAKS_denovo_exists;
 		bool NOVOR_denovo_exists;
+		string peptide_assignment_method;
 		vector<protein_data> v_protein_data;
 		vector<peptide_data> v_peptide_data;
 		vector<peptide_analysis> v_peptide_analysis;
@@ -85,11 +86,20 @@ namespace fpf_filesystem {
 		std::vector<sample_analysis> v_sample_analysis;
 	};
 
-	void display_settings(string par_FASTA_setting, string par_spectra_assignment_method) {
-		std::cout << " Current settings:";
+	void display_settings(string par_FASTA_setting, vector<string> par_v_spectra_assignment_method) {
+		std::cout << "\n\n Current settings:";
 		std::cout << "\n\n\n";
-		std::cout << " FASTA file -                     " << par_FASTA_setting;
-		std::cout << "\n Spectra assignment method -      " << par_spectra_assignment_method;
+		std::cout << " FASTA file -                     ";
+		std::cout << par_FASTA_setting;
+		std::cout << "\n Spectra assignment method -      ";
+		size_t count_itr{};
+		for (const auto& itr_v_spectra_assignment_method : par_v_spectra_assignment_method) {
+			++count_itr;
+			std::cout << itr_v_spectra_assignment_method;
+			if (count_itr != par_v_spectra_assignment_method.size()) {
+				std::cout << " + ";
+			}
+		}
 	}
 
 	string display_menu() {
@@ -100,7 +110,7 @@ namespace fpf_filesystem {
 		string menu_selection{};
 		while ((menu_selection != ("F")) && (menu_selection != ("P")) && (menu_selection != ("X"))) {
 			menu_selection.clear();
-			std::cout << "\n\n Input selection: \n\n > ";
+			std::cout << "\n\n --> ";
 			std::cin >> menu_selection;
 		}
 		return menu_selection;
@@ -122,7 +132,6 @@ namespace fpf_filesystem {
 		std::cout << "\n [8] IGH_IGL_IGK_mAB_20160827.fasta";
 		std::cout << "\n [9] IGH_IGL_IGK_mAB_CONT_20160827.fasta";
 		std::cout << "\n [X] Use current setting";
-		std::cout << "\n\n";
 		return perform_FASTA_selection(par_FASTA_setting_current);
 	}
 
@@ -140,7 +149,7 @@ namespace fpf_filesystem {
 			&& (menu_selection != ("9"))
 			&& (menu_selection != ("X"))) {
 			menu_selection.clear();
-			std::cout << "\n\n Input selection: --> ";
+			std::cout << "\n\n --> ";
 			std::cin >> menu_selection;
 		}
 		if (menu_selection == "0") {
@@ -179,7 +188,66 @@ namespace fpf_filesystem {
 		return par_FASTA_setting_current;
 	}
 
-	string perform_peptide_method_selection(string par_peptide_method_setting_current);
+	string perform_peptide_method_selection(string par_spectra_method_setting);
+
+	//void display_peptide_assignment_current(vector<string>& par_v_spectra_method_setting) {
+	//	std::cout << "\n\n Current setting -      ";
+	//	size_t count_itr{};
+	//	for (const auto& itr_v_spectra_assignment_method : par_v_spectra_method_setting) {
+	//		++count_itr;
+	//		std::cout << itr_v_spectra_assignment_method;
+	//		if (count_itr != par_v_spectra_method_setting.size()) {
+	//			std::cout << " + ";
+	//		}
+	//	}
+	//	std::cout << "\n";
+	//	count_itr = size_t();
+	//	for (const auto& itr_v_spectra_assignment_method : par_v_spectra_method_setting) {			
+	//		std::cout << "\n [" << count_itr << "]";
+	//		std::cout << " Modify " << itr_v_spectra_assignment_method;
+	//		++count_itr;
+	//	}
+	//	std::cout << "\n[" << count_itr << "]";
+	//	std::cout << " Include additional spectra assignment method ";
+	//	std::cout << "\n [X] Use current setting";
+	//	display_peptide_assignment_menu(count_itr, )
+	//}
+
+	//int perform_peptide_method_modify(string par_spectra_method_setting, vector<string>& par_v_spectra_method_setting) {
+	//	string menu_selection{};
+	//	while ((menu_selection != ("0"))
+	//		&& (menu_selection != ("1"))
+	//		&& (menu_selection != ("2"))
+	//		&& (menu_selection != ("X"))) {
+	//		menu_selection.clear();
+	//		std::cout << "\n\n --> ";
+	//		std::cin >> menu_selection;
+	//	}
+	//	if (menu_selection == "0") {
+	//		return "PEAKS database match";
+	//	}
+	//	if (menu_selection == "1") {
+	//		return "PEAKS de novo";
+	//	}
+	//	if (menu_selection == "2") {
+	//		return "NOVOR de novo";
+	//	}
+	//	if (menu_selection == "X") {
+	//		return par_spectra_method_setting;
+	//	}
+	//	return par_spectra_method_setting;
+	//}
+
+	//void display_peptide_assignment_menu(string par_current_setting, vector<string>& par_spectra_method_setting) {
+	//	std::cout << "\n\n Current setting - ";
+	//	std::cout << "[" << par_current_index << "]";
+	//	std::cout << " " << par_current_setting;
+	//	std::cout << "\n";
+	//	std::cout << "\n [0] Modify to PEAKS database match";
+	//	std::cout << "\n [1] Modify to PEAKS de novo";
+	//	std::cout << "\n [2] Modify to NOVOR de novo";
+	//	std::cout << "\n [X] Return";
+	//}
 
 	string display_peptide_assignment_menu(string par_peptide_method_setting_current) {
 		std::cout << "\n\n Current setting - " << par_peptide_method_setting_current;
@@ -191,14 +259,14 @@ namespace fpf_filesystem {
 		return perform_peptide_method_selection(par_peptide_method_setting_current);
 	}
 
-	string perform_peptide_method_selection(string par_peptide_method_setting_current) {
+	string perform_peptide_method_selection(string par_spectra_method_setting) {
 		string menu_selection{};
 		while ((menu_selection != ("0"))
 			&& (menu_selection != ("1"))
 			&& (menu_selection != ("2"))
 			&& (menu_selection != ("X"))) {
 			menu_selection.clear();
-			std::cout << "\n\n Input selection: --> ";
+			std::cout << "\n\n --> ";
 			std::cin >> menu_selection;
 		}
 		if (menu_selection == "0") {
@@ -211,24 +279,26 @@ namespace fpf_filesystem {
 			return "NOVOR de novo";
 		}
 		if (menu_selection == "X") {
-			return par_peptide_method_setting_current;
+			return par_spectra_method_setting;
 		}
-		return par_peptide_method_setting_current;
+		return par_spectra_method_setting;
 	}
 
 	vector<string> read_root_dir(string par_root_directory) {
-		std::ifstream fin_input_csv(par_root_directory);
 		vector<string> temp_v_IgFamily_root{};
 		string fin_IgFamily_root{};
-		char stream_IgFamily_root{};
-		while (fin_input_csv.std::istream::get(stream_IgFamily_root)) {
-			if ((stream_IgFamily_root != '\n') && (stream_IgFamily_root != ',')) {
-				fin_IgFamily_root += stream_IgFamily_root;
-			}
-			if (stream_IgFamily_root == ',') {
-				temp_v_IgFamily_root.push_back(fin_IgFamily_root);
-				std::cout << "\n * " << fin_IgFamily_root;
-				fin_IgFamily_root.clear();
+		if (IgFamily::FILESYSTEM_MODE) {
+			std::ifstream fin_input_csv(par_root_directory);
+			char stream_IgFamily_root{};
+			while (fin_input_csv.std::istream::get(stream_IgFamily_root)) {
+				if ((stream_IgFamily_root != '\n') && (stream_IgFamily_root != ',')) {
+					fin_IgFamily_root += stream_IgFamily_root;
+				}
+				if (stream_IgFamily_root == ',') {
+					temp_v_IgFamily_root.push_back(fin_IgFamily_root);
+					std::cout << "\n * " << fin_IgFamily_root;
+					fin_IgFamily_root.clear();
+				}
 			}
 		}
 		return temp_v_IgFamily_root;
@@ -237,126 +307,133 @@ namespace fpf_filesystem {
 	vector<filesystem> read_filesystem(vector<string> par_root_directory) {
 		filesystem temp_filesystem{};
 		vector<filesystem> temp_v_filesystem{};
-		std::cout << "\n";
-		for (const auto& itr_root_directory : par_root_directory) {
-			string stream_filesystem = itr_root_directory + "filesystem.data";
-			std::ifstream fin_input_filesystem(stream_filesystem);
-			char read_fin_filesystem{};
-			string stream_fin_filesystem{};
-			size_t switch_fin_filesystem{};
-			pair<string, string> temp_filesystem_id{};
-			string temp_filesystem_date{};
-			string temp_filesystem_filename{};
-			string temp_filesystem_version{};
-			string temp_filesystem_status{};
-			string temp_filesystem_enzyme{};
-			string temp_filesystem_denovo_deltamass{};
-			string temp_filesystem_replicatedate{};
-			size_t switch__filesystem_replicatepair{};
-			vector<pair<string, string>> v_filesystem_replicates{};	
-			while (fin_input_filesystem.std::istream::get(read_fin_filesystem)) {
-				if ((read_fin_filesystem != ';') && (read_fin_filesystem != '\n') && (read_fin_filesystem != ',')) {
-					stream_fin_filesystem += read_fin_filesystem;
-				}
-				if (switch__filesystem_replicatepair == 2) {
-					switch__filesystem_replicatepair = 0;
-				}
-				if ((switch_fin_filesystem == 1) && (read_fin_filesystem == ',')) {
-					temp_filesystem_date = stream_fin_filesystem;
-					stream_fin_filesystem.clear();
-				}
-				if (stream_fin_filesystem == "ID: ") {
-					stream_fin_filesystem.clear();
-					switch_fin_filesystem = 1;
-				}
-				if (stream_fin_filesystem == "FILE: ") {
-					stream_fin_filesystem.clear();
-					switch_fin_filesystem = 2;
-				}
-				if (stream_fin_filesystem == "VERSION: ") {
-					stream_fin_filesystem.clear();
-					switch_fin_filesystem = 3;
-				}
-				if ((switch_fin_filesystem == 4) && (read_fin_filesystem == ',') && (switch__filesystem_replicatepair == 1)) {
-					v_filesystem_replicates.push_back(std::make_pair(temp_filesystem_replicatedate, stream_fin_filesystem));
-					switch__filesystem_replicatepair = 2;
-					temp_filesystem_replicatedate.clear();
-					stream_fin_filesystem.clear();
-				}
-				if ((switch_fin_filesystem == 4) && (read_fin_filesystem == ';') && (switch__filesystem_replicatepair == 0)) {
-					temp_filesystem_replicatedate = stream_fin_filesystem;
-					switch__filesystem_replicatepair = 1;
-					stream_fin_filesystem.clear();
-				}
-				if (stream_fin_filesystem == "REPLICATES: ") {
-					stream_fin_filesystem.clear();
-					switch_fin_filesystem = 4;
-				}
-				if (stream_fin_filesystem == "STATUS: ") {
-					stream_fin_filesystem.clear();
-					switch_fin_filesystem = 5;
-				}
-				if (stream_fin_filesystem == "ENZYME: ") {
-					stream_fin_filesystem.clear();
-					switch_fin_filesystem = 6;
-				}
-				if (stream_fin_filesystem == "DENOVO_DELTAMASS: ") {
-					stream_fin_filesystem.clear();
-					switch_fin_filesystem = 7;
-				}
-				if (read_fin_filesystem == ';') {
-					if (switch_fin_filesystem == 1) {
-						temp_filesystem_id = make_pair(temp_filesystem_date, stream_fin_filesystem);
-						temp_filesystem_date.clear();
+		if (IgFamily::FILESYSTEM_MODE) {
+			std::cout << "\n";
+			for (const auto& itr_root_directory : par_root_directory) {
+				string stream_filesystem = itr_root_directory + "filesystem.data";
+				std::ifstream fin_input_filesystem(stream_filesystem);
+				char read_fin_filesystem{};
+				string stream_fin_filesystem{};
+				size_t switch_fin_filesystem{};
+				pair<string, string> temp_filesystem_id{};
+				string temp_filesystem_date{};
+				string temp_filesystem_filename{};
+				string temp_filesystem_version{};
+				string temp_filesystem_status{};
+				string temp_filesystem_enzyme{};
+				string temp_filesystem_denovo_deltamass{};
+				string temp_filesystem_replicatedate{};
+				size_t switch__filesystem_replicatepair{};
+				vector<pair<string, string>> v_filesystem_replicates{};
+				while (fin_input_filesystem.std::istream::get(read_fin_filesystem)) {
+					if ((read_fin_filesystem != ';') && (read_fin_filesystem != '\n') && (read_fin_filesystem != ',')) {
+						stream_fin_filesystem += read_fin_filesystem;
+					}
+					if (switch__filesystem_replicatepair == 2) {
+						switch__filesystem_replicatepair = 0;
+					}
+					if ((switch_fin_filesystem == 1) && (read_fin_filesystem == ',')) {
+						temp_filesystem_date = stream_fin_filesystem;
 						stream_fin_filesystem.clear();
 					}
-					if (switch_fin_filesystem == 2) {
-						temp_filesystem_filename = stream_fin_filesystem;
+					if (stream_fin_filesystem == "ID: ") {
 						stream_fin_filesystem.clear();
+						switch_fin_filesystem = 1;
 					}
-					if (switch_fin_filesystem == 3) {
-						temp_filesystem_version = stream_fin_filesystem;
+					if (stream_fin_filesystem == "FILE: ") {
 						stream_fin_filesystem.clear();
+						switch_fin_filesystem = 2;
 					}
-					if (switch_fin_filesystem == 4) {
-						if (stream_fin_filesystem != "") {
-							v_filesystem_replicates.push_back(std::make_pair(temp_filesystem_replicatedate, stream_fin_filesystem));
-						}
-						switch__filesystem_replicatepair = size_t();
+					if (stream_fin_filesystem == "VERSION: ") {
+						stream_fin_filesystem.clear();
+						switch_fin_filesystem = 3;
+					}
+					if ((switch_fin_filesystem == 4) && (read_fin_filesystem == ',') && (switch__filesystem_replicatepair == 1)) {
+						v_filesystem_replicates.push_back(std::make_pair(temp_filesystem_replicatedate, stream_fin_filesystem));
+						switch__filesystem_replicatepair = 2;
 						temp_filesystem_replicatedate.clear();
 						stream_fin_filesystem.clear();
 					}
-					if (switch_fin_filesystem == 5) {
-						temp_filesystem_status = stream_fin_filesystem;
+					if ((switch_fin_filesystem == 4) && (read_fin_filesystem == ';') && (switch__filesystem_replicatepair == 0)) {
+						temp_filesystem_replicatedate = stream_fin_filesystem;
+						switch__filesystem_replicatepair = 1;
 						stream_fin_filesystem.clear();
 					}
-					if (switch_fin_filesystem == 6) {
-						temp_filesystem_enzyme = stream_fin_filesystem;
+					if (stream_fin_filesystem == "REPLICATES: ") {
 						stream_fin_filesystem.clear();
+						switch_fin_filesystem = 4;
 					}
-					if (switch_fin_filesystem == 7) {
-						temp_filesystem_denovo_deltamass = stream_fin_filesystem;
+					if (stream_fin_filesystem == "STATUS: ") {
 						stream_fin_filesystem.clear();
-						temp_filesystem.directory = itr_root_directory;
-						temp_filesystem.filesystem_id = temp_filesystem_id;
-						temp_filesystem.filename = temp_filesystem_filename;
-						temp_filesystem.fileversion = temp_filesystem_version;
-						temp_filesystem.patientstatus = temp_filesystem_status;
-						temp_filesystem.v_filesystem_replicates = v_filesystem_replicates;
-						temp_filesystem.enzyme = temp_filesystem_enzyme;
-						temp_filesystem.denono_deltamass = temp_filesystem_denovo_deltamass;
-						temp_filesystem.filesystem_replicate_count = size_t{ 1 };
-						v_filesystem_replicates.clear();
-						temp_v_filesystem.push_back(temp_filesystem);
-						std::cout << "\n * reading: " << temp_filesystem_filename << "   version - " << temp_filesystem_version;
-						if (temp_filesystem_version == IgFamily::version) {
-							std::cout << "   ! up to date !";
+						switch_fin_filesystem = 5;
+					}
+					if (stream_fin_filesystem == "ENZYME: ") {
+						stream_fin_filesystem.clear();
+						switch_fin_filesystem = 6;
+					}
+					if (stream_fin_filesystem == "DENOVO_DELTAMASS: ") {
+						stream_fin_filesystem.clear();
+						switch_fin_filesystem = 7;
+					}
+					if (read_fin_filesystem == ';') {
+						if (switch_fin_filesystem == 1) {
+							temp_filesystem_id = make_pair(temp_filesystem_date, stream_fin_filesystem);
+							temp_filesystem_date.clear();
+							stream_fin_filesystem.clear();
+						}
+						if (switch_fin_filesystem == 2) {
+							temp_filesystem_filename = stream_fin_filesystem;
+							stream_fin_filesystem.clear();
+						}
+						if (switch_fin_filesystem == 3) {
+							temp_filesystem_version = stream_fin_filesystem;
+							stream_fin_filesystem.clear();
+						}
+						if (switch_fin_filesystem == 4) {
+							if (stream_fin_filesystem != "") {
+								v_filesystem_replicates.push_back(std::make_pair(temp_filesystem_replicatedate, stream_fin_filesystem));
+							}
+							switch__filesystem_replicatepair = size_t();
+							temp_filesystem_replicatedate.clear();
+							stream_fin_filesystem.clear();
+						}
+						if (switch_fin_filesystem == 5) {
+							temp_filesystem_status = stream_fin_filesystem;
+							stream_fin_filesystem.clear();
+						}
+						if (switch_fin_filesystem == 6) {
+							temp_filesystem_enzyme = stream_fin_filesystem;
+							stream_fin_filesystem.clear();
+						}
+						if (switch_fin_filesystem == 7) {
+							temp_filesystem_denovo_deltamass = stream_fin_filesystem;
+							stream_fin_filesystem.clear();
+							temp_filesystem.directory = itr_root_directory;
+							temp_filesystem.filesystem_id = temp_filesystem_id;
+							temp_filesystem.filename = temp_filesystem_filename;
+							temp_filesystem.fileversion = temp_filesystem_version;
+							temp_filesystem.patientstatus = temp_filesystem_status;
+							temp_filesystem.v_filesystem_replicates = v_filesystem_replicates;
+							temp_filesystem.enzyme = temp_filesystem_enzyme;
+							temp_filesystem.denono_deltamass = temp_filesystem_denovo_deltamass;
+							temp_filesystem.filesystem_replicate_count = size_t{ 1 };
+							v_filesystem_replicates.clear();
+							temp_v_filesystem.push_back(temp_filesystem);
+							std::cout << "\n * reading: " << temp_filesystem_filename << "   version - " << temp_filesystem_version;
+							if (temp_filesystem_version == IgFamily::version) {
+								std::cout << "   ! up to date !";
+							}
 						}
 					}
 				}
+				fin_input_filesystem.clear();
+				fin_input_filesystem.seekg(0, std::ios::beg);
 			}
-			fin_input_filesystem.clear();
-			fin_input_filesystem.seekg(0, std::ios::beg);
+		}
+		else {
+			std::cout << "\n * reading: Local file";
+			temp_filesystem.filename = "Local_file";
+			temp_v_filesystem.push_back(temp_filesystem);
 		}
 		return temp_v_filesystem;
 	}
@@ -412,13 +489,13 @@ namespace fpf_filesystem {
 	}
 
 	string read_filesystem_PEAKS_database_peptides(string par_root_directory) {
-		string temp_root_PEAKS_database_peptides = par_root_directory + "protein_peptides.csv";
+		string temp_root_PEAKS_database_peptides = par_root_directory + "database_peptides_PEAKS.csv";
 		return temp_root_PEAKS_database_peptides;
 	}
 
 	string read_filesystem_PEAKS_denovo_peptides(string par_root_directory) {
 		string temp_root_PEAKS_denovo_peptides{};
-		temp_root_PEAKS_denovo_peptides = par_root_directory + "denovo_peptides.csv";
+		temp_root_PEAKS_denovo_peptides = par_root_directory + "denovo_peptides_PEAKS.csv";
 		return temp_root_PEAKS_denovo_peptides;
 	}
 
@@ -450,21 +527,23 @@ namespace fpf_filesystem {
 	}
 
 	void fout_filesystem(filesystem par_filesystem) {
-		string output_filesystem = par_filesystem.directory + "filesystem.data";
-		std::ofstream fout_filesystem;
-		fout_filesystem.open(output_filesystem);
-		fout_filesystem << "ID: " << std::get<0>(par_filesystem.filesystem_id) << "," << std::get<1>(par_filesystem.filesystem_id) << ";\n";
-		fout_filesystem << "FILE: " << par_filesystem.filename << ";\n";
-		fout_filesystem << "VERSION: " << IgFamily::version << ";\n";
-		fout_filesystem << "REPLICATES: ";
-		for (const auto& itr_v_p_replicates : par_filesystem.v_filesystem_replicates) {
-			fout_filesystem << std::get<0>(itr_v_p_replicates) << ",";
-			fout_filesystem << std::get<1>(itr_v_p_replicates) << ";";
+		if (IgFamily::FILESYSTEM_MODE) {
+			string output_filesystem = par_filesystem.directory + "filesystem.data";
+			std::ofstream fout_filesystem;
+			fout_filesystem.open(output_filesystem);
+			fout_filesystem << "ID: " << std::get<0>(par_filesystem.filesystem_id) << "," << std::get<1>(par_filesystem.filesystem_id) << ";\n";
+			fout_filesystem << "FILE: " << par_filesystem.filename << ";\n";
+			fout_filesystem << "VERSION: " << IgFamily::version << ";\n";
+			fout_filesystem << "REPLICATES: ";
+			for (const auto& itr_v_p_replicates : par_filesystem.v_filesystem_replicates) {
+				fout_filesystem << std::get<0>(itr_v_p_replicates) << ",";
+				fout_filesystem << std::get<1>(itr_v_p_replicates) << ";";
+			}
+			fout_filesystem << "\n";
+			fout_filesystem << "STATUS: " << par_filesystem.patientstatus << ";\n";
+			fout_filesystem << "ENZYME: " << par_filesystem.enzyme << ";\n";
+			fout_filesystem << "DENOVO_DELTAMASS: " << par_filesystem.denono_deltamass << ";\n";
 		}
-		fout_filesystem << "\n";
-		fout_filesystem << "STATUS: " << par_filesystem.patientstatus << ";\n";
-		fout_filesystem << "ENZYME: " << par_filesystem.enzyme << ";\n";
-		fout_filesystem << "DENOVO_DELTAMASS: " << par_filesystem.denono_deltamass << ";\n";
 	}
 }
 

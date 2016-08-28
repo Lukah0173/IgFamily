@@ -28,7 +28,7 @@ namespace fpf_report {
 	typedef fpf_filesystem::sample_analysis sample_analysis;
 
 	void fout_multinomial_comparison(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		std::string output_multinomial_comparison = par_filesystem.directory + "multinomial_comparison.csv";
+		std::string output_multinomial_comparison = par_filesystem.directory + "multinomial_comparison_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_multinomial_comparison;
 		fout_multinomial_comparison.open(output_multinomial_comparison);
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
@@ -39,9 +39,9 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_html_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis, string& par_output_filename) {
+	void fout_html_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::string output_html_report{};
-		output_html_report = par_filesystem.directory + "report_" + par_output_filename + ".html";
+		output_html_report = par_filesystem.directory + "report_" + par_sample_analysis.peptide_assignment_method + ".html";
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);
 		fout_html_report << "\
@@ -59,9 +59,11 @@ namespace fpf_report {
 						} \
 						</style>";
 		fout_html_report << "\n<br>" << par_filesystem.filename;
-		fout_html_report << "\n\n<br><br>" << par_filesystem.fileversion;
-		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
-		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
+		if (IgFamily::FILESYSTEM_MODE) {
+			fout_html_report << "\n\n<br><br>" << par_filesystem.fileversion;
+			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
+			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
+		}
 		for (const auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
 			fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;
 			fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_protein_analysis.protein_score;
@@ -257,9 +259,9 @@ namespace fpf_report {
 </html>\n ";
 	}
 
-	void fout_html_report_filtered(filesystem& par_filesystem, sample_analysis& par_sample_analysis, string& par_output_filename) {
+	void fout_html_report_filtered(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::string output_html_report{};
-		output_html_report = par_filesystem.directory + "report_IG_" + par_output_filename + ".html";
+		output_html_report = par_filesystem.directory + "report_IG_" + par_sample_analysis.peptide_assignment_method + ".html";
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);
 		vector<string> dummy;
@@ -278,9 +280,11 @@ namespace fpf_report {
 						} \
 						</style>";
 		fout_html_report << "\n<br>" << par_filesystem.filename;
-		fout_html_report << "\n\n<br><br>" << par_filesystem.fileversion;
-		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
-		fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
+		if (IgFamily::FILESYSTEM_MODE) {
+			fout_html_report << "\n\n<br><br>" << par_filesystem.fileversion;
+			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
+			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
+		}
 		for (const auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
 			if (itr_protein_analysis.p_protein_data->protein_type == "IG") {
 				fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;

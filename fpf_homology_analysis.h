@@ -40,7 +40,7 @@ namespace fpf_homology_analysis {
 	typedef vector<fpf_filesystem::filesystem> v_filesystem_type;
 
 	void create_blastp_input(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		string output_blastp_FASTA = "blast_directory\\";
+		string output_blastp_FASTA = DEFAULT_BLASTP_DIRECTORY;
 		output_blastp_FASTA += par_filesystem.filename;
 		output_blastp_FASTA += "_blastp_input.fasta";
 		std::ofstream fout_blastp_input_FASTA;
@@ -55,7 +55,7 @@ namespace fpf_homology_analysis {
 	}
 
 	void create_homology_database(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		string output_homology_database_FASTA = "blast_directory\\homology_database.fasta";
+		string output_homology_database_FASTA = DEFAULT_BLASTP_DIRECTORY + "homology_database.fasta";
 		std::ofstream fout_homology_database_FASTA;
 		fout_homology_database_FASTA.open(output_homology_database_FASTA);
 		for (auto itr_v_multinomial_protein : par_sample_analysis.v_protein_data) {
@@ -72,7 +72,7 @@ namespace fpf_homology_analysis {
 	}
 
 	void create_homology_database_refined(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		string output_homology_database_FASTA = "blast_directory\\homology_database.fasta";
+		string output_homology_database_FASTA = DEFAULT_BLASTP_DIRECTORY + "homology_database.fasta";
 		std::ofstream fout_homology_database_FASTA;
 		fout_homology_database_FASTA.open(output_homology_database_FASTA);
 		for (auto itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
@@ -90,12 +90,12 @@ namespace fpf_homology_analysis {
 
 	void sys_blastp(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n";
-		string string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
+		string string_system = "CD " + DEFAULT_BLASTP_DIRECTORY;
 		string_system += " && makeblastdb.exe -in ";
 		string_system += "homology_database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
-		string_system = "CD C:\\Users\\LJ\\IgFamily\\blast_directory\\";
+		string_system = "CD " + DEFAULT_BLASTP_DIRECTORY;
 		string_system += " && blastp.exe -query ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";
@@ -110,7 +110,7 @@ namespace fpf_homology_analysis {
 
 	void create_v_homology_data(filesystem& par_filesytem, sample_analysis& par_sample_analysis) {
 			size_t homology_data_count_delimit = size_t(1);
-			string homology_data_output = "blast_directory\\" + par_filesytem.filename + "_blastp_output.csv";
+			string homology_data_output = DEFAULT_BLASTP_DIRECTORY + par_filesytem.filename + "_blastp_output.csv";
 			std::ifstream fin_input_blastp(homology_data_output);
 			char homology_data_read{};
 			vector<homology_data> temp_v_homology_data{};
@@ -300,7 +300,7 @@ namespace fpf_homology_analysis {
 	}
 
 	void fout_blastp_summary(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis) {
-		string output_blastp_summary = "blast_directory\\";
+		string output_blastp_summary = DEFAULT_BLASTP_DIRECTORY;
 		output_blastp_summary += par_filesystem.filename;
 		output_blastp_summary += "_blastp_summary.csv";
 		std::ofstream fout_blastp_summary;
