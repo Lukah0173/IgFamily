@@ -777,7 +777,7 @@ namespace fpf_parse {
 	bool check_csv_PEAKS_database_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data, bool par_filesystem_modified) {
 		if (!par_v_csv_data.empty()) {
 			if (par_filesystem_modified) {
-				std::cout << "\n\n --- database matched peptides file found";
+				std::cout << "\n --- database matched peptides file found";
 			}
 			return true;
 		}
@@ -787,7 +787,7 @@ namespace fpf_parse {
 	bool check_csv_PEAKS_denovo_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data, bool par_filesystem_modified) {
 		if (!par_v_csv_data.empty()) {
 			if (par_filesystem_modified) {
-				std::cout << "\n\n --- PEAKS de novo peptides file found";
+				std::cout << "\n --- PEAKS de novo peptides file found";
 			}
 			return true;
 		}
@@ -797,7 +797,7 @@ namespace fpf_parse {
 	bool check_csv_NOVOR_denovo_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data, bool par_filesystem_modified) {
 		if (!par_v_csv_data.empty()) {
 			if (par_filesystem_modified) {
-				std::cout << "\n\n --- NOVOR de novo peptides file found";
+				std::cout << "\n --- NOVOR de novo peptides file found";
 			}
 			return true;
 		}

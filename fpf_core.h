@@ -93,8 +93,10 @@ namespace fpf_core {
 		fpf_report::fout_multinomial_comparison(par_filesystem, par_sample_analysis);
 		std::cout << " ...generating html report for " << par_filesystem.filename;
 		std::cout << "\n";
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis);
-		fpf_report::fout_html_report_filtered(par_filesystem, par_sample_analysis);
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, false);
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false);
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, true);
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true);
 		std::cout << "\n";
 	}
 }

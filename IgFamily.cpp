@@ -76,7 +76,9 @@ int main() {
 		vector<fpf_parse::csv_data> main_v_csv_PEAKS_denovo_peptides;
 		vector<fpf_parse::csv_data> main_v_csv_NOVOR_denovo_peptides;
 		if ((IgFamily::FILESYSTEM_UPDATE_ALL) || (itr_v_filesystem.fileversion != IgFamily::version)) {
-			std::cout << "\n\n\n\n parsing data...";
+			std::cout << "\n\n\n\n parsing data for file ";
+			std::cout << itr_v_filesystem.filename;
+			std::cout << "...\n";
 			main_v_csv_PEAKS_database_peptides = fpf_filesystem::parse_filesystem_PEAKS_database_peptides(fpf_filesystem::read_filesystem_PEAKS_database_peptides(itr_v_filesystem.directory));
 			main_v_csv_PEAKS_denovo_peptides = fpf_filesystem::parse_filesystem_PEAKS_denovo_peptides(fpf_filesystem::read_filesystem_PEAKS_denovo_peptides(itr_v_filesystem.directory));
 			main_v_csv_NOVOR_denovo_peptides = fpf_filesystem::parse_filesystem_NOVOR_denovo_peptides(fpf_filesystem::read_filesystem_NOVOR_denovo_peptides(itr_v_filesystem.directory));

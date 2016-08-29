@@ -527,7 +527,7 @@ namespace fpf_filesystem {
 		return temp_csv_NOVOR_denovo_peptides;
 	}
 
-	void fout_filesystem(filesystem par_filesystem) {
+	void fout_filesystem(filesystem& par_filesystem) {
 		if (IgFamily::FILESYSTEM_MODE) {
 			string output_filesystem = par_filesystem.directory + "filesystem.data";
 			std::ofstream fout_filesystem;
@@ -535,6 +535,7 @@ namespace fpf_filesystem {
 			fout_filesystem << "ID: " << std::get<0>(par_filesystem.filesystem_id) << "," << std::get<1>(par_filesystem.filesystem_id) << ";\n";
 			fout_filesystem << "FILE: " << par_filesystem.filename << ";\n";
 			fout_filesystem << "VERSION: " << IgFamily::version << ";\n";
+			par_filesystem.fileversion = IgFamily::version;
 			fout_filesystem << "REPLICATES: ";
 			for (const auto& itr_v_p_replicates : par_filesystem.v_filesystem_replicates) {
 				fout_filesystem << std::get<0>(itr_v_p_replicates) << ",";
