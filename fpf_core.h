@@ -56,7 +56,7 @@ namespace fpf_core {
 			fpf_homology_analysis::create_protein_from_protein_analysis(par_sample_analysis);
 		}
 		fpf_homology_analysis::create_query_alignment(par_sample_analysis);
-		fpf_homology_analysis::normalise_homology_data(par_sample_analysis);
+		fpf_homology_analysis::transform_homology_data(par_sample_analysis);
 		fpf_homology_analysis::determine_blastp_parameter_density(par_sample_analysis);
 		std::cout << " ...homology data structures assigned";
 		std::cout << "\n\n outputting homology summary for file ";
@@ -88,6 +88,11 @@ namespace fpf_core {
 
 	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n\n producing summary reports...\n";
+		std::cout << " ...generating peptide report for " << par_filesystem.filename;
+		std::cout << "\n";
+		fpf_report::fout_v_peptide_data(par_filesystem, par_sample_analysis);
+		fpf_report::fout_v_peptide_analysis(par_filesystem, par_sample_analysis);
+		fpf_report::fout_v_protein_analysis(par_filesystem, par_sample_analysis);
 		std::cout << " ...generating multinomial report for " << par_filesystem.filename;
 		std::cout << "\n";
 		fpf_report::fout_multinomial_comparison(par_filesystem, par_sample_analysis);

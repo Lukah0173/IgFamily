@@ -257,45 +257,45 @@ namespace fpf_homology_analysis {
 		return (log(d) / log(base));
 	}
 
-	void normalise_homology_data(sample_analysis& par_sample_analysis) {
+	void transform_homology_data(sample_analysis& par_sample_analysis) {
 		vector<homology_data> temp_v_homology_data{};
 		vector<homology_data> hold_v_homology_data{};
-		string hold_blastp_subject{};
+		string hold_blastp_query{};
 		double hold_min_blastp_evalue{};
 		double hold_sum_blastp_evalue{};
 		bool is_hold{};
-		for (auto itr_v_s_blastp : par_sample_analysis.v_homology_data) {
-			if (itr_v_s_blastp.blastp_query != hold_blastp_subject) {
+		for (auto itr_v_homology_data : par_sample_analysis.v_homology_data) {
+			if (itr_v_homology_data.blastp_query != hold_blastp_query) {
 				if (is_hold) {
-					for (auto& itr_hold_v_s_blastp : hold_v_homology_data) {
-						itr_hold_v_s_blastp.blastp_evalue_transformed = std::pow(log_base(((double(1) * BLASTP_PARPROP_SCALE) / itr_hold_v_s_blastp.blastp_evalue), 1.2), 1.15);
-						temp_v_homology_data.push_back(itr_hold_v_s_blastp);
+					for (auto& itr_hold_v_homology_data : hold_v_homology_data) {
+						itr_hold_v_homology_data.blastp_evalue_transformed = std::pow(log_base(((double(1) * BLASTP_PARPROP_SCALE) / itr_hold_v_homology_data.blastp_evalue), 1.2), 1.15);
+						temp_v_homology_data.push_back(itr_hold_v_homology_data);
 					}
 				}
 				hold_v_homology_data.clear();
 				hold_sum_blastp_evalue = 0;
-				hold_blastp_subject = itr_v_s_blastp.blastp_query;
-				hold_min_blastp_evalue = itr_v_s_blastp.blastp_evalue;
+				hold_blastp_query = itr_v_homology_data.blastp_query;
+				hold_min_blastp_evalue = itr_v_homology_data.blastp_evalue;
 				is_hold = true;
 			}
-			if (is_hold && (itr_v_s_blastp.blastp_evalue < BLASTP_THRESHOLD)) {
-				hold_v_homology_data.push_back(itr_v_s_blastp);
-				hold_sum_blastp_evalue += (1 / itr_v_s_blastp.blastp_evalue);
+			if (is_hold && (itr_v_homology_data.blastp_evalue < BLASTP_THRESHOLD)) {
+				hold_v_homology_data.push_back(itr_v_homology_data);
+				hold_sum_blastp_evalue += (1 / itr_v_homology_data.blastp_evalue);
 			}
 		}
 		par_sample_analysis.v_homology_data = temp_v_homology_data;
 	}
 
 	void determine_blastp_parameter_density(sample_analysis& par_sample_analysis) {
-		for (auto& itr_v_blastp : par_sample_analysis.v_homology_data) {
+		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
 			double temp_evalue_transform_sum{};
-			for (const auto& itr_v_blastp_2 : par_sample_analysis.v_homology_data) {
-				if (itr_v_blastp.blastp_query == itr_v_blastp_2.blastp_query) {
-					temp_evalue_transform_sum += itr_v_blastp_2.blastp_evalue_transformed;
+			for (const auto& itr_v_homology_data_2 : par_sample_analysis.v_homology_data) {
+				if (itr_v_homology_data.blastp_query == itr_v_homology_data_2.blastp_query) {
+					temp_evalue_transform_sum += itr_v_homology_data_2.blastp_evalue_transformed;
 				}
 			}
-			itr_v_blastp.blastp_parameter_density = (itr_v_blastp.blastp_evalue_transformed / temp_evalue_transform_sum);
-			itr_v_blastp.blastp_parameter_score = (itr_v_blastp.blastp_parameter_density * itr_v_blastp.blastp_evalue_transformed * (itr_v_blastp.p_peptide_analysis->v_denovo_peptide_averagescore / 100));
+			itr_v_homology_data.blastp_parameter_density = (itr_v_homology_data.blastp_evalue_transformed / temp_evalue_transform_sum);
+			itr_v_homology_data.blastp_parameter_score = (itr_v_homology_data.blastp_parameter_density * itr_v_homology_data.blastp_evalue_transformed * (itr_v_homology_data.p_peptide_analysis->v_denovo_peptide_averagescore / 100));
 		}
 	}
 

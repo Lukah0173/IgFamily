@@ -48,6 +48,7 @@ namespace fpf_data {
 
 	struct peptide_data {
 	public:
+		size_t key_peptide_data;
 		size_t scan_ID;
 		string peptide_withmod;
 		string peptide_filtered;
@@ -55,6 +56,7 @@ namespace fpf_data {
 	};
 	
 	struct peptide_analysis {
+		size_t key_peptide_analysis;
 		string peptide_filtered;
 		size_t replicate_count;
 		vector<peptide_data*> v_peptide_data; 
@@ -73,6 +75,7 @@ namespace fpf_data {
 
 	struct protein_analysis {
 	public:
+		size_t key_protein_analysis;
 		protein_data* p_protein_data;
 		vector<homology_data> v_homology_data_combined_by_protein;
 		double protein_score;
@@ -137,6 +140,7 @@ namespace fpf_data {
 
 	vector<peptide_data> create_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data) {
 		vector<peptide_data> temp_v_peptide_data{};
+		size_t temp_key_peptide_data{};
 		for (const auto itr_parse_csv_peptide_data : par_parse_csv_peptide_data) {
 			peptide_data temp_peptide_data{};
 			denovo_peptide temp_denovo_peptide{};
@@ -175,7 +179,9 @@ namespace fpf_data {
 			temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
 			temp_peptide_data.denovo_peptide_data = temp_denovo_peptide;
 			if (temp_denovo_peptide.localconfidence_average > DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD) {
+				temp_peptide_data.key_peptide_data = temp_key_peptide_data;
 				temp_v_peptide_data.push_back(temp_peptide_data);
+				++temp_key_peptide_data;
 			}
 		}
 		return temp_v_peptide_data;
@@ -183,8 +189,9 @@ namespace fpf_data {
 
 	vector<peptide_analysis> create_peptide_analysis(vector<peptide_data>& par_v_peptide_data) {
 		vector<peptide_analysis> temp_v_peptide_analysis{};
+		size_t temp_key_peptide_analysis{};
 		for (auto& itr_v_peptide_data : par_v_peptide_data) {
-			peptide_analysis temp_peptide_analysis{};
+			peptide_analysis temp_peptide_analysis{};			
 			auto& find_peptide_analysis = std::find_if(temp_v_peptide_analysis.begin(), temp_v_peptide_analysis.end(),
 				[itr_v_peptide_data](peptide_analysis par_peptide_analysis) {
 				return par_peptide_analysis.peptide_filtered == itr_v_peptide_data.peptide_filtered;
@@ -194,7 +201,9 @@ namespace fpf_data {
 				++temp_peptide_analysis.replicate_count;
 				temp_peptide_analysis.v_peptide_data.push_back(&itr_v_peptide_data);
 				temp_peptide_analysis.v_denovo_peptide_averagescore = itr_v_peptide_data.denovo_peptide_data.localconfidence_average;
+				temp_peptide_analysis.key_peptide_analysis = temp_key_peptide_analysis;
 				temp_v_peptide_analysis.push_back(temp_peptide_analysis);
+				++temp_key_peptide_analysis;
 			}
 			else {
 				++find_peptide_analysis->replicate_count;

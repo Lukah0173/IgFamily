@@ -40,6 +40,7 @@ namespace fpf_data_analysis {
 
 	void create_protein_analysis(sample_analysis& par_sample_analysis) {
 		protein_analysis temp_protein_analysis{};
+		size_t temp_key_protein_analysis{};
 		vector<protein_analysis> temp_v_protein_analysis{};
 		for (const auto itr_homology_data : par_sample_analysis.v_homology_data) {
 			if (itr_homology_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
@@ -55,7 +56,9 @@ namespace fpf_data_analysis {
 					temp_protein_analysis.p_protein_data = itr_homology_data.p_protein_data;
 					temp_protein_analysis.v_homology_data_combined_by_protein.push_back(itr_homology_data);
 					temp_protein_analysis.protein_score = temp_protein_score;
+					temp_protein_analysis.key_protein_analysis = temp_key_protein_analysis;
 					temp_v_protein_analysis.push_back(temp_protein_analysis);
+					++temp_key_protein_analysis;
 					temp_protein_analysis.v_homology_data_combined_by_protein.clear();
 				}
 			}
