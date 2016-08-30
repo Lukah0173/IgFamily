@@ -81,9 +81,9 @@ namespace fpf_core {
 	void core_multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n creating multinomial data frames...\n";
 		fpf_multinomial::create_filesystem_multinomial_data(par_sample_analysis);
-		fpf_multinomial::fout_multinomial(par_filesystem, par_sample_analysis);
-		fpf_multinomial::fout_multinomial_element(par_filesystem, par_sample_analysis);
-		fpf_multinomial::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
+		fpf_report::fout_multinomial(par_filesystem, par_sample_analysis);
+		fpf_report::fout_multinomial_element(par_filesystem, par_sample_analysis);
+		fpf_report::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
 	}
 
 	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {

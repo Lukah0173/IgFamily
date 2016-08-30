@@ -59,7 +59,7 @@ namespace fpf_data {
 		size_t key_peptide_analysis;
 		string peptide_filtered;
 		size_t replicate_count;
-		vector<peptide_data*> v_peptide_data; 
+		vector<peptide_data*> v_peptide_data;
 		denovo_peptide* p_denovo_peptide_best_by_averagelocalconfidence;
 		double v_denovo_peptide_averagescore;
 	};
@@ -109,6 +109,11 @@ namespace fpf_data {
 		double aminoacid_parameter_score;
 	};
 
+	struct multinomial_frequency_type {
+		string protein_data;
+		double multinomial_frequency;
+	};
+
 	struct multinomial {
 	public:
 		vector<string> v_protein_name;
@@ -147,38 +152,89 @@ namespace fpf_data {
 			denovo_aminoacid temp_denovo_aminoacid{};
 			string temp_peptide_filtered{};
 			size_t sw_peptide_filtered{};
-			for (auto j = size_t(); j < itr_parse_csv_peptide_data.csv_peptide.length(); ++j) {
-				if (itr_parse_csv_peptide_data.csv_peptide.at(j) == '(' || ((itr_parse_csv_peptide_data.csv_peptide.at(j) == '.') && (itr_parse_csv_peptide_data.csv_peptide.length() > 2))) {
+			for (auto i = size_t(); i < itr_parse_csv_peptide_data.csv_peptide.length(); ++i) {
+				if (itr_parse_csv_peptide_data.csv_peptide.at(i) == '(' || ((itr_parse_csv_peptide_data.csv_peptide.at(i) == '.') && (itr_parse_csv_peptide_data.csv_peptide.length() > 2))) {
 					sw_peptide_filtered = 1;
-					if (itr_parse_csv_peptide_data.csv_peptide.at(j + 1) == 's') {
+					if (itr_parse_csv_peptide_data.csv_peptide.at(i + 1) == 's') {
 						temp_peptide_filtered.pop_back();
-						temp_peptide_filtered += itr_parse_csv_peptide_data.csv_peptide.at(j + 5);
+						temp_peptide_filtered += itr_parse_csv_peptide_data.csv_peptide.at(i + 5);
 					}
 				}
 				if (sw_peptide_filtered == 0) {
-					temp_peptide_filtered += itr_parse_csv_peptide_data.csv_peptide.at(j);
+					temp_peptide_filtered += itr_parse_csv_peptide_data.csv_peptide.at(i);
 				}
-				if (itr_parse_csv_peptide_data.csv_peptide.at(j) == ')') {
+				if (itr_parse_csv_peptide_data.csv_peptide.at(i) == ')') {
 					sw_peptide_filtered = 0;
 				}
-				if ((itr_parse_csv_peptide_data.csv_peptide.at(j) == '.') && (itr_parse_csv_peptide_data.csv_peptide.length() <= 2) && (sw_peptide_filtered == 0)) {
+				if ((itr_parse_csv_peptide_data.csv_peptide.at(i) == '.') && (itr_parse_csv_peptide_data.csv_peptide.length() <= 2) && (sw_peptide_filtered == 0)) {
 					temp_peptide_filtered.clear();
 				}
 			}
 			temp_peptide_data.peptide_withmod = itr_parse_csv_peptide_data.csv_peptide;
 			temp_peptide_data.peptide_filtered = temp_peptide_filtered;
-			for (size_t i = 0; i < temp_peptide_filtered.size(); ++i) {
-				temp_denovo_aminoacid.aminoacid = temp_peptide_filtered[i];
-				temp_denovo_aminoacid.aminoacid_localconfidence = itr_parse_csv_peptide_data.v_csv_denovo_localconfidence[i];
+			for (auto j = 0; j < temp_peptide_filtered.size(); ++j) {
+				temp_denovo_aminoacid.aminoacid = temp_peptide_filtered[j];
+				temp_denovo_aminoacid.aminoacid_localconfidence = itr_parse_csv_peptide_data.v_csv_denovo_localconfidence[j];
 				temp_denovo_peptide.v_denovo_aminoacid.push_back(temp_denovo_aminoacid);
 			}
 			temp_denovo_peptide.localconfidence_average = double();
-			for (const auto itr_s_denovo_aminoacid : temp_denovo_peptide.v_denovo_aminoacid) {
-				temp_denovo_peptide.localconfidence_average += itr_s_denovo_aminoacid.aminoacid_localconfidence;
+			for (const auto itr_denovo_aminoacid : temp_denovo_peptide.v_denovo_aminoacid) {
+				temp_denovo_peptide.localconfidence_average += itr_denovo_aminoacid.aminoacid_localconfidence;
 			}
 			temp_denovo_peptide.localconfidence_average /= temp_denovo_peptide.v_denovo_aminoacid.size();
 			temp_peptide_data.denovo_peptide_data = temp_denovo_peptide;
-			if (temp_denovo_peptide.localconfidence_average > DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD) {
+			if (IgFamily::BLASTP_BY_SELECTED_PEPTIDE) {
+				string temp_peptide_selected{};
+				vector<string> temp_v_peptide_selected{};
+				denovo_peptide temp_denovo_peptide_2{};
+				vector<denovo_peptide> temp_v_denovo_peptide{};
+				vector<double> v_moving_value{};
+				for (auto j = 0; j < temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid.size(); ++j) {
+					v_moving_value.push_back(temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid[j].aminoacid_localconfidence);
+					if (v_moving_value.size() == 4) {
+						v_moving_value.erase(v_moving_value.begin());
+					}
+					double temp_moving_average{};
+					for (const auto& itr_v_moving_value : v_moving_value) {
+						temp_moving_average += itr_v_moving_value;
+					}
+					temp_moving_average /= v_moving_value.size();
+					if ((temp_moving_average < DENOVO_LOCAL_CONFIDENCE_THRESHOLD)
+						&& (temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid[j].aminoacid_localconfidence < DENOVO_LOCAL_CONFIDENCE_THRESHOLD)) {
+						if (temp_peptide_selected.size() > 5) {
+							temp_peptide_selected.pop_back();
+							temp_denovo_peptide_2.v_denovo_aminoacid.pop_back();
+							temp_v_peptide_selected.push_back(temp_peptide_selected);
+							temp_v_denovo_peptide.push_back(temp_denovo_peptide_2);
+						}
+						temp_peptide_selected.clear();
+						temp_denovo_peptide_2.v_denovo_aminoacid.clear();
+					}
+					else {
+						temp_peptide_selected += temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid[j].aminoacid;
+						temp_denovo_peptide_2.v_denovo_aminoacid.push_back(temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid[j]);
+					}
+					if (((j + 1) == temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid.size())
+						&& (temp_peptide_selected.size() > 5)) {
+						temp_v_peptide_selected.push_back(temp_peptide_selected);
+						temp_v_denovo_peptide.push_back(temp_denovo_peptide_2);
+					}
+				}
+				temp_peptide_selected = string();
+				for (auto j = 0; j < temp_v_peptide_selected.size(); ++j) {
+					if (temp_v_peptide_selected[j].size() > temp_peptide_selected.size()) {
+						temp_peptide_selected = temp_v_peptide_selected[j];
+						temp_v_denovo_peptide[j].localconfidence_average = double();
+						for (const auto itr_denovo_aminoacid : temp_v_denovo_peptide[j].v_denovo_aminoacid) {
+							temp_v_denovo_peptide[j].localconfidence_average += itr_denovo_aminoacid.aminoacid_localconfidence;
+						}
+						temp_v_denovo_peptide[j].localconfidence_average /= temp_v_denovo_peptide[j].v_denovo_aminoacid.size();
+						temp_peptide_data.denovo_peptide_data = temp_v_denovo_peptide[j];
+					}
+				}
+				temp_peptide_data.peptide_filtered = temp_peptide_selected;
+			}
+			if ((temp_denovo_peptide.localconfidence_average > DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD) && (temp_peptide_data.peptide_filtered != "")) {
 				temp_peptide_data.key_peptide_data = temp_key_peptide_data;
 				temp_v_peptide_data.push_back(temp_peptide_data);
 				++temp_key_peptide_data;
