@@ -66,16 +66,20 @@ namespace fpf_core {
 		std::cout << " ...homology file output\n";
 	}
 
-	void core_data_analysis(sample_analysis& par_sample_analysis) {
+	void core_data_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n scoring proteins...\n";
 		fpf_data_analysis::create_protein_analysis(par_sample_analysis);
+		std::cout << " ...proteins scored\n";
+		std::cout << "\n training protein scores...\n";
+		fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis);
+		fpf_report::fout_v_protein_analysis(par_filesystem, par_sample_analysis);
+		std::cout << " ...proteins scored\n";
 		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
 		fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
 		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			fpf_data_analysis::sort_v_homology_data_with_spectralcount(itr_v_protein_analysis.v_homology_data_combined_by_protein);
 		}
 		fpf_data_analysis::sort_v_protein_analysis(par_sample_analysis.v_protein_analysis);
-		std::cout << " ...proteins scored\n";
 	}
 
 	void core_multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {

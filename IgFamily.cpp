@@ -140,9 +140,9 @@ int main() {
 				std::cout << "\n ...data structures assigned";
 
 				fpf_core::core_homology_analysis(itr_v_filesystem, itr_v_sample_analysis, false);
-				fpf_core::core_data_analysis(itr_v_sample_analysis);
+				fpf_core::core_data_analysis(itr_v_filesystem, itr_v_sample_analysis);
 				fpf_core::core_homology_analysis(itr_v_filesystem, itr_v_sample_analysis, true);
-				fpf_core::core_data_analysis(itr_v_sample_analysis);
+				fpf_core::core_data_analysis(itr_v_filesystem, itr_v_sample_analysis);
 				fpf_core::core_multinomial(itr_v_filesystem, itr_v_sample_analysis);
 				if (itr_v_sample_analysis.PEAKS_database_exists) {
 					fpf_core::core_report(itr_v_filesystem, itr_v_sample_analysis);

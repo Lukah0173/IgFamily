@@ -199,8 +199,8 @@ namespace fpf_data {
 						temp_moving_average += itr_v_moving_value;
 					}
 					temp_moving_average /= v_moving_value.size();
-					if ((temp_moving_average < DENOVO_LOCAL_CONFIDENCE_THRESHOLD)
-						&& (temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid[j].aminoacid_localconfidence < DENOVO_LOCAL_CONFIDENCE_THRESHOLD)) {
+					if ((temp_moving_average < DENOVO_LOCAL_CONFIDENCE_MOVING_AVERAGE_THRESHOLD)
+						&& (temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid[j].aminoacid_localconfidence < DENOVO_LOCAL_CONFIDENCE_MOVING_AVERAGE_THRESHOLD)) {
 						if (temp_peptide_selected.size() > 5) {
 							temp_peptide_selected.pop_back();
 							temp_denovo_peptide_2.v_denovo_aminoacid.pop_back();

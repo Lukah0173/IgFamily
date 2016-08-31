@@ -53,6 +53,7 @@ namespace fpf_filesystem {
 		vector<protein_analysis> v_protein_analysis;
 		vector<protein_analysis> v_protein_analysis_selected_by_polymorphism;
 		multinomial multinomial_data;
+		double protein_analysis_score_mean;
 	};
 
 	struct filesystem {

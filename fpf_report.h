@@ -192,7 +192,7 @@ namespace fpf_report {
 		std::string output_multinomial_comparison = par_filesystem.directory + par_filesystem.filename + "_protein_score_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_multinomial_comparison;
 		fout_multinomial_comparison.open(output_multinomial_comparison);
-		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
+		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
 				fout_multinomial_comparison << itr_v_protein_analysis.p_protein_data->protein_name << ",";
 				fout_multinomial_comparison << itr_v_protein_analysis.protein_score << "\n";
@@ -237,7 +237,7 @@ namespace fpf_report {
 			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
 			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
 		}
-		for (const auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
+		for (const auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if ((par_alloutput) || (itr_protein_analysis.p_protein_data->protein_type == "IG")) {
 				if (itr_protein_analysis.protein_score > REPORT_SCORE_THRESHOLD) {
 					fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;

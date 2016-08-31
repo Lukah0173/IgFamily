@@ -18,6 +18,8 @@
 
 #include "fpf_data.h"
 #include "fpf_filesystem.h"
+#include "fpf_homology_analysis.h"
+#include "fpf_report.h"
 
 
 namespace fpf_data_analysis {
@@ -98,6 +100,31 @@ namespace fpf_data_analysis {
 
 	inline void sort_v_protein_analysis(vector<protein_analysis>& par_v_homology_data) {
 		std::sort(par_v_homology_data.begin(), par_v_homology_data.end(), predicate_protein_analysis);
+	}
+
+	void determine_protein_analysis_score_mean(sample_analysis& par_sample_analysis) {
+		double temp_protein_analysis_score_mean{};
+		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			temp_protein_analysis_score_mean += itr_protein_analysis.protein_score;
+		}
+		temp_protein_analysis_score_mean /= par_sample_analysis.v_protein_analysis.size();
+		par_sample_analysis.protein_analysis_score_mean = temp_protein_analysis_score_mean;
+	}
+
+	void train_homology_analysis_parameter_score(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+		determine_protein_analysis_score_mean(par_sample_analysis);
+		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
+				if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
+					itr_homology_analysis.blastp_evalue_transformed *= std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean), 0.4);
+				}
+			}
+		}
+		fpf_homology_analysis::determine_blastp_parameter_density(par_sample_analysis);
+		fpf_report::fout_v_protein_analysis(par_filesystem, par_sample_analysis);
+		create_protein_analysis(par_sample_analysis);
+		determine_protein_analysis_score_mean(par_sample_analysis);
+		fpf_report::fout_v_protein_analysis(par_filesystem, par_sample_analysis);
 	}
 
 	void create_proteinconstruct_from_denovo(sample_analysis& par_sample_analysis) {
