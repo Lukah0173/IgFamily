@@ -71,9 +71,12 @@ namespace fpf_core {
 		fpf_data_analysis::create_protein_analysis(par_sample_analysis);
 		std::cout << " ...proteins scored\n";
 		std::cout << "\n training protein scores...\n";
-		fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis);
-		fpf_report::fout_v_protein_analysis(par_filesystem, par_sample_analysis);
-		std::cout << " ...proteins scored\n";
+		for (auto i = 0; i < 3; ++i) {
+			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis);
+			std::cout << " ...iteration ";
+			std::cout << (i + 1);
+			std::cout << "\n";
+		}				
 		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
 		fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
 		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
