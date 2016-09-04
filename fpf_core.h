@@ -71,7 +71,7 @@ namespace fpf_core {
 		fpf_data_analysis::create_protein_analysis(par_sample_analysis);
 		std::cout << " ...proteins scored\n";
 		std::cout << "\n training protein scores...\n";
-		for (auto i = 0; i < 3; ++i) {
+		for (auto i = 0; i < 2; ++i) {
 			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis);
 			std::cout << " ...iteration ";
 			std::cout << (i + 1);

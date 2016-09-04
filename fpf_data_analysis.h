@@ -116,7 +116,7 @@ namespace fpf_data_analysis {
 		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
 				if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
-					itr_homology_analysis.blastp_evalue_transformed *= std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean), 0.35);
+					itr_homology_analysis.blastp_evalue_transformed *= std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean), IgFamily::MULTINOMIAL_CONJUGATION_FACTOR);
 				}
 			}
 		}
