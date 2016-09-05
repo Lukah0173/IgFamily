@@ -1,4 +1,4 @@
-// * * IgFamily v0.8.5 * * 
+// * * IgFamily v0.8.6 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -23,9 +23,12 @@
 #include "fpf_homology_analysis.h"
 #include "fpf_multinomial.h"
 #include "fpf_report.h"
+#include "fpf_utility.h"
 
 
 int main() {
+
+	//fpf_utility::fout_transcript_and_translation(fpf_utility::translate_transcript());
 
 	using std::string;
 	using std::vector;

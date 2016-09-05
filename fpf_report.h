@@ -236,6 +236,9 @@ namespace fpf_report {
 		if (IgFamily::FILESYSTEM_MODE) {
 			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
 			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
+			fout_html_report << "&nbsp&nbsp&nbspConjugation factor: " << std::fixed << std::setprecision(1) << IgFamily::MULTINOMIAL_CONJUGATION_FACTOR;
+			fout_html_report << std::fixed << std::setprecision(0) << " for " << IgFamily::MULTINOMIAL_CONJUGATION_ITERATION << " iterations";
+
 		}
 		for (const auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if ((par_alloutput) || (itr_protein_analysis.p_protein_data->protein_type == "IG")) {
