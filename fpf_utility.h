@@ -33,17 +33,23 @@ namespace fpf_utility {
 		string translation_sequence_3to5_frame_3;
 	};
 
-	string parse_transcript_data() {
+	vector<transcript> parse_transcript_data() {
+		vector<transcript> temp_v_transcript{};
+		transcript temp_transcript{};
 		string input_transcript_data = "transcript.txt";
 		std::ifstream fin_transcript_data(input_transcript_data);
 		char get_transcript_data{};
 		string transcript_sequence{};
 		while (fin_transcript_data.get(get_transcript_data)) {
+			if ((get_transcript_data == ',') || (fin_transcript_data.peek() == std::ifstream::traits_type::eof())) {
+				temp_transcript.transcript_sequence = transcript_sequence;
+				temp_v_transcript.push_back(temp_transcript);
+			}
 			if (get_transcript_data != '\n') {
 				transcript_sequence += get_transcript_data;
 			}
 		}
-		return transcript_sequence;
+		return temp_v_transcript;
 	}
 
 	void translate_read_codon(const string& par_codon, string& par_translation_sequence_frame) {
@@ -241,84 +247,85 @@ namespace fpf_utility {
 		}
 	}
 
-	transcript translate_transcript() {
-		transcript temp_transcript{};
-		temp_transcript.transcript_sequence = parse_transcript_data();;
-		size_t count_transcript_sequence{};
-		string transcript_codon_frame_1{};
-		string transcript_codon_frame_2{};
-		string transcript_codon_frame_3{};
-		string transcript_codon_reverseframe_1{};
-		string transcript_codon_reverseframe_2{};
-		string transcript_codon_reverseframe_3{};
-		for(const auto& itr_transcript_sequence : temp_transcript.transcript_sequence) {
-			++count_transcript_sequence;
-			transcript_codon_frame_1 += itr_transcript_sequence;
-			transcript_codon_frame_2 += itr_transcript_sequence;
-			transcript_codon_frame_3 += itr_transcript_sequence;
-			if(count_transcript_sequence % 3 == 0) { 
-				translate_read_codon(transcript_codon_frame_1, temp_transcript.translation_sequence_5to3_frame_1);
-				transcript_codon_frame_1.clear();
+	void translate_v_transcript(vector<transcript>& par_v_transcript) {
+		for (auto& itr_v_transcript : par_v_transcript) {
+			size_t count_transcript_sequence{};
+			string transcript_codon_frame_1{};
+			string transcript_codon_frame_2{};
+			string transcript_codon_frame_3{};
+			string transcript_codon_reverseframe_1{};
+			string transcript_codon_reverseframe_2{};
+			string transcript_codon_reverseframe_3{};
+			for (const auto& itr_transcript_sequence : itr_v_transcript.transcript_sequence) {
+				++count_transcript_sequence;
+				transcript_codon_frame_1 += itr_transcript_sequence;
+				transcript_codon_frame_2 += itr_transcript_sequence;
+				transcript_codon_frame_3 += itr_transcript_sequence;
+				if (count_transcript_sequence % 3 == 0) {
+					translate_read_codon(transcript_codon_frame_1, itr_v_transcript.translation_sequence_5to3_frame_1);
+					transcript_codon_frame_1.clear();
+				}
+				if (count_transcript_sequence % 3 == 1) {
+					translate_read_codon(transcript_codon_frame_2, itr_v_transcript.translation_sequence_5to3_frame_2);
+					transcript_codon_frame_2.clear();
+				}
+				if (count_transcript_sequence % 3 == 2) {
+					translate_read_codon(transcript_codon_frame_3, itr_v_transcript.translation_sequence_5to3_frame_3);
+					transcript_codon_frame_3.clear();
+				}
 			}
-			if (count_transcript_sequence % 3 == 1) {
-				translate_read_codon(transcript_codon_frame_2, temp_transcript.translation_sequence_5to3_frame_2);
-				transcript_codon_frame_2.clear();
-			}
-			if (count_transcript_sequence % 3 == 2) {
-				translate_read_codon(transcript_codon_frame_3, temp_transcript.translation_sequence_5to3_frame_3);
-				transcript_codon_frame_3.clear();
+			for (string::reverse_iterator& itr_transcript_sequence = itr_v_transcript.transcript_sequence.rbegin(); itr_transcript_sequence != itr_v_transcript.transcript_sequence.rend(); ++itr_transcript_sequence) {
+				++count_transcript_sequence;
+				if (*itr_transcript_sequence == 'A') {
+					transcript_codon_reverseframe_1 += 'T';
+					transcript_codon_reverseframe_2 += 'T';
+					transcript_codon_reverseframe_3 += 'T';
+				}
+				if (*itr_transcript_sequence == 'T') {
+					transcript_codon_reverseframe_1 += 'A';
+					transcript_codon_reverseframe_2 += 'A';
+					transcript_codon_reverseframe_3 += 'A';
+				}
+				if (*itr_transcript_sequence == 'G') {
+					transcript_codon_reverseframe_1 += 'C';
+					transcript_codon_reverseframe_2 += 'C';
+					transcript_codon_reverseframe_3 += 'C';
+				}
+				if (*itr_transcript_sequence == 'C') {
+					transcript_codon_reverseframe_1 += 'G';
+					transcript_codon_reverseframe_2 += 'G';
+					transcript_codon_reverseframe_3 += 'G';
+				}
+				if ((count_transcript_sequence + itr_v_transcript.transcript_sequence.size() + 2) % 3 == 0) {
+					translate_read_codon(transcript_codon_reverseframe_1, itr_v_transcript.translation_sequence_3to5_frame_1);
+					transcript_codon_reverseframe_1.clear();
+				}
+				if ((count_transcript_sequence + itr_v_transcript.transcript_sequence.size() + 2) % 3 == 1) {
+					translate_read_codon(transcript_codon_reverseframe_2, itr_v_transcript.translation_sequence_3to5_frame_2);
+					transcript_codon_reverseframe_2.clear();
+				}
+				if ((count_transcript_sequence + itr_v_transcript.transcript_sequence.size() + 2) % 3 == 2) {
+					translate_read_codon(transcript_codon_reverseframe_3, itr_v_transcript.translation_sequence_3to5_frame_3);
+					transcript_codon_reverseframe_3.clear();
+				}
 			}
 		}
-		for (string::reverse_iterator& itr_transcript_sequence = temp_transcript.transcript_sequence.rbegin(); itr_transcript_sequence != temp_transcript.transcript_sequence.rend(); ++itr_transcript_sequence) {
-			++count_transcript_sequence;
-			if (*itr_transcript_sequence == 'A') {
-				transcript_codon_reverseframe_1 += 'T';
-				transcript_codon_reverseframe_2 += 'T';
-				transcript_codon_reverseframe_3 += 'T';
-			}
-			if (*itr_transcript_sequence == 'T') {
-				transcript_codon_reverseframe_1 += 'A';
-				transcript_codon_reverseframe_2 += 'A';
-				transcript_codon_reverseframe_3 += 'A';
-			}
-			if (*itr_transcript_sequence == 'G') {
-				transcript_codon_reverseframe_1 += 'C';
-				transcript_codon_reverseframe_2 += 'C';
-				transcript_codon_reverseframe_3 += 'C';
-			}
-			if (*itr_transcript_sequence == 'C') {
-				transcript_codon_reverseframe_1 += 'G';
-				transcript_codon_reverseframe_2 += 'G';
-				transcript_codon_reverseframe_3 += 'G';
-			}
-			if ((count_transcript_sequence + temp_transcript.transcript_sequence.size() + 2) % 3 == 0) {
-				translate_read_codon(transcript_codon_reverseframe_1, temp_transcript.translation_sequence_3to5_frame_1);
-				transcript_codon_reverseframe_1.clear();
-			}
-			if ((count_transcript_sequence + temp_transcript.transcript_sequence.size() + 2) % 3 == 1) {
-				translate_read_codon(transcript_codon_reverseframe_2, temp_transcript.translation_sequence_3to5_frame_2);
-				transcript_codon_reverseframe_2.clear();
-			}
-			if ((count_transcript_sequence + temp_transcript.transcript_sequence.size() + 2) % 3 == 2) {
-				translate_read_codon(transcript_codon_reverseframe_3, temp_transcript.translation_sequence_3to5_frame_3);
-				transcript_codon_reverseframe_3.clear();
-			}
-		}
-		return temp_transcript;
 	}
 
-	void fout_transcript_and_translation (const transcript& par_transcript) {
+	void fout_transcript_and_translation(const vector<transcript>& par_v_transcript) {
 		std::string output_transcript = "transcript_and_translation.txt";
 		std::ofstream fout_transcript;
 		fout_transcript.open(output_transcript);
-		//fout_transcript << par_transcript.transcript_key;
-		fout_transcript << par_transcript.transcript_sequence << "\n\n";
-		fout_transcript << par_transcript.translation_sequence_5to3_frame_1 << "\n";
-		fout_transcript << par_transcript.translation_sequence_5to3_frame_2 << "\n";
-		fout_transcript << par_transcript.translation_sequence_5to3_frame_3 << "\n";
-		fout_transcript << par_transcript.translation_sequence_3to5_frame_1 << "\n";
-		fout_transcript << par_transcript.translation_sequence_3to5_frame_2 << "\n";
-		fout_transcript << par_transcript.translation_sequence_3to5_frame_3 << "\n";
+		for (const auto& itr_v_transcript : par_v_transcript) {
+			//fout_transcript << par_transcript.transcript_key;
+			fout_transcript << itr_v_transcript.transcript_sequence << "\n\n";
+			fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_1 << "\n";
+			fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_2 << "\n";
+			fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_3 << "\n";
+			fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_1 << "\n";
+			fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_2 << "\n";
+			fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_3 << "\n";
+		}
 	}
 }
 
