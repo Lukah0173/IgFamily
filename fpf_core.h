@@ -62,7 +62,7 @@ namespace fpf_core {
 		std::cout << "\n\n outputting homology summary for file ";
 		std::cout << par_filesystem.filename;;
 		std::cout << "...\n";
-		fpf_homology_analysis::fout_blastp_summary(par_filesystem, par_sample_analysis);
+		fpf_report::fout_blastp_summary(par_filesystem, par_sample_analysis);
 		std::cout << " ...homology file output\n";
 	}
 

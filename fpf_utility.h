@@ -29,6 +29,9 @@ namespace fpf_utility {
 		string translation_sequence_frame_1;
 		string translation_sequence_frame_2;
 		string translation_sequence_frame_3;
+		string translation_sequence_reverseframe_1;
+		string translation_sequence_reverseframe_2;
+		string translation_sequence_reverseframe_3;
 	};
 
 	string parse_transcript_data() {
@@ -246,12 +249,33 @@ namespace fpf_utility {
 		string transcript_codon_frame_1{};
 		string transcript_codon_frame_2{};
 		string transcript_codon_frame_3{};
+		string transcript_codon_reverseframe_1{};
+		string transcript_codon_reverseframe_2{};
+		string transcript_codon_reverseframe_3{};
 		for(const auto& itr_transcript_sequence : temp_transcript.transcript_sequence) {
 			++count_transcript_sequence;
 			transcript_codon_frame_1 += itr_transcript_sequence;
 			transcript_codon_frame_2 += itr_transcript_sequence;
 			transcript_codon_frame_3 += itr_transcript_sequence;
 			if(count_transcript_sequence % 3 == 0) { 
+				translate_read_codon(transcript_codon_frame_1, temp_transcript.translation_sequence_frame_1);
+				transcript_codon_frame_1.clear();
+			}
+			if (count_transcript_sequence % 3 == 1) {
+				translate_read_codon(transcript_codon_frame_2, temp_transcript.translation_sequence_frame_2);
+				transcript_codon_frame_2.clear();
+			}
+			if (count_transcript_sequence % 3 == 2) {
+				translate_read_codon(transcript_codon_frame_3, temp_transcript.translation_sequence_frame_3);
+				transcript_codon_frame_3.clear();
+			}
+		}
+		for (string::reverse_iterator& itr_transcript_sequence = temp_transcript.transcript_sequence.rbegin(); itr_transcript_sequence != temp_transcript.transcript_sequence.rend(); ++itr_transcript_sequence) {
+			++count_transcript_sequence;
+			transcript_codon_reverseframe_1 += *itr_transcript_sequence;
+			transcript_codon_reverseframe_2 += *itr_transcript_sequence;
+			transcript_codon_reverseframe_3 += *itr_transcript_sequence;
+			if (count_transcript_sequence % 3 == 0) {
 				translate_read_codon(transcript_codon_frame_1, temp_transcript.translation_sequence_frame_1);
 				transcript_codon_frame_1.clear();
 			}
@@ -276,6 +300,9 @@ namespace fpf_utility {
 		fout_transcript << par_transcript.translation_sequence_frame_1 << ",";
 		fout_transcript << par_transcript.translation_sequence_frame_2 << ",";
 		fout_transcript << par_transcript.translation_sequence_frame_3 << ",";
+		fout_transcript << par_transcript.translation_sequence_reverseframe_1 << ",";
+		fout_transcript << par_transcript.translation_sequence_reverseframe_2 << ",";
+		fout_transcript << par_transcript.translation_sequence_reverseframe_3 << ",";
 	}
 }
 

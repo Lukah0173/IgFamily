@@ -80,6 +80,49 @@ namespace fpf_report {
 		}
 	}
 
+	void fout_blastp_summary(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis) {
+		string output_blastp_summary = par_filesystem.directory + par_filesystem.filename;
+		output_blastp_summary += "_blastp_summary.csv";
+		std::ofstream fout_blastp_summary;
+		string output_blastp_summary_local = "blastp_summary_" + par_sample_analysis.peptide_assignment_method + ".csv";
+		std::ofstream fout_blastp_summary_local;
+		fout_blastp_summary.open(output_blastp_summary);
+		fout_blastp_summary << "subject,";
+		fout_blastp_summary << "query_accession,";
+		fout_blastp_summary << "e_value,";
+		fout_blastp_summary << "par_prop,";
+		fout_blastp_summary << "par_dens,";
+		fout_blastp_summary << "par_score,";
+		fout_blastp_summary << "\n";
+		for (auto itr_v_s_blastp : par_sample_analysis.v_homology_data) {
+			fout_blastp_summary << itr_v_s_blastp.blastp_query << ",";
+			fout_blastp_summary << itr_v_s_blastp.blastp_subject_accession << ",";
+			fout_blastp_summary << itr_v_s_blastp.blastp_evalue << ",";
+			fout_blastp_summary << itr_v_s_blastp.blastp_evalue_transformed << ",";
+			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_density << ",";
+			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_score << ",";
+			fout_blastp_summary << "\n";
+		}
+		fout_blastp_summary_local.open(output_blastp_summary_local);
+		fout_blastp_summary_local << "subject,";
+		fout_blastp_summary_local << "query_accession,";
+		fout_blastp_summary_local << "e_value,";
+		fout_blastp_summary_local << "par_prop,";
+		fout_blastp_summary_local << "par_dens,";
+		fout_blastp_summary_local << "par_score,";
+		fout_blastp_summary_local << "\n";
+		for (auto itr_v_s_blastp : par_sample_analysis.v_homology_data) {
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_query << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_subject_accession << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_evalue << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_evalue_transformed << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_parameter_density << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_parameter_score << ",";
+			fout_blastp_summary_local << "\n";
+		}
+		fout_blastp_summary_local.close();
+	}
+
 	void fout_multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		string output_multinomial = par_filesystem.directory + par_filesystem.filename + "_multinomial_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_multinomial;
