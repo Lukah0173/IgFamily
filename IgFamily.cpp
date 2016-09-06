@@ -1,4 +1,4 @@
-// * * IgFamily v0.8.6a * * 
+// * * IgFamily v0.8.7 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -28,7 +28,7 @@
 
 int main() {
 
-	//fpf_utility::fout_transcript_and_translation(fpf_utility::translate_transcript());
+	fpf_utility::fout_transcript_and_translation(fpf_utility::translate_transcript());
 
 	using std::string;
 	using std::vector;
