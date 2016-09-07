@@ -23,7 +23,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.8.7b";
+	const string version = "v0.8.8";
 
 	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
@@ -45,7 +45,7 @@ namespace IgFamily {
 
 	const string DEFAULT_MSCONVERT_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "msconvert\\";
 	const string DEFAULT_NOVOR_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "novor\\win\\";
-	const string DEFAULT_TRANSCRIPT_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "transcript_data\\transcript_directory.txt";
+	const string DEFAULT_TRANSCRIPT_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "transcript_data\\";
 	const string DEFAULT_INPUT_FASTA = "IGHV_IGLV_IGKV_CONT_20160827.fasta";
 	const string DEFAULT_PEPTIDE_ASSIGNMENT_METHOD = "PEAKS de novo";
 

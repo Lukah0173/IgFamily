@@ -42,12 +42,15 @@ namespace fpf_utility {
 	vector<string> parse_transcript_directory() {
 		vector<string> temp_v_transcript_directory{};
 		string temp_transcript_directory{};
-		string input_transcript_directory = IgFamily::DEFAULT_TRANSCRIPT_DIRECTORY;
+		string input_transcript_directory = IgFamily::DEFAULT_TRANSCRIPT_DIRECTORY + "transcript_directory.txt";
 		std::ifstream fin_transcript_directory(input_transcript_directory);
 		char get_transcript_directory{};
 		while (fin_transcript_directory.get(get_transcript_directory)) {
-			temp_transcript_directory += get_transcript_directory;
+			if ((get_transcript_directory != ',') && (get_transcript_directory != '\n')) {
+				temp_transcript_directory += get_transcript_directory;
+			}
 			if (get_transcript_directory == ',') {
+				temp_transcript_directory = IgFamily::DEFAULT_TRANSCRIPT_DIRECTORY + temp_transcript_directory;
 				temp_v_transcript_directory.push_back(temp_transcript_directory);
 				temp_transcript_directory.clear();
 			}
@@ -59,11 +62,11 @@ namespace fpf_utility {
 		vector<sample_transcript_and_translation> temp_v_transcript_and_translation{};
 		sample_transcript_and_translation temp_transcript_and_translation{};
 		vector<string> v_transcript_directory = parse_transcript_directory();
+		size_t count_transcript{};
 		for (const auto& itr_v_transcript_directory : v_transcript_directory) {
 			vector<transcript> temp_v_transcript{};
 			transcript temp_transcript{};
-			string input_transcript_data = "transcript.txt";
-			std::ifstream fin_transcript_data(input_transcript_data);
+			std::ifstream fin_transcript_data(itr_v_transcript_directory);
 			char get_transcript_data{};
 			string transcript_sequence{};
 			bool ignore_header{};
@@ -80,6 +83,11 @@ namespace fpf_utility {
 						temp_transcript.transcript_sequence = transcript_sequence;
 						temp_v_transcript.push_back(temp_transcript);
 						read_transcript = true;
+						transcript_sequence.clear();
+						++count_transcript;
+						if (count_transcript % 100 == 0) {
+							std::cout << "\n transcripts parsed: " << count_transcript;
+						}
 					}
 					if (get_transcript_data != '\n') {
 						transcript_sequence += get_transcript_data;
@@ -287,85 +295,94 @@ namespace fpf_utility {
 		}
 	}
 
-	void translate_v_transcript(sample_transcript_and_translation& par_sample_transcript_and_translation) {
-		for (auto& itr_v_transcript : par_sample_transcript_and_translation.sample_v_transcript) {
-			size_t count_transcript_sequence{};
-			string transcript_codon_frame_1{};
-			string transcript_codon_frame_2{};
-			string transcript_codon_frame_3{};
-			string transcript_codon_reverseframe_1{};
-			string transcript_codon_reverseframe_2{};
-			string transcript_codon_reverseframe_3{};
-			for (const auto& itr_transcript_sequence : itr_v_transcript.transcript_sequence) {
-				++count_transcript_sequence;
-				transcript_codon_frame_1 += itr_transcript_sequence;
-				transcript_codon_frame_2 += itr_transcript_sequence;
-				transcript_codon_frame_3 += itr_transcript_sequence;
-				if (count_transcript_sequence % 3 == 0) {
-					translate_read_codon(transcript_codon_frame_1, itr_v_transcript.translation_sequence_5to3_frame_1);
-					transcript_codon_frame_1.clear();
+	void translate_v_transcript(vector<sample_transcript_and_translation>& par_v_sample_transcript_and_translation) {
+		size_t count_translation{};
+		for (auto& itr_v_sample_transcript_and_translation : par_v_sample_transcript_and_translation) {
+			for (auto& itr_v_transcript : itr_v_sample_transcript_and_translation.sample_v_transcript) {
+				size_t count_transcript_sequence{};
+				string transcript_codon_frame_1{};
+				string transcript_codon_frame_2{};
+				string transcript_codon_frame_3{};
+				string transcript_codon_reverseframe_1{};
+				string transcript_codon_reverseframe_2{};
+				string transcript_codon_reverseframe_3{};
+				for (const auto& itr_transcript_sequence : itr_v_transcript.transcript_sequence) {
+					++count_transcript_sequence;
+					transcript_codon_frame_1 += itr_transcript_sequence;
+					transcript_codon_frame_2 += itr_transcript_sequence;
+					transcript_codon_frame_3 += itr_transcript_sequence;
+					if (count_transcript_sequence % 3 == 0) {
+						translate_read_codon(transcript_codon_frame_1, itr_v_transcript.translation_sequence_5to3_frame_1);
+						transcript_codon_frame_1.clear();
+					}
+					if (count_transcript_sequence % 3 == 1) {
+						translate_read_codon(transcript_codon_frame_2, itr_v_transcript.translation_sequence_5to3_frame_2);
+						transcript_codon_frame_2.clear();
+					}
+					if (count_transcript_sequence % 3 == 2) {
+						translate_read_codon(transcript_codon_frame_3, itr_v_transcript.translation_sequence_5to3_frame_3);
+						transcript_codon_frame_3.clear();
+					}
 				}
-				if (count_transcript_sequence % 3 == 1) {
-					translate_read_codon(transcript_codon_frame_2, itr_v_transcript.translation_sequence_5to3_frame_2);
-					transcript_codon_frame_2.clear();
+				for (string::reverse_iterator& itr_transcript_sequence = itr_v_transcript.transcript_sequence.rbegin(); itr_transcript_sequence != itr_v_transcript.transcript_sequence.rend(); ++itr_transcript_sequence) {
+					++count_transcript_sequence;
+					if (*itr_transcript_sequence == 'A') {
+						transcript_codon_reverseframe_1 += 'T';
+						transcript_codon_reverseframe_2 += 'T';
+						transcript_codon_reverseframe_3 += 'T';
+					}
+					if (*itr_transcript_sequence == 'T') {
+						transcript_codon_reverseframe_1 += 'A';
+						transcript_codon_reverseframe_2 += 'A';
+						transcript_codon_reverseframe_3 += 'A';
+					}
+					if (*itr_transcript_sequence == 'G') {
+						transcript_codon_reverseframe_1 += 'C';
+						transcript_codon_reverseframe_2 += 'C';
+						transcript_codon_reverseframe_3 += 'C';
+					}
+					if (*itr_transcript_sequence == 'C') {
+						transcript_codon_reverseframe_1 += 'G';
+						transcript_codon_reverseframe_2 += 'G';
+						transcript_codon_reverseframe_3 += 'G';
+					}
+					if ((count_transcript_sequence + itr_v_transcript.transcript_sequence.size() + 2) % 3 == 0) {
+						translate_read_codon(transcript_codon_reverseframe_1, itr_v_transcript.translation_sequence_3to5_frame_1);
+						transcript_codon_reverseframe_1.clear();
+					}
+					if ((count_transcript_sequence + itr_v_transcript.transcript_sequence.size() + 2) % 3 == 1) {
+						translate_read_codon(transcript_codon_reverseframe_2, itr_v_transcript.translation_sequence_3to5_frame_2);
+						transcript_codon_reverseframe_2.clear();
+					}
+					if ((count_transcript_sequence + itr_v_transcript.transcript_sequence.size() + 2) % 3 == 2) {
+						translate_read_codon(transcript_codon_reverseframe_3, itr_v_transcript.translation_sequence_3to5_frame_3);
+						transcript_codon_reverseframe_3.clear();
+					}
 				}
-				if (count_transcript_sequence % 3 == 2) {
-					translate_read_codon(transcript_codon_frame_3, itr_v_transcript.translation_sequence_5to3_frame_3);
-					transcript_codon_frame_3.clear();
-				}
-			}
-			for (string::reverse_iterator& itr_transcript_sequence = itr_v_transcript.transcript_sequence.rbegin(); itr_transcript_sequence != itr_v_transcript.transcript_sequence.rend(); ++itr_transcript_sequence) {
-				++count_transcript_sequence;
-				if (*itr_transcript_sequence == 'A') {
-					transcript_codon_reverseframe_1 += 'T';
-					transcript_codon_reverseframe_2 += 'T';
-					transcript_codon_reverseframe_3 += 'T';
-				}
-				if (*itr_transcript_sequence == 'T') {
-					transcript_codon_reverseframe_1 += 'A';
-					transcript_codon_reverseframe_2 += 'A';
-					transcript_codon_reverseframe_3 += 'A';
-				}
-				if (*itr_transcript_sequence == 'G') {
-					transcript_codon_reverseframe_1 += 'C';
-					transcript_codon_reverseframe_2 += 'C';
-					transcript_codon_reverseframe_3 += 'C';
-				}
-				if (*itr_transcript_sequence == 'C') {
-					transcript_codon_reverseframe_1 += 'G';
-					transcript_codon_reverseframe_2 += 'G';
-					transcript_codon_reverseframe_3 += 'G';
-				}
-				if ((count_transcript_sequence + itr_v_transcript.transcript_sequence.size() + 2) % 3 == 0) {
-					translate_read_codon(transcript_codon_reverseframe_1, itr_v_transcript.translation_sequence_3to5_frame_1);
-					transcript_codon_reverseframe_1.clear();
-				}
-				if ((count_transcript_sequence + itr_v_transcript.transcript_sequence.size() + 2) % 3 == 1) {
-					translate_read_codon(transcript_codon_reverseframe_2, itr_v_transcript.translation_sequence_3to5_frame_2);
-					transcript_codon_reverseframe_2.clear();
-				}
-				if ((count_transcript_sequence + itr_v_transcript.transcript_sequence.size() + 2) % 3 == 2) {
-					translate_read_codon(transcript_codon_reverseframe_3, itr_v_transcript.translation_sequence_3to5_frame_3);
-					transcript_codon_reverseframe_3.clear();
+				++count_translation;
+				if (count_translation % 100 == 0) {
+					std::cout << "\n transcripts translated: " << count_translation;
 				}
 			}
 		}
 	}
 
-	void fout_transcript_and_translation(const sample_transcript_and_translation& par_sample_transcript_and_translation) {
-		std::string output_transcript = "transcript_and_translation.txt";
-		std::ofstream fout_transcript;
-		fout_transcript.open(output_transcript);
-		for (const auto& itr_v_transcript : par_sample_transcript_and_translation.sample_v_transcript) {
-			//fout_transcript << par_transcript.transcript_key;
-			fout_transcript << itr_v_transcript.transcript_sequence << "\n\n";
-			fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_1 << "\n";
-			fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_2 << "\n";
-			fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_3 << "\n";
-			fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_1 << "\n";
-			fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_2 << "\n";
-			fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_3 << "\n";
-			fout_transcript << "\n\n";
+	void fout_transcript_and_translation(const vector<sample_transcript_and_translation>& par_v_sample_transcript_and_translation) {
+		for (auto& itr_v_sample_transcript_and_translation : par_v_sample_transcript_and_translation) {
+			std::string output_transcript = "transcript_and_translation.txt";
+			std::ofstream fout_transcript;
+			fout_transcript.open(output_transcript);
+			for (const auto& itr_v_transcript : itr_v_sample_transcript_and_translation.sample_v_transcript) {
+				//fout_transcript << par_transcript.transcript_key;
+				fout_transcript << itr_v_transcript.transcript_sequence << "\n\n";
+				fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_1 << "\n";
+				fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_2 << "\n";
+				fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_3 << "\n";
+				fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_1 << "\n";
+				fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_2 << "\n";
+				fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_3 << "\n";
+				fout_transcript << "\n\n";
+			}
 		}
 	}
 }
