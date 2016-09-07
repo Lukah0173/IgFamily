@@ -23,7 +23,7 @@ namespace fpf_utility {
 
 	struct transcript {
 	public: 
-		size_t transcript_key;
+		size_t key_transcript;
 		string transcript_sequence;
 		string translation_sequence_5to3_frame_1;
 		string translation_sequence_5to3_frame_2;
@@ -33,23 +33,63 @@ namespace fpf_utility {
 		string translation_sequence_3to5_frame_3;
 	};
 
-	vector<transcript> parse_transcript_data() {
-		vector<transcript> temp_v_transcript{};
-		transcript temp_transcript{};
-		string input_transcript_data = "transcript.txt";
-		std::ifstream fin_transcript_data(input_transcript_data);
-		char get_transcript_data{};
-		string transcript_sequence{};
-		while (fin_transcript_data.get(get_transcript_data)) {
-			if ((get_transcript_data == ',') || (fin_transcript_data.peek() == std::ifstream::traits_type::eof())) {
-				temp_transcript.transcript_sequence = transcript_sequence;
-				temp_v_transcript.push_back(temp_transcript);
-			}
-			if (get_transcript_data != '\n') {
-				transcript_sequence += get_transcript_data;
+	struct sample_transcript_and_translation {
+	public:
+		size_t key_sample;
+		vector<transcript> sample_v_transcript;
+	};
+
+	vector<string> parse_transcript_directory() {
+		vector<string> temp_v_transcript_directory{};
+		string temp_transcript_directory{};
+		string input_transcript_directory = IgFamily::DEFAULT_TRANSCRIPT_DIRECTORY;
+		std::ifstream fin_transcript_directory(input_transcript_directory);
+		char get_transcript_directory{};
+		while (fin_transcript_directory.get(get_transcript_directory)) {
+			temp_transcript_directory += get_transcript_directory;
+			if (get_transcript_directory == ',') {
+				temp_v_transcript_directory.push_back(temp_transcript_directory);
+				temp_transcript_directory.clear();
 			}
 		}
-		return temp_v_transcript;
+		return temp_v_transcript_directory;
+	}
+
+	vector<sample_transcript_and_translation> parse_transcript_data() {
+		vector<sample_transcript_and_translation> temp_v_transcript_and_translation{};
+		sample_transcript_and_translation temp_transcript_and_translation{};
+		vector<string> v_transcript_directory = parse_transcript_directory();
+		for (const auto& itr_v_transcript_directory : v_transcript_directory) {
+			vector<transcript> temp_v_transcript{};
+			transcript temp_transcript{};
+			string input_transcript_data = "transcript.txt";
+			std::ifstream fin_transcript_data(input_transcript_data);
+			char get_transcript_data{};
+			string transcript_sequence{};
+			bool ignore_header{};
+			bool read_transcript{};
+			while (fin_transcript_data.get(get_transcript_data)) {
+				if (get_transcript_data == '\n') {
+					if (!ignore_header) {
+						ignore_header = true;
+					}
+					read_transcript = false;
+				}
+				if (ignore_header && !read_transcript) {
+					if (get_transcript_data == ' ') {
+						temp_transcript.transcript_sequence = transcript_sequence;
+						temp_v_transcript.push_back(temp_transcript);
+						read_transcript = true;
+					}
+					if (get_transcript_data != '\n') {
+						transcript_sequence += get_transcript_data;
+					}
+				}
+			}
+			temp_transcript_and_translation.sample_v_transcript = temp_v_transcript;
+			temp_v_transcript_and_translation.push_back(temp_transcript_and_translation);
+		}
+		return temp_v_transcript_and_translation;
 	}
 
 	void translate_read_codon(const string& par_codon, string& par_translation_sequence_frame) {
@@ -247,8 +287,8 @@ namespace fpf_utility {
 		}
 	}
 
-	void translate_v_transcript(vector<transcript>& par_v_transcript) {
-		for (auto& itr_v_transcript : par_v_transcript) {
+	void translate_v_transcript(sample_transcript_and_translation& par_sample_transcript_and_translation) {
+		for (auto& itr_v_transcript : par_sample_transcript_and_translation.sample_v_transcript) {
 			size_t count_transcript_sequence{};
 			string transcript_codon_frame_1{};
 			string transcript_codon_frame_2{};
@@ -312,11 +352,11 @@ namespace fpf_utility {
 		}
 	}
 
-	void fout_transcript_and_translation(const vector<transcript>& par_v_transcript) {
+	void fout_transcript_and_translation(const sample_transcript_and_translation& par_sample_transcript_and_translation) {
 		std::string output_transcript = "transcript_and_translation.txt";
 		std::ofstream fout_transcript;
 		fout_transcript.open(output_transcript);
-		for (const auto& itr_v_transcript : par_v_transcript) {
+		for (const auto& itr_v_transcript : par_sample_transcript_and_translation.sample_v_transcript) {
 			//fout_transcript << par_transcript.transcript_key;
 			fout_transcript << itr_v_transcript.transcript_sequence << "\n\n";
 			fout_transcript << itr_v_transcript.translation_sequence_5to3_frame_1 << "\n";
@@ -325,6 +365,7 @@ namespace fpf_utility {
 			fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_1 << "\n";
 			fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_2 << "\n";
 			fout_transcript << itr_v_transcript.translation_sequence_3to5_frame_3 << "\n";
+			fout_transcript << "\n\n";
 		}
 	}
 }

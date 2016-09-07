@@ -23,7 +23,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.8.7a";
+	const string version = "v0.8.7b";
 
 	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
@@ -34,11 +34,18 @@ namespace IgFamily {
 	const bool BLASTP_BY_SELECTED_PEPTIDE = 1;
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_4.txt";
+
 	const string DEFAULT_IGFAMILY_DIRECTORY = "Z:\\Lukah_Dykes\\IgFamily\\";
 	const string DEFAULT_INPUT_FASTA_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\";
 	const string DEFAULT_BLASTP_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "blast_directory\\";
+
+	//const string DEFAULT_IGFAMILY_DIRECTORY = "";
+	//const string DEFAULT_INPUT_FASTA_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\";
+	//const string DEFAULT_BLASTP_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "blast_directory\\";
+
 	const string DEFAULT_MSCONVERT_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "msconvert\\";
 	const string DEFAULT_NOVOR_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "novor\\win\\";
+	const string DEFAULT_TRANSCRIPT_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "transcript_data\\transcript_directory.txt";
 	const string DEFAULT_INPUT_FASTA = "IGHV_IGLV_IGKV_CONT_20160827.fasta";
 	const string DEFAULT_PEPTIDE_ASSIGNMENT_METHOD = "PEAKS de novo";
 
@@ -48,8 +55,8 @@ namespace IgFamily {
 	const double BLASTP_EVALUE_THRESHOLD = 20;
 	const double BLASTP_PARPROP_SCALE = BLASTP_EVALUE_THRESHOLD;
 	const double BLASTP_EVALUETRANSFORMED_THRESHOLD = 10;
-	const double MULTINOMIAL_CONJUGATION_FACTOR = 0.3;
-	const double MULTINOMIAL_CONJUGATION_ITERATION = 3;
+	const double MULTINOMIAL_CONJUGATION_FACTOR = 0.5;
+	const double MULTINOMIAL_CONJUGATION_ITERATION = 2;
 	const double MULTINOMIAL_ELEMENT_OUTPUT_THRESHOLD = 0.1;
 	const double REPORT_SCORE_THRESHOLD = 5;
 	const double REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD = 0.1;
