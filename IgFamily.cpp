@@ -1,4 +1,4 @@
-// * * IgFamily v0.8.8 * * 
+// * * IgFamily v0.8.9 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -31,9 +31,9 @@ int main() {
 	using std::string;
 	using std::vector;
 
-	vector<fpf_utility::sample_transcript_and_translation> main_v_sample_transcript_and_translation = fpf_utility::parse_transcript_data();
-	fpf_utility::translate_v_transcript(main_v_sample_transcript_and_translation);
-	fpf_utility::fout_transcript_and_translation(main_v_sample_transcript_and_translation);
+	//vector<fpf_utility::sample_transcript_and_translation> main_v_sample_transcript_and_translation = fpf_utility::parse_transcript_data();
+	//fpf_utility::translate_v_transcript(main_v_sample_transcript_and_translation);
+	//fpf_utility::fout_transcript_and_translation(main_v_sample_transcript_and_translation);
 
 	std::cout << "\n -- IgFamily " << IgFamily::version << " --\n";
 

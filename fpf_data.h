@@ -62,6 +62,7 @@ namespace fpf_data {
 		vector<peptide_data*> v_peptide_data;
 		denovo_peptide* p_denovo_peptide_best_by_averagelocalconfidence;
 		double v_denovo_peptide_averagescore;
+		bool is_IG;
 	};
 
 	struct protein_data {
