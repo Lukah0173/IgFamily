@@ -23,7 +23,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.8.9c";
+	const string version = "v0.8.9d";
 
 	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
@@ -35,7 +35,7 @@ namespace IgFamily {
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_7.txt";
 
-	const string DEFAULT_IGFAMILY_DIRECTORY = "Z:\\Lukah_Dykes\\IgFamily\\";
+	const string DEFAULT_IGFAMILY_DIRECTORY = "C:\\Users\\LJ\\IgFamily\\";
 	const string DEFAULT_INPUT_FASTA_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\";
 	const string DEFAULT_BLASTP_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "blast_directory\\";
 	//const string DEFAULT_IGFAMILY_DIRECTORY = "";
@@ -67,9 +67,9 @@ namespace IgFamily {
 
 
 	int brute_calc(int i) {
-		std::vector<int> v(1000000);
+		std::vector<int> v(1000);
 		std::iota(v.begin(), v.end(), 0);
-		if (std::find(v.begin(), v.end(), 999999) == v.end()) {
+		if (std::find(v.begin(), v.end(), 500) == v.end()) {
 			i = -i;
 		}
 		return (i);
@@ -78,7 +78,7 @@ namespace IgFamily {
 	void async_test() {
 		std::vector<std::future<int>> test_future{};
 
-		for (auto i = 1; i < 50000; ++i) {
+		for (auto i = 1; i < 5000000; ++i) {
 			test_future.push_back(std::async(brute_calc, i));
 		}
 

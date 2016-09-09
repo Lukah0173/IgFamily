@@ -298,6 +298,17 @@ namespace fpf_homology_analysis {
 			itr_v_homology_data.blastp_parameter_score = (itr_v_homology_data.blastp_parameter_density * itr_v_homology_data.blastp_evalue_transformed * (itr_v_homology_data.p_peptide_analysis->v_denovo_peptide_averagescore / 100));
 		}
 	}
+
+	void determine_if_IG(sample_analysis& par_sample_analysis) {
+		vector<string> v_query_tested{};
+		vector<string> v_query_current_referenced{};
+		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
+			std::cout << "\n ";
+			std::cout << itr_v_homology_data.blastp_query;
+			std::cout << "   ";
+			std::cout << itr_v_homology_data.blastp_parameter_density;
+		}
+	}
 }
 
 #endif

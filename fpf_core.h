@@ -58,6 +58,7 @@ namespace fpf_core {
 		fpf_homology_analysis::create_query_alignment(par_sample_analysis);
 		fpf_homology_analysis::transform_homology_data(par_sample_analysis);
 		fpf_homology_analysis::determine_blastp_parameter_density(par_sample_analysis);
+		fpf_homology_analysis::determine_if_IG(par_sample_analysis);
 		std::cout << " ...homology data structures assigned";
 		std::cout << "\n\n outputting homology summary for file ";
 		std::cout << par_filesystem.filename;;

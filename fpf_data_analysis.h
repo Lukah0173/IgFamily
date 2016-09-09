@@ -117,7 +117,7 @@ namespace fpf_data_analysis {
 
 	void train_homology_analysis_parameter_score(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		if (IgFamily::POLYMORPHISM_SELECTED) {
-			std::cout << "\n training protein scores...\n";
+			std::cout << "\n training protein scores...\n\n";
 			size_t count_selected_genefamilies{};
 			size_t count_iterations{};
 			for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
@@ -137,7 +137,7 @@ namespace fpf_data_analysis {
 					}
 				}
 				++count_iterations;
-				std::cout << "\n ...iteration ";
+				std::cout << " ...iteration ";
 				std::cout << count_iterations;
 				count_selected_genefamilies = 0;
 				for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
@@ -147,7 +147,7 @@ namespace fpf_data_analysis {
 				}
 				std::cout << " with ";
 				std::cout << count_selected_genefamilies;
-				std::cout << " gene families ";
+				std::cout << " gene families\n";
 				if (count_selected_genefamilies < 50) {
 					IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = 0.05;
 				}
