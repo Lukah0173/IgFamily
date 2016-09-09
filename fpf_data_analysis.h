@@ -125,7 +125,7 @@ namespace fpf_data_analysis {
 					++count_selected_genefamilies;
 				}
 			}
-			while (count_selected_genefamilies > 10) {
+			while (count_selected_genefamilies > IgFamily::SELECT_N_MANY_GENE_FAMILIES) {
 				determine_protein_analysis_score_mean(par_sample_analysis);
 				for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 					if ((itr_protein_analysis.p_protein_data->protein_type == "IG") && (IgFamily::REPORT_SCORE_THRESHOLD)) {

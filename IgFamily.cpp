@@ -1,4 +1,4 @@
-// * * IgFamily v0.8.9a * * 
+// * * IgFamily v0.8.9b * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 

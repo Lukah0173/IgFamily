@@ -23,7 +23,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.8.9a";
+	const string version = "v0.8.9b";
 
 	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
@@ -55,6 +55,7 @@ namespace IgFamily {
 	const double BLASTP_EVALUE_THRESHOLD = 20;
 	const double BLASTP_PARPROP_SCALE = BLASTP_EVALUE_THRESHOLD;
 	const double BLASTP_EVALUETRANSFORMED_THRESHOLD = 10;
+	const double SELECT_N_MANY_GENE_FAMILIES = 10;
 	const double MULTINOMIAL_ELEMENT_OUTPUT_THRESHOLD = 0.1;
 	const double REPORT_SCORE_THRESHOLD = 10;
 	const double REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD = 0.1;
