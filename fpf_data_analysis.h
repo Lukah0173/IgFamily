@@ -121,14 +121,14 @@ namespace fpf_data_analysis {
 			size_t count_selected_genefamilies{};
 			size_t count_iterations{};
 			for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-				if ((itr_v_protein_analysis.p_protein_data->protein_type == "IG") && (itr_v_protein_analysis.protein_score > IgFamily::REPORT_SCORE_THRESHOLD)) {
+				if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score > IgFamily::REPORT_SCORE_THRESHOLD)) {
 					++count_selected_genefamilies;
 				}
 			}
 			while (count_selected_genefamilies > IgFamily::SELECT_N_MANY_GENE_FAMILIES) {
 				determine_protein_analysis_score_mean(par_sample_analysis);
 				for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
-					if ((itr_protein_analysis.p_protein_data->protein_type == "IG") && (IgFamily::REPORT_SCORE_THRESHOLD)) {
+					if ((itr_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (IgFamily::REPORT_SCORE_THRESHOLD)) {
 						for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
 							if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
 								itr_homology_analysis.blastp_evalue_transformed *= std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean), IgFamily::MULTINOMIAL_CONJUGATION_FACTOR);
@@ -141,7 +141,7 @@ namespace fpf_data_analysis {
 				std::cout << count_iterations;
 				count_selected_genefamilies = 0;
 				for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-					if ((itr_v_protein_analysis.p_protein_data->protein_type == "IG") && (itr_v_protein_analysis.protein_score > IgFamily::REPORT_SCORE_THRESHOLD)) {
+					if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score > IgFamily::REPORT_SCORE_THRESHOLD)) {
 						++count_selected_genefamilies;
 					}
 				}
