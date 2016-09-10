@@ -98,7 +98,7 @@ namespace fpf_report {
 			fout_blastp_summary << itr_v_s_blastp.blastp_query << ",";
 			fout_blastp_summary << itr_v_s_blastp.blastp_subject_accession << ",";
 			fout_blastp_summary << itr_v_s_blastp.blastp_evalue << ",";
-			fout_blastp_summary << itr_v_s_blastp.blastp_evalue_transformed << ",";
+			fout_blastp_summary << itr_v_s_blastp.blastp_evalue_transformed_conjugated << ",";
 			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_density << ",";
 			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_score << ",";
 			fout_blastp_summary << "\n";
@@ -115,7 +115,7 @@ namespace fpf_report {
 			fout_blastp_summary_local << itr_v_s_blastp.blastp_query << ",";
 			fout_blastp_summary_local << itr_v_s_blastp.blastp_subject_accession << ",";
 			fout_blastp_summary_local << itr_v_s_blastp.blastp_evalue << ",";
-			fout_blastp_summary_local << itr_v_s_blastp.blastp_evalue_transformed << ",";
+			fout_blastp_summary_local << itr_v_s_blastp.blastp_evalue_transformed_conjugated << ",";
 			fout_blastp_summary_local << itr_v_s_blastp.blastp_parameter_density << ",";
 			fout_blastp_summary_local << itr_v_s_blastp.blastp_parameter_score << ",";
 			fout_blastp_summary_local << "\n";
@@ -359,22 +359,22 @@ namespace fpf_report {
 						}
 						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_html_report << "Total";
-						fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_html_report << "Spec";
 						fout_html_report << "&nbsp&nbsp";
-						fout_html_report << "Score";
-						fout_html_report << "&nbsp&nbsp&nbsp";
+						//fout_html_report << "Score";
+						//fout_html_report << "&nbsp&nbsp&nbsp";
 						fout_html_report << "Homo";
 						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_html_report << "Dist";
-						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
-						fout_html_report << "DN&nbspconf";
-						fout_html_report << "&nbsp&nbsp";
-						fout_html_report << "DN&nbspconf&nbspavr";
+						//fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+						//fout_html_report << "DN&nbspconf";
+						//fout_html_report << "&nbsp&nbsp";
+						//fout_html_report << "DN&nbspconf&nbspavr";
 						fout_html_report << "<br>";
 						for (const auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
-							if (itr_homology_data.blastp_evalue_transformed > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
-								if ((itr_homology_data.blastp_parameter_score > REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD)
+							if (itr_homology_data.blastp_evalue_transformed > IgFamily::REPORT_QUERY_EVALUETRANSFORMED_THRESHOLD) {
+								if ((itr_homology_data.blastp_parameter_score > IgFamily::REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD)
 									&& ((itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count) > REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD)) {
 									fout_html_report << "\n<br> ";
 									int st_mismatch = int();
@@ -416,10 +416,10 @@ namespace fpf_report {
 									}
 									fout_html_report << std::fixed << std::setprecision(2) << (itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count);
 									if ((itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count) < 1) {
-										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 									}
 									else {
-										for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count))); ++j) {
+										for (auto j = 0; j < (10 - std::floor(std::log10(itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count))); ++j) {
 											fout_html_report << "&nbsp";
 										}
 									}
@@ -432,15 +432,15 @@ namespace fpf_report {
 											fout_html_report << "&nbsp";
 										}
 									}
-									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.blastp_parameter_score;
-									if (itr_homology_data.blastp_parameter_score < 1) {
-										fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
-									}
-									else {
-										for (auto j = 0; j < (4 - std::floor(std::log10(itr_homology_data.blastp_parameter_score))); ++j) {
-											fout_html_report << "&nbsp";
-										}
-									}
+									//fout_html_report << std::fixed << std::setprecision(0) << itr_homology_data.blastp_parameter_score;
+									//if (itr_homology_data.blastp_parameter_score < 1) {
+									//	fout_html_report << "&nbsp&nbsp&nbsp&nbsp";
+									//}
+									//else {
+									//	for (auto j = 0; j < (4 - std::floor(std::log10(itr_homology_data.blastp_parameter_score))); ++j) {
+									//		fout_html_report << "&nbsp";
+									//	}
+									//}
 									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.blastp_evalue_transformed;
 									if (itr_homology_data.blastp_evalue_transformed < 1) {
 										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -452,24 +452,24 @@ namespace fpf_report {
 									}
 									fout_html_report << std::fixed << std::setprecision(3) << itr_homology_data.blastp_parameter_density;
 									fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
-									if (itr_homology_data.blastp_evalue_transformed < 1) {
-										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-									}
-									else {
-										for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average))); ++j) {
-											fout_html_report << "&nbsp";
-										}
-									}
-									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.p_peptide_analysis->v_denovo_peptide_averagescore;
-									if (itr_homology_data.blastp_evalue_transformed < 1) {
-										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-									}
-									else {
-										for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.p_peptide_analysis->v_denovo_peptide_averagescore))); ++j) {
-											fout_html_report << "&nbsp";
-										}
-									}
+									//fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
+									//if (itr_homology_data.blastp_evalue_transformed_conjugated < 1) {
+									//	fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+									//}
+									//else {
+									//	for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average))); ++j) {
+									//		fout_html_report << "&nbsp";
+									//	}
+									//}
+									//fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.p_peptide_analysis->v_denovo_peptide_averagescore;
+									//if (itr_homology_data.blastp_evalue_transformed_conjugated < 1) {
+									//	fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+									//}
+									//else {
+									//	for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.p_peptide_analysis->v_denovo_peptide_averagescore))); ++j) {
+									//		fout_html_report << "&nbsp";
+									//	}
+									//}
 								}
 							}
 						}

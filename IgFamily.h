@@ -23,7 +23,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.8.9d";
+	const string version = "v0.8.9e";
 
 	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
@@ -35,7 +35,7 @@ namespace IgFamily {
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_7.txt";
 
-	const string DEFAULT_IGFAMILY_DIRECTORY = "C:\\Users\\LJ\\IgFamily\\";
+	const string DEFAULT_IGFAMILY_DIRECTORY = "C:\\Users\\LJ\\Dropbox\\IgFamily\\";
 	const string DEFAULT_INPUT_FASTA_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\";
 	const string DEFAULT_BLASTP_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "blast_directory\\";
 	//const string DEFAULT_IGFAMILY_DIRECTORY = "";
@@ -59,6 +59,7 @@ namespace IgFamily {
 	const double REPORT_SCORE_THRESHOLD = 10;
 	const double REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD = 0.1;
 	const double REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD = 0.1;
+	const double REPORT_QUERY_EVALUETRANSFORMED_THRESHOLD = 10;
 
 	bool POLYMORPHISM_SELECTED = 0;
 	double MULTINOMIAL_CONJUGATION_FACTOR = 0.5;

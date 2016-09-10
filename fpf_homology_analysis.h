@@ -30,7 +30,8 @@ namespace fpf_homology_analysis {
 
 	typedef fpf_data::homology_data homology_data;
 	typedef vector<fpf_data::homology_data> v_blastp_type;
-	typedef fpf_data::multinomial s_multinomial_type;
+	typedef fpf_data::homology_data homology_data;
+	typedef fpf_data::multinomial multinomial_type;
 	typedef fpf_data::peptide_analysis peptide_analysis;
 	typedef fpf_data::peptide_data peptide_data;
 	typedef fpf_data::protein_data protein_data;
@@ -269,6 +270,7 @@ namespace fpf_homology_analysis {
 				if (is_hold) {
 					for (auto& itr_hold_v_homology_data : hold_v_homology_data) {
 						itr_hold_v_homology_data.blastp_evalue_transformed = std::pow(log_base(((double(1) * BLASTP_PARPROP_SCALE) / itr_hold_v_homology_data.blastp_evalue), 1.2), 1.15);
+						itr_hold_v_homology_data.blastp_evalue_transformed_conjugated = itr_hold_v_homology_data.blastp_evalue_transformed;
 						temp_v_homology_data.push_back(itr_hold_v_homology_data);
 					}
 				}
@@ -291,22 +293,11 @@ namespace fpf_homology_analysis {
 			double temp_evalue_transform_sum{};
 			for (const auto& itr_v_homology_data_2 : par_sample_analysis.v_homology_data) {
 				if (itr_v_homology_data.blastp_query == itr_v_homology_data_2.blastp_query) {
-					temp_evalue_transform_sum += itr_v_homology_data_2.blastp_evalue_transformed;
+					temp_evalue_transform_sum += itr_v_homology_data_2.blastp_evalue_transformed_conjugated;
 				}
 			}
-			itr_v_homology_data.blastp_parameter_density = (itr_v_homology_data.blastp_evalue_transformed / temp_evalue_transform_sum);
-			itr_v_homology_data.blastp_parameter_score = (itr_v_homology_data.blastp_parameter_density * itr_v_homology_data.blastp_evalue_transformed * (itr_v_homology_data.p_peptide_analysis->v_denovo_peptide_averagescore / 100));
-		}
-	}
-
-	void determine_if_IG(sample_analysis& par_sample_analysis) {
-		vector<string> v_query_tested{};
-		vector<string> v_query_current_referenced{};
-		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
-			std::cout << "\n ";
-			std::cout << itr_v_homology_data.blastp_query;
-			std::cout << "   ";
-			std::cout << itr_v_homology_data.blastp_parameter_density;
+			itr_v_homology_data.blastp_parameter_density = (itr_v_homology_data.blastp_evalue_transformed_conjugated / temp_evalue_transform_sum);
+			itr_v_homology_data.blastp_parameter_score = (itr_v_homology_data.blastp_parameter_density * itr_v_homology_data.blastp_evalue_transformed_conjugated * (itr_v_homology_data.p_peptide_analysis->v_denovo_peptide_averagescore / 100));
 		}
 	}
 }
