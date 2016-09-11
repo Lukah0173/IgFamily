@@ -34,8 +34,8 @@ namespace fpf_multinomial {
 			par_sample_analysis.multinomial_data.v_protein_name.push_back(itr_v_protein_analysis.p_protein_data->protein_name);
 			par_sample_analysis.multinomial_data.v_protein_class.push_back(itr_v_protein_analysis.p_protein_data->protein_class);
 		}
-		for (const auto& itr_v_peptide_data : par_sample_analysis.v_peptide_data) {
-			par_sample_analysis.multinomial_data.v_element_name.push_back(itr_v_peptide_data.peptide_filtered);
+		for (const auto& itr_v_peptide_analysis : par_sample_analysis.v_peptide_analysis) {
+			par_sample_analysis.multinomial_data.v_element_name.push_back(itr_v_peptide_analysis.peptide_filtered);
 		}
 		par_sample_analysis.multinomial_data.v2_frequency = vector<vector<double>>(par_sample_analysis.multinomial_data.v_element_name.size(), vector<double>(par_sample_analysis.multinomial_data.v_protein_name.size(), 0));
 		par_sample_analysis.multinomial_data.v2_density = vector<vector<double>>(par_sample_analysis.multinomial_data.v_element_name.size(), vector<double>(par_sample_analysis.multinomial_data.v_protein_name.size(), 0));

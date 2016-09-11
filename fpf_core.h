@@ -104,6 +104,7 @@ namespace fpf_core {
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, false);
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false);
 		std::cout << "\n";
+		IgFamily::POLYMORPHISM_SELECTED = false;
 	}
 }
 #endif
