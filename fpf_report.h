@@ -84,8 +84,6 @@ namespace fpf_report {
 		string output_blastp_summary = par_filesystem.directory + par_filesystem.filename;
 		output_blastp_summary += "_blastp_summary.csv";
 		std::ofstream fout_blastp_summary;
-		string output_blastp_summary_local = "blastp_summary_" + par_sample_analysis.peptide_assignment_method + ".csv";
-		std::ofstream fout_blastp_summary_local;
 		fout_blastp_summary.open(output_blastp_summary);
 		fout_blastp_summary << "subject,";
 		fout_blastp_summary << "query_accession,";
@@ -103,24 +101,6 @@ namespace fpf_report {
 			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_score << ",";
 			fout_blastp_summary << "\n";
 		}
-		fout_blastp_summary_local.open(output_blastp_summary_local);
-		fout_blastp_summary_local << "subject,";
-		fout_blastp_summary_local << "query_accession,";
-		fout_blastp_summary_local << "e_value,";
-		fout_blastp_summary_local << "par_prop,";
-		fout_blastp_summary_local << "par_dens,";
-		fout_blastp_summary_local << "par_score,";
-		fout_blastp_summary_local << "\n";
-		for (auto itr_v_s_blastp : par_sample_analysis.v_homology_data) {
-			fout_blastp_summary_local << itr_v_s_blastp.blastp_query << ",";
-			fout_blastp_summary_local << itr_v_s_blastp.blastp_subject_accession << ",";
-			fout_blastp_summary_local << itr_v_s_blastp.blastp_evalue << ",";
-			fout_blastp_summary_local << itr_v_s_blastp.blastp_evalue_transformed_conjugated << ",";
-			fout_blastp_summary_local << itr_v_s_blastp.blastp_parameter_density << ",";
-			fout_blastp_summary_local << itr_v_s_blastp.blastp_parameter_score << ",";
-			fout_blastp_summary_local << "\n";
-		}
-		fout_blastp_summary_local.close();
 	}
 
 	void fout_multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
@@ -157,7 +137,7 @@ namespace fpf_report {
 		fout_multinomial_element << "\n";
 		fout_multinomial_element << par_filesystem.filename;
 		fout_multinomial_element << "\n\n\n";
-		int format_ws_length = int();
+		size_t format_ws_length{};
 		for (auto i = 0; i < par_sample_analysis.multinomial_data.v_element_name.size(); ++i) {
 			if (par_sample_analysis.multinomial_data.v_element_name[i].length() > format_ws_length) {
 				format_ws_length = par_sample_analysis.multinomial_data.v_element_name[i].length();
@@ -194,7 +174,7 @@ namespace fpf_report {
 		fout_multinomial_element_nomatch << "\n";
 		fout_multinomial_element_nomatch << par_filesystem.filename;
 		fout_multinomial_element_nomatch << "\n\n\n";
-		int format_ws_length = int();
+		size_t format_ws_length{};
 		for (auto i = 0; i < par_sample_analysis.multinomial_data.v_element_name.size(); ++i) {
 			if (par_sample_analysis.multinomial_data.v_element_name[i].length() > format_ws_length) {
 				format_ws_length = par_sample_analysis.multinomial_data.v_element_name[i].length();
@@ -377,7 +357,7 @@ namespace fpf_report {
 								if ((itr_homology_data.blastp_parameter_score > IgFamily::REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD)
 									&& ((itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count) > REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD)) {
 									fout_html_report << "\n<br> ";
-									int st_mismatch = int();
+									size_t st_mismatch{};
 									for (auto i = 0; i < itr_homology_data.query_alignment.length(); i) {
 										if (itr_homology_data.query_alignment.at(i) == '.') {
 											if (i < itr_homology_data.p_protein_data->protein_protein.length()) {

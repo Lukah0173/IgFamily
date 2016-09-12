@@ -9,13 +9,14 @@
 #ifndef FPF_DATA
 #define	FPF_DATA
 
-#include <cstdlib>
-#include <vector>
-#include <sstream>
 #include <algorithm>
-#include <string>
-#include <utility>
+#include <cstdlib>
 #include <math.h>
+#include <sstream>
+#include <string>
+#include <map>
+#include <utility>
+#include <vector>
 
 #include "IgFamily.h"
 #include "fpf_parse.h"
@@ -26,6 +27,7 @@ namespace fpf_data {
 	using std::string;
 	using std::tuple;
 	using std::vector;
+	using std::map;
 
 	struct denovo_peptide;
 	struct denovo_aminoacid;
@@ -271,6 +273,22 @@ namespace fpf_data {
 			}
 		}
 		return temp_v_peptide_analysis;
+	}
+
+	map<string, peptide_analysis*> create_v_peptide_analysis_map(vector<peptide_analysis>& par_v_peptide_analysis) {
+		map<string, peptide_analysis*> temp_v_peptide_analysis_map{};
+		for (auto& itr_v_peptide_analysis : par_v_peptide_analysis) {
+			temp_v_peptide_analysis_map[itr_v_peptide_analysis.peptide_filtered] = &itr_v_peptide_analysis;
+		}
+		return temp_v_peptide_analysis_map;
+	}
+
+	map<string, protein_analysis*> create_v_protein_analysis_map(vector<protein_analysis>& par_v_protein_analysis) {
+		map<string, protein_analysis*> temp_v_protein_analysis_map{};
+		for (auto& itr_v_peptide_analysis : par_v_protein_analysis) {
+			temp_v_protein_analysis_map[itr_v_peptide_analysis.p_protein_data->protein_name] = &itr_v_peptide_analysis;
+		}
+		return temp_v_protein_analysis_map;
 	}
 }
 

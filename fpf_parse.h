@@ -35,6 +35,7 @@ namespace fpf_parse {
 	struct csv_data {
 	public:
 		string csv_scan_ID;
+		string csv_sourcefile;
 		string csv_peptide;
 		string csv_spectralcount;
 		string csv_IgP;
@@ -216,6 +217,8 @@ namespace fpf_parse {
 		size_t csv_ignore_header{};
 		char csv_read{};
 		string temp_csv_scan{};
+		string temp_csv_sourcefile{};
+		bool read_source{true};
 		string temp_csv_peptide{};
 		string temp_csv_denovo_localconfidence{};
 		vector<double> temp_v_csv_denovo_localconfidence{};
@@ -226,10 +229,13 @@ namespace fpf_parse {
 				if (csv_count_delimit == 16) {
 					csv_data temp_csv_data{};
 					temp_csv_data.csv_scan_ID = temp_csv_scan;
+					temp_csv_data.csv_sourcefile = temp_csv_sourcefile;
 					temp_csv_data.csv_peptide = temp_csv_peptide;
 					temp_csv_data.v_csv_denovo_localconfidence = temp_v_csv_denovo_localconfidence;
 					temp_v_csv_data.push_back(temp_csv_data);
 					temp_csv_scan.clear();
+					temp_csv_sourcefile.clear();
+					temp_csv_sourcefile = true;
 					temp_csv_peptide.clear();
 					temp_v_csv_denovo_localconfidence.clear();
 					csv_count_delimit = 0;
@@ -239,6 +245,14 @@ namespace fpf_parse {
 				}
 				if ((csv_count_delimit == 1) && (csv_parse != ",")) {
 					temp_csv_scan += csv_parse;
+				}
+				if ((csv_count_delimit == 2) && (csv_parse != ",")) {
+					if (csv_parse == ".") {
+						read_source = false;
+					}
+					if (!IgFamily::FILESYSTEM_MODE && read_source) {
+						temp_csv_sourcefile += csv_parse;
+					}
 				}
 				if ((csv_count_delimit == 3) && (csv_parse != ",") && (csv_parse != " ")) {
 					if (csv_parse == "(") {

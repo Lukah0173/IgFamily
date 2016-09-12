@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <tuple>
+#include <map>
 #include <utility>
 #include <vector>
 
@@ -26,6 +27,7 @@ namespace fpf_filesystem {
 
 	using std::pair;
 	using std::string;
+	using std::map;
 	using std::vector;
 
 	typedef fpf_convert::file_conversion file_conversion;
@@ -49,8 +51,10 @@ namespace fpf_filesystem {
 		vector<protein_data> v_protein_data;
 		vector<peptide_data> v_peptide_data;
 		vector<peptide_analysis> v_peptide_analysis;
+		map<string, peptide_analysis*> v_peptide_analysis_map;
 		vector<homology_data> v_homology_data;
 		vector<protein_analysis> v_protein_analysis;
+		map<string, protein_analysis*> v_protein_analysis_map;
 		vector<protein_analysis> v_protein_analysis_selected_by_polymorphism;
 		multinomial multinomial_data;
 		double protein_analysis_score_mean;

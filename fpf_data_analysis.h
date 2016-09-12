@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <string>
 #include <utility>
 #include <vector>
@@ -68,13 +69,10 @@ namespace fpf_data_analysis {
 		denovo_peptide default_denovo_peptide{};
 		for (auto& itr_protein_analysis : temp_v_protein_analysis) {
 			for (auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
-				auto& find_peptide_analysis = std::find_if(par_sample_analysis.v_peptide_analysis.begin(), par_sample_analysis.v_peptide_analysis.end(),
-					[itr_homology_data](const peptide_analysis par_peptide_analysis) {
-					return par_peptide_analysis.peptide_filtered == itr_homology_data.blastp_query;
-				});
-				itr_homology_data.p_peptide_analysis = &(*find_peptide_analysis);
+				auto& find_peptide_analysis = par_sample_analysis.v_peptide_analysis_map.find(itr_homology_data.blastp_query);
+				itr_homology_data.p_peptide_analysis = find_peptide_analysis->second;
 				itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &default_denovo_peptide;
-				for (auto& itr_peptide_data : find_peptide_analysis->v_peptide_data) {
+				for (auto& itr_peptide_data : find_peptide_analysis->second->v_peptide_data) {
 					++itr_homology_data.denovo_replicate_count;
 					if (itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average < itr_peptide_data->denovo_peptide_data.localconfidence_average) {
 						itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &itr_peptide_data->denovo_peptide_data;

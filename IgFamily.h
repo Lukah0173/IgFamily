@@ -23,7 +23,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.8.9f";
+	const string version = "v0.8.9g";
 
 	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
@@ -33,14 +33,12 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA = 1;
 	const bool BLASTP_BY_SELECTED_PEPTIDE = 1;
 
-	const string IGFAMILY_ROOT_DIR = "IgFamily_root_7.txt";
+	const string IGFAMILY_ROOT_DIR = "IgFamily_root_5.txt";
 
-	const string DEFAULT_IGFAMILY_DIRECTORY = "C:\\Users\\LJ\\Dropbox\\IgFamily\\";
+	//const string DEFAULT_IGFAMILY_DIRECTORY = "";
+	const string DEFAULT_IGFAMILY_DIRECTORY = "Z:\\Lukah_Dykes\\IgFamily\\";
 	const string DEFAULT_INPUT_FASTA_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\";
 	const string DEFAULT_BLASTP_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "blast_directory\\";
-	//const string DEFAULT_IGFAMILY_DIRECTORY = "";
-	//const string DEFAULT_INPUT_FASTA_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\";
-	//const string DEFAULT_BLASTP_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "blast_directory\\";
 	const string DEFAULT_MSCONVERT_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "msconvert\\";
 	const string DEFAULT_NOVOR_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "novor\\win\\";
 	const string DEFAULT_TRANSCRIPT_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "transcript_data\\";
@@ -68,7 +66,7 @@ namespace IgFamily {
 
 
 	int brute_calc(int i) {
-		std::vector<int> v(1000);
+		std::vector<int> v(10000000);
 		std::iota(v.begin(), v.end(), 0);
 		if (std::find(v.begin(), v.end(), 500) == v.end()) {
 			i = -i;
@@ -78,11 +76,9 @@ namespace IgFamily {
 
 	void async_test() {
 		std::vector<std::future<int>> test_future{};
-
 		for (auto i = 1; i < 5000000; ++i) {
 			test_future.push_back(std::async(brute_calc, i));
 		}
-
 		for (auto& get_future : test_future) {
 			std::cout << get_future.get() << std::endl;
 		}

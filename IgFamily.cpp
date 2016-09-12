@@ -1,4 +1,4 @@
-// * * IgFamily v0.8.9f * * 
+// * * IgFamily v0.8.9g * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -7,10 +7,11 @@
 
 
 #include <algorithm>
-#include <string>
-#include <iostream>
-#include <iomanip>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <omp.h>
+#include <string>
 #include <utility>
 
 #include "IgFamily.h"
@@ -129,6 +130,10 @@ int main() {
 				if (itr_v_sample_analysis.PEAKS_denovo_exists) {
 					std::cout << "\n\n\n * parsing " << itr_v_filesystem.filename << " PEAKS de novo peptides...";
 					main_v_csv_peptides = std::move(main_v_csv_PEAKS_denovo_peptides);
+					if (!IgFamily::FILESYSTEM_MODE) {
+						itr_v_filesystem.filename = main_v_csv_peptides.begin()->csv_sourcefile;
+						std::cout << main_v_csv_peptides.begin()->csv_sourcefile;;
+					}
 				}
 				if (itr_v_sample_analysis.NOVOR_denovo_exists) {
 					std::cout << "\n\n\n * parsing " << itr_v_filesystem.filename << " NOVOR de novo matched peptides...";
@@ -141,6 +146,7 @@ int main() {
 				std::cout << "...";
 				itr_v_sample_analysis.v_peptide_data = fpf_data::create_peptide_data(main_v_csv_peptides);
 				itr_v_sample_analysis.v_peptide_analysis = fpf_data::create_peptide_analysis(itr_v_sample_analysis.v_peptide_data);
+				itr_v_sample_analysis.v_peptide_analysis_map = fpf_data::create_v_peptide_analysis_map(itr_v_sample_analysis.v_peptide_analysis);
 				itr_v_sample_analysis.v_protein_data = fpf_data::create_protein_data(main_FASTA);
 				std::cout << "\n ...data structures assigned";
 
