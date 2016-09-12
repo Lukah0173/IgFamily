@@ -49,7 +49,8 @@ namespace fpf_homology_analysis {
 		size_t st_count_blastp_FASTA{};
 		for (const auto& itr_v_peptide_analysis : par_sample_analysis.v_peptide_analysis) {
 			++st_count_blastp_FASTA;
-			fout_blastp_input_FASTA << ">" << itr_v_peptide_analysis.peptide_filtered << "\n";
+			fout_blastp_input_FASTA << ">" << itr_v_peptide_analysis.key_peptide_analysis << "|";
+			fout_blastp_input_FASTA << itr_v_peptide_analysis.peptide_filtered << "\n";
 			fout_blastp_input_FASTA << itr_v_peptide_analysis.peptide_filtered << "\n";
 		}
 		fout_blastp_input_FASTA.close();
@@ -123,7 +124,22 @@ namespace fpf_homology_analysis {
 				}
 				if (homology_data_read == ',') {
 					if (homology_data_count_delimit % 10 == 1) {
-						temp_homology_data.blastp_query = temp_parse_blastp;
+						bool read_key_blastp_query{};
+						string read_key{};
+						for (const auto& itr_parse_blastp : temp_parse_blastp) {
+							if (itr_parse_blastp == '|') {
+								temp_homology_data.key_blastp_query = std::stoi(read_key);
+								read_key_blastp_query = true;
+							}
+							else {
+								if (read_key_blastp_query) {
+									temp_homology_data.blastp_query += itr_parse_blastp;
+								}
+								if (!read_key_blastp_query) {
+									read_key += itr_parse_blastp;
+								}
+							}
+						}
 					}
 					if (homology_data_count_delimit % 10 == 2) {
 						temp_homology_data.blastp_query_aligned = temp_parse_blastp;

@@ -68,6 +68,7 @@ namespace fpf_data {
 
 	struct protein_data {
 	public:
+		size_t key_protein_data;
 		string protein_name;
 		string protein_class;
 		string protein_type;
@@ -89,6 +90,7 @@ namespace fpf_data {
 	public:
 		peptide_analysis* p_peptide_analysis;
 		protein_data* p_protein_data;
+		size_t key_blastp_query;
 		string blastp_query;
 		string blastp_query_aligned;
 		string blastp_subject;
@@ -130,18 +132,21 @@ namespace fpf_data {
 
 	vector<protein_data> create_protein_data(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
 		vector<protein_data> temp_v_protein_data{};
+		size_t temp_key_protein_data{};
 		for (const auto itr_parse_FASTA : par_parse_FASTA) {
 			const auto find_v_FASTA_element = std::find_if(temp_v_protein_data.begin(), temp_v_protein_data.end(),
 				[itr_parse_FASTA](const protein_data& par_FASTA_element) {
 				return par_FASTA_element.protein_name == itr_parse_FASTA.return_FASTA_name(); });
 			if (find_v_FASTA_element == temp_v_protein_data.end()) {
 				protein_data temp_protein_data{
+					temp_key_protein_data,
 					itr_parse_FASTA.return_FASTA_name(),
 					itr_parse_FASTA.return_FASTA_class(),
 					itr_parse_FASTA.return_FASTA_type(),
 					itr_parse_FASTA.return_FASTA_species(),
 					itr_parse_FASTA.return_protein_data()};
 				temp_v_protein_data.push_back(temp_protein_data);
+				++temp_key_protein_data;
 			}
 		}
 		return temp_v_protein_data;
