@@ -31,7 +31,25 @@ namespace fpf_report {
 	typedef fpf_filesystem::sample_analysis sample_analysis;
 
 	void fout_v_peptide_data(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		std::string output_v_peptide_data = par_filesystem.directory + par_filesystem.filename + "_peptide_summary_" + par_sample_analysis.peptide_assignment_method + ".csv";
+		std::string output_v_peptide_data = par_filesystem.directory + par_filesystem.filename + "_peptide_data_" + par_sample_analysis.peptide_assignment_method + ".csv";
+		std::ofstream fout_v_peptide_data;
+		fout_v_peptide_data.open(output_v_peptide_data);
+		fout_v_peptide_data << "key,scan_ID,peptide_filtered,peptide_withmod,denovo_peptide,\n";
+		for (const auto& itr_v_peptide_data_map : par_sample_analysis.v_peptide_data_map) {
+			fout_v_peptide_data << itr_v_peptide_data_map.second->key_peptide_data << ",";
+			fout_v_peptide_data << itr_v_peptide_data_map.second->scan_ID << ",";
+			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_filtered << ",";
+			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_withmod << ",";
+			for (const auto& itr_v_denovo_aminoacid : itr_v_peptide_data_map.second->denovo_peptide_data.v_denovo_aminoacid) {
+				fout_v_peptide_data << itr_v_denovo_aminoacid.aminoacid;
+				fout_v_peptide_data << "[" << itr_v_denovo_aminoacid.aminoacid_localconfidence << "]";
+			}
+			fout_v_peptide_data << ",\n";
+		}
+	}
+
+	void fout_v_protein_data(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+		std::string output_v_peptide_data = par_filesystem.directory + par_filesystem.filename + "_protein_data_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_v_peptide_data;
 		fout_v_peptide_data.open(output_v_peptide_data);
 		fout_v_peptide_data << "key,scan_ID,peptide_filtered,peptide_withmod,denovo_peptide,\n";
@@ -53,10 +71,10 @@ namespace fpf_report {
 		std::ofstream fout_v_peptide_analysis;
 		fout_v_peptide_analysis.open(output_v_peptide_analysis);
 		fout_v_peptide_analysis << "key,peptide_filtered,replicate_count,\n";
-		for (const auto& itr_v_peptide_anaylsis : par_sample_analysis.v_peptide_analysis) {
-			fout_v_peptide_analysis << itr_v_peptide_anaylsis.key_peptide_analysis << ",";
-			fout_v_peptide_analysis << itr_v_peptide_anaylsis.peptide_filtered << ",";
-			fout_v_peptide_analysis << itr_v_peptide_anaylsis.replicate_count << ",";
+		for (const auto& itr_v_peptide_anaylsis_map : par_sample_analysis.v_peptide_analysis_map) {
+			fout_v_peptide_analysis << itr_v_peptide_anaylsis_map.second->key_peptide_analysis << ",";
+			fout_v_peptide_analysis << itr_v_peptide_anaylsis_map.second->peptide_filtered << ",";
+			fout_v_peptide_analysis << itr_v_peptide_anaylsis_map.second->replicate_count << ",";
 			fout_v_peptide_analysis << "\n";
 		}
 	}
@@ -66,16 +84,16 @@ namespace fpf_report {
 		std::ofstream fout_v_protein_analysis;
 		fout_v_protein_analysis.open(output_v_protein_analysis);
 		fout_v_protein_analysis << "key,protein_name,protein_protein,protein_score,proteinconstruct_sequencecoverage,\n";
-		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			fout_v_protein_analysis << itr_v_protein_analysis.key_protein_analysis << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis.p_protein_data->protein_name << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis.p_protein_data->protein_class << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis.p_protein_data->protein_type << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis.p_protein_data->protein_species << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis.p_protein_data->protein_protein << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis.protein_score << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis.proteinconstruct_sequencecoverage << ",";
-			for (const auto& itr_v_proteinconstruct_from_denovos : itr_v_protein_analysis.proteinconstruct_from_denovo) {
+		for (const auto& itr_v_protein_analysis_map : par_sample_analysis.v_protein_analysis_map) {
+			fout_v_protein_analysis << itr_v_protein_analysis_map.second->key_protein_analysis << ",";
+			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_name << ",";
+			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_class << ",";
+			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_type << ",";
+			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_species << ",";
+			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_protein << ",";
+			fout_v_protein_analysis << itr_v_protein_analysis_map.second->protein_score << ",";
+			fout_v_protein_analysis << itr_v_protein_analysis_map.second->proteinconstruct_sequencecoverage << ",";
+			for (const auto& itr_v_proteinconstruct_from_denovos : itr_v_protein_analysis_map.second->proteinconstruct_from_denovo) {
 				fout_v_protein_analysis << itr_v_proteinconstruct_from_denovos.aminoacid;
 				fout_v_protein_analysis << "[" << itr_v_proteinconstruct_from_denovos.aminoacid_localconfidence << "]";
 			}

@@ -42,6 +42,14 @@ namespace fpf_data_analysis {
 	typedef fpf_parse::csv_data csv_data;
 	typedef fpf_parse::FASTA_data FASTA_data;
 
+	map<string, peptide_analysis*> create_v_peptide_analysis_map(vector<peptide_analysis>& par_v_peptide_analysis) {
+		map<string, peptide_analysis*> temp_v_peptide_analysis_map{};
+		for (auto& itr_v_peptide_analysis : par_v_peptide_analysis) {
+			temp_v_peptide_analysis_map[itr_v_peptide_analysis.peptide_filtered] = &itr_v_peptide_analysis;
+		}
+		return temp_v_peptide_analysis_map;
+	}
+
 	vector<peptide_analysis> create_v_peptide_analysis(vector<peptide_data>& par_v_peptide_data) {
 		vector<peptide_analysis> temp_v_peptide_analysis{};
 		size_t temp_key_peptide_analysis{};
@@ -70,12 +78,12 @@ namespace fpf_data_analysis {
 		return temp_v_peptide_analysis;
 	}
 
-	map<string, peptide_analysis*> create_v_peptide_analysis_map(vector<peptide_analysis>& par_v_peptide_analysis) {
-		map<string, peptide_analysis*> temp_v_peptide_analysis_map{};
-		for (auto& itr_v_peptide_analysis : par_v_peptide_analysis) {
-			temp_v_peptide_analysis_map[itr_v_peptide_analysis.peptide_filtered] = &itr_v_peptide_analysis;
+	map<string, protein_analysis*> create_v_protein_analysis_map(vector<protein_analysis>& par_v_protein_analysis) {
+		map<string, protein_analysis*> temp_v_protein_analysis_map{};
+		for (auto& itr_v_peptide_analysis : par_v_protein_analysis) {
+			temp_v_protein_analysis_map[itr_v_peptide_analysis.p_protein_data->protein_name] = &itr_v_peptide_analysis;
 		}
-		return temp_v_peptide_analysis_map;
+		return temp_v_protein_analysis_map;
 	}
 
 	void create_protein_analysis(sample_analysis& par_sample_analysis) {
@@ -119,14 +127,7 @@ namespace fpf_data_analysis {
 			}
 		}
 		par_sample_analysis.v_protein_analysis = temp_v_protein_analysis;
-	}
-
-	map<string, protein_analysis*> create_v_protein_analysis_map(vector<protein_analysis>& par_v_protein_analysis) {
-		map<string, protein_analysis*> temp_v_protein_analysis_map{};
-		for (auto& itr_v_peptide_analysis : par_v_protein_analysis) {
-			temp_v_protein_analysis_map[itr_v_peptide_analysis.p_protein_data->protein_name] = &itr_v_peptide_analysis;
-		}
-		return temp_v_protein_analysis_map;
+		create_v_protein_analysis_map(par_sample_analysis.v_protein_analysis);
 	}
 
 	inline bool predicate_homology_data_with_spectralcount(const homology_data& i, const homology_data& j) {

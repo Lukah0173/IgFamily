@@ -756,7 +756,7 @@ namespace fpf_parse {
 			if ((FASTA_condition_switch_2 == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
 				
 				if (temp_FASTA_class != "MIGHV") {
-					if (!((temp_FASTA_class == "UNIPROT") && (temp_FASTA_name.find("Ig") != std::string::npos))) {
+					if (!((temp_FASTA_class == "UNIPROT") && ((temp_FASTA_name.find("Ig") != std::string::npos) || (temp_FASTA_name.find("Immunoglobulin") != std::string::npos)))) {
 						temp_FASTA_data.set_FASTA_accession(temp_FASTA_accession);
 						temp_FASTA_data.set_FASTA_name(temp_FASTA_name);
 						temp_FASTA_data.set_FASTA_class(temp_FASTA_class);

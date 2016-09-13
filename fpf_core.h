@@ -69,7 +69,6 @@ namespace fpf_core {
 	void core_data_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n scoring proteins...\n";
 		fpf_data_analysis::create_protein_analysis(par_sample_analysis);
-		fpf_data_analysis::create_v_protein_analysis_map(par_sample_analysis.v_protein_analysis);
 		std::cout << " ...proteins scored\n";
 		fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis);
 		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);

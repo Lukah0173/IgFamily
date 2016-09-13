@@ -28,6 +28,7 @@ namespace fpf_data {
 	using std::tuple;
 	using std::vector;
 	using std::map;
+	using std::multimap;
 
 	struct denovo_peptide;
 	struct denovo_aminoacid;
@@ -131,6 +132,14 @@ namespace fpf_data {
 		vector<vector<double>> v2_density;
 	};
 
+	map<string, protein_data*> create_v_protein_data_map(vector<protein_data>& par_v_protein_data) {
+		map<string, protein_data*> temp_v_protein_data_map{};
+		for (auto& itr_v_protein_data : par_v_protein_data) {
+			temp_v_protein_data_map[itr_v_protein_data.protein_name] = &itr_v_protein_data;
+		}
+		return temp_v_protein_data_map;
+	}
+
 	vector<protein_data> create_v_protein_data(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
 		vector<protein_data> temp_v_protein_data{};
 		size_t temp_key_protein_data{};
@@ -153,12 +162,12 @@ namespace fpf_data {
 		return temp_v_protein_data;
 	}
 
-	map<string, protein_data*> create_v_protein_data_map(vector<protein_data>& par_v_protein_data) {
-		map<string, protein_data*> temp_v_protein_data_map{};
-		for (auto& itr_v_protein_data : par_v_protein_data) {
-			temp_v_protein_data_map[itr_v_protein_data.protein_name] = &itr_v_protein_data;
+	multimap<string, peptide_data*> create_v_peptide_data_map(vector<peptide_data>& par_v_peptide_data) {
+		multimap<string, peptide_data*> temp_v_peptide_data_map{};
+		for (auto& itr_v_peptide_data : par_v_peptide_data) {
+			temp_v_peptide_data_map.insert(std::make_pair(itr_v_peptide_data.peptide_withmod, &itr_v_peptide_data));
 		}
-		return temp_v_protein_data_map;
+		return temp_v_peptide_data_map;
 	}
 
 	vector<peptide_data> create_v_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data) {

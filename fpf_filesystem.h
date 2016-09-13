@@ -28,6 +28,7 @@ namespace fpf_filesystem {
 	using std::pair;
 	using std::string;
 	using std::map;
+	using std::multimap;
 	using std::vector;
 
 	typedef fpf_convert::file_conversion file_conversion;
@@ -51,6 +52,7 @@ namespace fpf_filesystem {
 		vector<protein_data> v_protein_data;
 		map<string, protein_data*> v_protein_data_map;
 		vector<peptide_data> v_peptide_data;
+		multimap<string, peptide_data*> v_peptide_data_map;
 		vector<peptide_analysis> v_peptide_analysis;
 		map<string, peptide_analysis*> v_peptide_analysis_map;
 		vector<homology_data> v_homology_data;

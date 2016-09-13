@@ -1,4 +1,4 @@
-// * * IgFamily v0.9.0 * * 
+// * * IgFamily v0.9.0a * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -145,6 +145,7 @@ int main() {
 				std::cout << itr_v_filesystem.filename;
 				std::cout << "...";
 				itr_v_sample_analysis.v_peptide_data = fpf_data::create_v_peptide_data(main_v_csv_peptides);
+				itr_v_sample_analysis.v_peptide_data_map = fpf_data::create_v_peptide_data_map(itr_v_sample_analysis.v_peptide_data);
 				itr_v_sample_analysis.v_peptide_analysis = fpf_data_analysis::create_v_peptide_analysis(itr_v_sample_analysis.v_peptide_data);
 				itr_v_sample_analysis.v_peptide_analysis_map = fpf_data_analysis::create_v_peptide_analysis_map(itr_v_sample_analysis.v_peptide_analysis);
 				itr_v_sample_analysis.v_protein_data = fpf_data::create_v_protein_data(main_FASTA);
