@@ -1,4 +1,4 @@
-// * * IgFamily v0.9.0a * * 
+// * * IgFamily v0.9.1 * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -21,6 +21,7 @@
 #include "fpf_dirichlet_mixture_model.h"
 #include "fpf_filesystem.h"
 #include "fpf_filesystem_analysis.h"
+#include "fpf_genome_data.h"
 #include "fpf_homology_analysis.h"
 #include "fpf_multinomial.h"
 #include "fpf_report.h"
@@ -31,10 +32,6 @@ int main() {
 
 	using std::string;
 	using std::vector;
-
-	//vector<fpf_utility::sample_transcript_and_translation> main_v_sample_transcript_and_translation = fpf_utility::parse_transcript_data();
-	//fpf_utility::translate_v_transcript(main_v_sample_transcript_and_translation);
-	//fpf_utility::fout_transcript_and_translation(main_v_sample_transcript_and_translation);
 
 	std::cout << "\n -- IgFamily " << IgFamily::version << " --\n";
 
@@ -54,11 +51,23 @@ int main() {
 		if (menu_selection == "P") {
 			*v_select_spectra_assignment.begin() = fpf_filesystem::display_peptide_assignment_menu(*v_select_spectra_assignment.begin());
 			fpf_filesystem::display_settings(select_FASTA, v_select_spectra_assignment);
-			menu_selection = fpf_filesystem::display_menu();
+			
 		}
 		if (menu_selection == "X") {
 			select_FASTA = IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY + select_FASTA;
 			menu_continue = true;
+		}
+		if (menu_selection == "!!") {
+			if (IgFamily::FILESYSTEM_MODE) {
+				//vector<fpf_utility::sample_transcript_and_translation> main_v_sample_transcript_and_translation = fpf_utility::parse_transcript_data();
+				//fpf_utility::translate_v_transcript(main_v_sample_transcript_and_translation);
+				//fpf_utility::fout_transcript_and_translation(main_v_sample_transcript_and_translation);
+				vector<fpf_genome_data::genome_data> main_v_genomic_data = fpf_genome_data::create_v_genome_data();
+				vector<fpf_genome_data::genome_analysis> main_v_genomic_analysis = fpf_genome_data::create_v_genome_analysis(main_v_genomic_data);
+				fpf_genome_data::fout_v_genome_data(main_v_genomic_data);
+				fpf_genome_data::fout_v_genome_analysis(main_v_genomic_analysis);
+			}
+			menu_selection = fpf_filesystem::display_menu();
 		}
 	}
 

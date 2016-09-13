@@ -117,8 +117,8 @@ namespace fpf_homology_analysis {
 
 	void create_v_homology_data(filesystem& par_filesytem, sample_analysis& par_sample_analysis) {
 			size_t homology_data_count_delimit = size_t(1);
-			string homology_data_output = DEFAULT_BLASTP_DIRECTORY + par_filesytem.filename + "_blastp_output.csv";
-			std::ifstream fin_input_blastp(homology_data_output);
+			string homology_data_input = DEFAULT_BLASTP_DIRECTORY + par_filesytem.filename + "_blastp_output.csv";
+			std::ifstream fin_input_blastp(homology_data_input);
 			char homology_data_read{};
 			vector<homology_data> temp_v_homology_data{};
 			homology_data temp_homology_data{};

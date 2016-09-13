@@ -116,7 +116,7 @@ namespace fpf_filesystem {
 		std::cout << "\n Select spectra assignment method:          [P]";
 		std::cout << "\n Continue with current settings:            [X]";
 		string menu_selection{};
-		while ((menu_selection != ("F")) && (menu_selection != ("P")) && (menu_selection != ("X"))) {
+		while ((menu_selection != "F") && (menu_selection != "P") && (menu_selection != "X") && (menu_selection != "!!")) {
 			menu_selection.clear();
 			std::cout << "\n\n --> ";
 			std::cin >> menu_selection;
