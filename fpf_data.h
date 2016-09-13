@@ -94,6 +94,7 @@ namespace fpf_data {
 		string blastp_query;
 		string blastp_query_aligned;
 		string blastp_subject;
+		size_t key_blastp_subject_accession;
 		string blastp_subject_accession;
 		string blastp_subject_accession_class;
 		size_t blastp_query_alignment_index;
@@ -130,7 +131,7 @@ namespace fpf_data {
 		vector<vector<double>> v2_density;
 	};
 
-	vector<protein_data> create_protein_data(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
+	vector<protein_data> create_v_protein_data(vector<fpf_parse::FASTA_data> par_parse_FASTA) {
 		vector<protein_data> temp_v_protein_data{};
 		size_t temp_key_protein_data{};
 		for (const auto itr_parse_FASTA : par_parse_FASTA) {
@@ -152,7 +153,15 @@ namespace fpf_data {
 		return temp_v_protein_data;
 	}
 
-	vector<peptide_data> create_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data) {
+	map<string, protein_data*> create_v_protein_data_map(vector<protein_data>& par_v_protein_data) {
+		map<string, protein_data*> temp_v_protein_data_map{};
+		for (auto& itr_v_protein_data : par_v_protein_data) {
+			temp_v_protein_data_map[itr_v_protein_data.protein_name] = &itr_v_protein_data;
+		}
+		return temp_v_protein_data_map;
+	}
+
+	vector<peptide_data> create_v_peptide_data(vector<fpf_parse::csv_data> par_parse_csv_peptide_data) {
 		vector<peptide_data> temp_v_peptide_data{};
 		size_t temp_key_peptide_data{};
 		for (const auto itr_parse_csv_peptide_data : par_parse_csv_peptide_data) {
@@ -250,50 +259,6 @@ namespace fpf_data {
 			}
 		}
 		return temp_v_peptide_data;
-	}
-
-	vector<peptide_analysis> create_peptide_analysis(vector<peptide_data>& par_v_peptide_data) {
-		vector<peptide_analysis> temp_v_peptide_analysis{};
-		size_t temp_key_peptide_analysis{};
-		for (auto& itr_v_peptide_data : par_v_peptide_data) {
-			peptide_analysis temp_peptide_analysis{};			
-			auto& find_peptide_analysis = std::find_if(temp_v_peptide_analysis.begin(), temp_v_peptide_analysis.end(),
-				[itr_v_peptide_data](peptide_analysis par_peptide_analysis) {
-				return par_peptide_analysis.peptide_filtered == itr_v_peptide_data.peptide_filtered;
-			});
-			if (find_peptide_analysis == temp_v_peptide_analysis.end()) {
-				temp_peptide_analysis.peptide_filtered = itr_v_peptide_data.peptide_filtered;
-				++temp_peptide_analysis.replicate_count;
-				temp_peptide_analysis.v_peptide_data.push_back(&itr_v_peptide_data);
-				temp_peptide_analysis.v_denovo_peptide_averagescore = itr_v_peptide_data.denovo_peptide_data.localconfidence_average;
-				temp_peptide_analysis.key_peptide_analysis = temp_key_peptide_analysis;
-				temp_v_peptide_analysis.push_back(temp_peptide_analysis);
-				++temp_key_peptide_analysis;
-			}
-			else {
-				++find_peptide_analysis->replicate_count;
-				find_peptide_analysis->v_peptide_data.push_back(&itr_v_peptide_data);
-				find_peptide_analysis->v_denovo_peptide_averagescore
-					= ((find_peptide_analysis->v_denovo_peptide_averagescore * (find_peptide_analysis->replicate_count - 1)) + itr_v_peptide_data.denovo_peptide_data.localconfidence_average) / find_peptide_analysis->replicate_count;
-			}
-		}
-		return temp_v_peptide_analysis;
-	}
-
-	map<string, peptide_analysis*> create_v_peptide_analysis_map(vector<peptide_analysis>& par_v_peptide_analysis) {
-		map<string, peptide_analysis*> temp_v_peptide_analysis_map{};
-		for (auto& itr_v_peptide_analysis : par_v_peptide_analysis) {
-			temp_v_peptide_analysis_map[itr_v_peptide_analysis.peptide_filtered] = &itr_v_peptide_analysis;
-		}
-		return temp_v_peptide_analysis_map;
-	}
-
-	map<string, protein_analysis*> create_v_protein_analysis_map(vector<protein_analysis>& par_v_protein_analysis) {
-		map<string, protein_analysis*> temp_v_protein_analysis_map{};
-		for (auto& itr_v_peptide_analysis : par_v_protein_analysis) {
-			temp_v_protein_analysis_map[itr_v_peptide_analysis.p_protein_data->protein_name] = &itr_v_peptide_analysis;
-		}
-		return temp_v_protein_analysis_map;
 	}
 }
 

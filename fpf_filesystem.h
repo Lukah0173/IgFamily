@@ -49,7 +49,7 @@ namespace fpf_filesystem {
 		bool NOVOR_denovo_exists;
 		string peptide_assignment_method;
 		vector<protein_data> v_protein_data;
-		map<size_t, protein_data*> v_protein_data_map;
+		map<string, protein_data*> v_protein_data_map;
 		vector<peptide_data> v_peptide_data;
 		vector<peptide_analysis> v_peptide_analysis;
 		map<string, peptide_analysis*> v_peptide_analysis_map;

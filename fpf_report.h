@@ -90,19 +90,22 @@ namespace fpf_report {
 		fout_blastp_summary.open(output_blastp_summary);
 		fout_blastp_summary << "key_query,";
 		fout_blastp_summary << "query,";
+		fout_blastp_summary << "key_subject_accession,";
 		fout_blastp_summary << "subject_accession,";
 		fout_blastp_summary << "e_value,";
-		fout_blastp_summary << "par_prop,";
+		fout_blastp_summary << "e_value_transformed,";
 		fout_blastp_summary << "par_dens,";
 		fout_blastp_summary << "par_score,";
 		fout_blastp_summary << "\n";
-		for (auto itr_v_s_blastp : par_sample_analysis.v_homology_data) {
-			fout_blastp_summary << itr_v_s_blastp.key_blastp_query << ",";
-			fout_blastp_summary << itr_v_s_blastp.blastp_subject_accession << ",";
-			fout_blastp_summary << itr_v_s_blastp.blastp_evalue << ",";
-			fout_blastp_summary << itr_v_s_blastp.blastp_evalue_transformed_conjugated << ",";
-			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_density << ",";
-			fout_blastp_summary << itr_v_s_blastp.blastp_parameter_score << ",";
+		for (auto itr_v_homology_data : par_sample_analysis.v_homology_data) {
+			fout_blastp_summary << itr_v_homology_data.key_blastp_query << ",";
+			fout_blastp_summary << itr_v_homology_data.blastp_query << ",";
+			fout_blastp_summary << itr_v_homology_data.key_blastp_subject_accession << ",";
+			fout_blastp_summary << itr_v_homology_data.blastp_subject_accession << ",";
+			fout_blastp_summary << itr_v_homology_data.blastp_evalue << ",";
+			fout_blastp_summary << itr_v_homology_data.blastp_evalue_transformed_conjugated << ",";
+			fout_blastp_summary << itr_v_homology_data.blastp_parameter_density << ",";
+			fout_blastp_summary << itr_v_homology_data.blastp_parameter_score << ",";
 			fout_blastp_summary << "\n";
 		}
 	}
