@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -20,6 +21,7 @@
 
 namespace fpf_genome_data {
 
+	using std::map;
 	using std::string;
 	using std::vector;
 
@@ -29,15 +31,46 @@ namespace fpf_genome_data {
 		string genome_Vregion_genefamily;
 		string genome_translation_sequence;
 	};
-
+	
 	struct genome_analysis {
 	public:
 		genome_data* p_genome_data;
 		size_t count_genome_data_replicate;
 	};
 
-	vector<genome_data> create_v_genome_data() {
-		string genomic_data_input = IgFamily::DEFAULT_GENOME_DIRECTORY + "Sjogrens_syndrome_patient_data\\SS1_AA.csv";
+	struct sample_genome {
+	public:
+		vector<genome_data>* v_genome_data;
+		vector<genome_analysis>* v_genome_analysis;
+	};
+
+	struct population_genome {
+	public:
+		map<string, sample_genome*> v_sample_genome;
+	};
+
+	void create_v_genome_directory(population_genome& par_population_genome) {
+		sample_genome temp_sample_genome{};
+		string genomic_root_directory_input = IgFamily::DEFAULT_GENOME_DIRECTORY + "genome_root_directory.txt";
+		std::ifstream fin_input_genomic_root_directory(genomic_root_directory_input);
+		char read_genomic_root_directory{};
+		string parse_genomic_root_directory{};
+		while (fin_input_genomic_root_directory.get(read_genomic_root_directory)) {
+			if (read_genomic_root_directory == ',') {
+				par_population_genome.v_sample_genome[parse_genomic_root_directory] = nullptr;
+				parse_genomic_root_directory.clear();
+			}
+			else {
+				if (read_genomic_root_directory != '\n') {
+					parse_genomic_root_directory += read_genomic_root_directory;
+				}
+			}
+		}
+
+	}
+
+	vector<genome_data> create_v_genome_data(const string& par_genome_directory) {
+		string genomic_data_input = IgFamily::DEFAULT_GENOME_DIRECTORY + par_genome_directory;
 		std::ifstream fin_input_genomic_data(genomic_data_input);
 		char genomic_data_read{};
 		vector<genome_data> temp_v_genomic_data{};
@@ -125,12 +158,12 @@ namespace fpf_genome_data {
 		return temp_v_genome_analysis;
 	}
 
-	void fout_v_genome_data(const vector<genome_data>& par_v_genome_data) {
-		std::string output_v_genome_data = IgFamily::DEFAULT_GENOME_DIRECTORY + "genome_data.csv";
+	void fout_v_genome_data(const string par_directory, const sample_genome& par_sample_genome) {
+		std::string output_v_genome_data = IgFamily::DEFAULT_GENOME_DIRECTORY + par_directory + "_genome_data.csv";
 		std::ofstream fout_v_genome_data;
 		fout_v_genome_data.open(output_v_genome_data);
 		fout_v_genome_data << "genome_ID,genome_Vregion_genefamily,genome_translation_sequence,\n";
-		for (const auto& itr_v_genome_data : par_v_genome_data) {
+		for (const auto& itr_v_genome_data : *par_sample_genome.v_genome_data) {
 			fout_v_genome_data << itr_v_genome_data.genome_ID << ",";
 			fout_v_genome_data << itr_v_genome_data.genome_Vregion_genefamily << ",";
 			fout_v_genome_data << itr_v_genome_data.genome_translation_sequence << ",";
@@ -138,12 +171,12 @@ namespace fpf_genome_data {
 		}
 	}
 
-	void fout_v_genome_analysis(const vector<genome_analysis>& par_v_genome_analysis) {
-		std::string output_v_genome_analysis = IgFamily::DEFAULT_GENOME_DIRECTORY + "genome_analysis.csv";
+	void fout_v_genome_analysis(const string par_directory, const sample_genome& par_sample_genome) {
+		std::string output_v_genome_analysis = IgFamily::DEFAULT_GENOME_DIRECTORY + par_directory + "_genome_analysis.csv";
 		std::ofstream fout_v_genome_analysis;
 		fout_v_genome_analysis.open(output_v_genome_analysis);
 		fout_v_genome_analysis << "count_genome_data_replicate,genome_Vregion_genefamily,genome_translation_sequence,\n";
-		for (const auto& itr_v_genome_analysis : par_v_genome_analysis) {
+		for (const auto& itr_v_genome_analysis : *par_sample_genome.v_genome_analysis) {
 			fout_v_genome_analysis << itr_v_genome_analysis.count_genome_data_replicate << ",";
 			fout_v_genome_analysis << itr_v_genome_analysis.p_genome_data->genome_Vregion_genefamily << ",";
 			fout_v_genome_analysis << itr_v_genome_analysis.p_genome_data->genome_translation_sequence << ",";

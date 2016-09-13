@@ -1,4 +1,4 @@
-// * * IgFamily v0.9.1 * * 
+// * * IgFamily v0.9.1a * * 
 // 
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -62,10 +62,19 @@ int main() {
 				//vector<fpf_utility::sample_transcript_and_translation> main_v_sample_transcript_and_translation = fpf_utility::parse_transcript_data();
 				//fpf_utility::translate_v_transcript(main_v_sample_transcript_and_translation);
 				//fpf_utility::fout_transcript_and_translation(main_v_sample_transcript_and_translation);
-				vector<fpf_genome_data::genome_data> main_v_genomic_data = fpf_genome_data::create_v_genome_data();
-				vector<fpf_genome_data::genome_analysis> main_v_genomic_analysis = fpf_genome_data::create_v_genome_analysis(main_v_genomic_data);
-				fpf_genome_data::fout_v_genome_data(main_v_genomic_data);
-				fpf_genome_data::fout_v_genome_analysis(main_v_genomic_analysis);
+				fpf_genome_data::population_genome main_population_genome{};
+				fpf_genome_data::create_v_genome_directory(main_population_genome);
+				for (auto& itr_v_sample_genome : main_population_genome.v_sample_genome) {
+					vector<fpf_genome_data::genome_data> main_v_genomic_data = fpf_genome_data::create_v_genome_data(itr_v_sample_genome.first);
+					vector<fpf_genome_data::genome_analysis> main_v_genomic_analysis = fpf_genome_data::create_v_genome_analysis(main_v_genomic_data);
+					fpf_genome_data::sample_genome main_sample_genome {
+						&main_v_genomic_data,
+						&main_v_genomic_analysis
+					};
+					itr_v_sample_genome.second = &main_sample_genome;
+					fpf_genome_data::fout_v_genome_data(itr_v_sample_genome.first, *itr_v_sample_genome.second);
+					fpf_genome_data::fout_v_genome_analysis(itr_v_sample_genome.first, *itr_v_sample_genome.second);
+				}
 			}
 			menu_selection = fpf_filesystem::display_menu();
 		}
