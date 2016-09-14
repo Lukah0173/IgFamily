@@ -1,5 +1,5 @@
-// * * IgFamily v0.9.1b * * 
-// 
+// * * IgFamily v0.9.2 * * 
+//
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
 // * * * * *
@@ -21,8 +21,8 @@
 #include "fpf_dirichlet_mixture_model.h"
 #include "fpf_filesystem.h"
 #include "fpf_filesystem_analysis.h"
-#include "fpf_genome_data.h"
 #include "fpf_homology_analysis.h"
+#include "fpf_interface.h"
 #include "fpf_multinomial.h"
 #include "fpf_report.h"
 #include "fpf_utility.h"
@@ -36,50 +36,10 @@ int main() {
 	std::cout << "\n -- IgFamily " << IgFamily::version << " --\n";
 
 	string select_FASTA{ IgFamily::DEFAULT_INPUT_FASTA };
-	vector<string> v_select_spectra_assignment{ IgFamily::DEFAULT_PEPTIDE_ASSIGNMENT_METHOD };
+	vector<string> v_select_peptide_assignment{ IgFamily::DEFAULT_PEPTIDE_ASSIGNMENT_METHOD };
 
-	fpf_filesystem::display_settings(select_FASTA, v_select_spectra_assignment);
-	string menu_selection{ fpf_filesystem::display_menu() };
-
-	bool menu_continue{};
-	while (!menu_continue) {
-		if (menu_selection == "F") {
-			select_FASTA = fpf_filesystem::display_FASTA_menu(select_FASTA);	
-			fpf_filesystem::display_settings(select_FASTA, v_select_spectra_assignment);
-			menu_selection = fpf_filesystem::display_menu();
-		}
-		if (menu_selection == "P") {
-			*v_select_spectra_assignment.begin() = fpf_filesystem::display_peptide_assignment_menu(*v_select_spectra_assignment.begin());
-			fpf_filesystem::display_settings(select_FASTA, v_select_spectra_assignment);
-			
-		}
-		if (menu_selection == "X") {
-			select_FASTA = IgFamily::DEFAULT_INPUT_FASTA_DIRECTORY + select_FASTA;
-			menu_continue = true;
-		}
-		if (menu_selection == "!!") {
-			if (IgFamily::FILESYSTEM_MODE) {
-				//vector<fpf_utility::sample_transcript_and_translation> main_v_sample_transcript_and_translation = fpf_utility::parse_transcript_data();
-				//fpf_utility::translate_v_transcript(main_v_sample_transcript_and_translation);
-				//fpf_utility::fout_transcript_and_translation(main_v_sample_transcript_and_translation);
-				fpf_genome_data::population_genome main_population_genome{};
-				fpf_genome_data::create_v_genome_directory(main_population_genome);
-				for (auto& itr_v_sample_genome : main_population_genome.v_sample_genome) {
-					vector<fpf_genome_data::genome_data> main_v_genomic_data = fpf_genome_data::create_v_genome_data(itr_v_sample_genome.first);
-					vector<fpf_genome_data::genome_analysis> main_v_genomic_analysis = fpf_genome_data::create_v_genome_analysis(main_v_genomic_data);
-					fpf_genome_data::sample_genome main_sample_genome {
-						&main_v_genomic_data,
-						&main_v_genomic_analysis
-					};
-					itr_v_sample_genome.second = &main_sample_genome;
-					fpf_genome_data::fout_v_genome_data(itr_v_sample_genome.first, *itr_v_sample_genome.second);
-					fpf_genome_data::fout_v_genome_analysis(itr_v_sample_genome.first, *itr_v_sample_genome.second);
-					fpf_genome_data::fout_v_genome_analysis_filtered(itr_v_sample_genome.first, *itr_v_sample_genome.second);
-				}
-			}
-			menu_selection = fpf_filesystem::display_menu();
-		}
-	}
+	fpf_interface::display_settings(select_FASTA, v_select_peptide_assignment);
+	fpf_interface::select_settings(select_FASTA, v_select_peptide_assignment);
 
 	std::cout << "\n\n\n reading root directory...\n";
 	vector<string> v_root_directory = fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR);
@@ -111,7 +71,7 @@ int main() {
 		}
 
 		bool file_found{};
-		for (const auto& itr_v_select_spectra_assignment : v_select_spectra_assignment) {
+		for (const auto& itr_v_select_spectra_assignment : v_select_peptide_assignment) {
 			if (itr_v_select_spectra_assignment == "PEAKS database match") {
 				temp_sample_analysis.PEAKS_database_exists = fpf_parse::check_csv_PEAKS_database_peptides_empty(main_v_csv_PEAKS_database_peptides, filesystem_modified);
 				temp_sample_analysis.peptide_assignment_method = "PEAKS_database";
