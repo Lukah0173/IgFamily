@@ -66,7 +66,6 @@ namespace fpf_genome_data {
 				}
 			}
 		}
-
 	}
 
 	vector<genome_data> create_v_genome_data(const string& par_genome_directory) {
@@ -181,6 +180,21 @@ namespace fpf_genome_data {
 			fout_v_genome_analysis << itr_v_genome_analysis.p_genome_data->genome_Vregion_genefamily << ",";
 			fout_v_genome_analysis << itr_v_genome_analysis.p_genome_data->genome_translation_sequence << ",";
 			fout_v_genome_analysis << ",\n";
+		}
+	}
+
+	void fout_v_genome_analysis_filtered(const string par_directory, const sample_genome& par_sample_genome) {
+		std::string output_v_genome_analysis = IgFamily::DEFAULT_GENOME_DIRECTORY + par_directory + "_genome_analysis_filtered.csv";
+		std::ofstream fout_v_genome_analysis;
+		fout_v_genome_analysis.open(output_v_genome_analysis);
+		fout_v_genome_analysis << "count_genome_data_replicate,genome_Vregion_genefamily,genome_translation_sequence,\n";
+		for (const auto& itr_v_genome_analysis : *par_sample_genome.v_genome_analysis) {
+			if (itr_v_genome_analysis.count_genome_data_replicate > 9) {
+				fout_v_genome_analysis << itr_v_genome_analysis.count_genome_data_replicate << ",";
+				fout_v_genome_analysis << itr_v_genome_analysis.p_genome_data->genome_Vregion_genefamily << ",";
+				fout_v_genome_analysis << itr_v_genome_analysis.p_genome_data->genome_translation_sequence << ",";
+				fout_v_genome_analysis << ",\n";
+			}
 		}
 	}
 }

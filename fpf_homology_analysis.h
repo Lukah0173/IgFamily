@@ -47,11 +47,11 @@ namespace fpf_homology_analysis {
 		std::ofstream fout_blastp_input_FASTA;
 		fout_blastp_input_FASTA.open(output_blastp_FASTA);
 		size_t st_count_blastp_FASTA{};
-		for (const auto& itr_v_peptide_analysis : par_sample_analysis.v_peptide_analysis) {
+		for (const auto& itr_v_peptide_analysis_map : par_sample_analysis.v_peptide_analysis_map) {
 			++st_count_blastp_FASTA;
-			fout_blastp_input_FASTA << ">" << itr_v_peptide_analysis.key_peptide_analysis;
-			fout_blastp_input_FASTA << "|" << itr_v_peptide_analysis.peptide_filtered;
-			fout_blastp_input_FASTA << "\n" << itr_v_peptide_analysis.peptide_filtered;
+			fout_blastp_input_FASTA << ">" << itr_v_peptide_analysis_map.second->key_peptide_analysis;
+			fout_blastp_input_FASTA << "|" << itr_v_peptide_analysis_map.second->peptide_filtered;
+			fout_blastp_input_FASTA << "\n" << itr_v_peptide_analysis_map.second->peptide_filtered;
 			fout_blastp_input_FASTA << "\n";
 		}
 		fout_blastp_input_FASTA.close();
