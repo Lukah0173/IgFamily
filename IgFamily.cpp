@@ -1,4 +1,4 @@
-// * * IgFamily v0.9.4 * * 
+// * * IgFamily v0.9.5 * * 
 //
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -38,9 +38,9 @@ int main() {
 	for (auto& itr_v_filesystem : v_filesystem) {
 		fpf_core::core_perform_wiff_fileconversion(itr_v_filesystem);
 		fpf_core::core_perform_novor_denovo(itr_v_filesystem);
-		fpf_core::core_parse_data(itr_v_filesystem, v_select_peptide_assignment);
 		bool FASTA_exists = fpf_core::core_create_FASTA_data_structures(itr_v_filesystem, select_FASTA);
 		if (FASTA_exists) {
+			fpf_core::core_parse_data(itr_v_filesystem, v_select_peptide_assignment);
 			for (auto& itr_v_sample_analysis : itr_v_filesystem.v_sample_analysis) {
 				if (itr_v_sample_analysis.file_found) {
 					fpf_core::core_create_data_structures(itr_v_filesystem, itr_v_sample_analysis);
@@ -50,9 +50,6 @@ int main() {
 					fpf_core::core_data_analysis(itr_v_filesystem, itr_v_sample_analysis);
 					fpf_core::core_multinomial(itr_v_filesystem, itr_v_sample_analysis);
 					fpf_core::core_report(itr_v_filesystem, itr_v_sample_analysis);
-				}
-				else {
-					std::cout << "\n ...no data file found";
 				}
 			}
 		}

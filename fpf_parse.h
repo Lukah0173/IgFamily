@@ -108,281 +108,229 @@ namespace fpf_parse {
 		string protein_data;
 	};
 
-	vector<csv_data> parse_proteinpeptides(std::ifstream& par_fin_csv_proteinpeptides, string par_directory) {
-
+	vector<csv_data> parse_proteinpeptides(const string& par_directory) {
+		std::ifstream fin_input_csv(par_directory);
 		vector<csv_data> temp_v_csv_data{};
-		string csv_parse{};
-		size_t csv_count_delimit{};
-		size_t csv_condition_switch{};
-		size_t csv_ignore_header{};
+		csv_data temp_csv_data{};
 		char csv_read{};
-		string csv_scan_ID{};
-		string csv_peptide{};
-		string csv_spectralcount{};
-		string csv_IgP{};
-
-		while (par_fin_csv_proteinpeptides.std::istream::get(csv_read)) {
-			if (csv_ignore_header == 1) {
-				csv_parse = csv_read;
-				if (csv_count_delimit == 18) {
-					if (temp_v_csv_data.size() == 0) {
-						csv_data temp_csv_data{};
-						temp_csv_data.csv_scan_ID = csv_scan_ID;
-						temp_csv_data.csv_peptide = csv_peptide;
-						temp_csv_data.csv_spectralcount = csv_spectralcount;
-						temp_csv_data.csv_IgP = csv_IgP;
+		size_t csv_count_delimit{};
+		size_t csv_count_delimit_width{};
+		size_t csv_peptide_parse_condition{};
+		bool csv_header_parsed{};
+		while (fin_input_csv.get(csv_read)) {
+			if (csv_header_parsed) {
+				if (csv_read == ',') {
+					if (csv_count_delimit % csv_count_delimit_width == 0) {
 						temp_v_csv_data.push_back(temp_csv_data);
+						temp_csv_data = csv_data();
 					}
-					else {
-						size_t count_v_csv_data{};
-						for (auto& itr_v_csv_data : temp_v_csv_data) {
-							++count_v_csv_data;
-							if (itr_v_csv_data.csv_peptide == csv_peptide) {
-								break;
+					++csv_count_delimit;
+				}
+				if (csv_read != ',') {
+					if (csv_count_delimit % csv_count_delimit_width == 1) {
+						temp_csv_data.csv_scan_ID += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 3) {
+						if (csv_read == '(') {
+							csv_peptide_parse_condition = 2;
+						}
+						if (csv_read == ')') {
+							csv_peptide_parse_condition = 1;
+						}
+						if ((csv_peptide_parse_condition == 1) && ((csv_read == '.') && (temp_csv_data.csv_peptide.length() > 2))) {
+							csv_peptide_parse_condition = 0;
+						}
+						if ((csv_peptide_parse_condition == 1) || (csv_peptide_parse_condition == 2)) {
+							temp_csv_data.csv_peptide += csv_read;
+						}
+						if ((csv_read == '.') && (temp_csv_data.csv_peptide.length() <= 2)) {
+							temp_csv_data.csv_peptide.clear();
+							csv_peptide_parse_condition = 1;
+						}
+						if ((csv_peptide_parse_condition != 2) && (csv_read != '.')) {
+							csv_peptide_parse_condition = 1;
+						}
+					}
+					if ((csv_count_delimit % csv_count_delimit_width == 5) && (csv_read != ',')) {
+						temp_csv_data.csv_IgP += csv_read;
+					}
+					if ((csv_count_delimit % csv_count_delimit_width == 14) && (csv_read != ',')) {
+						temp_csv_data.csv_spectralcount += csv_read;
+					}
+				}
+			}
+			if (!csv_header_parsed) {
+				if (csv_read == ',') {
+					++csv_count_delimit;
+				}
+				if (csv_read == '\n') {
+					csv_count_delimit_width = csv_count_delimit;
+					csv_header_parsed = true;
+				}
+			}
+		}
+
+		fin_input_csv.clear();
+		fin_input_csv.seekg(0, std::ios::beg);
+
+		return temp_v_csv_data;
+	}
+
+	vector<csv_data> parse_csv_PEAKS_denovopeptides(string par_directory) {
+		std::ifstream fin_input_csv(par_directory);
+		vector<csv_data> temp_v_csv_data{};
+		csv_data temp_csv_data{};
+		char csv_read{};
+		size_t csv_count_delimit{};
+		size_t csv_count_delimit_width{};
+		size_t csv_peptide_parse_condition{};
+		bool csv_header_parsed{};
+		bool read_source{ true };
+		string temp_csv_denovo_localconfidence{};
+		while (fin_input_csv.get(csv_read)) {
+			if (csv_header_parsed) {
+				if (csv_read == ',') {
+					if (csv_count_delimit % csv_count_delimit_width == 0) {					
+						temp_v_csv_data.push_back(temp_csv_data);
+						temp_csv_data = csv_data();						
+					}
+					++csv_count_delimit;
+				}
+				if (csv_read != ',') {
+					if (csv_count_delimit % csv_count_delimit_width == 1) {
+						temp_csv_data.csv_scan_ID += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 2) {
+						if (read_source) {
+							if (csv_read == '.') {
+								read_source = false;
 							}
-							if (count_v_csv_data == temp_v_csv_data.size()) {
-								csv_data temp_csv_data{};
-								temp_csv_data.csv_scan_ID = csv_scan_ID;
-								temp_csv_data.csv_peptide = csv_peptide;
-								temp_csv_data.csv_spectralcount = csv_spectralcount;
-								temp_csv_data.csv_IgP = csv_IgP;
-								temp_v_csv_data.push_back(temp_csv_data);
-								break;
+							if (!IgFamily::FILESYSTEM_MODE) {
+								temp_csv_data.csv_sourcefile += csv_read;
 							}
 						}
 					}
-					csv_peptide.clear();
-					csv_spectralcount.clear();
-					csv_IgP.clear();
-					csv_count_delimit = 0;
-				}
-				if (csv_parse == ",") {
-					++csv_count_delimit;
-				}
-				if ((csv_count_delimit == 1) && (csv_parse != ",")) {
-					csv_scan_ID += csv_parse;
-				}
-				if ((csv_count_delimit == 3) && (csv_parse != ",")) {
-					if (csv_parse == "(") {
-						csv_condition_switch = 2;
+					if ((csv_count_delimit % csv_count_delimit_width == 3) && (csv_read != ' ')) {
+						if (csv_read == '(') {
+							csv_peptide_parse_condition = 2;
+						}
+						if (csv_read == ')') {
+							csv_peptide_parse_condition = 1;
+						}
+						if ((csv_peptide_parse_condition == 1) && ((csv_read == '.') && (temp_csv_data.csv_peptide.length() > 2))) {
+							csv_peptide_parse_condition = 0;
+						}
+						if ((csv_peptide_parse_condition == 1) || (csv_peptide_parse_condition == 2)) {
+							temp_csv_data.csv_peptide += csv_read;
+						}
+						if ((csv_read == '.') && (temp_csv_data.csv_peptide.length() <= 2)) {
+							temp_csv_data.csv_peptide.clear();
+							csv_peptide_parse_condition = 1;
+						}
+						if ((csv_peptide_parse_condition != 2) && (csv_read != '.')) {
+							csv_peptide_parse_condition = 1;
+						}
 					}
-					if (csv_parse == ")") {
-						csv_condition_switch = 1;
+					if (csv_count_delimit % csv_count_delimit_width == 14) {
+						if (csv_read == ' ') {
+							temp_csv_data.v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
+							temp_csv_denovo_localconfidence.clear();
+						}
+						if (csv_read != ' ') {
+							temp_csv_denovo_localconfidence += csv_read;
+						}
+						if (fin_input_csv.peek() == ',') {
+							temp_csv_data.v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
+							temp_csv_denovo_localconfidence.clear();
+						}
 					}
-					if ((csv_condition_switch == 1) && ((csv_parse == ".") && (csv_peptide.length() > 2))) {
-						csv_condition_switch = 0;
-					}
-					if ((csv_condition_switch == 1) || (csv_condition_switch == 2)) {
-						csv_peptide += csv_parse;
-					}
-					if ((csv_parse == ".") && (csv_peptide.length() <= 2)) {
-						csv_peptide.clear();
-						csv_condition_switch = 1;
-					}
-					if ((csv_condition_switch != 2) && (csv_parse != ".")) {
-						csv_condition_switch = 1;
-					}
-				}
-				if ((csv_count_delimit == 4) && (csv_parse != ",")) {
-					csv_parse.clear();
-				}
-				if ((csv_count_delimit == 5) && (csv_parse != ",")) {
-					csv_IgP += csv_parse;
-				}
-				if ((csv_count_delimit == 14) && (csv_parse != ",")) {
-					csv_spectralcount += csv_parse;
 				}
 			}
-			if ((csv_ignore_header == 0) && (csv_read == ',')) {
-				++csv_count_delimit;
-				if (csv_count_delimit == 18) {
-					csv_ignore_header = 1;
-					csv_count_delimit = 0;
-				}
-			}
-		}
-
-		par_fin_csv_proteinpeptides.clear();
-		par_fin_csv_proteinpeptides.seekg(0, std::ios::beg);
-
-		return temp_v_csv_data;
-	}
-
-	vector<csv_data> parse_csv_PEAKS_denovopeptides(std::ifstream& par_fin_csv_denovopeptides, string par_directory) {
-
-		vector<csv_data> temp_v_csv_data{};
-		string csv_parse{};
-		size_t csv_count_delimit{};
-		size_t csv_condition_switch{};
-		size_t csv_ignore_header{};
-		char csv_read{};
-		string temp_csv_scan{};
-		string temp_csv_sourcefile{};
-		bool read_source{true};
-		string temp_csv_peptide{};
-		string temp_csv_denovo_localconfidence{};
-		vector<double> temp_v_csv_denovo_localconfidence{};
-
-		while (par_fin_csv_denovopeptides.std::istream::get(csv_read)) {
-			if (csv_ignore_header == 1) {
-				csv_parse = csv_read;
-				if (csv_count_delimit == 16) {
-					csv_data temp_csv_data{};
-					temp_csv_data.csv_scan_ID = temp_csv_scan;
-					temp_csv_data.csv_sourcefile = temp_csv_sourcefile;
-					temp_csv_data.csv_peptide = temp_csv_peptide;
-					temp_csv_data.v_csv_denovo_localconfidence = temp_v_csv_denovo_localconfidence;
-					temp_v_csv_data.push_back(temp_csv_data);
-					temp_csv_scan.clear();
-					temp_csv_sourcefile.clear();
-					temp_csv_sourcefile = true;
-					temp_csv_peptide.clear();
-					temp_v_csv_denovo_localconfidence.clear();
-					csv_count_delimit = 0;
-				}
-				if (csv_parse == ",") {
-					++csv_count_delimit;
-				}
-				if ((csv_count_delimit == 1) && (csv_parse != ",")) {
-					temp_csv_scan += csv_parse;
-				}
-				if ((csv_count_delimit == 2) && (csv_parse != ",")) {
-					if (csv_parse == ".") {
-						read_source = false;
-					}
-					if (!IgFamily::FILESYSTEM_MODE && read_source) {
-						temp_csv_sourcefile += csv_parse;
-					}
-				}
-				if ((csv_count_delimit == 3) && (csv_parse != ",") && (csv_parse != " ")) {
-					if (csv_parse == "(") {
-						csv_condition_switch = 2;
-					}
-					if (csv_parse == ")") {
-						csv_condition_switch = 1;
-					}
-					if ((csv_condition_switch == 1) && ((csv_parse == ".") && (temp_csv_peptide.length() > 2))) {
-						csv_condition_switch = 0;
-					}
-					if ((csv_condition_switch == 1) || (csv_condition_switch == 2)) {
-						temp_csv_peptide += csv_parse;
-					}
-					if ((csv_parse == ".") && (temp_csv_peptide.length() <= 2)) {
-						temp_csv_peptide.clear();
-						csv_condition_switch = 1;
-					}
-					if ((csv_condition_switch != 2) && (csv_parse != ".")) {
-						csv_condition_switch = 1;
-					}
-				}
-				if ((csv_count_delimit == 4) && (csv_parse != ",")) {
-					csv_parse.clear();
-				}
-				if ((csv_count_delimit == 14) && (csv_read != ',')) {
-					if (csv_read == ' ') {
-						temp_v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
-						temp_csv_denovo_localconfidence.clear();
-					}
-					if (csv_read != ' ') {
-						temp_csv_denovo_localconfidence += csv_parse;
-					}
-				}
-				if ((csv_count_delimit == 15) && (csv_read == ',')) {
-					temp_v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
-					temp_csv_denovo_localconfidence.clear();
-				}
-			}
-			if ((csv_ignore_header == 0) && (csv_read == ',')) {
-				++csv_count_delimit;
-				if (csv_count_delimit == 16) {
-					csv_ignore_header = 1;
-					csv_count_delimit = 0;
-				}
-			}
-		}
-
-		par_fin_csv_denovopeptides.clear();
-		par_fin_csv_denovopeptides.seekg(0, std::ios::beg);
-
-		return temp_v_csv_data;
-	}
-
-	vector<csv_data> parse_csv_NOVOR_denovopeptides(std::ifstream& par_fin_csv_denovopeptides, string par_directory) {
-
-		vector<csv_data> temp_v_csv_data{};
-		string csv_parse{};
-		size_t csv_count_delimit{};
-		size_t csv_condition_switch{};
-		bool csv_ignore_header{};
-		char csv_read{};
-		string temp_csv_peptide{};
-		string temp_csv_denovo_localconfidence{};
-		vector<double> temp_v_csv_denovo_localconfidence{};
-
-		while (par_fin_csv_denovopeptides.std::istream::get(csv_read)) {
-			if (csv_ignore_header) {
-				csv_parse = csv_read;
-				if (csv_parse == ",") {
-					++csv_count_delimit;
-				}
-				if ((csv_count_delimit == 11) && (csv_read == ',')) {
-					temp_v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
-					csv_data temp_csv_data{};
-					temp_csv_data.csv_peptide = temp_csv_peptide;
-					temp_csv_data.v_csv_denovo_localconfidence = temp_v_csv_denovo_localconfidence;
-					temp_v_csv_data.push_back(temp_csv_data);
-					temp_v_csv_denovo_localconfidence.clear();
-					temp_csv_peptide.clear();
-					csv_count_delimit = 1;
-				}
-				if ((csv_count_delimit == 10) && (csv_read != ',')) {
-					if (csv_read == '-') {
-						temp_v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
-						temp_csv_denovo_localconfidence.clear();
-					}
-					if ((csv_read != ' ') && (csv_read != '-')) {
-						temp_csv_denovo_localconfidence += csv_parse;
-					}
-				}
-				if ((csv_count_delimit == 9) && (csv_parse != ",") && (csv_parse != " ")) {
-					if (csv_parse == "(") {
-						csv_condition_switch = 2;
-					}
-					if (csv_parse == ")") {
-						csv_condition_switch = 1;
-					}
-					if ((csv_condition_switch == 1) && ((csv_parse == ".") && (temp_csv_peptide.length() > 2))) {
-						csv_condition_switch = 0;
-					}
-					if ((csv_condition_switch == 1) || (csv_condition_switch == 2)) {
-						temp_csv_peptide += csv_parse;
-					}
-					if ((csv_parse == ".") && (temp_csv_peptide.length() <= 2)) {
-						temp_csv_peptide.clear();
-						csv_condition_switch = 1;
-					}
-					if ((csv_condition_switch != 2) && (csv_parse != ".")) {
-						csv_condition_switch = 1;
-					}
-				}
-				if ((csv_count_delimit == 10) && (csv_parse != ",")) {
-					csv_parse.clear();
-				}
-			}
-			if (!csv_ignore_header) {
-				csv_parse += csv_read;
-				if (csv_parse == " aaScore,") {
-					csv_ignore_header = true;
-					csv_parse.clear();
-				}
+			if (!csv_header_parsed) {
 				if (csv_read == ',') {
-					csv_parse.clear();
+					++csv_count_delimit;
+				}
+				if (csv_read == '\n') {
+					csv_count_delimit_width = csv_count_delimit;
+					csv_header_parsed = true;
 				}
 			}
 		}
 
-		par_fin_csv_denovopeptides.clear();
-		par_fin_csv_denovopeptides.seekg(0, std::ios::beg);
+		fin_input_csv.clear();
+		fin_input_csv.seekg(0, std::ios::beg);
+
+		return temp_v_csv_data;
+	}
+
+	vector<csv_data> parse_csv_NOVOR_denovopeptides(string par_directory) {
+		std::ifstream fin_input_csv(par_directory);
+		vector<csv_data> temp_v_csv_data{};
+		csv_data temp_csv_data{};
+		char csv_read{};
+		size_t csv_count_delimit{};
+		size_t csv_count_delimit_width{};
+		size_t csv_peptide_parse_condition{};
+		bool csv_header_parsed{};
+		bool read_source{ true };
+		string temp_csv_denovo_localconfidence{};
+		while (fin_input_csv.get(csv_read)) {
+			if (csv_header_parsed) {
+				if (csv_read == ',') {
+					temp_v_csv_data.push_back(temp_csv_data);
+					temp_csv_data = csv_data();
+					++csv_count_delimit;
+				}
+				if (csv_read != ',') {
+					if (csv_count_delimit % csv_count_delimit_width == 10) {
+						if (csv_read == '-') {
+							temp_csv_data.v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
+							temp_csv_denovo_localconfidence.clear();
+						}
+						if ((csv_read != ' ') && (csv_read != '-')) {
+							temp_csv_denovo_localconfidence += csv_read;
+						}
+						if (fin_input_csv.peek() == ',') {
+							temp_csv_data.v_csv_denovo_localconfidence.push_back(std::stod(temp_csv_denovo_localconfidence));
+							temp_csv_denovo_localconfidence.clear();
+						}
+					}
+					if ((csv_count_delimit % csv_count_delimit_width == 9) && (csv_read != ' ')) {
+						if (csv_read == '(') {
+							csv_peptide_parse_condition = 2;
+						}
+						if (csv_read == ')') {
+							csv_peptide_parse_condition = 1;
+						}
+						if ((csv_peptide_parse_condition == 1) && ((csv_read == '.') && (temp_csv_data.csv_peptide.length() > 2))) {
+							csv_peptide_parse_condition = 0;
+						}
+						if ((csv_peptide_parse_condition == 1) || (csv_peptide_parse_condition == 2)) {
+							temp_csv_data.csv_peptide += csv_read;
+						}
+						if ((csv_read == '.') && (temp_csv_data.csv_peptide.length() <= 2)) {
+							temp_csv_data.csv_peptide.clear();
+							csv_peptide_parse_condition = 1;
+						}
+						if ((csv_peptide_parse_condition != 2) && (csv_read != '.')) {
+							csv_peptide_parse_condition = 1;
+						}
+					}
+				}
+			}
+			if (!csv_header_parsed) {
+				if (csv_read == ',') {
+					++csv_count_delimit;
+				}
+				if (csv_read == '\n') {
+					csv_count_delimit_width = csv_count_delimit;
+					csv_header_parsed = true;
+				}
+			}
+		}
+
+		fin_input_csv.clear();
+		fin_input_csv.seekg(0, std::ios::beg);
 
 		return temp_v_csv_data;
 	}
@@ -404,7 +352,7 @@ namespace fpf_parse {
 					std::cout << FASTA_parse;
 					FASTA_parse.clear();
 					string str_format_break{};
-					std::cout << "\n\n\n continue? ( y / n ) ";					
+					std::cout << "\n\n\n continue? ( y / n ) ";
 					while (str_format_break == "") {
 						std::cout << "\n\n --> ";
 						std::cin >> str_format_break;
@@ -431,7 +379,7 @@ namespace fpf_parse {
 				if ((FASTA_read != '>') && (FASTA_read != '|') && ((FASTA_read != '\n') && (FASTA_read != '\r\n') && (FASTA_read != '\r'))) {
 					FASTA_parse += FASTA_read;
 				}
-				if ((FASTA_read == '\n') || (FASTA_read == '\r\n') || (FASTA_read == '\r')) {					
+				if ((FASTA_read == '\n') || (FASTA_read == '\r\n') || (FASTA_read == '\r')) {
 					header_line = false;
 					FASTA_parse.clear();
 				}
@@ -492,7 +440,7 @@ namespace fpf_parse {
 							while (!((std::stoi(change_field_value) < FASTA_count_delimit) && (std::stoi(change_field_value) >= 0))) {
 								std::cout << "\n\n Input selection: \n\n --> ";
 								std::cin >> change_field_value;
-								if ((change_field_value != "T") && (change_field_value != "X")){
+								if ((change_field_value != "T") && (change_field_value != "X")) {
 									try {
 										auto try_catch = std::stoi(change_field_value);
 										if (try_catch == 0) {
@@ -501,7 +449,7 @@ namespace fpf_parse {
 									catch (const std::invalid_argument&) {
 										change_field_value = "-1";
 									}
-								} 
+								}
 								else {
 									break;
 								}
@@ -704,7 +652,7 @@ namespace fpf_parse {
 				if (FASTA_read != '_') {
 					if (temp_FASTA_name == "IGHV") {
 						temp_FASTA_class = "IGHV";
-						temp_FASTA_type = "IG";				
+						temp_FASTA_type = "IG";
 					}
 					if (temp_FASTA_name == "IGKV") {
 						temp_FASTA_class = "IGKV";
@@ -754,7 +702,7 @@ namespace fpf_parse {
 				temp_FASTA_accession += FASTA_read;
 			}
 			if ((FASTA_condition_switch_2 == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
-				
+
 				if (temp_FASTA_class != "MIGHV") {
 					if (!((temp_FASTA_class == "UNIPROT") && ((temp_FASTA_name.find("Ig") != std::string::npos) || (temp_FASTA_name.find("Immunoglobulin") != std::string::npos)))) {
 						temp_FASTA_data.set_FASTA_accession(temp_FASTA_accession);

@@ -71,8 +71,13 @@ namespace fpf_core {
 					std::cout << "\n\n\n * parsing " << par_filesystem.filename << " NOVOR de novo matched peptides...";
 					temp_sample_analysis.v_csv_data = std::move(main_v_csv_NOVOR_denovo_peptides);
 				}
-				std::cout << "\n\n peptides parsed - " << temp_sample_analysis.v_csv_data.size();
-				par_filesystem.v_sample_analysis.push_back(std::move(temp_sample_analysis));
+				if (temp_sample_analysis.file_found) {
+					std::cout << "\n\n peptides parsed - " << temp_sample_analysis.v_csv_data.size();
+					par_filesystem.v_sample_analysis.push_back(std::move(temp_sample_analysis));
+				}
+				else {
+					std::cout << "\n ...no data file found";
+				}
 			}
 		}
 	}

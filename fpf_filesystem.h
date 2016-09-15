@@ -265,24 +265,18 @@ namespace fpf_filesystem {
 		return temp_root_NOVOR_database_peptides;
 	}
 
-	vector<csv_data> parse_filesystem_PEAKS_database_peptides(string par_fin_root_directory) {
-		vector<csv_data> temp_v_csv_proteinpeptides{};
-		std::ifstream fin_input_csv(par_fin_root_directory);
-		temp_v_csv_proteinpeptides = fpf_parse::parse_proteinpeptides(fin_input_csv, par_fin_root_directory);
+	inline vector<csv_data> parse_filesystem_PEAKS_database_peptides(string par_fin_root_directory) {
+		vector<csv_data> temp_v_csv_proteinpeptides = fpf_parse::parse_proteinpeptides(par_fin_root_directory);
 		return temp_v_csv_proteinpeptides;
 	}
 
-	vector<csv_data> parse_filesystem_PEAKS_denovo_peptides(string par_fin_root_directory) {
-		vector<csv_data> temp_csv_PEAKS_denovo_peptides{};
-		std::ifstream fin_input_csv(par_fin_root_directory);
-		temp_csv_PEAKS_denovo_peptides = fpf_parse::parse_csv_PEAKS_denovopeptides(fin_input_csv, par_fin_root_directory);
+	inline vector<csv_data> parse_filesystem_PEAKS_denovo_peptides(string par_fin_root_directory) {
+		vector<csv_data> temp_csv_PEAKS_denovo_peptides = fpf_parse::parse_csv_PEAKS_denovopeptides(par_fin_root_directory);
 		return temp_csv_PEAKS_denovo_peptides;
 	}
 
-	vector<csv_data> parse_filesystem_NOVOR_denovo_peptides(string par_fin_root_directory) {
-		vector<csv_data> temp_csv_NOVOR_denovo_peptides{};
-		std::ifstream fin_input_csv(par_fin_root_directory);
-		temp_csv_NOVOR_denovo_peptides = fpf_parse::parse_csv_NOVOR_denovopeptides(fin_input_csv, par_fin_root_directory);
+	inline vector<csv_data> parse_filesystem_NOVOR_denovo_peptides(string par_fin_root_directory) {
+		vector<csv_data> temp_csv_NOVOR_denovo_peptides = fpf_parse::parse_csv_NOVOR_denovopeptides(par_fin_root_directory);
 		return temp_csv_NOVOR_denovo_peptides;
 	}
 
