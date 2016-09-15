@@ -39,8 +39,7 @@ namespace fpf_core {
 		}
 	}
 
-	bool core_create_peptide_data_structures(filesystem& par_filesystem, vector<string>& par_v_select_peptide_assignment_method) {
-		bool file_found{};
+	void core_create_peptide_data_structures(filesystem& par_filesystem, vector<string>& par_v_select_peptide_assignment_method) {
 		if ((IgFamily::FILESYSTEM_UPDATE_ALL) || (par_filesystem.fileversion != IgFamily::version)) {
 			std::cout << "\n\n\n\n parsing data for file ";
 			std::cout << par_filesystem.filename;
@@ -49,14 +48,14 @@ namespace fpf_core {
 				fpf_filesystem::sample_analysis temp_sample_analysis{};
 				if (itr_v_select_spectra_assignment == "PEAKS database match") {
 					vector<fpf_parse::csv_data> main_v_csv_PEAKS_database_peptides = fpf_filesystem::parse_filesystem_PEAKS_database_peptides(fpf_filesystem::read_filesystem_PEAKS_database_peptides(par_filesystem.directory));
-					file_found = fpf_parse::check_csv_PEAKS_database_peptides_empty(main_v_csv_PEAKS_database_peptides);
+					temp_sample_analysis.file_found = fpf_parse::check_csv_PEAKS_database_peptides_empty(main_v_csv_PEAKS_database_peptides);
 					temp_sample_analysis.peptide_assignment_method = "PEAKS_database";
 					std::cout << "\n\n\n * parsing " << par_filesystem.filename << " PEAKS database matched peptides...";
 					temp_sample_analysis.main_v_csv_peptides = std::move(main_v_csv_PEAKS_database_peptides);
 				}
 				if (itr_v_select_spectra_assignment == "PEAKS de novo") {
 					vector<fpf_parse::csv_data> main_v_csv_PEAKS_denovo_peptides = fpf_filesystem::parse_filesystem_PEAKS_denovo_peptides(fpf_filesystem::read_filesystem_PEAKS_denovo_peptides(par_filesystem.directory));
-					file_found = fpf_parse::check_csv_PEAKS_denovo_peptides_empty(main_v_csv_PEAKS_denovo_peptides);
+					temp_sample_analysis.file_found = fpf_parse::check_csv_PEAKS_denovo_peptides_empty(main_v_csv_PEAKS_denovo_peptides);
 					temp_sample_analysis.peptide_assignment_method = "PEAKS_denono";
 					std::cout << "\n\n\n * parsing " << par_filesystem.filename << " PEAKS de novo peptides...";
 					temp_sample_analysis.main_v_csv_peptides = std::move(main_v_csv_PEAKS_denovo_peptides);
@@ -67,7 +66,7 @@ namespace fpf_core {
 				}
 				if (itr_v_select_spectra_assignment == "NOVOR de novo") {
 					vector<fpf_parse::csv_data> main_v_csv_NOVOR_denovo_peptides = fpf_filesystem::parse_filesystem_NOVOR_denovo_peptides(fpf_filesystem::read_filesystem_NOVOR_denovo_peptides(par_filesystem.directory));
-					file_found = fpf_parse::check_csv_NOVOR_denovo_peptides_empty(main_v_csv_NOVOR_denovo_peptides);
+					temp_sample_analysis.file_found = fpf_parse::check_csv_NOVOR_denovo_peptides_empty(main_v_csv_NOVOR_denovo_peptides);
 					temp_sample_analysis.peptide_assignment_method = "NOVOR_denono";
 					std::cout << "\n\n\n * parsing " << par_filesystem.filename << " NOVOR de novo matched peptides...";
 					temp_sample_analysis.main_v_csv_peptides = std::move(main_v_csv_NOVOR_denovo_peptides);
@@ -75,7 +74,6 @@ namespace fpf_core {
 				par_filesystem.v_sample_analysis.push_back(std::move(temp_sample_analysis));
 			}
 		}
-		return file_found;
 	}
 
 	void core_homology_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_refined) {
