@@ -796,14 +796,14 @@ namespace fpf_parse {
 		string output_FASTA_filtered = "blast_directory\\database.fasta";
 		std::ofstream fout_FASTA_filtered;
 		fout_FASTA_filtered.open(output_FASTA_filtered);
-		if (IgFamily::OUTPUT_FASTA == 1) {
+		if (IgFamily::OUTPUT_FASTA) {
 			for (const auto& itr_v_FASTA_DATA : par_v_FASTA_data) {
 				fout_FASTA_filtered << ">" << itr_v_FASTA_DATA.return_FASTA_accession();
 				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_name();
 				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_species();
 				fout_FASTA_filtered << "|";
 				for (auto i = 0; i < itr_v_FASTA_DATA.return_protein_data().length(); ++i) {
-					if ((i % 60 == 0) && ((i + 1) < itr_v_FASTA_DATA.return_protein_data().length())) {
+					if ((i % IgFamily::OUTPUT_FASTA_ACCESSION_WIDTH == 0) && ((i + 1) < itr_v_FASTA_DATA.return_protein_data().length())) {
 						fout_FASTA_filtered << "\n";
 					}
 					fout_FASTA_filtered << itr_v_FASTA_DATA.return_protein_data().at(i);

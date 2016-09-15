@@ -23,7 +23,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.9.5b";
+	const string version = "v0.9.5c";
 
 	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
@@ -45,8 +45,10 @@ namespace IgFamily {
 	const string DEFAULT_INPUT_FASTA = "IGHV_IGLV_IGKV_CONT_20160827.fasta";
 	const string DEFAULT_PEPTIDE_ASSIGNMENT_METHOD = "PEAKS de novo";
 
+	const int OUTPUT_FASTA_ACCESSION_WIDTH = 60;
 	const double DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD = 50;
 	const double DENOVO_LOCAL_CONFIDENCE_MOVING_AVERAGE_THRESHOLD = 85;
+	const double DENOVO_PEPTIDE_SIZE_THRESHOLD = 5;
 	const double BLASTP_THRESHOLD = 10000;
 	const double BLASTP_EVALUE_THRESHOLD = 20;
 	const double BLASTP_PARPROP_SCALE = BLASTP_EVALUE_THRESHOLD;

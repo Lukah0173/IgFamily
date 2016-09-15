@@ -146,7 +146,8 @@ namespace fpf_data {
 		for (const auto itr_parse_FASTA : par_parse_FASTA) {
 			const auto find_v_FASTA_element = std::find_if(temp_v_protein_data.begin(), temp_v_protein_data.end(),
 				[itr_parse_FASTA](const protein_data& par_FASTA_element) {
-				return par_FASTA_element.protein_name == itr_parse_FASTA.return_FASTA_name(); });
+					return par_FASTA_element.protein_name == itr_parse_FASTA.return_FASTA_name();
+				});
 			if (find_v_FASTA_element == temp_v_protein_data.end()) {
 				protein_data temp_protein_data{
 					temp_key_protein_data,
@@ -228,7 +229,7 @@ namespace fpf_data {
 					temp_moving_average /= v_moving_value.size();
 					if ((temp_moving_average < DENOVO_LOCAL_CONFIDENCE_MOVING_AVERAGE_THRESHOLD)
 						&& (temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid[j].aminoacid_localconfidence < DENOVO_LOCAL_CONFIDENCE_MOVING_AVERAGE_THRESHOLD)) {
-						if (temp_peptide_selected.size() > 5) {
+						if (temp_peptide_selected.size() > IgFamily::DENOVO_PEPTIDE_SIZE_THRESHOLD) {
 							temp_peptide_selected.pop_back();
 							temp_denovo_peptide_2.v_denovo_aminoacid.pop_back();
 							temp_v_peptide_selected.push_back(temp_peptide_selected);
@@ -242,7 +243,7 @@ namespace fpf_data {
 						temp_denovo_peptide_2.v_denovo_aminoacid.push_back(temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid[j]);
 					}
 					if (((j + 1) == temp_peptide_data.denovo_peptide_data.v_denovo_aminoacid.size())
-						&& (temp_peptide_selected.size() > 5)) {
+						&& (temp_peptide_selected.size() > IgFamily::DENOVO_PEPTIDE_SIZE_THRESHOLD)) {
 						temp_v_peptide_selected.push_back(temp_peptide_selected);
 						temp_v_denovo_peptide.push_back(temp_denovo_peptide_2);
 					}
