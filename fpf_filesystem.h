@@ -18,7 +18,6 @@
 #include <vector>
 
 #include "IgFamily.h"
-#include "fpf_convert.h"
 #include "fpf_data.h"
 #include "fpf_parse.h"
 
@@ -31,7 +30,6 @@ namespace fpf_filesystem {
 	using std::multimap;
 	using std::vector;
 
-	typedef fpf_convert::file_conversion file_conversion;
 	typedef fpf_data::homology_data homology_data;
 	typedef fpf_data::protein_data protein_data;
 	typedef fpf_data::peptide_analysis peptide_analysis;
@@ -82,11 +80,11 @@ namespace fpf_filesystem {
 
 		/* mgf conversion parameters */
 
-		bool fileconversion = true;
-		file_conversion file_conversion;
+		bool perform_wiff_fileconversion;
 
 		/* de novo parameters */
 
+		bool perform_novor_denovo;
 		string denono_deltamass;
 
 		/* sample analysis */
@@ -95,6 +93,7 @@ namespace fpf_filesystem {
 	};
 
 	vector<string> read_root_dir(string par_root_directory) {
+		std::cout << "\n\n\n reading root directory...\n";
 		vector<string> temp_v_IgFamily_root{};
 		string fin_IgFamily_root{};
 		if (IgFamily::FILESYSTEM_MODE) {
@@ -247,56 +246,6 @@ namespace fpf_filesystem {
 			temp_v_filesystem.push_back(temp_filesystem);
 		}
 		return temp_v_filesystem;
-	}
-
-	void perform_fileconversion(filesystem& par_filesystem) {
-		par_filesystem.file_conversion = fpf_convert::create_fileconversion_parameters(fpf_convert::prompt_defaultconversion());
-		string fileconversion_command{};
-		fileconversion_command += "msconvert.exe ";
-		fileconversion_command += "\"" + DEFAULT_IGFAMILY_DIRECTORY;
-		fileconversion_command += par_filesystem.directory;
-		fileconversion_command += par_filesystem.filename;
-		fileconversion_command += ".wiff\"";
-		////fileconversion_command += " --64";
-		////fileconversion_command += " --mz64";
-		//fileconversion_command += " -v";
-		//fileconversion_command += " --mgf";
-		//if (par_filesystem.file_conversion.peakpicking.peakpicking) {
-		//	//fileconversion_command += " --filter \"peakPicking cwt ";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.peakpicking.peakpicking_mslevel_from);
-		//	//fileconversion_command += "-";
-		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.peakpicking.peakpicking_mslevel_to);
-		//	//fileconversion_command += "\"";
-		//}
-		//if (par_filesystem.file_conversion.threshold.intensity_threshold) {
-		//	//fileconversion_command += " --filter \"threshold absolute ";
-		//	//fileconversion_command += std::to_string(par_filesystem.file_conversion.threshold.threshold);
-		//	//fileconversion_command += " most-intense\"";
-		//}
-		//if (par_filesystem.file_conversion.ms2denoise.ms2denoise) {
-		//	//fileconversion_command += " --filter \"MS2Denoise ";
-		//	//fileconversion_command += std::to_string(par_filesystem.file_conversion.ms2denoise.ms2denoise_peaksinwindow);
-		//	//fileconversion_command += " ";
-		//	//fileconversion_command += std::to_string(par_filesystem.file_conversion.ms2denoise.ms2denoise_windowwidth);
-		//	//fileconversion_command += " true\"";
-		//}
-		//if (par_filesystem.file_conversion.ms2deisotope.ms2deisotope) {
-		//	//fileconversion_command += " --filter MS2Deisotope";
-		//}
-		//if (par_filesystem.file_conversion.chargestatepredictor.chargestatepredictor) {
-		//	fileconversion_command += " --filter \"chargeStatePredictor true ";
-		//	fileconversion_command += std::to_string(par_filesystem.file_conversion.chargestatepredictor.chargestatepredictor_maxcharge);
-		//	fileconversion_command += " ";
-		//	fileconversion_command += std::to_string(par_filesystem.file_conversion.chargestatepredictor.chargestatepredictor_mincharge);
-		//	fileconversion_command += " ";
-		//	fileconversion_command += "0.9";
-		//	fileconversion_command += "\"";
-		//}
-		//fileconversion_command += " outdir=Z:\\Lukah_Dykes\\IgFamily\\";
-		//fileconversion_command += par_filesystem.directory;
-		fileconversion_command += " --mgf --filter \"chargeStatePredictor true 3 2 0.9\"";
-		std::cout << "\n\n" << fileconversion_command;
-		fpf_convert::sys_msconvert(fileconversion_command, par_filesystem.directory);
 	}
 
 	string read_filesystem_PEAKS_database_peptides(string par_root_directory) {

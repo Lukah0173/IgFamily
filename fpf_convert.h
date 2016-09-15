@@ -15,12 +15,15 @@
 #include <vector>
 
 #include "IgFamily.h"
+#include "fpf_filesystem.h"
 
 
 namespace fpf_convert {
 
 	using std::string;
 	using std::vector;
+
+	typedef fpf_filesystem::filesystem filesystem;
 
 	struct conversion_absolute_threshold;
 	struct conversion_peakpicking;
@@ -122,6 +125,56 @@ namespace fpf_convert {
 		string_system += " && ";
 		string_system += par_str_msconvert_command;
 		system(string_system.c_str());
+	}
+
+	void perform_fileconversion(filesystem& par_filesystem) {
+		file_conversion temp_file_conversion = fpf_convert::create_fileconversion_parameters(fpf_convert::prompt_defaultconversion());
+		string fileconversion_command{};
+		fileconversion_command += "msconvert.exe ";
+		fileconversion_command += "\"" + DEFAULT_IGFAMILY_DIRECTORY;
+		fileconversion_command += par_filesystem.directory;
+		fileconversion_command += par_filesystem.filename;
+		fileconversion_command += ".wiff\"";
+		////fileconversion_command += " --64";
+		////fileconversion_command += " --mz64";
+		//fileconversion_command += " -v";
+		//fileconversion_command += " --mgf";
+		//if (temp_file_conversion.peakpicking.peakpicking) {
+		//	//fileconversion_command += " --filter \"peakPicking cwt ";
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.peakpicking.peakpicking_mslevel_from);
+		//	//fileconversion_command += "-";
+		//	//fileconversion_command += std::to_string(par_filesystem.fileconversion.peakpicking.peakpicking_mslevel_to);
+		//	//fileconversion_command += "\"";
+		//}
+		//if (temp_file_conversion.threshold.intensity_threshold) {
+		//	//fileconversion_command += " --filter \"threshold absolute ";
+		//	//fileconversion_command += std::to_string(par_filesystem.file_conversion.threshold.threshold);
+		//	//fileconversion_command += " most-intense\"";
+		//}
+		//if (temp_file_conversion.ms2denoise.ms2denoise) {
+		//	//fileconversion_command += " --filter \"MS2Denoise ";
+		//	//fileconversion_command += std::to_string(par_filesystem.file_conversion.ms2denoise.ms2denoise_peaksinwindow);
+		//	//fileconversion_command += " ";
+		//	//fileconversion_command += std::to_string(par_filesystem.file_conversion.ms2denoise.ms2denoise_windowwidth);
+		//	//fileconversion_command += " true\"";
+		//}
+		//if (temp_file_conversion.ms2deisotope.ms2deisotope) {
+		//	//fileconversion_command += " --filter MS2Deisotope";
+		//}
+		//if (temp_file_conversion.chargestatepredictor.chargestatepredictor) {
+		//	fileconversion_command += " --filter \"chargeStatePredictor true ";
+		//	fileconversion_command += std::to_string(par_filesystem.file_conversion.chargestatepredictor.chargestatepredictor_maxcharge);
+		//	fileconversion_command += " ";
+		//	fileconversion_command += std::to_string(par_filesystem.file_conversion.chargestatepredictor.chargestatepredictor_mincharge);
+		//	fileconversion_command += " ";
+		//	fileconversion_command += "0.9";
+		//	fileconversion_command += "\"";
+		//}
+		//fileconversion_command += " outdir=Z:\\Lukah_Dykes\\IgFamily\\";
+		//fileconversion_command += par_filesystem.directory;
+		fileconversion_command += " --mgf --filter \"chargeStatePredictor true 3 2 0.9\"";
+		std::cout << "\n\n" << fileconversion_command;
+		sys_msconvert(fileconversion_command, par_filesystem.directory);
 	}
 }
 

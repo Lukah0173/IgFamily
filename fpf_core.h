@@ -10,7 +10,9 @@
 #define	FPF_CORE
 
 #include "IgFamily.h"
+#include "fpf_convert.h"
 #include "fpf_data_analysis.h"
+#include "fpf_denovo.h"
 #include "fpf_filesystem.h"
 #include "fpf_homology_analysis.h"
 #include "fpf_multinomial.h"
@@ -24,6 +26,18 @@ namespace fpf_core {
 
 	typedef fpf_filesystem::filesystem filesystem;
 	typedef fpf_filesystem::sample_analysis sample_analysis;
+
+	void core_perform_wiff_fileconversion(filesystem& par_filesystem) {
+		if (par_filesystem.perform_wiff_fileconversion) {
+			fpf_convert::perform_fileconversion(par_filesystem);
+		}
+	}
+
+	void core_perform_novor_denovo(filesystem& par_filesystem) {
+		if (par_filesystem.perform_novor_denovo) {
+			fpf_denovo::perform_novor_denovo(par_filesystem);
+		}
+	}
 
 	void core_homology_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_refined) {
 		if (!par_refined) {

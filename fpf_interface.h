@@ -32,7 +32,7 @@ namespace fpf_interface {
 			++count_itr;
 			std::cout << itr_v_spectra_assignment_method;
 			if (count_itr != par_v_spectra_assignment_method.size()) {
-				std::cout << " + ";
+				std::cout << ",\n" + string(34,' ');
 			}
 		}
 	}
@@ -221,7 +221,6 @@ namespace fpf_interface {
 
 	void select_settings(string& par_select_fasta, vector<string> par_v_select_peptide_assignment) {
 		string menu_selection{ display_menu() };
-
 		bool menu_continue{};
 		while (!menu_continue) {
 			if (par_select_fasta == "F") {

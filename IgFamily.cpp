@@ -1,4 +1,4 @@
-// * * IgFamily v0.9.2 * * 
+// * * IgFamily v0.9.3 * * 
 //
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -17,7 +17,6 @@
 #include "IgFamily.h"
 #include "fpf_core.h"
 #include "fpf_data_analysis.h"
-#include "fpf_denovo.h"
 #include "fpf_dirichlet_mixture_model.h"
 #include "fpf_filesystem.h"
 #include "fpf_filesystem_analysis.h"
@@ -41,22 +40,16 @@ int main() {
 	fpf_interface::display_settings(select_FASTA, v_select_peptide_assignment);
 	fpf_interface::select_settings(select_FASTA, v_select_peptide_assignment);
 
-	std::cout << "\n\n\n reading root directory...\n";
 	vector<string> v_root_directory = fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR);
 	vector<fpf_filesystem::filesystem> v_filesystem = fpf_filesystem::read_filesystem(v_root_directory);
-	
-	for (auto itr_v_filesystem : v_filesystem) {
-		if (itr_v_filesystem.fileconversion) {
-			//fpf_filesystem::perform_fileconversion(itr_v_filesystem);
-			//fpf_denovo::perform_novor_denovo(itr_v_filesystem);
-			//string catchin{};
-			//std::cin >> catchin;
-		}
+
+	for (auto& itr_v_filesystem : v_filesystem) {
+		fpf_core::core_perform_wiff_fileconversion(itr_v_filesystem);
+		fpf_core::core_perform_novor_denovo(itr_v_filesystem);
 	}
 
 	for (auto& itr_v_filesystem : v_filesystem) {
 		bool filesystem_modified{};
-		fpf_filesystem::sample_analysis temp_sample_analysis{};
 		vector<fpf_parse::csv_data> main_v_csv_PEAKS_database_peptides;
 		vector<fpf_parse::csv_data> main_v_csv_PEAKS_denovo_peptides;
 		vector<fpf_parse::csv_data> main_v_csv_NOVOR_denovo_peptides;
@@ -72,6 +65,7 @@ int main() {
 
 		bool file_found{};
 		for (const auto& itr_v_select_spectra_assignment : v_select_peptide_assignment) {
+			fpf_filesystem::sample_analysis temp_sample_analysis{};
 			if (itr_v_select_spectra_assignment == "PEAKS database match") {
 				temp_sample_analysis.PEAKS_database_exists = fpf_parse::check_csv_PEAKS_database_peptides_empty(main_v_csv_PEAKS_database_peptides, filesystem_modified);
 				temp_sample_analysis.peptide_assignment_method = "PEAKS_database";
@@ -87,7 +81,7 @@ int main() {
 				temp_sample_analysis.peptide_assignment_method = "NOVOR_denono";
 				file_found = temp_sample_analysis.NOVOR_denovo_exists;
 			}
-			itr_v_filesystem.v_sample_analysis.push_back(temp_sample_analysis);
+			itr_v_filesystem.v_sample_analysis.push_back(std::move(temp_sample_analysis));
 		}
 
 		if (file_found) {
