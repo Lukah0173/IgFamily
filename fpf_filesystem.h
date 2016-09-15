@@ -43,10 +43,8 @@ namespace fpf_filesystem {
 	struct sample_analysis;
 	
 	struct sample_analysis {
-		bool PEAKS_database_exists;
-		bool PEAKS_denovo_exists;
-		bool NOVOR_denovo_exists;
 		string peptide_assignment_method;
+		vector<csv_data> main_v_csv_peptides;
 		vector<protein_data> v_protein_data;
 		map<string, protein_data*> v_protein_data_map;
 		vector<peptide_data> v_peptide_data;
