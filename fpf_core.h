@@ -28,15 +28,11 @@ namespace fpf_core {
 	typedef fpf_filesystem::sample_analysis sample_analysis;
 
 	void core_perform_wiff_fileconversion(filesystem& par_filesystem) {
-		if (par_filesystem.perform_wiff_fileconversion) {
-			fpf_convert::perform_fileconversion(par_filesystem);
-		}
+		fpf_convert::perform_fileconversion(par_filesystem);
 	}
 
 	void core_perform_novor_denovo(filesystem& par_filesystem) {
-		if (par_filesystem.perform_novor_denovo) {
-			fpf_denovo::perform_novor_denovo(par_filesystem);
-		}
+		fpf_denovo::perform_novor_denovo(par_filesystem);
 	}
 
 	void core_parse_data(filesystem& par_filesystem, vector<string>& par_v_select_peptide_assignment_method) {
