@@ -45,7 +45,7 @@ namespace fpf_filesystem {
 	struct sample_analysis {
 		string peptide_assignment_method;
 		bool file_found;
-		vector<csv_data> main_v_csv_peptides;
+		vector<csv_data> v_csv_data;
 		vector<protein_data> v_protein_data;
 		map<string, protein_data*> v_protein_data_map;
 		vector<peptide_data> v_peptide_data;
@@ -88,6 +88,7 @@ namespace fpf_filesystem {
 
 		/* sample analysis */
 
+		vector<fpf_parse::FASTA_data> v_FASTA_data;
 		std::vector<sample_analysis> v_sample_analysis;
 	};
 

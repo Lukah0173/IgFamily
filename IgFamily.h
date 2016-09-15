@@ -23,7 +23,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.9.3b";
+	const string version = "v0.9.4";
 
 	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
@@ -61,6 +61,10 @@ namespace IgFamily {
 
 	bool POLYMORPHISM_SELECTED = 0;
 	double MULTINOMIAL_CONJUGATION_FACTOR = 0.5;
+	double MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_1 = 50;
+	double MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_1 = 0.05;
+	double MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_2 = 50;
+	double MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2 = 0.01;
 
 
 

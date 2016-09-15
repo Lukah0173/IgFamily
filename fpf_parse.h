@@ -812,8 +812,8 @@ namespace fpf_parse {
 		return false;
 	}
 
-	bool check_FASTA_file_empty(vector<FASTA_data> par_v_FASTA_data) {
-		if (par_v_FASTA_data.size() == 0) {
+	bool check_FASTA_file_exists(vector<FASTA_data> par_v_FASTA_data) {
+		if (par_v_FASTA_data.empty()) {
 			std::cout << "\n\n * * * FASTA file empty..\n\n * * * Is the file correctly directed?";
 			std::cout << "\n\n The program will now terminate. Input any key to continue -\n\n -> ";
 			string program_exit;

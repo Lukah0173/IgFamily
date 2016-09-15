@@ -192,11 +192,11 @@ namespace fpf_data_analysis {
 				std::cout << " with ";
 				std::cout << count_selected_genefamilies;
 				std::cout << " gene families\n";
-				if (count_selected_genefamilies < 50) {
-					IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = 0.05;
+				if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_1) {
+					IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_1;
 				}
-				if (count_selected_genefamilies < 20) {
-					IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = 0.01;
+				if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_2) {
+					IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2;
 				}
 				fpf_homology_analysis::determine_blastp_parameter_density(par_sample_analysis);
 				create_protein_analysis(par_sample_analysis);
