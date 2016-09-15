@@ -248,18 +248,18 @@ namespace fpf_filesystem {
 		return temp_v_filesystem;
 	}
 
-	string read_filesystem_PEAKS_database_peptides(string par_root_directory) {
+	inline string read_filesystem_PEAKS_database_peptides(string par_root_directory) {
 		string temp_root_PEAKS_database_peptides = par_root_directory + "database_peptides_PEAKS.csv";
 		return temp_root_PEAKS_database_peptides;
 	}
 
-	string read_filesystem_PEAKS_denovo_peptides(string par_root_directory) {
+	inline string read_filesystem_PEAKS_denovo_peptides(string par_root_directory) {
 		string temp_root_PEAKS_denovo_peptides{};
 		temp_root_PEAKS_denovo_peptides = par_root_directory + "denovo_peptides_PEAKS.csv";
 		return temp_root_PEAKS_denovo_peptides;
 	}
 
-	string read_filesystem_NOVOR_denovo_peptides(string par_root_directory) {
+	inline string read_filesystem_NOVOR_denovo_peptides(string par_root_directory) {
 		string temp_root_NOVOR_database_peptides{};
 		temp_root_NOVOR_database_peptides = par_root_directory + "denovo_peptides_NOVOR.csv";
 		return temp_root_NOVOR_database_peptides;

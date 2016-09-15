@@ -86,7 +86,7 @@ namespace fpf_data_analysis {
 		return temp_v_protein_analysis_map;
 	}
 
-	void create_protein_analysis(sample_analysis& par_sample_analysis) {
+	void create_v_protein_analysis(sample_analysis& par_sample_analysis) {
 		protein_analysis temp_protein_analysis{};
 		size_t temp_key_protein_analysis{};
 		vector<protein_analysis> temp_v_protein_analysis{};
@@ -198,8 +198,8 @@ namespace fpf_data_analysis {
 				if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_2) {
 					IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2;
 				}
-				fpf_homology_analysis::determine_blastp_parameter_density(par_sample_analysis);
-				create_protein_analysis(par_sample_analysis);
+				fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis);
+				create_v_protein_analysis(par_sample_analysis);
 			}
 		}
 		IgFamily::POLYMORPHISM_SELECTED = true;

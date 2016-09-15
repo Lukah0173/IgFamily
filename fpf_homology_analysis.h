@@ -219,7 +219,7 @@ namespace fpf_homology_analysis {
 		}
 	}
 
-	void create_protein_from_protein_analysis(sample_analysis& par_sample_analysis) {
+	void create_protein_construct_from_protein_analysis(sample_analysis& par_sample_analysis) {
 		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
 			auto find_protein_name = std::find_if(par_sample_analysis.v_protein_analysis_selected_by_polymorphism.begin(), par_sample_analysis.v_protein_analysis_selected_by_polymorphism.end(),
 				[itr_v_homology_data](const protein_analysis& par_protein_analysis) {
@@ -235,7 +235,7 @@ namespace fpf_homology_analysis {
 		}
 	}
 
-	void create_query_alignment(sample_analysis& par_sample_analysis) {
+	void create_blastp_query_alignment(sample_analysis& par_sample_analysis) {
 		string temp_query_alignment{};
 		size_t index_match = 1;
 		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
@@ -323,7 +323,7 @@ namespace fpf_homology_analysis {
 		par_sample_analysis.v_homology_data = temp_v_homology_data;
 	}
 
-	void determine_blastp_parameter_density(sample_analysis& par_sample_analysis) {
+	void determine_homology_parameter_density(sample_analysis& par_sample_analysis) {
 		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
 			double temp_evalue_transform_sum{};
 			for (const auto& itr_v_homology_data_2 : par_sample_analysis.v_homology_data) {

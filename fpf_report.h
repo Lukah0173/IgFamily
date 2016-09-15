@@ -101,30 +101,30 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_blastp_summary(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis) {
+	void fout_v_homology_data(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis) {
 		string output_blastp_summary = par_filesystem.directory + par_filesystem.filename;
 		output_blastp_summary += "_blastp_summary.csv";
-		std::ofstream fout_blastp_summary;
-		fout_blastp_summary.open(output_blastp_summary);
-		fout_blastp_summary << "key_query,";
-		fout_blastp_summary << "query,";
-		fout_blastp_summary << "key_subject_accession,";
-		fout_blastp_summary << "subject_accession,";
-		fout_blastp_summary << "e_value,";
-		fout_blastp_summary << "e_value_transformed,";
-		fout_blastp_summary << "par_dens,";
-		fout_blastp_summary << "par_score,";
-		fout_blastp_summary << "\n";
+		std::ofstream fout_v_homology_data;
+		fout_v_homology_data.open(output_blastp_summary);
+		fout_v_homology_data << "key_query,";
+		fout_v_homology_data << "query,";
+		fout_v_homology_data << "key_subject_accession,";
+		fout_v_homology_data << "subject_accession,";
+		fout_v_homology_data << "e_value,";
+		fout_v_homology_data << "e_value_transformed,";
+		fout_v_homology_data << "par_dens,";
+		fout_v_homology_data << "par_score,";
+		fout_v_homology_data << "\n";
 		for (auto itr_v_homology_data : par_sample_analysis.v_homology_data) {
-			fout_blastp_summary << itr_v_homology_data.key_blastp_query << ",";
-			fout_blastp_summary << itr_v_homology_data.blastp_query << ",";
-			fout_blastp_summary << itr_v_homology_data.key_blastp_subject_accession << ",";
-			fout_blastp_summary << itr_v_homology_data.blastp_subject_accession << ",";
-			fout_blastp_summary << itr_v_homology_data.blastp_evalue << ",";
-			fout_blastp_summary << itr_v_homology_data.blastp_evalue_transformed_conjugated << ",";
-			fout_blastp_summary << itr_v_homology_data.blastp_parameter_density << ",";
-			fout_blastp_summary << itr_v_homology_data.blastp_parameter_score << ",";
-			fout_blastp_summary << "\n";
+			fout_v_homology_data << itr_v_homology_data.key_blastp_query << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_query << ",";
+			fout_v_homology_data << itr_v_homology_data.key_blastp_subject_accession << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_subject_accession << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_evalue << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_evalue_transformed_conjugated << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_parameter_density << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_parameter_score << ",";
+			fout_v_homology_data << "\n";
 		}
 	}
 

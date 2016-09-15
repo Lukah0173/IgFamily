@@ -29,7 +29,7 @@ namespace fpf_multinomial {
 	typedef fpf_filesystem::filesystem filesystem;
 	typedef fpf_filesystem::sample_analysis sample_analysis;
 
-	void create_filesystem_multinomial_data(sample_analysis& par_sample_analysis) {
+	void create_multinomial_data(sample_analysis& par_sample_analysis) {
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
 			par_sample_analysis.multinomial_data.v_protein_name.push_back(itr_v_protein_analysis.p_protein_data->protein_name);
 			par_sample_analysis.multinomial_data.v_protein_class.push_back(itr_v_protein_analysis.p_protein_data->protein_class);

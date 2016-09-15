@@ -27,11 +27,11 @@ namespace fpf_core {
 	typedef fpf_filesystem::filesystem filesystem;
 	typedef fpf_filesystem::sample_analysis sample_analysis;
 
-	void core_perform_wiff_fileconversion(filesystem& par_filesystem) {
+	inline void core_perform_wiff_fileconversion(filesystem& par_filesystem) {
 		fpf_convert::perform_fileconversion(par_filesystem);
 	}
 
-	void core_perform_novor_denovo(filesystem& par_filesystem) {
+	inline void core_perform_novor_denovo(filesystem& par_filesystem) {
 		fpf_denovo::perform_novor_denovo(par_filesystem);
 	}
 
@@ -57,7 +57,7 @@ namespace fpf_core {
 					temp_sample_analysis.v_csv_data = std::move(main_v_csv_PEAKS_denovo_peptides);
 					if (!IgFamily::FILESYSTEM_MODE) {
 						par_filesystem.filename = temp_sample_analysis.v_csv_data.begin()->csv_sourcefile;
-						std::cout << temp_sample_analysis.v_csv_data.begin()->csv_sourcefile;;
+						std::cout << temp_sample_analysis.v_csv_data.begin()->csv_sourcefile;
 					}
 				}
 				if (itr_v_select_spectra_assignment == "NOVOR de novo") {
@@ -130,22 +130,22 @@ namespace fpf_core {
 		fpf_homology_analysis::associate_homology_data_to_v_protein_data(par_sample_analysis);
 		fpf_homology_analysis::associate_homology_data_to_v_peptide_data(par_sample_analysis);
 		if (par_refined) {
-			fpf_homology_analysis::create_protein_from_protein_analysis(par_sample_analysis);
+			fpf_homology_analysis::create_protein_construct_from_protein_analysis(par_sample_analysis);
 		}
-		fpf_homology_analysis::create_query_alignment(par_sample_analysis);
+		fpf_homology_analysis::create_blastp_query_alignment(par_sample_analysis);
 		fpf_homology_analysis::transform_homology_data(par_sample_analysis);
-		fpf_homology_analysis::determine_blastp_parameter_density(par_sample_analysis);
+		fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis);
 		std::cout << " ...homology data structures assigned";
 		std::cout << "\n\n outputting homology summary for file ";
 		std::cout << par_filesystem.filename;;
 		std::cout << "...\n";
-		fpf_report::fout_blastp_summary(par_filesystem, par_sample_analysis);
+		fpf_report::fout_v_homology_data(par_filesystem, par_sample_analysis);
 		std::cout << " ...homology file output\n";
 	}
 
 	void core_data_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n scoring proteins...\n";
-		fpf_data_analysis::create_protein_analysis(par_sample_analysis);
+		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis);
 		std::cout << " ...proteins scored\n";
 		fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis);
 		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
@@ -158,21 +158,21 @@ namespace fpf_core {
 
 	void core_multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n creating multinomial data frames...\n";
-		fpf_multinomial::create_filesystem_multinomial_data(par_sample_analysis);
-		fpf_report::fout_multinomial(par_filesystem, par_sample_analysis);
-		fpf_report::fout_multinomial_element(par_filesystem, par_sample_analysis);
-		fpf_report::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
+		fpf_multinomial::create_multinomial_data(par_sample_analysis);
 	}
 
 	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n\n producing summary reports...\n";
-		std::cout << " ...generating peptide report for " << par_filesystem.filename;
+		std::cout << " ...generating data reports for " << par_filesystem.filename;
 		std::cout << "\n";
 		fpf_report::fout_v_peptide_data(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_peptide_analysis(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_protein_analysis(par_filesystem, par_sample_analysis);
-		std::cout << " ...generating multinomial report for " << par_filesystem.filename;
+		std::cout << " ...generating multinomial reports for " << par_filesystem.filename;
 		std::cout << "\n";
+		fpf_report::fout_multinomial(par_filesystem, par_sample_analysis);
+		fpf_report::fout_multinomial_element(par_filesystem, par_sample_analysis);
+		fpf_report::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
 		fpf_report::fout_multinomial_comparison(par_filesystem, par_sample_analysis);
 		std::cout << " ...generating html report for " << par_filesystem.filename;
 		std::cout << "\n";
