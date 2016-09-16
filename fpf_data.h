@@ -155,7 +155,7 @@ namespace fpf_data {
 					itr_parse_FASTA.return_FASTA_class(),
 					itr_parse_FASTA.return_FASTA_type(),
 					itr_parse_FASTA.return_FASTA_species(),
-					itr_parse_FASTA.return_protein_data()};
+					itr_parse_FASTA.return_FASTA_protein()};
 				temp_v_protein_data.push_back(temp_protein_data);
 				++temp_key_protein_data;
 			}

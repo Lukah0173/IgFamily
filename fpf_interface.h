@@ -239,7 +239,10 @@ namespace fpf_interface {
 				menu_continue = true;
 			}
 			if (menu_selection == "!!") {
-				vector<string> v_FASTA_module = fpf_fasta_creator::read_FASTA_module_directory(IgFamily::DEFAULT_IGFAMILY_DIRECTORY);
+				vector<string> v_FASTA_module{ fpf_fasta_creator::read_FASTA_module_directory(IgFamily::DEFAULT_IGFAMILY_DIRECTORY) };
+				for (const auto& itr_FASTA_module : v_FASTA_module) {
+					fpf_parse::parse_FASTA(IgFamily::DEFAULT_FASTA_MODULE_DIRECTORY + itr_FASTA_module);
+				}
 				//vector<fpf_utility::sample_transcript_and_translation> main_v_sample_transcript_and_translation = fpf_utility::parse_transcript_data();
 				//fpf_utility::translate_v_transcript(main_v_sample_transcript_and_translation);
 				//fpf_utility::fout_transcript_and_translation(main_v_sample_transcript_and_translation);

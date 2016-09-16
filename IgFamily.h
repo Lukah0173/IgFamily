@@ -23,9 +23,9 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.9.5f";
+	const string version = "v0.9.6";
 
-	const bool FILESYSTEM_MODE = 0;
+	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
 	const bool MAP_FOUT_BY_SCORE = 1;
 	const bool MAP_FOUT_BY_DISTINCT = 1;
@@ -33,9 +33,9 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA = 1;
 	const bool BLASTP_BY_SELECTED_PEPTIDE = 1;
 
-	const string IGFAMILY_ROOT_DIR = "IgFamily_root_3.txt";
-	const string DEFAULT_IGFAMILY_DIRECTORY = "";
-	//const string DEFAULT_IGFAMILY_DIRECTORY = "Z:\\Lukah_Dykes\\IgFamily\\";
+	const string IGFAMILY_ROOT_DIR = "IgFamily_root_4.txt";
+	//const string DEFAULT_IGFAMILY_DIRECTORY = "";
+	const string DEFAULT_IGFAMILY_DIRECTORY = "C:\\Users\\LJ\\Dropbox\\IgFamily\\";
 	const string DEFAULT_FASTA_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\";
 	const string DEFAULT_FASTA_MODULE_DIRECTORY = DEFAULT_FASTA_DIRECTORY + "FASTA_modules\\";
 	const string DEFAULT_BLASTP_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "blast_directory\\";
@@ -55,7 +55,7 @@ namespace IgFamily {
 	const double BLASTP_PARPROP_SCALE = BLASTP_EVALUE_THRESHOLD;
 	const double BLASTP_EVALUETRANSFORMED_THRESHOLD = 10;
 	const string SELECT_TYPE_GENE_FAMILIES = "IG";
-	const double SELECT_N_MANY_GENE_FAMILIES = 50;
+	const double SELECT_N_MANY_GENE_FAMILIES = 10;
 	const double MULTINOMIAL_ELEMENT_OUTPUT_THRESHOLD = 0.1;
 	const double REPORT_SCORE_THRESHOLD = 10;
 	const double REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD = 0.1;

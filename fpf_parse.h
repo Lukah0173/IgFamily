@@ -70,8 +70,8 @@ namespace fpf_parse {
 			FASTA_species = par_FASTA_species;
 		};
 
-		inline void set_protein_data(string par_protein_data) {
-			protein_data = par_protein_data;
+		inline void set_FASTA_protein(string par_protein_data) {
+			FASTA_protein = par_protein_data;
 		};
 
 		inline const string return_FASTA_accession() const {
@@ -94,18 +94,17 @@ namespace fpf_parse {
 			return FASTA_species;
 		};
 
-		inline const string return_protein_data() const {
-			return protein_data;
+		inline const string return_FASTA_protein() const {
+			return FASTA_protein;
 		};
 
 	private:
 		string FASTA_accession;
-		string protein_data_delimited;
 		string FASTA_name;
 		string FASTA_class;
 		string FASTA_type;
 		string FASTA_species;
-		string protein_data;
+		string FASTA_protein;
 	};
 
 	vector<csv_data> parse_proteinpeptides(const string& par_directory) {
@@ -614,135 +613,81 @@ namespace fpf_parse {
 		fin_INPUT_FASTA.seekg(0, std::ios::beg);
 	}
 
-	vector<FASTA_data> parse_FASTA(std::ifstream& par_fin_input_FASTA) {
+	vector<FASTA_data> parse_FASTA(const string& par_select_FASTA) {
 		vector<FASTA_data> temp_v_FASTA_data{};
 		FASTA_data temp_FASTA_data{};
+		std::ifstream fin_FASTA(par_select_FASTA);
+		std::cout << par_select_FASTA << "\n";
 		char read_FASTA{};
-		size_t FASTA_condition_switch{};
-		size_t FASTA_condition_switch_2{};
+		string parse_FASTA{};
 		size_t count_FASTA_delimit{};
 		size_t count_FASTA_delimit_width{ 4 };
+		size_t count_FASTA_accessions{};
 		bool reading_accession{};
-		while (par_fin_input_FASTA.get(read_FASTA)) {
+		while (fin_FASTA.get(read_FASTA)) {
 			if (read_FASTA == '>') {
 				reading_accession = true;
+				++count_FASTA_accessions;
 			}
 			if (reading_accession) {
 				if (read_FASTA == '\n') {
 					reading_accession = false;
 				}
 				if (read_FASTA == '|') {
-					if (read_FASTA)
+					if (count_FASTA_delimit % count_FASTA_delimit_width == 0) {
+						temp_FASTA_data.set_FASTA_accession(parse_FASTA);
+						parse_FASTA.clear();
+					}
+					if (count_FASTA_delimit % count_FASTA_delimit_width == 1) {
+						temp_FASTA_data.set_FASTA_name(parse_FASTA);
+						parse_FASTA.clear();
+					}
+					if (count_FASTA_delimit % count_FASTA_delimit_width == 2) {
+						if (parse_FASTA == "IMGT") {
+							temp_FASTA_data.set_FASTA_type("IG");
+						}
+						if (parse_FASTA == "CONT") {
+							temp_FASTA_data.set_FASTA_type("CONT");
+						}
+						if (parse_FASTA == "UNIPROT") {
+							temp_FASTA_data.set_FASTA_type("UNIPROT");
+						}
+						if (parse_FASTA == "mAB") {
+							temp_FASTA_data.set_FASTA_type("IG");
+						}
+						parse_FASTA.clear();
+					}
+					if (count_FASTA_delimit % count_FASTA_delimit_width == 3) {
+						temp_FASTA_data.set_FASTA_species(parse_FASTA);
+						parse_FASTA.clear();
+					}
 					++count_FASTA_delimit;
 				}
+				if ((read_FASTA != '|') && (read_FASTA != '>') && (read_FASTA != '\n')) {
+					parse_FASTA += read_FASTA;
+				}
 			}
-
-
-
-
-			if (FASTA_condition_switch_2 == 1) {
+			if (!reading_accession) {
 				if (read_FASTA != '\n') {
-					temp_FASTA_element += read_FASTA;
+					parse_FASTA += read_FASTA;
 				}
-			}
-			if ((FASTA_condition_switch_2 == 0) && (read_FASTA == '\n')) {
-				temp_FASTA_element.clear();
-				FASTA_condition_switch_2 = 1;
-			}
-			if ((FASTA_condition_switch == 2) && (read_FASTA == '|')) {
-				FASTA_condition_switch = 3;
-			}
-			if (FASTA_condition_switch == 2) {
-				tenp_FASTA_species += read_FASTA;
-			}
-			if ((FASTA_condition_switch == 1) && (read_FASTA == '|')) {
-				FASTA_condition_switch = 2;
-			}
-			if (FASTA_condition_switch == 1) {
-				if (read_FASTA != '_') {
-					if (temp_FASTA_name == "IGHV") {
-						temp_FASTA_class = "IGHV";
-						temp_FASTA_type = "IG";
-					}
-					if (temp_FASTA_name == "IGKV") {
-						temp_FASTA_class = "IGKV";
-						temp_FASTA_type = "IG";
-					}
-					if (temp_FASTA_name == "IGLV") {
-						temp_FASTA_class = "IGLV";
-						temp_FASTA_type = "IG";
-					}
-					if (temp_FASTA_name == "IGKJ") {
-						temp_FASTA_class = "IGKJ_IGLJ_IGKC_IGLC";
-					}
-					if (temp_FASTA_name == "IGLJ") {
-						temp_FASTA_class = "IGKJ_IGLJ_IGKC_IGLC";
-					}
-					if (temp_FASTA_name == "IGHJ") {
-						temp_FASTA_class = "IGHJ_IGHC";
-					}
-					if (temp_FASTA_name == "MIGHV") {
-						temp_FASTA_class = "MIGHV";
-					}
-					if (temp_FASTA_name == "mA") {
-						temp_FASTA_class = "mAB";
-						temp_FASTA_type = "IG";
-					}
-					if (temp_FASTA_name == "CON") {
-						temp_FASTA_class = "CONT";
-					}
-					if (temp_FASTA_name == "UNIPROT") {
-						temp_FASTA_class = "UNIPROT";
-					}
-					if (read_FASTA == ' ') {
-						temp_FASTA_name += "_";
-					}
-					else {
-						temp_FASTA_name += read_FASTA;
-					}
-				}
-				else {
-					temp_FASTA_name += '*';
-				}
-			}
-			if ((FASTA_condition_switch == 0) && (read_FASTA == '|')) {
-				temp_FASTA_name.clear();
-				FASTA_condition_switch = 1;
-			}
-			if ((FASTA_condition_switch == 0) && (read_FASTA != '>')) {
-				temp_FASTA_accession += read_FASTA;
-			}
-			if ((FASTA_condition_switch_2 == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
-
-				if (temp_FASTA_class != "MIGHV") {
-					if (!((temp_FASTA_class == "UNIPROT") && ((temp_FASTA_name.find("Ig") != std::string::npos) || (temp_FASTA_name.find("Immunoglobulin") != std::string::npos)))) {
-						temp_FASTA_data.set_FASTA_accession(temp_FASTA_accession);
-						temp_FASTA_data.set_FASTA_name(temp_FASTA_name);
-						temp_FASTA_data.set_FASTA_class(temp_FASTA_class);
-						temp_FASTA_data.set_FASTA_type(temp_FASTA_type);
-						temp_FASTA_data.set_FASTA_species(tenp_FASTA_species);
-						temp_FASTA_data.set_protein_data(temp_FASTA_element);
+				if ((fin_FASTA.peek() == '>') || (fin_FASTA.peek() == std::ifstream::traits_type::eof())) {
+					temp_FASTA_data.set_FASTA_protein(parse_FASTA);
+					parse_FASTA.clear();
+					if (!((temp_FASTA_data.return_FASTA_type() == "UNIPROT") && ((temp_FASTA_data.return_FASTA_name().find("Ig") != std::string::npos) || (temp_FASTA_data.return_FASTA_name().find("Immunoglobulin") != std::string::npos)))) {
 						temp_v_FASTA_data.push_back(temp_FASTA_data);
 					}
 				}
-				++count_FASTA_delimit;
-				if ((par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof())) {
-					std::cout << "\n FASTA accessions parsed - ";
-					std::cout << count_FASTA_delimit;
-				}
-				FASTA_condition_switch = 0;
-				FASTA_condition_switch_2 = 0;
-				temp_FASTA_accession.clear();
-				temp_FASTA_element.clear();
-				temp_FASTA_name.clear();
-				temp_FASTA_class.clear();
-				temp_FASTA_type.clear();
-				tenp_FASTA_species.clear();
 			}
 		}
 
-		par_fin_input_FASTA.clear();
-		par_fin_input_FASTA.seekg(0, std::ios::beg);
+		if (fin_FASTA.peek() == std::ifstream::traits_type::eof()) {
+			std::cout << "\n FASTA accessions parsed - ";
+			std::cout << count_FASTA_delimit;
+		}	
+		
+		fin_FASTA.clear();
+		fin_FASTA.seekg(0, std::ios::beg);
 
 		return temp_v_FASTA_data;
 	}
@@ -792,11 +737,11 @@ namespace fpf_parse {
 				fout_FASTA_filtered << "|" << itr_v_FASTA_data.return_FASTA_name();
 				fout_FASTA_filtered << "|" << itr_v_FASTA_data.return_FASTA_species();
 				fout_FASTA_filtered << "|";
-				for (auto i = 0; i < itr_v_FASTA_data.return_protein_data().length(); ++i) {
-					if ((i % 60 == 0) && ((i + 1) < itr_v_FASTA_data.return_protein_data().length())) {
+				for (auto i = 0; i < itr_v_FASTA_data.return_FASTA_protein().length(); ++i) {
+					if ((i % 60 == 0) && ((i + 1) < itr_v_FASTA_data.return_FASTA_protein().length())) {
 						fout_FASTA_filtered << "\n";
 					}
-					fout_FASTA_filtered << itr_v_FASTA_data.return_protein_data().at(i);
+					fout_FASTA_filtered << itr_v_FASTA_data.return_FASTA_protein().at(i);
 				}
 				fout_FASTA_filtered << "\n";
 			}
@@ -813,11 +758,11 @@ namespace fpf_parse {
 				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_name();
 				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_species();
 				fout_FASTA_filtered << "|";
-				for (auto i = 0; i < itr_v_FASTA_DATA.return_protein_data().length(); ++i) {
-					if ((i % IgFamily::OUTPUT_FASTA_ACCESSION_WIDTH == 0) && ((i + 1) < itr_v_FASTA_DATA.return_protein_data().length())) {
+				for (auto i = 0; i < itr_v_FASTA_DATA.return_FASTA_protein().length(); ++i) {
+					if ((i % IgFamily::OUTPUT_FASTA_ACCESSION_WIDTH == 0) && ((i + 1) < itr_v_FASTA_DATA.return_FASTA_protein().length())) {
 						fout_FASTA_filtered << "\n";
 					}
-					fout_FASTA_filtered << itr_v_FASTA_DATA.return_protein_data().at(i);
+					fout_FASTA_filtered << itr_v_FASTA_DATA.return_FASTA_protein().at(i);
 				}
 				fout_FASTA_filtered << "\n";
 			}

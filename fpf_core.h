@@ -91,11 +91,10 @@ namespace fpf_core {
 		std::cout << "\n ...data structures assigned";
 	}
 
-	bool core_create_FASTA_data_structures(filesystem& par_filesystem, const string& par_select_FASTA) {
-		std::ifstream fin_FASTA(par_select_FASTA);
+	bool core_create_FASTA_data_structures(filesystem& par_filesystem, const string& par_select_FASTA) {		
 		fpf_parse::custom_FASTA_output(par_select_FASTA);
 		std::cout << "\n\n\n * parsing FASTA file... \n";
-		par_filesystem.v_FASTA_data = fpf_parse::parse_FASTA(fin_FASTA);
+		par_filesystem.v_FASTA_data = fpf_parse::parse_FASTA(par_select_FASTA);
 		if (check_FASTA_file_exists(par_filesystem.v_FASTA_data)) { return false; }
 		fpf_parse::output_v_FASTA_data(par_filesystem.v_FASTA_data);
 		fpf_parse::output_v_FASTA_data_to_blastdirectory(par_filesystem.v_FASTA_data);
