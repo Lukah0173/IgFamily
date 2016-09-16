@@ -615,41 +615,51 @@ namespace fpf_parse {
 	}
 
 	vector<FASTA_data> parse_FASTA(std::ifstream& par_fin_input_FASTA) {
-
-		char FASTA_read{};
+		vector<FASTA_data> temp_v_FASTA_data{};
+		FASTA_data temp_FASTA_data{};
+		char read_FASTA{};
 		size_t FASTA_condition_switch{};
 		size_t FASTA_condition_switch_2{};
-		size_t FASTA_count_accession{};
-		string temp_FASTA_accession{};
-		string temp_FASTA_name{};
-		string temp_FASTA_class{};
-		string temp_FASTA_type{};
-		string tenp_FASTA_species{};
-		string temp_FASTA_element{};
-		FASTA_data temp_FASTA_data{};
-		vector<FASTA_data> temp_v_FASTA_data{};
-
-		while (par_fin_input_FASTA.get(FASTA_read)) {
-			if (FASTA_condition_switch_2 == 1) {
-				if (FASTA_read != '\n') {
-					temp_FASTA_element += FASTA_read;
+		size_t count_FASTA_delimit{};
+		size_t count_FASTA_delimit_width{ 4 };
+		bool reading_accession{};
+		while (par_fin_input_FASTA.get(read_FASTA)) {
+			if (read_FASTA == '>') {
+				reading_accession = true;
+			}
+			if (reading_accession) {
+				if (read_FASTA == '\n') {
+					reading_accession = false;
+				}
+				if (read_FASTA == '|') {
+					if (read_FASTA)
+					++count_FASTA_delimit;
 				}
 			}
-			if ((FASTA_condition_switch_2 == 0) && (FASTA_read == '\n')) {
+
+
+
+
+			if (FASTA_condition_switch_2 == 1) {
+				if (read_FASTA != '\n') {
+					temp_FASTA_element += read_FASTA;
+				}
+			}
+			if ((FASTA_condition_switch_2 == 0) && (read_FASTA == '\n')) {
 				temp_FASTA_element.clear();
 				FASTA_condition_switch_2 = 1;
 			}
-			if ((FASTA_condition_switch == 2) && (FASTA_read == '|')) {
+			if ((FASTA_condition_switch == 2) && (read_FASTA == '|')) {
 				FASTA_condition_switch = 3;
 			}
 			if (FASTA_condition_switch == 2) {
-				tenp_FASTA_species += FASTA_read;
+				tenp_FASTA_species += read_FASTA;
 			}
-			if ((FASTA_condition_switch == 1) && (FASTA_read == '|')) {
+			if ((FASTA_condition_switch == 1) && (read_FASTA == '|')) {
 				FASTA_condition_switch = 2;
 			}
 			if (FASTA_condition_switch == 1) {
-				if (FASTA_read != '_') {
+				if (read_FASTA != '_') {
 					if (temp_FASTA_name == "IGHV") {
 						temp_FASTA_class = "IGHV";
 						temp_FASTA_type = "IG";
@@ -684,23 +694,23 @@ namespace fpf_parse {
 					if (temp_FASTA_name == "UNIPROT") {
 						temp_FASTA_class = "UNIPROT";
 					}
-					if (FASTA_read == ' ') {
+					if (read_FASTA == ' ') {
 						temp_FASTA_name += "_";
 					}
 					else {
-						temp_FASTA_name += FASTA_read;
+						temp_FASTA_name += read_FASTA;
 					}
 				}
 				else {
 					temp_FASTA_name += '*';
 				}
 			}
-			if ((FASTA_condition_switch == 0) && (FASTA_read == '|')) {
+			if ((FASTA_condition_switch == 0) && (read_FASTA == '|')) {
 				temp_FASTA_name.clear();
 				FASTA_condition_switch = 1;
 			}
-			if ((FASTA_condition_switch == 0) && (FASTA_read != '>')) {
-				temp_FASTA_accession += FASTA_read;
+			if ((FASTA_condition_switch == 0) && (read_FASTA != '>')) {
+				temp_FASTA_accession += read_FASTA;
 			}
 			if ((FASTA_condition_switch_2 == 1) && ((par_fin_input_FASTA.peek() == '>') || (par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof()))) {
 
@@ -715,10 +725,10 @@ namespace fpf_parse {
 						temp_v_FASTA_data.push_back(temp_FASTA_data);
 					}
 				}
-				++FASTA_count_accession;
+				++count_FASTA_delimit;
 				if ((par_fin_input_FASTA.peek() == std::ifstream::traits_type::eof())) {
 					std::cout << "\n FASTA accessions parsed - ";
-					std::cout << FASTA_count_accession;
+					std::cout << count_FASTA_delimit;
 				}
 				FASTA_condition_switch = 0;
 				FASTA_condition_switch_2 = 0;
