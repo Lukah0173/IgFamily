@@ -23,9 +23,9 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.9.5d";
+	const string version = "v0.9.5e";
 
-	const bool FILESYSTEM_MODE = 1;
+	const bool FILESYSTEM_MODE = 0;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
 	const bool MAP_FOUT_BY_SCORE = 1;
 	const bool MAP_FOUT_BY_DISTINCT = 1;
@@ -34,8 +34,8 @@ namespace IgFamily {
 	const bool BLASTP_BY_SELECTED_PEPTIDE = 1;
 
 	const string IGFAMILY_ROOT_DIR = "IgFamily_root_3.txt";
-	//const string DEFAULT_IGFAMILY_DIRECTORY = "";
-	const string DEFAULT_IGFAMILY_DIRECTORY = "Z:\\Lukah_Dykes\\IgFamily\\";
+	const string DEFAULT_IGFAMILY_DIRECTORY = "";
+	//const string DEFAULT_IGFAMILY_DIRECTORY = "Z:\\Lukah_Dykes\\IgFamily\\";
 	const string DEFAULT_INPUT_FASTA_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\";
 	const string DEFAULT_BLASTP_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "blast_directory\\";
 	const string DEFAULT_MSCONVERT_DIRECTORY = DEFAULT_IGFAMILY_DIRECTORY + "msconvert\\";

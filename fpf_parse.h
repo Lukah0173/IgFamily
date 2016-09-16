@@ -192,7 +192,7 @@ namespace fpf_parse {
 				if (csv_read == ',') {
 					if (csv_count_delimit % csv_count_delimit_width == 0) {					
 						temp_v_csv_data.push_back(temp_csv_data);
-						temp_csv_data = csv_data();						
+						temp_csv_data = csv_data();				
 					}
 					++csv_count_delimit;
 				}
@@ -672,10 +672,11 @@ namespace fpf_parse {
 						temp_FASTA_class = "IGHJ_IGHC";
 					}
 					if (temp_FASTA_name == "MIGHV") {
-						temp_FASTA_class = temp_FASTA_name;
+						temp_FASTA_class = "MIGHV";
 					}
 					if (temp_FASTA_name == "mA") {
 						temp_FASTA_class = "mAB";
+						temp_FASTA_type = "IG";
 					}
 					if (temp_FASTA_name == "CON") {
 						temp_FASTA_class = "CONT";

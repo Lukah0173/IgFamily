@@ -223,7 +223,7 @@ namespace fpf_interface {
 		string menu_selection{ display_menu() };
 		bool menu_continue{};
 		while (!menu_continue) {
-			if (par_select_fasta == "F") {
+			if (menu_selection == "F") {
 				par_select_fasta = display_FASTA_menu(par_select_fasta);
 				display_settings(par_select_fasta, par_v_select_peptide_assignment);
 				menu_selection = display_menu();
