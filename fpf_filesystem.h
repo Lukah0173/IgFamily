@@ -43,6 +43,7 @@ namespace fpf_filesystem {
 	struct sample_analysis;
 	
 	struct sample_analysis {
+	public:
 		string peptide_assignment_method;
 		bool file_found;
 		vector<csv_data> v_csv_data;
