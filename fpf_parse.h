@@ -107,7 +107,7 @@ namespace fpf_parse {
 		string FASTA_protein;
 	};
 
-	vector<csv_data> parse_proteinpeptides(const string& par_directory) {
+	vector<csv_data> parse_csv_PEAKS_database_peptides(const string& par_directory) {
 		std::ifstream fin_input_csv(par_directory);
 		vector<csv_data> temp_v_csv_data{};
 		csv_data temp_csv_data{};
@@ -175,7 +175,7 @@ namespace fpf_parse {
 		return temp_v_csv_data;
 	}
 
-	vector<csv_data> parse_csv_PEAKS_denovopeptides(string par_directory) {
+	vector<csv_data> parse_csv_PEAKS_denovo_peptides(string par_directory) {
 		std::ifstream fin_input_csv(par_directory);
 		vector<csv_data> temp_v_csv_data{};
 		csv_data temp_csv_data{};
@@ -262,7 +262,7 @@ namespace fpf_parse {
 		return temp_v_csv_data;
 	}
 
-	vector<csv_data> parse_csv_NOVOR_denovopeptides(string par_directory) {
+	vector<csv_data> parse_csv_NOVOR_denovo_peptides(string par_directory) {
 		std::ifstream fin_input_csv(par_directory);
 		vector<csv_data> temp_v_csv_data{};
 		csv_data temp_csv_data{};

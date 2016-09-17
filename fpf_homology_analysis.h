@@ -20,7 +20,6 @@
 
 #include "fpf_data.h"
 #include "fpf_filesystem.h"
-#include "fpf_filesystem_analysis.h"
 
 
 namespace fpf_homology_analysis {

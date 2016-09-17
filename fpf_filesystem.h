@@ -249,40 +249,38 @@ namespace fpf_filesystem {
 	}
 
 	inline string read_filesystem_PEAKS_database_peptides(string par_root_directory) {
-		string temp_root_PEAKS_database_peptides = par_root_directory + "database_peptides_PEAKS.csv";
+		string temp_root_PEAKS_database_peptides{ par_root_directory + "database_peptides_PEAKS.csv" };
 		return temp_root_PEAKS_database_peptides;
 	}
 
 	inline string read_filesystem_PEAKS_denovo_peptides(string par_root_directory) {
-		string temp_root_PEAKS_denovo_peptides{};
-		temp_root_PEAKS_denovo_peptides = par_root_directory + "denovo_peptides_PEAKS.csv";
+		string temp_root_PEAKS_denovo_peptides{ par_root_directory + "denovo_peptides_PEAKS.csv" };
 		return temp_root_PEAKS_denovo_peptides;
 	}
 
 	inline string read_filesystem_NOVOR_denovo_peptides(string par_root_directory) {
-		string temp_root_NOVOR_database_peptides{};
-		temp_root_NOVOR_database_peptides = par_root_directory + "denovo_peptides_NOVOR.csv";
+		string temp_root_NOVOR_database_peptides{ par_root_directory + "denovo_peptides_NOVOR.csv" };
 		return temp_root_NOVOR_database_peptides;
 	}
 
 	inline vector<csv_data> parse_filesystem_PEAKS_database_peptides(string par_fin_root_directory) {
-		vector<csv_data> temp_v_csv_proteinpeptides = fpf_parse::parse_proteinpeptides(par_fin_root_directory);
+		vector<csv_data> temp_v_csv_proteinpeptides{ fpf_parse::parse_csv_PEAKS_database_peptides(par_fin_root_directory) };
 		return temp_v_csv_proteinpeptides;
 	}
 
 	inline vector<csv_data> parse_filesystem_PEAKS_denovo_peptides(string par_fin_root_directory) {
-		vector<csv_data> temp_csv_PEAKS_denovo_peptides = fpf_parse::parse_csv_PEAKS_denovopeptides(par_fin_root_directory);
+		vector<csv_data> temp_csv_PEAKS_denovo_peptides{ fpf_parse::parse_csv_PEAKS_denovo_peptides(par_fin_root_directory) };
 		return temp_csv_PEAKS_denovo_peptides;
 	}
 
 	inline vector<csv_data> parse_filesystem_NOVOR_denovo_peptides(string par_fin_root_directory) {
-		vector<csv_data> temp_csv_NOVOR_denovo_peptides = fpf_parse::parse_csv_NOVOR_denovopeptides(par_fin_root_directory);
+		vector<csv_data> temp_csv_NOVOR_denovo_peptides{ fpf_parse::parse_csv_NOVOR_denovo_peptides(par_fin_root_directory) };
 		return temp_csv_NOVOR_denovo_peptides;
 	}
 
 	void fout_filesystem(filesystem& par_filesystem) {
 		if (IgFamily::FILESYSTEM_MODE) {
-			string output_filesystem = par_filesystem.directory + "filesystem.data";
+			string output_filesystem{ par_filesystem.directory + "filesystem.data" };
 			std::ofstream fout_filesystem;
 			fout_filesystem.open(output_filesystem);
 			fout_filesystem << "ID: " << std::get<0>(par_filesystem.filesystem_id) << "," << std::get<1>(par_filesystem.filesystem_id) << ";\n";

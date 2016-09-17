@@ -1,4 +1,4 @@
-// * * IgFamily v0.9.6 * * 
+// * * IgFamily v0.9.6a * * 
 //
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -32,8 +32,8 @@ int main() {
 	fpf_interface::display_settings(select_FASTA, v_select_peptide_assignment);
 	fpf_interface::select_settings(select_FASTA, v_select_peptide_assignment);
 
-	vector<string> v_root_directory = fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR);
-	vector<filesystem> v_filesystem = fpf_filesystem::read_filesystem(v_root_directory);
+	vector<string> v_root_directory{ fpf_filesystem::read_root_dir(IgFamily::IGFAMILY_ROOT_DIR) };
+	vector<filesystem> v_filesystem{ fpf_filesystem::read_filesystem(v_root_directory) };
 
 	for (auto& itr_v_filesystem : v_filesystem) {
 		if (itr_v_filesystem.perform_wiff_fileconversion) {

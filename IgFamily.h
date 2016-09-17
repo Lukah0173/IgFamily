@@ -12,18 +12,11 @@
 #include <string>
 
 
-#include <cstdlib>
-#include <future>
-#include <iostream>
-#include <numeric>
-
-
-
 namespace IgFamily {
 
 	using std::string;
 
-	const string version = "v0.9.6";
+	const string version = "v0.9.6a";
 
 	const bool FILESYSTEM_MODE = 1;
 	const bool FILESYSTEM_UPDATE_ALL = 1;
@@ -68,28 +61,6 @@ namespace IgFamily {
 	double MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_1 = 0.05;
 	double MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_2 = 50;
 	double MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2 = 0.01;
-
-
-
-
-	int brute_calc(int i) {
-		std::vector<int> v(10000000);
-		std::iota(v.begin(), v.end(), 0);
-		if (std::find(v.begin(), v.end(), 500) == v.end()) {
-			i = -i;
-		}
-		return (i);
-	}
-
-	void async_test() {
-		std::vector<std::future<int>> test_future{};
-		for (auto i = 1; i < 5000000; ++i) {
-			test_future.push_back(std::async(brute_calc, i));
-		}
-		for (auto& get_future : test_future) {
-			std::cout << get_future.get() << std::endl;
-		}
-	}
 }
 
 #endif
