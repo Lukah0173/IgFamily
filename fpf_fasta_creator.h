@@ -31,7 +31,7 @@ namespace fpf_fasta_creator {
 	vector<string> read_FASTA_module_directory(const string& par_FASTA_module_directory) {
 		vector<string> temp_v_FASTA_module{};
 		string temp_FASTA_module{};
-		string FASTA_module_directory = IgFamily::DEFAULT_FASTA_MODULE_DIRECTORY + "_FASTA_module_directory.txt";
+		const string FASTA_module_directory{ IgFamily::DEFAULT_FASTA_MODULE_DIRECTORY + "_FASTA_module_directory.txt" };
 		std::ifstream fin_FASTA_module_directory(FASTA_module_directory);
 		char read_FASTA_module_directory{};
 		while (fin_FASTA_module_directory.get(read_FASTA_module_directory)) {

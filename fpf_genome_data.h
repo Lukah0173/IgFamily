@@ -51,7 +51,7 @@ namespace fpf_genome_data {
 
 	void create_v_genome_directory(population_genome& par_population_genome) {
 		sample_genome temp_sample_genome{};
-		string genomic_root_directory_input = IgFamily::DEFAULT_GENOME_DIRECTORY + "genome_root_directory.txt";
+		const string genomic_root_directory_input{ IgFamily::DEFAULT_GENOME_DIRECTORY + "genome_root_directory.txt" };
 		std::ifstream fin_input_genomic_root_directory(genomic_root_directory_input);
 		char read_genomic_root_directory{};
 		string parse_genomic_root_directory{};
@@ -69,11 +69,11 @@ namespace fpf_genome_data {
 	}
 
 	vector<genome_data> create_v_genome_data(const string& par_genome_directory) {
-		string genomic_data_input = IgFamily::DEFAULT_GENOME_DIRECTORY + par_genome_directory;
-		std::ifstream fin_input_genomic_data(genomic_data_input);
-		char genomic_data_read{};
 		vector<genome_data> temp_v_genomic_data{};
 		genome_data temp_genomic_data{};
+		const string genomic_data_input{ IgFamily::DEFAULT_GENOME_DIRECTORY + par_genome_directory };
+		std::ifstream fin_input_genomic_data(genomic_data_input);
+		char genomic_data_read{};
 		string temp_parse_genomic_data{};
 		size_t genome_data_count_delimit{};
 		size_t genome_data_count_delimit_width{};
@@ -158,7 +158,7 @@ namespace fpf_genome_data {
 	}
 
 	void fout_v_genome_data(const string par_directory, const sample_genome& par_sample_genome) {
-		std::string output_v_genome_data = IgFamily::DEFAULT_GENOME_DIRECTORY + par_directory + "_genome_data.csv";
+		const string output_v_genome_data{ IgFamily::DEFAULT_GENOME_DIRECTORY + par_directory + "_genome_data.csv" };
 		std::ofstream fout_v_genome_data;
 		fout_v_genome_data.open(output_v_genome_data);
 		fout_v_genome_data << "genome_ID,genome_Vregion_genefamily,genome_translation_sequence,\n";
@@ -171,7 +171,7 @@ namespace fpf_genome_data {
 	}
 
 	void fout_v_genome_analysis(const string par_directory, const sample_genome& par_sample_genome) {
-		std::string output_v_genome_analysis = IgFamily::DEFAULT_GENOME_DIRECTORY + par_directory + "_genome_analysis.csv";
+		const string output_v_genome_analysis{ IgFamily::DEFAULT_GENOME_DIRECTORY + par_directory + "_genome_analysis.csv" };
 		std::ofstream fout_v_genome_analysis;
 		fout_v_genome_analysis.open(output_v_genome_analysis);
 		fout_v_genome_analysis << "count_genome_data_replicate,genome_Vregion_genefamily,genome_translation_sequence,\n";
@@ -184,7 +184,7 @@ namespace fpf_genome_data {
 	}
 
 	void fout_v_genome_analysis_filtered(const string par_directory, const sample_genome& par_sample_genome) {
-		std::string output_v_genome_analysis = IgFamily::DEFAULT_GENOME_DIRECTORY + par_directory + "_genome_analysis_filtered.csv";
+		const string output_v_genome_analysis{ IgFamily::DEFAULT_GENOME_DIRECTORY + par_directory + "_genome_analysis_filtered.csv" };
 		std::ofstream fout_v_genome_analysis;
 		fout_v_genome_analysis.open(output_v_genome_analysis);
 		fout_v_genome_analysis << "count_genome_data_replicate,genome_Vregion_genefamily,genome_translation_sequence,\n";
