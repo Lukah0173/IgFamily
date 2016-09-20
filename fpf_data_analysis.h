@@ -198,7 +198,7 @@ namespace fpf_data_analysis {
 				if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_2) {
 					IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2;
 				}
-				fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis);
+				fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis, true);
 				create_v_protein_analysis(par_sample_analysis);
 			}
 		}

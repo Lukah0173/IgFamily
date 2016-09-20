@@ -104,6 +104,7 @@ namespace fpf_data {
 		double blastp_evalue_transformed;
 		double blastp_evalue_transformed_conjugated;
 		double blastp_parameter_density;
+		double blastp_parameter_density_conjugated;
 		double blastp_parameter_score;
 		string query_alignment;
 		size_t denovo_replicate_count;

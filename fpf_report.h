@@ -122,7 +122,7 @@ namespace fpf_report {
 			fout_v_homology_data << itr_v_homology_data.blastp_subject_accession << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_evalue << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_evalue_transformed_conjugated << ",";
-			fout_v_homology_data << itr_v_homology_data.blastp_parameter_density << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_parameter_density_conjugated << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_parameter_score << ",";
 			fout_v_homology_data << "\n";
 		}
@@ -371,6 +371,8 @@ namespace fpf_report {
 						//fout_html_report << "&nbsp&nbsp&nbsp";
 						fout_html_report << "Homo";
 						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+						fout_html_report << "Conj";
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_html_report << "Dist";
 						//fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 						//fout_html_report << "DN&nbspconf";
@@ -455,6 +457,8 @@ namespace fpf_report {
 											fout_html_report << "&nbsp";
 										}
 									}
+									fout_html_report << std::fixed << std::setprecision(3) << itr_homology_data.blastp_parameter_density_conjugated;
+									fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 									fout_html_report << std::fixed << std::setprecision(3) << itr_homology_data.blastp_parameter_density;
 									fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 									//fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
