@@ -147,6 +147,7 @@ namespace fpf_core {
 		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis);
 		std::cout << " ...proteins scored\n";
 		fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis);
+		fpf_data_analysis::determine_protein_score_density(par_sample_analysis);
 		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
 		fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
 		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {

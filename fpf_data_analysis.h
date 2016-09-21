@@ -332,6 +332,20 @@ namespace fpf_data_analysis {
 		}
 		par_sample_analysis.v_protein_analysis_selected_by_polymorphism = temp_v_protein_analysis_selected_by_polymorphism;
 	}
+
+	void determine_protein_score_density(sample_analysis& par_sample_analysis) {
+		double temp_protein_score_sum{};
+		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
+				temp_protein_score_sum += itr_v_protein_analysis.protein_score;
+			}
+		}
+		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
+				itr_v_protein_analysis.protein_density = itr_v_protein_analysis.protein_score / temp_protein_score_sum;
+			}
+		}
+	}
 }
 
 #endif

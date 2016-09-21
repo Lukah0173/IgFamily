@@ -674,7 +674,10 @@ namespace fpf_parse {
 				if ((fin_FASTA.peek() == '>') || (fin_FASTA.peek() == std::ifstream::traits_type::eof())) {
 					temp_FASTA_data.set_FASTA_protein(parse_FASTA);
 					parse_FASTA.clear();
-					if (!((temp_FASTA_data.return_FASTA_type() == "UNIPROT") && ((temp_FASTA_data.return_FASTA_name().find("Ig") != std::string::npos) || (temp_FASTA_data.return_FASTA_name().find("Immunoglobulin") != std::string::npos)))) {
+					if (!((temp_FASTA_data.return_FASTA_type() == "UNIPROT")
+						&& ((temp_FASTA_data.return_FASTA_name().find("Ig") != std::string::npos)
+							|| (temp_FASTA_data.return_FASTA_name().find("Immunoglobulin") != std::string::npos)
+							|| (temp_FASTA_data.return_FASTA_name().find("HLA") != std::string::npos)))) {
 						temp_v_FASTA_data.push_back(temp_FASTA_data);
 					}
 				}
@@ -683,7 +686,7 @@ namespace fpf_parse {
 
 		if (fin_FASTA.peek() == std::ifstream::traits_type::eof()) {
 			std::cout << "\n FASTA accessions parsed - ";
-			std::cout << count_FASTA_delimit;
+			std::cout << count_FASTA_accessions;
 		}	
 		
 		fin_FASTA.clear();

@@ -290,6 +290,7 @@ namespace fpf_report {
 				if (itr_protein_analysis.protein_score > REPORT_SCORE_THRESHOLD) {
 					fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;
 					fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_protein_analysis.protein_score;
+					fout_html_report << "&nbsp&nbsp&nbspDensity: " << std::fixed << std::setprecision(4) << itr_protein_analysis.protein_density;
 					fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_protein_analysis.proteinconstruct_sequencecoverage << "%";
 					fout_html_report << "\n\n<br><br> " << itr_protein_analysis.p_protein_data->protein_protein;
 					fout_html_report << "\n\n<br> ";
@@ -459,7 +460,13 @@ namespace fpf_report {
 									}
 									fout_html_report << std::fixed << std::setprecision(3) << itr_homology_data.blastp_parameter_density_conjugated;
 									fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+									if (itr_homology_data.blastp_parameter_density > 0.5) {
+										fout_html_report << "<font color=\"#4c62d6\">";
+									}
 									fout_html_report << std::fixed << std::setprecision(3) << itr_homology_data.blastp_parameter_density;
+									if (itr_homology_data.blastp_parameter_density > 0.5) {
+										fout_html_report << "</font>";
+									}
 									fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 									//fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
 									//if (itr_homology_data.blastp_evalue_transformed_conjugated < 1) {
@@ -491,6 +498,19 @@ namespace fpf_report {
 	</body>\n \
 </html>\n ";
 	}
+
+	void fout_v_sample_analysis_comparison(vector<filesystem>& par_v_filesystem, filesystem& par_filesystem) {
+		string sample_analysis_comparison{};
+		for (const auto& itr_v_filesystem : par_v_filesystem) {
+
+		}
+		string output_v_sample_analysis_comparison = par_filesystem.directory + par_filesystem.filename + "_sample_comparison_" + par_filesystem.v_sample_analysis.begin()->peptide_assignment_method + ".txt";
+		std::ofstream fout_v_sample_analysis_comparison;
+		fout_v_sample_analysis_comparison.open(output_v_sample_analysis_comparison);
+		std::cout << "\n ...outputting sample comparison for " << par_filesystem.filename;
+		fout_v_sample_analysis_comparison << sample_analysis_comparison;
+	}
+
 }
 #endif
 

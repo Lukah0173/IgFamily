@@ -303,7 +303,7 @@ namespace fpf_homology_analysis {
 			if (itr_v_homology_data.blastp_query != hold_blastp_query) {
 				if (is_hold) {
 					for (auto& itr_hold_v_homology_data : hold_v_homology_data) {
-						itr_hold_v_homology_data.blastp_evalue_transformed = std::pow(log_base(((double(1) * BLASTP_PARPROP_SCALE) / itr_hold_v_homology_data.blastp_evalue), 1.2), 1.15);
+						itr_hold_v_homology_data.blastp_evalue_transformed = std::pow(log_base(((double(1) * BLASTP_PARPROP_SCALE) / itr_hold_v_homology_data.blastp_evalue), 1.2), 1.2);
 						itr_hold_v_homology_data.blastp_evalue_transformed_conjugated = itr_hold_v_homology_data.blastp_evalue_transformed;
 						temp_v_homology_data.push_back(itr_hold_v_homology_data);
 					}

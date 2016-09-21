@@ -83,6 +83,7 @@ namespace fpf_data {
 		protein_data* p_protein_data;
 		vector<homology_data> v_homology_data_combined_by_protein;
 		double protein_score;
+		double protein_density;
 		vector<proteinconstruct_aminoacid> proteinconstruct_from_denovo;
 		double proteinconstruct_sequencecoverage;
 	};
