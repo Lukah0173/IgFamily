@@ -695,7 +695,7 @@ namespace fpf_parse {
 		return temp_v_FASTA_data;
 	}
 
-	bool check_csv_PEAKS_database_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data) {
+	inline bool check_csv_PEAKS_database_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data) {
 		if (!par_v_csv_data.empty()) {
 			std::cout << "\n --- database matched peptides file found";
 			return true;
@@ -703,7 +703,7 @@ namespace fpf_parse {
 		return false;
 	}
 
-	bool check_csv_PEAKS_denovo_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data) {
+	inline bool check_csv_PEAKS_denovo_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data) {
 		if (!par_v_csv_data.empty()) {
 			std::cout << "\n --- PEAKS de novo peptides file found";
 			return true;
@@ -711,7 +711,7 @@ namespace fpf_parse {
 		return false;
 	}
 
-	bool check_csv_NOVOR_denovo_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data) {
+	inline bool check_csv_NOVOR_denovo_peptides_empty(vector<fpf_parse::csv_data> par_v_csv_data) {
 		if (!par_v_csv_data.empty()) {
 			std::cout << "\n --- NOVOR de novo peptides file found";
 			return true;
@@ -719,7 +719,7 @@ namespace fpf_parse {
 		return false;
 	}
 
-	bool check_FASTA_file_exists(vector<FASTA_data> par_v_FASTA_data) {
+	inline bool check_FASTA_file_exists(vector<FASTA_data> par_v_FASTA_data) {
 		if (par_v_FASTA_data.empty()) {
 			std::cout << "\n\n * * * FASTA file empty..\n\n * * * Is the file correctly directed?";
 			std::cout << "\n\n The program will now terminate. Input any key to continue -\n\n -> ";
