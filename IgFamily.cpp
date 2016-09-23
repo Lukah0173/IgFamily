@@ -1,4 +1,4 @@
-// * * IgFamily v0.9.8c * * 
+// * * IgFamily v0.9.8d * * 
 //
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -65,5 +65,5 @@ int main() {
 	std::cout << "\n\n\n input any key to exit...\n\n > ";
 	std::cin >> farewell;
 
-	return 0;
+	return EXIT_SUCCESS;
 }
