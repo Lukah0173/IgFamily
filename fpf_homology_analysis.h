@@ -114,7 +114,7 @@ namespace fpf_homology_analysis {
 		system(string_system.c_str());
 	}
 
-	void create_v_homology_data(filesystem& par_filesytem, sample_analysis& par_sample_analysis) {
+	void parse_homology_data(filesystem& par_filesytem, sample_analysis& par_sample_analysis) {
 			size_t homology_data_count_delimit = size_t(1);
 			string homology_data_input = DEFAULT_BLASTP_DIRECTORY + par_filesytem.filename + "_blastp_output.csv";
 			std::ifstream fin_input_blastp(homology_data_input);
@@ -267,7 +267,7 @@ namespace fpf_homology_analysis {
 		}
 	}
 
-	void modify_filesystem_homology_data(sample_analysis& par_sample_analysis) {
+	void modify_homology_data(sample_analysis& par_sample_analysis) {
 		for (auto& itr_v_c_blastp : par_sample_analysis.v_homology_data) {
 			bool b_parse_query_accession{};
 			string temp_parse_query_accession{};
@@ -303,7 +303,7 @@ namespace fpf_homology_analysis {
 			if (itr_v_homology_data.blastp_query != hold_blastp_query) {
 				if (is_hold) {
 					for (auto& itr_hold_v_homology_data : hold_v_homology_data) {
-						itr_hold_v_homology_data.blastp_evalue_transformed = std::pow(log_base(((double(1) * BLASTP_PARPROP_SCALE) / itr_hold_v_homology_data.blastp_evalue), 1.2), 1.2);
+						itr_hold_v_homology_data.blastp_evalue_transformed = std::pow(log_base(((double(1) * IgFamily::BLASTP_PARPROP_SCALE) / itr_hold_v_homology_data.blastp_evalue), 1.2), 1.2);
 						itr_hold_v_homology_data.blastp_evalue_transformed_conjugated = itr_hold_v_homology_data.blastp_evalue_transformed;
 						temp_v_homology_data.push_back(itr_hold_v_homology_data);
 					}
@@ -314,7 +314,7 @@ namespace fpf_homology_analysis {
 				hold_min_blastp_evalue = itr_v_homology_data.blastp_evalue;
 				is_hold = true;
 			}
-			if (is_hold && (itr_v_homology_data.blastp_evalue < BLASTP_THRESHOLD)) {
+			if (is_hold && (itr_v_homology_data.blastp_evalue < IgFamily::BLASTP_THRESHOLD)) {
 				hold_v_homology_data.push_back(itr_v_homology_data);
 				hold_sum_blastp_evalue += (1 / itr_v_homology_data.blastp_evalue);
 			}

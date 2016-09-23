@@ -125,8 +125,8 @@ namespace fpf_core {
 		std::cout << "\n\n\n creating homology data structures for file ";
 		std::cout << par_filesystem.filename;
 		std::cout << "...\n";
-		fpf_homology_analysis::create_v_homology_data(par_filesystem, par_sample_analysis);
-		fpf_homology_analysis::modify_filesystem_homology_data(par_sample_analysis);
+		fpf_homology_analysis::parse_homology_data(par_filesystem, par_sample_analysis);
+		fpf_homology_analysis::modify_homology_data(par_sample_analysis);
 		fpf_homology_analysis::associate_homology_data_to_v_protein_data(par_sample_analysis);
 		fpf_homology_analysis::associate_homology_data_to_v_peptide_data(par_sample_analysis);
 		if (par_refined) {
