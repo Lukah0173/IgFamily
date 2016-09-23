@@ -24,9 +24,9 @@ namespace fpf_core {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_filesystem::filesystem filesystem;
-	typedef fpf_filesystem::sample_analysis sample_analysis;
-	typedef fpf_parse::csv_data csv_data;
+	using fpf_filesystem::filesystem;
+	using fpf_filesystem::sample_analysis;
+	using fpf_parse::csv_data;
 
 	inline void core_perform_wiff_fileconversion(filesystem& par_filesystem) {
 		fpf_convert::perform_fileconversion(par_filesystem);

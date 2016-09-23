@@ -25,9 +25,9 @@ namespace fpf_multinomial {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_data::multinomial_frequency_type multinomial_frequency_type;
-	typedef fpf_filesystem::filesystem filesystem;
-	typedef fpf_filesystem::sample_analysis sample_analysis;
+	using fpf_data::multinomial_frequency_type;
+	using fpf_filesystem::filesystem;
+	using fpf_filesystem::sample_analysis;
 
 	void create_multinomial_data(sample_analysis& par_sample_analysis) {
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {

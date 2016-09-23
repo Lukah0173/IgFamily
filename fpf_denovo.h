@@ -23,7 +23,7 @@ namespace fpf_denovo {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_filesystem::filesystem filesystem;
+	using fpf_filesystem::filesystem;
 
 	void perform_novor_denovo (filesystem& par_filesystem) {
 		std::cout << "\n\n\n * * * calling novor.bat * * * \n\n\n";

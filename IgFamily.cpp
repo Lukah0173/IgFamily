@@ -1,4 +1,4 @@
-// * * IgFamily v0.9.8f * * 
+// * * IgFamily v0.9.9 * * 
 //
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -22,7 +22,7 @@ int main() {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_filesystem::filesystem filesystem;
+	using fpf_filesystem::filesystem;
 
 	std::cout << "\n -- IgFamily " << IgFamily::version << " --\n";
 

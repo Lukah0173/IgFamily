@@ -27,17 +27,17 @@ namespace fpf_homology_analysis {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_data::homology_data homology_data;
-	typedef vector<fpf_data::homology_data> v_blastp_type;
-	typedef fpf_data::homology_data homology_data;
-	typedef fpf_data::multinomial multinomial_type;
-	typedef fpf_data::peptide_analysis peptide_analysis;
-	typedef fpf_data::peptide_data peptide_data;
-	typedef fpf_data::protein_data protein_data;
-	typedef fpf_data::protein_analysis protein_analysis;
-	typedef fpf_filesystem::filesystem filesystem;
-	typedef fpf_filesystem::sample_analysis sample_analysis;
-	typedef vector<fpf_filesystem::filesystem> v_filesystem_type;
+	using fpf_data::homology_data;
+	using fpf_data::multinomial;
+	using fpf_data::peptide_analysis;
+	using fpf_data::peptide_data;
+	using fpf_data::protein_data;
+	using fpf_data::protein_analysis;
+	using fpf_filesystem::filesystem;
+	using fpf_filesystem::sample_analysis;
+
+	typedef vector<homology_data> v_homology_data;
+	typedef vector<filesystem> v_filesystem_type;
 
 	void create_blastp_input(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		string output_blastp_FASTA = DEFAULT_BLASTP_DIRECTORY;

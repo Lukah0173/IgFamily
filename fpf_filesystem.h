@@ -30,14 +30,14 @@ namespace fpf_filesystem {
 	using std::multimap;
 	using std::vector;
 
-	typedef fpf_data::homology_data homology_data;
-	typedef fpf_data::protein_data protein_data;
-	typedef fpf_data::peptide_analysis peptide_analysis;
-	typedef fpf_data::peptide_data peptide_data;
-	typedef fpf_data::protein_analysis protein_analysis;
-	typedef fpf_data::multinomial multinomial;
-	typedef fpf_parse::csv_data csv_data;
-	typedef fpf_parse::FASTA_data FASTA_data;
+	using fpf_data::homology_data;
+	using fpf_data::protein_data;
+	using fpf_data::peptide_analysis;
+	using fpf_data::peptide_data;
+	using fpf_data::protein_analysis;
+	using fpf_data::multinomial;
+	using fpf_parse::csv_data;
+	using fpf_parse::FASTA_data;
 
 	struct filesystem;
 	struct sample_analysis;

@@ -6,6 +6,11 @@
 
 
 
+
+
+/* in development */
+
+
 #ifndef FPF_DIRICHLET_MIXTURE_MODEL
 #define	FPF_DIRICHLET_MIXTURE_MODEL
 #include <cstdlib>						// provides - size_t
@@ -13,7 +18,6 @@
 #include <vector>						// provides - vector
 #include "fpf_data.h"
 #include "fpf_filesystem.h"
-#include "fpf_filesystem_analysis.h"
 #include "fpf_homology_analysis.h"
 
 /*Eigen*/
@@ -25,7 +29,7 @@ namespace fpf_dirichlet_mixture_model {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_data::protein_data protein_data;
+	using fpf_data::protein_data;
 
 	struct def_s_model_data;
 	struct def_s_model_parameters;

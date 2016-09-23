@@ -23,7 +23,7 @@ namespace fpf_convert {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_filesystem::filesystem filesystem;
+	using fpf_filesystem::filesystem;
 
 	struct conversion_absolute_threshold;
 	struct conversion_peakpicking;

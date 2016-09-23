@@ -26,9 +26,9 @@ namespace fpf_report {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_data::multinomial_frequency_type multinomial_frequency_type;
-	typedef fpf_filesystem::filesystem filesystem;
-	typedef fpf_filesystem::sample_analysis sample_analysis;
+	using fpf_data::multinomial_frequency_type;
+	using fpf_filesystem::filesystem;
+	using fpf_filesystem::sample_analysis;
 
 	void fout_v_peptide_data(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::string output_v_peptide_data = par_filesystem.directory + par_filesystem.filename + "_peptide_data_" + par_sample_analysis.peptide_assignment_method + ".csv";

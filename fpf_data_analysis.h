@@ -29,18 +29,18 @@ namespace fpf_data_analysis {
 	using std::string;
 	using std::vector;
 
-	typedef fpf_data::homology_data homology_data;
-	typedef fpf_data::denovo_peptide denovo_peptide;
-	typedef fpf_data::protein_data protein_data;
-	typedef fpf_data::peptide_analysis peptide_analysis;
-	typedef fpf_data::peptide_data peptide_data;
-	typedef fpf_data::protein_analysis protein_analysis;
-	typedef fpf_data::multinomial multinomial;
-	typedef fpf_data::proteinconstruct_aminoacid proteinconstruct_aminoacid;
-	typedef fpf_filesystem::filesystem filesystem;
-	typedef fpf_filesystem::sample_analysis sample_analysis;
-	typedef fpf_parse::csv_data csv_data;
-	typedef fpf_parse::FASTA_data FASTA_data;
+	using fpf_data::homology_data;
+	using fpf_data::denovo_peptide;
+	using fpf_data::protein_data;
+	using fpf_data::peptide_analysis;
+	using fpf_data::peptide_data;
+	using fpf_data::protein_analysis;
+	using fpf_data::multinomial;
+	using fpf_data::proteinconstruct_aminoacid;
+	using fpf_filesystem::filesystem;
+	using fpf_filesystem::sample_analysis;
+	using fpf_parse::csv_data;
+	using fpf_parse::FASTA_data;
 
 	map<string, peptide_analysis*> create_v_peptide_analysis_map(vector<peptide_analysis>& par_v_peptide_analysis) {
 		map<string, peptide_analysis*> temp_v_peptide_analysis_map{};
