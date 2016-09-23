@@ -96,16 +96,16 @@ namespace fpf_homology_analysis {
 
 	void systemcall_blastp(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n";
-		string string_system = "CD " + DEFAULT_BLASTP_DIRECTORY;
+		string string_system = "CD " + IgFamily::DEFAULT_BLASTP_DIRECTORY;
 		string_system += " && makeblastdb.exe -in ";
 		string_system += "homology_database.fasta";
 		string_system += " -dbtype prot -out FPF_blastpdb";
 		system(string_system.c_str());
-		string_system = "CD " + DEFAULT_BLASTP_DIRECTORY;
+		string_system = "CD " + IgFamily::DEFAULT_BLASTP_DIRECTORY;
 		string_system += " && blastp.exe -query ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_input.fasta -db FPF_blastpdb -evalue ";
-		string_system += std::to_string(BLASTP_EVALUE_THRESHOLD);
+		string_system += std::to_string(IgFamily::BLASTP_EVALUE_THRESHOLD);
 		string_system += " -max_target_seqs 100 -out ";
 		string_system += par_filesystem.filename;
 		string_system += "_blastp_output.csv -outfmt \"10 qacc qseq sseq sacc qstart sstart qlen pident ppos mismatch evalue\"";
