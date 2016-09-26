@@ -63,7 +63,7 @@ namespace fpf_data_analysis {
 				temp_peptide_analysis.peptide_filtered = itr_v_peptide_data.peptide_filtered;
 				++temp_peptide_analysis.replicate_count;
 				temp_peptide_analysis.v_peptide_data.push_back(&itr_v_peptide_data);
-				temp_peptide_analysis.v_denovo_peptide_averagescore = itr_v_peptide_data.denovo_peptide_data.localconfidence_average;
+				temp_peptide_analysis.v_denovo_peptide_averagescore = itr_v_peptide_data.denovo_peptide_data_filtered.localconfidence_average;
 				temp_peptide_analysis.key_peptide_analysis = temp_key_peptide_analysis;
 				temp_v_peptide_analysis.push_back(temp_peptide_analysis);
 				++temp_key_peptide_analysis;
@@ -72,7 +72,7 @@ namespace fpf_data_analysis {
 				++find_peptide_analysis->replicate_count;
 				find_peptide_analysis->v_peptide_data.push_back(&itr_v_peptide_data);
 				find_peptide_analysis->v_denovo_peptide_averagescore
-					= ((find_peptide_analysis->v_denovo_peptide_averagescore * (find_peptide_analysis->replicate_count - 1)) + itr_v_peptide_data.denovo_peptide_data.localconfidence_average) / find_peptide_analysis->replicate_count;
+					= ((find_peptide_analysis->v_denovo_peptide_averagescore * (find_peptide_analysis->replicate_count - 1)) + itr_v_peptide_data.denovo_peptide_data_filtered.localconfidence_average) / find_peptide_analysis->replicate_count;
 			}
 		}
 		return temp_v_peptide_analysis;
@@ -119,8 +119,8 @@ namespace fpf_data_analysis {
 				itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &default_denovo_peptide;
 				for (auto& itr_peptide_data : find_peptide_analysis->second->v_peptide_data) {
 					++itr_homology_data.denovo_replicate_count;
-					if (itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average < itr_peptide_data->denovo_peptide_data.localconfidence_average) {
-						itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &itr_peptide_data->denovo_peptide_data;
+					if (itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average < itr_peptide_data->denovo_peptide_data_filtered.localconfidence_average) {
+						itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &itr_peptide_data->denovo_peptide_data_filtered;
 					}
 				}
 				itr_protein_analysis.protein_score += (itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count);

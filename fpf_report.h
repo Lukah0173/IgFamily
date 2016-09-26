@@ -34,35 +34,38 @@ namespace fpf_report {
 		std::string output_v_peptide_data = par_filesystem.directory + par_filesystem.filename + "_peptide_data_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_v_peptide_data;
 		fout_v_peptide_data.open(output_v_peptide_data);
-		fout_v_peptide_data << "key,scan_ID,peptide_filtered,peptide_withmod,denovo_peptide,\n";
+		fout_v_peptide_data << "key,scan_ID,peptide_withmod,peptide_withoutmod,peptide_filtered,denovo_peptide,denovo_peptide_filtered\n";
 		for (const auto& itr_v_peptide_data_map : par_sample_analysis.v_peptide_data_map) {
 			fout_v_peptide_data << itr_v_peptide_data_map.second->key_peptide_data << ",";
 			fout_v_peptide_data << itr_v_peptide_data_map.second->scan_ID << ",";
-			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_filtered << ",";
 			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_withmod << ",";
+			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_withoutmod << ",";
+			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_filtered << ",";
 			for (const auto& itr_v_denovo_aminoacid : itr_v_peptide_data_map.second->denovo_peptide_data.v_denovo_aminoacid) {
 				fout_v_peptide_data << itr_v_denovo_aminoacid.aminoacid;
 				fout_v_peptide_data << "[" << itr_v_denovo_aminoacid.aminoacid_localconfidence << "]";
+			}
+			fout_v_peptide_data << ",";
+			for (const auto& itr_v_denovo_filtered_aminoacid : itr_v_peptide_data_map.second->denovo_peptide_data_filtered.v_denovo_aminoacid) {
+				fout_v_peptide_data << itr_v_denovo_filtered_aminoacid.aminoacid;
+				fout_v_peptide_data << "[" << itr_v_denovo_filtered_aminoacid.aminoacid_localconfidence << "]";
 			}
 			fout_v_peptide_data << ",\n";
 		}
 	}
 
 	void fout_v_protein_data(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		std::string output_v_peptide_data = par_filesystem.directory + par_filesystem.filename + "_protein_data_" + par_sample_analysis.peptide_assignment_method + ".csv";
-		std::ofstream fout_v_peptide_data;
-		fout_v_peptide_data.open(output_v_peptide_data);
-		fout_v_peptide_data << "key,scan_ID,peptide_filtered,peptide_withmod,denovo_peptide,\n";
-		for (const auto& itr_v_peptide_data : par_sample_analysis.v_peptide_data) {
-			fout_v_peptide_data << itr_v_peptide_data.key_peptide_data << ",";
-			fout_v_peptide_data << itr_v_peptide_data.scan_ID << ",";
-			fout_v_peptide_data << itr_v_peptide_data.peptide_filtered << ",";
-			fout_v_peptide_data << itr_v_peptide_data.peptide_withmod << ",";
-			for (const auto& itr_v_denovo_aminoacid : itr_v_peptide_data.denovo_peptide_data.v_denovo_aminoacid) {
-				fout_v_peptide_data << itr_v_denovo_aminoacid.aminoacid;
-				fout_v_peptide_data << "[" << itr_v_denovo_aminoacid.aminoacid_localconfidence << "]";
-			}
-			fout_v_peptide_data << ",\n";
+		std::string output_v_protein_data = par_filesystem.directory + par_filesystem.filename + "_protein_data_" + par_sample_analysis.peptide_assignment_method + ".csv";
+		std::ofstream fout_v_protein_data_map;
+		fout_v_protein_data_map.open(output_v_protein_data);
+		fout_v_protein_data_map << "key,protein_name,protein_type,protein_species,protein_protein,\n";
+		for (const auto& itr_v_protein_data_map : par_sample_analysis.v_protein_data_map) {
+			fout_v_protein_data_map << itr_v_protein_data_map.second->key_protein_data << ",";
+			fout_v_protein_data_map << itr_v_protein_data_map.second->protein_name << ",";
+			fout_v_protein_data_map << itr_v_protein_data_map.second->protein_type << ",";
+			fout_v_protein_data_map << itr_v_protein_data_map.second->protein_species << ",";
+			fout_v_protein_data_map << itr_v_protein_data_map.second->protein_protein << ",";
+			fout_v_protein_data_map << "\n";
 		}
 	}
 
@@ -75,7 +78,11 @@ namespace fpf_report {
 			fout_v_peptide_analysis << itr_v_peptide_anaylsis_map.second->key_peptide_analysis << ",";
 			fout_v_peptide_analysis << itr_v_peptide_anaylsis_map.second->peptide_filtered << ",";
 			fout_v_peptide_analysis << itr_v_peptide_anaylsis_map.second->replicate_count << ",";
-			fout_v_peptide_analysis << "\n";
+			//for (const auto& itr_v_denovo_aminoacid : itr_v_peptide_anaylsis_map.second->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
+			//	fout_v_peptide_analysis << itr_v_denovo_aminoacid.aminoacid;
+			//	fout_v_peptide_analysis << "[" << itr_v_denovo_aminoacid.aminoacid_localconfidence << "]";
+			//}
+			fout_v_peptide_analysis << ",\n";
 		}
 	}
 
@@ -132,7 +139,6 @@ namespace fpf_report {
 		string output_multinomial = par_filesystem.directory + par_filesystem.filename + "_multinomial_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_multinomial;
 		fout_multinomial.open(output_multinomial);
-		std::cout << " ...outputting multinomial data frame for " << par_filesystem.filename;
 		fout_multinomial << ",";
 		fout_multinomial << "TOTAL,";
 		for (const auto& itr_multinomial_protein : par_sample_analysis.multinomial_data.v_protein_name) {
@@ -158,7 +164,6 @@ namespace fpf_report {
 		string output_multinomial_element = par_filesystem.directory + par_filesystem.filename + "_multinomial_peptide_" + par_sample_analysis.peptide_assignment_method + ".txt";
 		std::ofstream fout_multinomial_element;
 		fout_multinomial_element.open(output_multinomial_element);
-		std::cout << "\n ...outputting multinomial peptide list for " << par_filesystem.filename;
 		fout_multinomial_element << "\n";
 		fout_multinomial_element << par_filesystem.filename;
 		fout_multinomial_element << "\n\n\n";
@@ -195,7 +200,6 @@ namespace fpf_report {
 		string output_multinomial_element_nomatch = par_filesystem.directory + par_filesystem.filename + "_multinomial_peptide_filtered_" + par_sample_analysis.peptide_assignment_method + ".txt";
 		std::ofstream fout_multinomial_element_nomatch;
 		fout_multinomial_element_nomatch.open(output_multinomial_element_nomatch);
-		std::cout << "\n ...outputting filtered multinomial peptide list for " << par_filesystem.filename;
 		fout_multinomial_element_nomatch << "\n";
 		fout_multinomial_element_nomatch << par_filesystem.filename;
 		fout_multinomial_element_nomatch << "\n\n\n";
