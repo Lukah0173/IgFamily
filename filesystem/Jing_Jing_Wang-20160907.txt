@@ -1,0 +1,6 @@
+root_directory\Jing_Jing_Wang\20160907\JW16_J01_HAGG_isolated_RF_lane1_MGFPeaklist\,
+root_directory\Jing_Jing_Wang\20160907\JW16_J02_HAGG_isolated_RF_lane2_MGFPeaklist\,
+root_directory\Jing_Jing_Wang\20160907\JW16_J02+J02a_HAGG_isolated_RF_lane2_MGFPeaklist\,
+root_directory\Jing_Jing_Wang\20160907\JW16_J02a_HAGG_isolated_RF_lane2_MGFPeaklist\,
+root_directory\Jing_Jing_Wang\20160907\JW16_J03_HAGG_isolated_RF_lane3_MGFPeaklist\,
+root_directory\Jing_Jing_Wang\20160907\JW16_J04_HAGG_isolated_RF_lane4_MGFPeaklist\,

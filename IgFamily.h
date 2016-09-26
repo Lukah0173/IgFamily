@@ -16,7 +16,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.9.10" };
+	const string version{ "v0.9.10a" };
 
 	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
@@ -26,7 +26,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA{ 1 };
 	const bool BLASTP_BY_SELECTED_PEPTIDE{ 1 };
 
-	const string IGFAMILY_ROOT_DIR{ "Jing_Jing_Wang-20160913.txt" };
+	const string IGFAMILY_ROOT_DIR{ "Jing_Jing_Wang-20160907.txt" };
 	const string DEFAULT_IGFAMILY_DIRECTORY{ "" };
 	const string DEFAULT_FASTA_DIRECTORY{ DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\" };
 	const string DEFAULT_FASTA_MODULE_DIRECTORY{ DEFAULT_FASTA_DIRECTORY + "FASTA_modules\\" };
