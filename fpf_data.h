@@ -270,6 +270,7 @@ namespace fpf_data {
 			}
 			if ((temp_denovo_peptide.localconfidence_average > IgFamily::DENOVO_PEPTIDE_CONFIDENCE_THRESHOLD) && (temp_peptide_data.peptide_filtered != "")) {
 				temp_peptide_data.key_peptide_data = temp_key_peptide_data;
+				temp_peptide_data.scan_ID = std::stoi(itr_parse_csv_peptide_data.csv_scan_ID);
 				temp_v_peptide_data.push_back(temp_peptide_data);
 				++temp_key_peptide_data;
 			}
