@@ -174,7 +174,7 @@ namespace fpf_data_analysis {
 				if ((IgFamily::REPORT_SCORE_THRESHOLD)) {
 					for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
 						if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
-							itr_homology_analysis.blastp_score_transformed_conjugated *= std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean), IgFamily::MULTINOMIAL_CONJUGATION_FACTOR);
+							itr_homology_analysis.blastp_score_transformed_conjugated = std::pow(itr_homology_analysis.blastp_score_transformed_conjugated, (1 / (1 + std::pow(double(2.718), double(-1) * IgFamily::MULTINOMIAL_CONJUGATION_FACTOR * (itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean)))));
 						}
 					}
 				}
@@ -199,6 +199,11 @@ namespace fpf_data_analysis {
 			}
 			fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis, true);
 			create_v_protein_analysis(par_sample_analysis);
+			fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, true);
+			fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true);
+			fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, false);
+			fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false);
+			std::cout << "\n ping!";
 		}
 	}
 

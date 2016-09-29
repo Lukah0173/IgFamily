@@ -16,7 +16,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.10.0a" };
+	const string version{ "v0.10.0b" };
 
 	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
@@ -26,7 +26,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA{ 1 };
 	const bool BLASTP_BY_SELECTED_PEPTIDE{ 1 };
 
-	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Alex-Colella_20160609.txt" };
+	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Will-Murray-Brown_20160907.txt" };
 	const string DEFAULT_IGFAMILY_DIRECTORY{ "" };
 	const string DEFAULT_FASTA_DIRECTORY{ DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\" };
 	const string DEFAULT_FASTA_MODULE_DIRECTORY{ DEFAULT_FASTA_DIRECTORY + "FASTA_modules\\" };
@@ -51,9 +51,9 @@ namespace IgFamily {
 	const double REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD{ 0.1 };
 	const double REPORT_QUERY_EVALUETRANSFORMED_THRESHOLD{ 10 };
 
-	double MULTINOMIAL_CONJUGATION_FACTOR{ 0.5 };
+	double MULTINOMIAL_CONJUGATION_FACTOR{ 0.01 };
 	double MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_1{ 50 };
-	double MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_1{ 0.05 };
+	double MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_1{ 0.01 };
 	double MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_2{ 50 };
 	double MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2{ 0.01 };
 }

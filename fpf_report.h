@@ -453,8 +453,8 @@ namespace fpf_report {
 									//		fout_html_report << "&nbsp";
 									//	}
 									//}
-									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.blastp_score_transformed;
-									if (itr_homology_data.blastp_score_transformed < 1) {
+									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.blastp_score_transformed_conjugated;
+									if (itr_homology_data.blastp_score_transformed_conjugated < 1) {
 										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 									}
 									else {
