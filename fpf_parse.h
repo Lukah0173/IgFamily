@@ -750,27 +750,6 @@ namespace fpf_parse {
 			}
 		}
 	}
-
-	void output_v_FASTA_data_to_blastdirectory(vector<FASTA_data> par_v_FASTA_data) {
-		string output_FASTA_filtered = "blast_directory\\database.fasta";
-		std::ofstream fout_FASTA_filtered;
-		fout_FASTA_filtered.open(output_FASTA_filtered);
-		if (IgFamily::OUTPUT_FASTA) {
-			for (const auto& itr_v_FASTA_DATA : par_v_FASTA_data) {
-				fout_FASTA_filtered << ">" << itr_v_FASTA_DATA.return_FASTA_accession();
-				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_name();
-				fout_FASTA_filtered << "|" << itr_v_FASTA_DATA.return_FASTA_species();
-				fout_FASTA_filtered << "|";
-				for (auto i = 0; i < itr_v_FASTA_DATA.return_FASTA_protein().length(); ++i) {
-					if ((i % IgFamily::OUTPUT_FASTA_ACCESSION_WIDTH == 0) && ((i + 1) < itr_v_FASTA_DATA.return_FASTA_protein().length())) {
-						fout_FASTA_filtered << "\n";
-					}
-					fout_FASTA_filtered << itr_v_FASTA_DATA.return_FASTA_protein().at(i);
-				}
-				fout_FASTA_filtered << "\n";
-			}
-		}
-	}
 }
 
 #endif

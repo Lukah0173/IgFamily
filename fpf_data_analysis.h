@@ -91,7 +91,7 @@ namespace fpf_data_analysis {
 		size_t temp_key_protein_analysis{};
 		vector<protein_analysis> temp_v_protein_analysis{};
 		for (const auto& itr_homology_data : par_sample_analysis.v_homology_data) {
-			if (itr_homology_data.blastp_evalue_transformed_conjugated > BLASTP_EVALUETRANSFORMED_THRESHOLD) {
+			//if (itr_homology_data.blastp_score_transformed_conjugated > BLASTP_BITSCORETRANSFORMED_THRESHOLD) {
 				auto find_protein_analysis = std::find_if(temp_v_protein_analysis.begin(), temp_v_protein_analysis.end(),
 					[itr_homology_data](const protein_analysis& par_protein_analysis) {
 					return par_protein_analysis.p_protein_data->key_protein_data == itr_homology_data.key_blastp_subject_accession;
@@ -109,7 +109,7 @@ namespace fpf_data_analysis {
 					++temp_key_protein_analysis;
 					temp_protein_analysis.v_homology_data_combined_by_protein.clear();
 				}
-			}
+			//}
 		}
 		denovo_peptide default_denovo_peptide{};
 		for (auto& itr_protein_analysis : temp_v_protein_analysis) {
@@ -159,50 +159,47 @@ namespace fpf_data_analysis {
 		par_sample_analysis.protein_analysis_score_mean = temp_protein_analysis_score_mean;
 	}
 
-	void train_homology_analysis_parameter_score(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		if (IgFamily::POLYMORPHISM_SELECTED) {
-			std::cout << "\n training protein scores...\n\n";
-			size_t count_selected_genefamilies{};
-			size_t count_iterations{};
+	void train_homology_analysis_parameter_score(filesystem& par_filesystem, sample_analysis& par_sample_analysis, const size_t& par_select_N_many_gene_families) {
+		std::cout << "\n training protein scores...\n\n";
+		size_t count_selected_genefamilies{};
+		size_t count_iterations{};
+		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score > IgFamily::REPORT_SCORE_THRESHOLD)) {
+				++count_selected_genefamilies;
+			}
+		}
+		while (count_selected_genefamilies > par_select_N_many_gene_families) {
+			determine_protein_analysis_score_mean(par_sample_analysis);
+			for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
+				if ((IgFamily::REPORT_SCORE_THRESHOLD)) {
+					for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
+						if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
+							itr_homology_analysis.blastp_score_transformed_conjugated *= std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean), IgFamily::MULTINOMIAL_CONJUGATION_FACTOR);
+						}
+					}
+				}
+			}
+			++count_iterations;
+			std::cout << " ...iteration ";
+			std::cout << count_iterations;
+			count_selected_genefamilies = 0;
 			for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 				if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score > IgFamily::REPORT_SCORE_THRESHOLD)) {
 					++count_selected_genefamilies;
 				}
 			}
-			while (count_selected_genefamilies > IgFamily::SELECT_N_MANY_GENE_FAMILIES) {
-				determine_protein_analysis_score_mean(par_sample_analysis);
-				for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
-					if ((IgFamily::REPORT_SCORE_THRESHOLD)) {
-						for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
-							if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
-								itr_homology_analysis.blastp_evalue_transformed_conjugated *= std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean), IgFamily::MULTINOMIAL_CONJUGATION_FACTOR);
-							}
-						}
-					}
-				}
-				++count_iterations;
-				std::cout << " ...iteration ";
-				std::cout << count_iterations;
-				count_selected_genefamilies = 0;
-				for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-					if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score > IgFamily::REPORT_SCORE_THRESHOLD)) {
-						++count_selected_genefamilies;
-					}
-				}
-				std::cout << " with ";
-				std::cout << count_selected_genefamilies;
-				std::cout << " gene families\n";
-				if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_1) {
-					IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_1;
-				}
-				if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_2) {
-					IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2;
-				}
-				fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis, true);
-				create_v_protein_analysis(par_sample_analysis);
+			std::cout << " with ";
+			std::cout << count_selected_genefamilies;
+			std::cout << " gene families\n";
+			if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_1) {
+				IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_1;
 			}
+			if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_2) {
+				IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2;
+			}
+			fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis, true);
+			create_v_protein_analysis(par_sample_analysis);
 		}
-		IgFamily::POLYMORPHISM_SELECTED = true;
 	}
 
 	void create_proteinconstruct_from_denovo(sample_analysis& par_sample_analysis) {
@@ -224,7 +221,7 @@ namespace fpf_data_analysis {
 				if (find_blastp_query_alignment_rejected == v_blastp_query_alignment_rejected.end()) {
 					homology_data temp_blastp_query_alignment{};
 					temp_blastp_query_alignment.query_alignment = itr_v_homology_data.query_alignment;
-					temp_blastp_query_alignment.blastp_evalue_transformed = itr_v_homology_data.blastp_evalue_transformed;
+					temp_blastp_query_alignment.blastp_score_transformed = itr_v_homology_data.blastp_score_transformed;
 					temp_blastp_query_alignment.blastp_parameter_score = itr_v_homology_data.blastp_parameter_score;
 					temp_blastp_query_alignment.p_peptide_analysis = itr_v_homology_data.p_peptide_analysis;
 					temp_blastp_query_alignment.denovo_replicate_count = itr_v_homology_data.denovo_replicate_count;
@@ -266,12 +263,12 @@ namespace fpf_data_analysis {
 								}
 								else {
 									if (v_blastp_query_alignment_selected[i].blastp_parameter_score > itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_score) {
-										if (v_blastp_query_alignment_selected[i].blastp_evalue_transformed > IgFamily::REPORT_QUERY_EVALUETRANSFORMED_THRESHOLD) {
+										if (v_blastp_query_alignment_selected[i].blastp_score_transformed > IgFamily::REPORT_QUERY_EVALUETRANSFORMED_THRESHOLD) {
 											if ((v_blastp_query_alignment_selected[i].blastp_parameter_score > IgFamily::REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD)
 												&& ((v_blastp_query_alignment_selected[i].blastp_parameter_score * v_blastp_query_alignment_selected[i].denovo_replicate_count) > REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD)) {
 												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid = v_blastp_query_alignment_selected[i].query_alignment.at(j);
 												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
-												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_evalue_transformed = v_blastp_query_alignment_selected[i].blastp_evalue_transformed;
+												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_evalue_transformed = v_blastp_query_alignment_selected[i].blastp_score_transformed;
 												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_score = v_blastp_query_alignment_selected[i].blastp_parameter_score;
 											}
 										}

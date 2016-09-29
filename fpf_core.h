@@ -98,7 +98,6 @@ namespace fpf_core {
 		par_filesystem.v_FASTA_data = fpf_parse::parse_FASTA(par_select_FASTA);
 		if (check_FASTA_file_exists(par_filesystem.v_FASTA_data)) { return false; }
 		fpf_parse::output_v_FASTA_data(par_filesystem.v_FASTA_data);
-		fpf_parse::output_v_FASTA_data_to_blastdirectory(par_filesystem.v_FASTA_data);
 		return true;
 	}
 
@@ -143,11 +142,16 @@ namespace fpf_core {
 		std::cout << " ...homology file output\n";
 	}
 
-	void core_data_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
+	void core_data_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_refined) {
 		std::cout << "\n\n scoring proteins...\n";
 		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis);
 		std::cout << " ...proteins scored\n";
-		fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis);
+		if (!par_refined) {
+			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN);
+		}
+		else {
+			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES);
+		}
 		fpf_data_analysis::determine_protein_score_density(par_sample_analysis);
 		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
 		fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
@@ -186,7 +190,6 @@ namespace fpf_core {
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false);
 		std::cout << "\n";
 		fpf_filesystem::fout_filesystem(par_filesystem);
-		IgFamily::POLYMORPHISM_SELECTED = false;
 	}
 }
 #endif

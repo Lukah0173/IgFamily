@@ -117,8 +117,8 @@ namespace fpf_report {
 		fout_v_homology_data << "query,";
 		fout_v_homology_data << "key_subject_accession,";
 		fout_v_homology_data << "subject_accession,";
-		fout_v_homology_data << "e_value,";
-		fout_v_homology_data << "e_value_transformed,";
+		fout_v_homology_data << "score,";
+		fout_v_homology_data << "score_transformed,";
 		fout_v_homology_data << "par_dens,";
 		fout_v_homology_data << "par_score,";
 		fout_v_homology_data << "\n";
@@ -127,8 +127,8 @@ namespace fpf_report {
 			fout_v_homology_data << itr_v_homology_data.blastp_query << ",";
 			fout_v_homology_data << itr_v_homology_data.key_blastp_subject_accession << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_subject_accession << ",";
-			fout_v_homology_data << itr_v_homology_data.blastp_evalue << ",";
-			fout_v_homology_data << itr_v_homology_data.blastp_evalue_transformed_conjugated << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_score << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_score_transformed_conjugated << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_parameter_density_conjugated << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_parameter_score << ",";
 			fout_v_homology_data << "\n";
@@ -385,7 +385,7 @@ namespace fpf_report {
 						//fout_html_report << "DN&nbspconf&nbspavr";
 						fout_html_report << "<br>";
 						for (const auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
-							if (itr_homology_data.blastp_evalue_transformed > IgFamily::REPORT_QUERY_EVALUETRANSFORMED_THRESHOLD) {
+							if (itr_homology_data.blastp_score_transformed > IgFamily::REPORT_QUERY_EVALUETRANSFORMED_THRESHOLD) {
 								if ((itr_homology_data.blastp_parameter_score > IgFamily::REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD)
 									&& ((itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count) > REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD)) {
 									fout_html_report << "\n<br> ";
@@ -453,12 +453,12 @@ namespace fpf_report {
 									//		fout_html_report << "&nbsp";
 									//	}
 									//}
-									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.blastp_evalue_transformed;
-									if (itr_homology_data.blastp_evalue_transformed < 1) {
+									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.blastp_score_transformed;
+									if (itr_homology_data.blastp_score_transformed < 1) {
 										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 									}
 									else {
-										for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.blastp_evalue_transformed))); ++j) {
+										for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.blastp_score_transformed))); ++j) {
 											fout_html_report << "&nbsp";
 										}
 									}
@@ -473,7 +473,7 @@ namespace fpf_report {
 									}
 									fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 									//fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence->localconfidence_average;
-									//if (itr_homology_data.blastp_evalue_transformed_conjugated < 1) {
+									//if (itr_homology_data.blastp_score_transformed_conjugated < 1) {
 									//	fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 									//}
 									//else {
@@ -482,7 +482,7 @@ namespace fpf_report {
 									//	}
 									//}
 									//fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.p_peptide_analysis->v_denovo_peptide_averagescore;
-									//if (itr_homology_data.blastp_evalue_transformed_conjugated < 1) {
+									//if (itr_homology_data.blastp_score_transformed_conjugated < 1) {
 									//	fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 									//}
 									//else {

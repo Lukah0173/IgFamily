@@ -103,9 +103,9 @@ namespace fpf_data {
 		string blastp_subject_accession_class;
 		size_t blastp_query_alignment_index;
 		size_t blastp_subject_alignment_index;
-		double blastp_evalue;
-		double blastp_evalue_transformed;
-		double blastp_evalue_transformed_conjugated;
+		double blastp_score;
+		double blastp_score_transformed;
+		double blastp_score_transformed_conjugated;
 		double blastp_parameter_density;
 		double blastp_parameter_density_conjugated;
 		double blastp_parameter_score;

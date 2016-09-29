@@ -1,4 +1,4 @@
-// * * IgFamily v0.9.11 * * 
+// * * IgFamily v0.10.0 * * 
 //
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -49,9 +49,9 @@ int main() {
 				if (itr_v_sample_analysis.file_found) {
 					fpf_core::core_create_data_structures(itr_v_filesystem, itr_v_sample_analysis);
 					fpf_core::core_homology_analysis(itr_v_filesystem, itr_v_sample_analysis, false);
-					fpf_core::core_data_analysis(itr_v_filesystem, itr_v_sample_analysis);
+					fpf_core::core_data_analysis(itr_v_filesystem, itr_v_sample_analysis, false);
 					fpf_core::core_homology_analysis(itr_v_filesystem, itr_v_sample_analysis, true);
-					fpf_core::core_data_analysis(itr_v_filesystem, itr_v_sample_analysis);
+					fpf_core::core_data_analysis(itr_v_filesystem, itr_v_sample_analysis, true);
 					fpf_core::core_multinomial(itr_v_filesystem, itr_v_sample_analysis);
 					fpf_core::core_report(itr_v_filesystem, itr_v_sample_analysis);
 					itr_v_sample_analysis = {};
