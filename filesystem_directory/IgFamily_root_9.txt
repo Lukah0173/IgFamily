@@ -1,0 +1,5 @@
+root_directory\Jing_Jing_Wang\20160901\JW16_I01_HAGG_RF_RNP70kd_LT\,
+root_directory\Jing_Jing_Wang\20160901\JW16_I02_HAGG_RF_pSS_TJ_tube_3_2nd\,
+root_directory\Jing_Jing_Wang\20160901\JW16_I03_HAGG_RF_asym_pSS_SAD\,
+root_directory\Jing_Jing_Wang\20160901\JW16_I04_HAGG_RF_pSS_JR\,
+root_directory\Jing_Jing_Wang\20160901\JW16_I05_HAGG_RF_pSS_MJ\,

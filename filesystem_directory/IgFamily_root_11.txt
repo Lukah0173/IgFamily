@@ -1,0 +1,4 @@
+root_directory\Lukah_Dykes\20151020\LD15_F01_HC_IgG_1D_H1\,
+root_directory\Lukah_Dykes\20151020\LD15_F01_HC_IgG_1D_H2\,
+root_directory\Lukah_Dykes\20151020\LD15_F01_HC_IgG_1D_H3\,
+root_directory\Lukah_Dykes\20151020\LD15_F01_HC_IgG_1D_H4\,

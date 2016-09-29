@@ -1,0 +1,3 @@
+root_directory\Alex_Colella\20160622\AC16_M05_BP_Cryo_HC\,
+root_directory\Alex_Colella\20160721\AC16_Q03_BP_cryo_HC_spot_3\,
+root_directory\Alex_Colella\20160721\AC16_Q04_BP_cryo_HC_spot_4\,

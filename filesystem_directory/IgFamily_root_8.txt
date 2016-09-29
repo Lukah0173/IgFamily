@@ -1,0 +1,3 @@
+root_directory\Jing_Jing_Wang\20150820\JW15_H07_Ro52_AP_BNE_H\,
+root_directory\Jing_Jing_Wang\20150820\JW15_H07a_Ro52_AP_BNE_H\,
+root_directory\Jing_Jing_Wang\20150820\JW15_H07_Ro52_AP_BNE_H_+_JW15_H07a_Ro52_AP_BNE_H\,

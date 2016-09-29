@@ -1,0 +1,3 @@
+root_directory\Jing_Jing_Wang\20150820\JW15_H05_Ro60_AP_BN_H\,
+root_directory\Jing_Jing_Wang\20150820\JW15_H05a_Ro60_AP_BN_H\,
+root_directory\Jing_Jing_Wang\20150820\JW15_H05_Ro60_AP_BN_H_+_JW15_H05a_Ro60_AP_BN_H\,
