@@ -224,7 +224,7 @@ namespace fpf_data_analysis {
 				if (find_blastp_query_alignment_rejected == v_blastp_query_alignment_rejected.end()) {
 					homology_data temp_blastp_query_alignment{};
 					temp_blastp_query_alignment.query_alignment = itr_v_homology_data.query_alignment;
-					temp_blastp_query_alignment.blastp_score_transformed = itr_v_homology_data.blastp_score_transformed;
+					temp_blastp_query_alignment.blastp_score_transformed = (itr_v_homology_data.blastp_score_transformed * itr_v_homology_data.blastp_parameter_density_conjugated);
 					temp_blastp_query_alignment.blastp_parameter_score = itr_v_homology_data.blastp_parameter_score;
 					temp_blastp_query_alignment.p_peptide_analysis = itr_v_homology_data.p_peptide_analysis;
 					temp_blastp_query_alignment.denovo_replicate_count = itr_v_homology_data.denovo_replicate_count;

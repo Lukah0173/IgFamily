@@ -339,7 +339,7 @@ namespace fpf_report {
 							if ((itr_proteinconstruct_from_denovo.aminoacid != itr_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct_from_denovo.aminoacid == 'L') && (itr_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 								fout_html_report << "<span class=\"mismatch\">";
 							}
-							if (itr_proteinconstruct_from_denovo.aminoacid_score_transformed > std::pow(40, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) {
+							if ((itr_proteinconstruct_from_denovo.aminoacid_score_transformed) > std::pow(40, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) {
 								fout_html_report << "<font color=\"#4c62d6\">";
 							}
 							if ((itr_proteinconstruct_from_denovo.aminoacid_score_transformed <= std::pow(40, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) && (itr_proteinconstruct_from_denovo.aminoacid_score_transformed > std::pow(30, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT))) {
