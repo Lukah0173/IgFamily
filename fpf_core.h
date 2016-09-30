@@ -144,13 +144,13 @@ namespace fpf_core {
 
 	void core_data_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_refined) {
 		std::cout << "\n\n scoring proteins...\n";
-		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis);
+		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis, 0, par_refined);
 		std::cout << " ...proteins scored\n";
 		if (!par_refined) {
-			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN);
+			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN, par_refined);
 		}
 		else {
-			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES);
+			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES, par_refined);
 		}
 		fpf_data_analysis::determine_protein_score_density(par_sample_analysis);
 		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);

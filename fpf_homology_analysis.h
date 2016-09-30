@@ -302,7 +302,8 @@ namespace fpf_homology_analysis {
 				if (is_hold) {
 					for (auto& itr_hold_v_homology_data : hold_v_homology_data) {
 						//itr_hold_v_homology_data.blastp_score_transformed = std::pow(log_base(((double(1) * IgFamily::BLASTP_PARPROP_SCALE) / itr_hold_v_homology_data.blastp_score), 1.2), 2.2);
-						itr_hold_v_homology_data.blastp_score_transformed = std::pow(itr_hold_v_homology_data.blastp_score, 1.3);
+						itr_hold_v_homology_data.blastp_score_transformed = std::pow(itr_hold_v_homology_data.blastp_score, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT);
+						//itr_hold_v_homology_data.blastp_score_transformed = itr_hold_v_homology_data.blastp_score;
 						itr_hold_v_homology_data.blastp_score_transformed_conjugated = itr_hold_v_homology_data.blastp_score_transformed;
 						temp_v_homology_data.push_back(itr_hold_v_homology_data);
 					}
