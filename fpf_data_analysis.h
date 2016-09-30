@@ -91,30 +91,25 @@ namespace fpf_data_analysis {
 		size_t temp_key_protein_analysis{};
 		vector<protein_analysis> temp_v_protein_analysis{};
 		for (const auto& itr_homology_data : par_sample_analysis.v_homology_data) {
-			//if (itr_homology_data.blastp_score_transformed_conjugated > BLASTP_BITSCORETRANSFORMED_THRESHOLD) {
-				auto find_protein_analysis = std::find_if(temp_v_protein_analysis.begin(), temp_v_protein_analysis.end(),
-					[itr_homology_data](const protein_analysis& par_protein_analysis) {
-					return par_protein_analysis.p_protein_data->key_protein_data == itr_homology_data.key_blastp_subject_accession;
-				});
-				if (find_protein_analysis != temp_v_protein_analysis.end()) {
-					find_protein_analysis->v_homology_data_combined_by_protein.push_back(itr_homology_data);
-				}
-				else {
-					double temp_protein_score{};
-					temp_protein_analysis.p_protein_data = itr_homology_data.p_protein_data;
+			auto find_protein_analysis = std::find_if(temp_v_protein_analysis.begin(), temp_v_protein_analysis.end(),
+				[itr_homology_data](const protein_analysis& par_protein_analysis) {
+				return par_protein_analysis.p_protein_data->key_protein_data == itr_homology_data.key_blastp_subject_accession;
+			});
+			if (find_protein_analysis != temp_v_protein_analysis.end()) {
+				find_protein_analysis->v_homology_data_combined_by_protein.push_back(itr_homology_data);
+			}
+			else {
+				double temp_protein_score{};
+				temp_protein_analysis.p_protein_data = itr_homology_data.p_protein_data;
+				if ((par_refined) && (par_iteration > 10) && (itr_homology_data.blastp_parameter_density_conjugated > IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
 					temp_protein_analysis.v_homology_data_combined_by_protein.push_back(itr_homology_data);
-					temp_protein_analysis.protein_score = temp_protein_score;
-					temp_protein_analysis.key_protein_analysis = temp_key_protein_analysis;
-					if ((par_refined) && (par_iteration > 10) && (temp_protein_analysis.protein_score > IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
-						temp_v_protein_analysis.push_back(temp_protein_analysis);
-					}
-					else {
-						temp_v_protein_analysis.push_back(temp_protein_analysis);
-					}
-					++temp_key_protein_analysis;
-					temp_protein_analysis.v_homology_data_combined_by_protein.clear();
 				}
-			//}
+				temp_protein_analysis.protein_score = temp_protein_score;
+				temp_protein_analysis.key_protein_analysis = temp_key_protein_analysis;
+				temp_v_protein_analysis.push_back(temp_protein_analysis);
+				++temp_key_protein_analysis;
+				temp_protein_analysis.v_homology_data_combined_by_protein.clear();
+			}
 		}
 		denovo_peptide default_denovo_peptide{};
 		for (auto& itr_protein_analysis : temp_v_protein_analysis) {
@@ -180,14 +175,7 @@ namespace fpf_data_analysis {
 					for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
 						if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
 							double score_conjugate{ double(0.995) + (double(0.01) / (1 + std::pow(double(2.718), double(-IgFamily::MULTINOMIAL_CONJUGATION_FACTOR) * (itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean)))) };
-							//std::cout << "\n" << itr_homology_analysis.blastp_query;
-							//std::cout << "   " << itr_homology_analysis.blastp_score_transformed_conjugated;
 							itr_homology_analysis.blastp_score_transformed_conjugated = std::pow(itr_homology_analysis.blastp_score_transformed_conjugated, score_conjugate);
-							//std::cout << "   " << itr_homology_analysis.blastp_score_transformed_conjugated;
-							//std::cout << "   " << itr_protein_analysis.protein_score;
-							//std::cout << "   " << par_sample_analysis.protein_analysis_score_mean;
-							//std::cout << "   " << score_conjugate;
-							//std::cout << "    ping!";
 						}
 					}
 				}
@@ -211,7 +199,7 @@ namespace fpf_data_analysis {
 				IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2;
 			}
 			fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis, true);
-			IgFamily::HOMOLOGY_SCORE_THRESHOLD = (par_sample_analysis.protein_analysis_score_mean / double(100));
+			IgFamily::HOMOLOGY_SCORE_THRESHOLD = (par_sample_analysis.protein_analysis_score_mean / IgFamily::HOMOLOGY_SCORE_THRESHOLD_CONJUGATE);
 			create_v_protein_analysis(par_sample_analysis, count_iterations, par_refined);
 			//std::cout << "\n " << IgFamily::HOMOLOGY_SCORE_THRESHOLD;
 		}

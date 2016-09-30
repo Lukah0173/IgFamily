@@ -247,7 +247,7 @@ namespace fpf_report {
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
 				fout_multinomial_comparison << itr_v_protein_analysis.p_protein_data->protein_name << ",";
-				fout_multinomial_comparison << itr_v_protein_analysis.protein_score << "\n";
+				fout_multinomial_comparison << itr_v_protein_analysis.protein_density << "\n";
 			}
 		}
 	}
@@ -293,7 +293,7 @@ namespace fpf_report {
 			if ((par_alloutput) || (itr_protein_analysis.p_protein_data->protein_type == "IG")) {
 				if (itr_protein_analysis.protein_score > HOMOLOGY_SCORE_THRESHOLD) {
 					fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;
-					fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_protein_analysis.protein_score;
+					//fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_protein_analysis.protein_score;
 					fout_html_report << "&nbsp&nbsp&nbspDensity: " << std::fixed << std::setprecision(4) << itr_protein_analysis.protein_density;
 					fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_protein_analysis.proteinconstruct_sequencecoverage << "%";
 					fout_html_report << "\n\n<br><br> " << itr_protein_analysis.p_protein_data->protein_protein;
@@ -342,13 +342,13 @@ namespace fpf_report {
 							if (itr_proteinconstruct_from_denovo.aminoacid_score_transformed > std::pow(40, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) {
 								fout_html_report << "<font color=\"#4c62d6\">";
 							}
-							if ((itr_proteinconstruct_from_denovo.aminoacid_score_transformed <= std::pow(40, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) && (itr_proteinconstruct_from_denovo.aminoacid_score_transformed > std::pow(25, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT))) {
+							if ((itr_proteinconstruct_from_denovo.aminoacid_score_transformed <= std::pow(40, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) && (itr_proteinconstruct_from_denovo.aminoacid_score_transformed > std::pow(30, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT))) {
 								fout_html_report << "<font color=\"#239B56\">";
 							}
-							if ((itr_proteinconstruct_from_denovo.aminoacid_score_transformed <= std::pow(25, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) && (itr_proteinconstruct_from_denovo.aminoacid_score_transformed >std::pow(15, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT))) {
+							if ((itr_proteinconstruct_from_denovo.aminoacid_score_transformed <= std::pow(30, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) && (itr_proteinconstruct_from_denovo.aminoacid_score_transformed >std::pow(20, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT))) {
 								fout_html_report << "<font color=\"#E67E22\">";
 							}
-							if (itr_proteinconstruct_from_denovo.aminoacid_score_transformed <= std::pow(15, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) {
+							if (itr_proteinconstruct_from_denovo.aminoacid_score_transformed <= std::pow(20, IgFamily::PARAMETER_DISTINCTIVENESS_WEIGHT)) {
 								fout_html_report << "<font color=\"red\">";
 							}
 						}
@@ -368,8 +368,8 @@ namespace fpf_report {
 							fout_html_report << "&nbsp";
 						}
 						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-						fout_html_report << "Total";
-						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+						//fout_html_report << "Total";
+						//fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_html_report << "Spec";
 						fout_html_report << "&nbsp&nbsp";
 						//fout_html_report << "Score";
@@ -426,15 +426,15 @@ namespace fpf_report {
 									for (auto j = 0; j < (5 - st_mismatch); ++j) {
 										fout_html_report << "&nbsp";
 									}
-									fout_html_report << std::fixed << std::setprecision(2) << (itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count);
-									if ((itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count) < 1) {
-										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
-									}
-									else {
-										for (auto j = 0; j < (10 - std::floor(std::log10(itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count))); ++j) {
-											fout_html_report << "&nbsp";
-										}
-									}
+									//fout_html_report << std::fixed << std::setprecision(2) << (itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count);
+									//if ((itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count) < 1) {
+									//	fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+									//}
+									//else {
+									//	for (auto j = 0; j < (10 - std::floor(std::log10(itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count))); ++j) {
+									//		fout_html_report << "&nbsp";
+									//	}
+									//}
 									fout_html_report << itr_homology_data.denovo_replicate_count;
 									if (itr_homology_data.denovo_replicate_count < 1) {
 										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -453,12 +453,12 @@ namespace fpf_report {
 									//		fout_html_report << "&nbsp";
 									//	}
 									//}
-									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.blastp_score_transformed;
+									fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.blastp_score;
 									if (itr_homology_data.blastp_score_transformed < 1) {
 										fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 									}
 									else {
-										for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.blastp_score_transformed))); ++j) {
+										for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.blastp_score))); ++j) {
 											fout_html_report << "&nbsp";
 										}
 									}
