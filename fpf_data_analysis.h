@@ -210,7 +210,8 @@ namespace fpf_data_analysis {
 			for (size_t i = 0; i < itr_protein_analysis.p_protein_data->protein_protein.length(); ++i) {
 				proteinconstruct_aminoacid temp_proteinconstruct_from_denovo{};
 				temp_proteinconstruct_from_denovo.aminoacid = '.';
-				temp_proteinconstruct_from_denovo.aminoacid_score_transformed = 0;
+				temp_proteinconstruct_from_denovo.aminoacid_score = 0;
+				temp_proteinconstruct_from_denovo.aminoacid_score_conjugated = 0;
 				itr_protein_analysis.proteinconstruct_from_denovo.push_back(temp_proteinconstruct_from_denovo);
 			}
 			sort_v_homology_data_with_spectralcount(itr_protein_analysis.v_homology_data_combined_by_protein);
@@ -224,6 +225,7 @@ namespace fpf_data_analysis {
 				if (find_blastp_query_alignment_rejected == v_blastp_query_alignment_rejected.end()) {
 					homology_data temp_blastp_query_alignment{};
 					temp_blastp_query_alignment.query_alignment = itr_v_homology_data.query_alignment;
+					temp_blastp_query_alignment.blastp_score = itr_v_homology_data.blastp_score_transformed;
 					temp_blastp_query_alignment.blastp_score_transformed = (itr_v_homology_data.blastp_score_transformed * itr_v_homology_data.blastp_parameter_density_conjugated);
 					temp_blastp_query_alignment.blastp_parameter_score = itr_v_homology_data.blastp_parameter_score;
 					temp_blastp_query_alignment.p_peptide_analysis = itr_v_homology_data.p_peptide_analysis;
@@ -271,7 +273,8 @@ namespace fpf_data_analysis {
 												&& ((v_blastp_query_alignment_selected[i].blastp_parameter_score * v_blastp_query_alignment_selected[i].denovo_replicate_count) > REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD)) {
 												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid = v_blastp_query_alignment_selected[i].query_alignment.at(j);
 												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
-												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_score_transformed = v_blastp_query_alignment_selected[i].blastp_score_transformed;
+												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_score = v_blastp_query_alignment_selected[i].blastp_score;
+												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_score_conjugated = v_blastp_query_alignment_selected[i].blastp_score_transformed;
 												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_score = v_blastp_query_alignment_selected[i].blastp_parameter_score;
 											}
 										}

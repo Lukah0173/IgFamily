@@ -117,7 +117,8 @@ namespace fpf_data {
 	struct proteinconstruct_aminoacid {
 		char aminoacid;
 		double aminoacid_localconfidence;
-		double aminoacid_score_transformed;
+		double aminoacid_score;
+		double aminoacid_score_conjugated;
 		double aminoacid_parameter_score;
 	};
 

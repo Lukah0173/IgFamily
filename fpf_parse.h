@@ -646,7 +646,7 @@ namespace fpf_parse {
 						if (parse_FASTA == "IMGT") {
 							temp_FASTA_data.set_FASTA_type("IG");
 						}
-						if (parse_FASTA == "CONT") {
+						if (parse_FASTA == "Contaminant") {
 							temp_FASTA_data.set_FASTA_type("CONT");
 						}
 						if (parse_FASTA == "UNIPROT") {
