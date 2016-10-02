@@ -16,7 +16,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.10.2a" };
+	const string version{ "v0.11.0" };
 
 	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
@@ -26,7 +26,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA{ 1 };
 	const bool BLASTP_BY_SELECTED_PEPTIDE{ 1 };
 
-	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\_filesystem.txt" };
+	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Will-Murray-Brown_20160907.txt" };
 	const string DEFAULT_IGFAMILY_DIRECTORY{ "" };
 	const string DEFAULT_FASTA_DIRECTORY{ DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\" };
 	const string DEFAULT_FASTA_MODULE_DIRECTORY{ DEFAULT_FASTA_DIRECTORY + "FASTA_modules\\" };
@@ -50,7 +50,8 @@ namespace IgFamily {
 	const double REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD{ 0.1 };
 	const double REPORT_QUERY_EVALUETRANSFORMED_THRESHOLD{ 10 };
 
-	const double PARAMETER_DISTINCTIVENESS_WEIGHT{ 2.5 };
+	const double PARAMETER_HOMOLOGY_WEIGHT{ 1.0 };
+	const double PARAMETER_CONJUGATION_WEIGHT{ 1.5 };
 	double HOMOLOGY_SCORE_THRESHOLD{ 10 };
 	const double HOMOLOGY_SCORE_THRESHOLD_CONJUGATE{ 50 };
 	

@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <math.h>
 #include <string>
 #include <utility>
 #include <vector>
@@ -123,7 +124,7 @@ namespace fpf_data_analysis {
 						itr_homology_data.p_peptide_analysis->p_denovo_peptide_best_by_averagelocalconfidence = &itr_peptide_data->denovo_peptide_data_filtered;
 					}
 				}
-				itr_protein_analysis.protein_score += (itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count);
+				itr_protein_analysis.protein_score += itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count;
 			}
 		}
 		par_sample_analysis.v_protein_analysis = temp_v_protein_analysis;
@@ -228,6 +229,7 @@ namespace fpf_data_analysis {
 					temp_blastp_query_alignment.blastp_score = itr_v_homology_data.blastp_score_transformed;
 					temp_blastp_query_alignment.blastp_score_transformed = (itr_v_homology_data.blastp_score_transformed * itr_v_homology_data.blastp_parameter_density_conjugated);
 					temp_blastp_query_alignment.blastp_parameter_score = itr_v_homology_data.blastp_parameter_score;
+					temp_blastp_query_alignment.blastp_parameter_density_conjugated = itr_v_homology_data.blastp_parameter_density_conjugated;
 					temp_blastp_query_alignment.p_peptide_analysis = itr_v_homology_data.p_peptide_analysis;
 					temp_blastp_query_alignment.denovo_replicate_count = itr_v_homology_data.denovo_replicate_count;
 					for (const auto itr_v_homology_data_2 : itr_protein_analysis.v_homology_data_combined_by_protein) {
@@ -276,6 +278,7 @@ namespace fpf_data_analysis {
 												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_score = v_blastp_query_alignment_selected[i].blastp_score;
 												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_score_conjugated = v_blastp_query_alignment_selected[i].blastp_score_transformed;
 												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_score = v_blastp_query_alignment_selected[i].blastp_parameter_score;
+												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_density_conjugated = v_blastp_query_alignment_selected[i].blastp_parameter_density_conjugated;
 											}
 										}
 									}

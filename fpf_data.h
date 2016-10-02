@@ -120,6 +120,7 @@ namespace fpf_data {
 		double aminoacid_score;
 		double aminoacid_score_conjugated;
 		double aminoacid_parameter_score;
+		double aminoacid_parameter_density_conjugated;
 	};
 
 	struct multinomial_frequency_type {
