@@ -150,10 +150,10 @@ namespace fpf_data_analysis {
 	void determine_protein_analysis_score_mean(sample_analysis& par_sample_analysis) {
 		double temp_protein_analysis_score_mean{};
 		size_t count_IG_proteins{};
-		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if ((itr_protein_analysis.p_protein_data->protein_type == "IG") && (IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
+		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			if ((itr_v_protein_analysis.p_protein_data->protein_type == "IG") && (itr_v_protein_analysis.protein_score >= IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
 				++count_IG_proteins;
-				temp_protein_analysis_score_mean += itr_protein_analysis.protein_score;
+				temp_protein_analysis_score_mean += itr_v_protein_analysis.protein_score;
 			}
 		}
 		temp_protein_analysis_score_mean /= count_IG_proteins;
@@ -165,19 +165,17 @@ namespace fpf_data_analysis {
 		size_t count_selected_genefamilies{};
 		size_t count_iterations{};
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score > IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
+			if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score >= IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
 				++count_selected_genefamilies;
 			}
 		}
 		while (count_selected_genefamilies > par_select_N_many_gene_families) {
 			determine_protein_analysis_score_mean(par_sample_analysis);
 			for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
-				if ((IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
-					for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
-						if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
-							double score_conjugate{ double(0.995) + (double(0.01) / (1 + std::pow(double(2.718), double(-IgFamily::MULTINOMIAL_CONJUGATION_FACTOR) * (itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean)))) };
-							itr_homology_analysis.blastp_score_transformed_conjugated = std::pow(itr_homology_analysis.blastp_score_transformed_conjugated, score_conjugate);
-						}
+				for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
+					if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
+						double score_conjugate{ double(0.995) + (double(0.01) / (1 + std::pow(double(2.718), double(-IgFamily::MULTINOMIAL_CONJUGATION_FACTOR) * (itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean)))) };
+						itr_homology_analysis.blastp_score_transformed_conjugated = std::pow(itr_homology_analysis.blastp_score_transformed_conjugated, score_conjugate);
 					}
 				}
 			}
@@ -200,9 +198,8 @@ namespace fpf_data_analysis {
 				IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2;
 			}
 			fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis, true);
-			IgFamily::HOMOLOGY_SCORE_THRESHOLD = (par_sample_analysis.protein_analysis_score_mean / IgFamily::HOMOLOGY_SCORE_THRESHOLD_CONJUGATE);
+			IgFamily::HOMOLOGY_SCORE_THRESHOLD = (par_sample_analysis.protein_analysis_score_mean / IgFamily::HOMOLOGY_SCORE_THRESHOLD_FACTOR);
 			create_v_protein_analysis(par_sample_analysis, count_iterations, par_refined);
-			//std::cout << "\n " << IgFamily::HOMOLOGY_SCORE_THRESHOLD;
 		}
 	}
 
@@ -269,18 +266,15 @@ namespace fpf_data_analysis {
 									break;
 								}
 								else {
-									if (v_blastp_query_alignment_selected[i].blastp_parameter_score > itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_score) {
-										if (v_blastp_query_alignment_selected[i].blastp_score_transformed > IgFamily::REPORT_QUERY_EVALUETRANSFORMED_THRESHOLD) {
-											if ((v_blastp_query_alignment_selected[i].blastp_parameter_score > IgFamily::REPORT_QUERY_ALIGNMENT_PARSCORE_OUTPUT_THRESHOLD)
-												&& ((v_blastp_query_alignment_selected[i].blastp_parameter_score * v_blastp_query_alignment_selected[i].denovo_replicate_count) > REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD)) {
-												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid = v_blastp_query_alignment_selected[i].query_alignment.at(j);
-												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
-												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_score = v_blastp_query_alignment_selected[i].blastp_score;
-												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_score_conjugated = v_blastp_query_alignment_selected[i].blastp_score_transformed;
-												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_score = v_blastp_query_alignment_selected[i].blastp_parameter_score;
-												itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_density_conjugated = v_blastp_query_alignment_selected[i].blastp_parameter_density_conjugated;
-											}
-										}
+									if ((v_blastp_query_alignment_selected[i].blastp_parameter_score >= itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_score)
+										&& (v_blastp_query_alignment_selected[i].blastp_parameter_score >= IgFamily::REPORT_QUERY_ALIGNMENT_PARAMETER_SCORE_THRESHOLD)
+										&& ((v_blastp_query_alignment_selected[i].blastp_parameter_score * v_blastp_query_alignment_selected[i].denovo_replicate_count) >= IgFamily::REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD)) {
+										itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid = v_blastp_query_alignment_selected[i].query_alignment.at(j);
+										itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
+										itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_score = v_blastp_query_alignment_selected[i].blastp_score;
+										itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_score_conjugated = v_blastp_query_alignment_selected[i].blastp_score_transformed;
+										itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_score = v_blastp_query_alignment_selected[i].blastp_parameter_score;
+										itr_protein_analysis.proteinconstruct_from_denovo[j].aminoacid_parameter_density_conjugated = v_blastp_query_alignment_selected[i].blastp_parameter_density_conjugated;
 									}
 									++j;
 								}

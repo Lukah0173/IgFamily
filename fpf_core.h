@@ -159,7 +159,6 @@ namespace fpf_core {
 			fpf_data_analysis::sort_v_homology_data_with_spectralcount(itr_v_protein_analysis.v_homology_data_combined_by_protein);
 		}
 		fpf_data_analysis::sort_v_protein_analysis(par_sample_analysis.v_protein_analysis);
-		HOMOLOGY_SCORE_THRESHOLD = 10;
 	}
 
 	void core_multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
@@ -191,6 +190,7 @@ namespace fpf_core {
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false);
 		std::cout << "\n";
 		fpf_filesystem::fout_filesystem(par_filesystem);
+		IgFamily::HOMOLOGY_SCORE_THRESHOLD = 10;
 	}
 }
 #endif

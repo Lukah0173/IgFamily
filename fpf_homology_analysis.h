@@ -180,7 +180,9 @@ namespace fpf_homology_analysis {
 				}
 				if (homology_data_read == '\n') {
 					temp_homology_data.blastp_score = std::stod(temp_parse_blastp);
-					temp_v_homology_data.push_back(temp_homology_data);
+					if (temp_homology_data.blastp_score >= IgFamily::HOMOLOGY_SCORE_THRESHOLD_2) {
+						temp_v_homology_data.push_back(temp_homology_data);
+					}
 					temp_parse_blastp.clear();
 				}
 			}
