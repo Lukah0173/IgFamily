@@ -64,6 +64,8 @@ namespace fpf_data_analysis {
 				temp_peptide_analysis.peptide_filtered = itr_v_peptide_data.peptide_filtered;
 				++temp_peptide_analysis.replicate_count;
 				temp_peptide_analysis.v_peptide_data.push_back(&itr_v_peptide_data);
+				temp_peptide_analysis.v_peptide_withoutmod_mz.push_back(itr_v_peptide_data.peptide_mz);
+				temp_peptide_analysis.v_peptide_withoutmod_rt.push_back(itr_v_peptide_data.peptide_rt);
 				temp_peptide_analysis.v_denovo_peptide_averagescore = itr_v_peptide_data.denovo_peptide_data_filtered.localconfidence_average;
 				temp_peptide_analysis.key_peptide_analysis = temp_key_peptide_analysis;
 				temp_v_peptide_analysis.push_back(temp_peptide_analysis);
@@ -72,6 +74,8 @@ namespace fpf_data_analysis {
 			else {
 				++find_peptide_analysis->replicate_count;
 				find_peptide_analysis->v_peptide_data.push_back(&itr_v_peptide_data);
+				find_peptide_analysis->v_peptide_withoutmod_mz.push_back(itr_v_peptide_data.peptide_mz);
+				find_peptide_analysis->v_peptide_withoutmod_rt.push_back(itr_v_peptide_data.peptide_rt);
 				find_peptide_analysis->v_denovo_peptide_averagescore
 					= ((find_peptide_analysis->v_denovo_peptide_averagescore * (find_peptide_analysis->replicate_count - 1)) + itr_v_peptide_data.denovo_peptide_data_filtered.localconfidence_average) / find_peptide_analysis->replicate_count;
 			}
@@ -174,7 +178,7 @@ namespace fpf_data_analysis {
 			for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 				for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
 					if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
-						double score_conjugate{ double(0.995) + (double(0.01) / (1 + std::pow(double(2.718), double(-IgFamily::MULTINOMIAL_CONJUGATION_FACTOR) * (itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean)))) };
+						double score_conjugate{ IgFamily::LOGISTIC_CONJUGATION_FACTOR + (IgFamily::LOGISTIC_CONJUGATION_MIDPOINT / (1 + std::pow(double(2.718), double(-IgFamily::MULTINOMIAL_CONJUGATION_FACTOR) * (itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean)))) };
 						itr_homology_analysis.blastp_score_transformed_conjugated = std::pow(itr_homology_analysis.blastp_score_transformed_conjugated, score_conjugate);
 					}
 				}
@@ -191,14 +195,16 @@ namespace fpf_data_analysis {
 			std::cout << " with ";
 			std::cout << count_selected_genefamilies;
 			std::cout << " gene families\n";
-			if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_1) {
-				IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_1;
-			}
-			if (count_selected_genefamilies < IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_LIMIT_2) {
-				IgFamily::MULTINOMIAL_CONJUGATION_FACTOR = IgFamily::MULTINOMIAL_CONJUGATION_FACTOR_CONVERGE_2;
-			}
 			fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis, true);
 			IgFamily::HOMOLOGY_SCORE_THRESHOLD = (par_sample_analysis.protein_analysis_score_mean / IgFamily::HOMOLOGY_SCORE_THRESHOLD_FACTOR);
+			if (count_selected_genefamilies <= IgFamily::TRAIN_SELECTED_GENE_FAMILY_PRECISION_CONDITION) {
+				IgFamily::LOGISTIC_CONJUGATION_FACTOR = 0.9995;
+				IgFamily::LOGISTIC_CONJUGATION_MIDPOINT = 0.001;
+			}
+			if (count_selected_genefamilies <= IgFamily::TRAIN_SELECTED_GENE_FAMILY_PRECISION_CONDITION_2) {
+				IgFamily::LOGISTIC_CONJUGATION_FACTOR = 0.99995;
+				IgFamily::LOGISTIC_CONJUGATION_MIDPOINT = 0.0001;
+			}
 			create_v_protein_analysis(par_sample_analysis, count_iterations, par_refined);
 		}
 	}

@@ -181,6 +181,11 @@ namespace fpf_core {
 		fpf_report::fout_multinomial_element(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting filtered multinomial peptide list for " << par_filesystem.filename;
 		fpf_report::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
+		std::cout << "\n ...outputting contaminants report for " << par_filesystem.filename;
+		fpf_report::fout_multinomial_contaminants_report(par_filesystem, par_sample_analysis);
+		std::cout << "\n ...outputting contaminants list for " << par_filesystem.filename;
+		fpf_report::fout_multinomial_contaminants_list(par_filesystem, par_sample_analysis);
+		std::cout << "\n ...outputting protein score comparison for " << par_filesystem.filename;
 		fpf_report::fout_multinomial_comparison(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...generating html report for " << par_filesystem.filename;
 		std::cout << "\n";
@@ -191,6 +196,8 @@ namespace fpf_core {
 		std::cout << "\n";
 		fpf_filesystem::fout_filesystem(par_filesystem);
 		IgFamily::HOMOLOGY_SCORE_THRESHOLD = 10;
+		IgFamily::LOGISTIC_CONJUGATION_FACTOR = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_FACTOR;
+		IgFamily::LOGISTIC_CONJUGATION_MIDPOINT = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_MIDPOINT;
 	}
 }
 #endif

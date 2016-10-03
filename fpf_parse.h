@@ -36,9 +36,11 @@ namespace fpf_parse {
 	public:
 		string csv_scan_ID;
 		string csv_sourcefile;
-		string csv_peptide;
+		string csv_mz;
+		string csv_rt;
 		string csv_spectralcount;
 		string csv_IgP;
+		string csv_peptide;
 		vector<double> v_csv_denovo_localconfidence;
 	};
 
@@ -191,7 +193,7 @@ namespace fpf_parse {
 				if (csv_read == ',') {
 					if (csv_count_delimit % csv_count_delimit_width == 0) {					
 						temp_v_csv_data.push_back(temp_csv_data);
-						temp_csv_data = csv_data();				
+						temp_csv_data = {};
 					}
 					++csv_count_delimit;
 				}
@@ -229,6 +231,12 @@ namespace fpf_parse {
 						if ((csv_peptide_parse_condition != 2) && (csv_read != '.')) {
 							csv_peptide_parse_condition = 1;
 						}
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 7) {
+						temp_csv_data.csv_mz += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 9) {
+						temp_csv_data.csv_rt += csv_read;
 					}
 					if (csv_count_delimit % csv_count_delimit_width == 14) {
 						if (csv_read == ' ') {

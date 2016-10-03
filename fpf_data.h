@@ -53,6 +53,8 @@ namespace fpf_data {
 	public:
 		size_t key_peptide_data;
 		size_t scan_ID;
+		string peptide_mz;
+		string peptide_rt;
 		string peptide_withmod;
 		string peptide_withoutmod;
 		string peptide_filtered;
@@ -64,6 +66,8 @@ namespace fpf_data {
 		size_t key_peptide_analysis;
 		string peptide_filtered;
 		size_t replicate_count;
+		vector<string> v_peptide_withoutmod_mz;
+		vector<string> v_peptide_withoutmod_rt;
 		vector<peptide_data*> v_peptide_data;
 		denovo_peptide* p_denovo_peptide_best_by_averagelocalconfidence;
 		double v_denovo_peptide_averagescore;
@@ -124,15 +128,14 @@ namespace fpf_data {
 	};
 
 	struct multinomial_frequency_type {
-		string protein_data;
+		protein_data* p_protein_data;
 		double multinomial_frequency;
 	};
 
 	struct multinomial {
 	public:
-		vector<string> v_protein_name;
-		vector<string> v_protein_class;
-		vector<string> v_element_name;
+		vector<protein_data*> v_p_protein_data;
+		vector<peptide_analysis*> v_p_peptide_analysis;
 		vector<vector<double>> v2_frequency;
 		vector<double> v_frequency_marginal_sum;
 		vector<vector<double>> v2_density;
@@ -204,6 +207,8 @@ namespace fpf_data {
 					temp_peptide_withoutmod.clear();
 				}
 			}
+			temp_peptide_data.peptide_mz = itr_parse_csv_peptide_data.csv_mz;
+			temp_peptide_data.peptide_rt = itr_parse_csv_peptide_data.csv_rt;
 			temp_peptide_data.peptide_withmod = itr_parse_csv_peptide_data.csv_peptide;
 			temp_peptide_data.peptide_withoutmod = temp_peptide_withoutmod;
 			temp_peptide_data.peptide_filtered = temp_peptide_withoutmod;

@@ -26,28 +26,34 @@ namespace fpf_multinomial {
 	using std::vector;
 
 	using fpf_data::multinomial_frequency_type;
+	using fpf_data::protein_data;
+	using fpf_data::peptide_analysis;
 	using fpf_filesystem::filesystem;
 	using fpf_filesystem::sample_analysis;
 
 	void create_multinomial_data(sample_analysis& par_sample_analysis) {
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
-			par_sample_analysis.multinomial_data.v_protein_name.push_back(itr_v_protein_analysis.p_protein_data->protein_name);
-			par_sample_analysis.multinomial_data.v_protein_class.push_back(itr_v_protein_analysis.p_protein_data->protein_type);
+			par_sample_analysis.multinomial_data.v_p_protein_data.push_back(itr_v_protein_analysis.p_protein_data);
 		}
 		for (const auto& itr_v_peptide_analysis_map : par_sample_analysis.v_peptide_analysis_map) {
-			par_sample_analysis.multinomial_data.v_element_name.push_back(itr_v_peptide_analysis_map.second->peptide_filtered);
+			par_sample_analysis.multinomial_data.v_p_peptide_analysis.push_back(itr_v_peptide_analysis_map.second);
 		}
-		par_sample_analysis.multinomial_data.v2_frequency = vector<vector<double>>(par_sample_analysis.multinomial_data.v_element_name.size(), vector<double>(par_sample_analysis.multinomial_data.v_protein_name.size(), 0));
-		par_sample_analysis.multinomial_data.v2_density = vector<vector<double>>(par_sample_analysis.multinomial_data.v_element_name.size(), vector<double>(par_sample_analysis.multinomial_data.v_protein_name.size(), 0));
-		par_sample_analysis.multinomial_data.v_frequency_marginal_sum = vector<double>(par_sample_analysis.multinomial_data.v_element_name.size(), 0);
+		par_sample_analysis.multinomial_data.v2_frequency = vector<vector<double>>(par_sample_analysis.multinomial_data.v_p_peptide_analysis.size(), vector<double>(par_sample_analysis.multinomial_data.v_p_protein_data.size(), 0));
+		par_sample_analysis.multinomial_data.v2_density = vector<vector<double>>(par_sample_analysis.multinomial_data.v_p_peptide_analysis.size(), vector<double>(par_sample_analysis.multinomial_data.v_p_protein_data.size(), 0));
+		par_sample_analysis.multinomial_data.v_frequency_marginal_sum = vector<double>(par_sample_analysis.multinomial_data.v_p_peptide_analysis.size(), 0);
 
-		for (const auto itr_v_homology_data : par_sample_analysis.v_homology_data) {
-			const auto find_multinomial_element = std::find(par_sample_analysis.multinomial_data.v_element_name.begin(), par_sample_analysis.multinomial_data.v_element_name.end(), itr_v_homology_data.blastp_query);		
-			const auto find_multinomial_protein = std::find(par_sample_analysis.multinomial_data.v_protein_name.begin(), par_sample_analysis.multinomial_data.v_protein_name.end(), itr_v_homology_data.blastp_subject_accession);			
-			
-			if ((find_multinomial_element != par_sample_analysis.multinomial_data.v_element_name.end()) && (find_multinomial_protein) != par_sample_analysis.multinomial_data.v_protein_name.end()){
-				const size_t i = (find_multinomial_element - par_sample_analysis.multinomial_data.v_element_name.begin());
-				const size_t j = (find_multinomial_protein - par_sample_analysis.multinomial_data.v_protein_name.begin());
+		for (const auto itr_v_homology_data : par_sample_analysis.v_homology_data) {	
+			const auto& find_multinomial_element = std::find_if(par_sample_analysis.multinomial_data.v_p_peptide_analysis.begin(), par_sample_analysis.multinomial_data.v_p_peptide_analysis.end(),
+				[itr_v_homology_data](peptide_analysis*& par_peptide_analysis) {
+				return par_peptide_analysis->peptide_filtered == itr_v_homology_data.blastp_query;
+			});
+			const auto& find_multinomial_protein = std::find_if(par_sample_analysis.multinomial_data.v_p_protein_data.begin(), par_sample_analysis.multinomial_data.v_p_protein_data.end(),
+				[itr_v_homology_data](protein_data*& par_protein_data) {
+				return par_protein_data->protein_name == itr_v_homology_data.blastp_subject_accession;
+			});
+			if ((find_multinomial_element != par_sample_analysis.multinomial_data.v_p_peptide_analysis.end()) && (find_multinomial_protein) != par_sample_analysis.multinomial_data.v_p_protein_data.end()){
+				const size_t i = (find_multinomial_element - par_sample_analysis.multinomial_data.v_p_peptide_analysis.begin());
+				const size_t j = (find_multinomial_protein - par_sample_analysis.multinomial_data.v_p_protein_data.begin());
 				par_sample_analysis.multinomial_data.v2_frequency[i][j] = itr_v_homology_data.blastp_score_transformed;
 				par_sample_analysis.multinomial_data.v_frequency_marginal_sum[i] += itr_v_homology_data.blastp_score_transformed;
 			}
