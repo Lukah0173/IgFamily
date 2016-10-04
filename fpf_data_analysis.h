@@ -65,7 +65,9 @@ namespace fpf_data_analysis {
 				++temp_peptide_analysis.replicate_count;
 				temp_peptide_analysis.v_peptide_data.push_back(&itr_v_peptide_data);
 				temp_peptide_analysis.v_peptide_withoutmod_mz.push_back(itr_v_peptide_data.peptide_mz);
+				temp_peptide_analysis.v_peptide_withoutmod_z.push_back(itr_v_peptide_data.peptide_z);
 				temp_peptide_analysis.v_peptide_withoutmod_rt.push_back(itr_v_peptide_data.peptide_rt);
+				temp_peptide_analysis.v_peptide_withoutmod_m.push_back(itr_v_peptide_data.peptide_m);
 				temp_peptide_analysis.v_denovo_peptide_averagescore = itr_v_peptide_data.denovo_peptide_data_filtered.localconfidence_average;
 				temp_peptide_analysis.key_peptide_analysis = temp_key_peptide_analysis;
 				temp_v_peptide_analysis.push_back(temp_peptide_analysis);
@@ -75,7 +77,9 @@ namespace fpf_data_analysis {
 				++find_peptide_analysis->replicate_count;
 				find_peptide_analysis->v_peptide_data.push_back(&itr_v_peptide_data);
 				find_peptide_analysis->v_peptide_withoutmod_mz.push_back(itr_v_peptide_data.peptide_mz);
+				find_peptide_analysis->v_peptide_withoutmod_z.push_back(itr_v_peptide_data.peptide_z);
 				find_peptide_analysis->v_peptide_withoutmod_rt.push_back(itr_v_peptide_data.peptide_rt);
+				find_peptide_analysis->v_peptide_withoutmod_m.push_back(itr_v_peptide_data.peptide_m);
 				find_peptide_analysis->v_denovo_peptide_averagescore
 					= ((find_peptide_analysis->v_denovo_peptide_averagescore * (find_peptide_analysis->replicate_count - 1)) + itr_v_peptide_data.denovo_peptide_data_filtered.localconfidence_average) / find_peptide_analysis->replicate_count;
 			}

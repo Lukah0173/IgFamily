@@ -1,0 +1,5 @@
+root_directory\Thilini_Mendis\20160514\TM16_01_AP_IgG_H_KN_background_binding_on_ZnT8W_2\,
+root_directory\Thilini_Mendis\20160514\TM16_02_AP_IgG_L_KN_background_binding_on_ZnT8W\,
+root_directory\Thilini_Mendis\20160514\TM16_03_BSA_KN\,
+root_directory\Thilini_Mendis\20160514\TM16_04_Cap_IgG_H_TG\,
+root_directory\Thilini_Mendis\20160514\TM16_05_Cap_IgG_L_TG\,

@@ -34,12 +34,14 @@ namespace fpf_report {
 		std::string output_v_peptide_data = par_filesystem.directory + par_filesystem.filename + "_peptide_data_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_v_peptide_data;
 		fout_v_peptide_data.open(output_v_peptide_data);
-		fout_v_peptide_data << "key,scan_ID,peptide_mz,peptide_rt,peptide_withmod,peptide_withoutmod,peptide_filtered,denovo_peptide,denovo_peptide_filtered\n";
+		fout_v_peptide_data << "key,scan_ID,peptide_mz,peptide_z,peptide_rt,peptide_m,peptide_withmod,peptide_withoutmod,peptide_filtered,denovo_peptide,denovo_peptide_filtered\n";
 		for (const auto& itr_v_peptide_data_map : par_sample_analysis.v_peptide_data_map) {
 			fout_v_peptide_data << itr_v_peptide_data_map.second->key_peptide_data << ",";
 			fout_v_peptide_data << itr_v_peptide_data_map.second->scan_ID << ",";
 			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_mz << ",";
+			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_z << ",";
 			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_rt << ",";
+			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_m << ",";
 			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_withmod << ",";
 			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_withoutmod << ",";
 			fout_v_peptide_data << itr_v_peptide_data_map.second->peptide_filtered << ",";
@@ -75,7 +77,7 @@ namespace fpf_report {
 		std::string output_v_peptide_analysis = par_filesystem.directory + par_filesystem.filename + "_peptide_analysis_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_v_peptide_analysis;
 		fout_v_peptide_analysis.open(output_v_peptide_analysis);
-		fout_v_peptide_analysis << "key,peptide_filtered,replicate_count,v_peptide_withoutmod_mz,v_peptide_withoutmod_rt,\n";
+		fout_v_peptide_analysis << "key,peptide_filtered,replicate_count,v_peptide_withoutmod_mz,v_peptide_withoutmod_z,v_peptide_withoutmod_rt,v_peptide_withoutmod_m,\n";
 		for (const auto& itr_v_peptide_anaylsis_map : par_sample_analysis.v_peptide_analysis_map) {
 			fout_v_peptide_analysis << itr_v_peptide_anaylsis_map.second->key_peptide_analysis << ",";
 			fout_v_peptide_analysis << itr_v_peptide_anaylsis_map.second->peptide_filtered << ",";
@@ -84,8 +86,16 @@ namespace fpf_report {
 				fout_v_peptide_analysis << itr_v_peptide_withoutmod_mz << "|";
 			}
 			fout_v_peptide_analysis << ",";
+			for (const auto& itr_v_peptide_withoutmod_z : itr_v_peptide_anaylsis_map.second->v_peptide_withoutmod_z) {
+				fout_v_peptide_analysis << itr_v_peptide_withoutmod_z << "|";
+			}
+			fout_v_peptide_analysis << ",";
 			for (const auto& itr_v_peptide_withoutmod_rt : itr_v_peptide_anaylsis_map.second->v_peptide_withoutmod_rt) {
 				fout_v_peptide_analysis << itr_v_peptide_withoutmod_rt << "|";
+			}
+			fout_v_peptide_analysis << ",";
+			for (const auto& itr_v_peptide_withoutmod_m : itr_v_peptide_anaylsis_map.second->v_peptide_withoutmod_m) {
+				fout_v_peptide_analysis << itr_v_peptide_withoutmod_m << "|";
 			}
 			fout_v_peptide_analysis << ",";
 			//for (const auto& itr_v_denovo_aminoacid : itr_v_peptide_anaylsis_map.second->p_denovo_peptide_best_by_averagelocalconfidence->v_denovo_aminoacid) {
@@ -272,20 +282,22 @@ namespace fpf_report {
 				temp_v_multinomial_frequency.push_back(temp_multinomial_frequency);
 			}
 			fpf_multinomial::sort_v_multinomial_frequency(temp_v_multinomial_frequency);
-			if ((temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "UNIPROT")
-				|| (temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "CONT")) {
-				if (temp_v_multinomial_frequency.begin()->multinomial_frequency > 0.2) {
-					fout_multinomial_element << par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->peptide_filtered;
-					for (auto j = 0; j < (format_ws_length - par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->peptide_filtered.length() + 5); ++j) {
-						fout_multinomial_element << " ";
-					}
-					for (auto j = 0; j < par_sample_analysis.multinomial_data.v_p_protein_data.size(); ++j) {
-						if (temp_v_multinomial_frequency[j].multinomial_frequency > 0.2) {
-							fout_multinomial_element << temp_v_multinomial_frequency[j].p_protein_data->protein_name << " (";
-							fout_multinomial_element << temp_v_multinomial_frequency[j].multinomial_frequency << "), ";
+			if (!temp_v_multinomial_frequency.empty()) {
+				if ((temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "UNIPROT")
+					|| (temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "CONT")) {
+					if (temp_v_multinomial_frequency.begin()->multinomial_frequency > 0.2) {
+						fout_multinomial_element << par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->peptide_filtered;
+						for (auto j = 0; j < (format_ws_length - par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->peptide_filtered.length() + 5); ++j) {
+							fout_multinomial_element << " ";
 						}
+						for (auto j = 0; j < par_sample_analysis.multinomial_data.v_p_protein_data.size(); ++j) {
+							if (temp_v_multinomial_frequency[j].multinomial_frequency > 0.2) {
+								fout_multinomial_element << temp_v_multinomial_frequency[j].p_protein_data->protein_name << " (";
+								fout_multinomial_element << temp_v_multinomial_frequency[j].multinomial_frequency << "), ";
+							}
+						}
+						fout_multinomial_element << "\n";
 					}
-					fout_multinomial_element << "\n";
 				}
 			}
 		}
@@ -295,9 +307,6 @@ namespace fpf_report {
 		string output_multinomial_element = par_filesystem.directory + par_filesystem.filename + "_contaminants_list_" + par_sample_analysis.peptide_assignment_method + ".txt";
 		std::ofstream fout_multinomial_element;
 		fout_multinomial_element.open(output_multinomial_element);
-		fout_multinomial_element << "\n";
-		fout_multinomial_element << par_filesystem.filename;
-		fout_multinomial_element << "\n\n\n";
 		for (auto i = 0; i < par_sample_analysis.multinomial_data.v_p_peptide_analysis.size(); ++i) {
 			vector<multinomial_frequency_type> temp_v_multinomial_frequency{};
 			for (auto j = 0; j < par_sample_analysis.multinomial_data.v_p_protein_data.size(); ++j) {
@@ -307,14 +316,16 @@ namespace fpf_report {
 				temp_v_multinomial_frequency.push_back(temp_multinomial_frequency);
 			}
 			fpf_multinomial::sort_v_multinomial_frequency(temp_v_multinomial_frequency);
-			if ((temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "UNIPROT")
-				|| (temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "CONT")) {
-				if (temp_v_multinomial_frequency.begin()->multinomial_frequency > 0.2) {
-					for (auto k = 0; k < par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_withoutmod_mz.size(); ++k) {
-						fout_multinomial_element << par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_withoutmod_mz[k];
-						fout_multinomial_element << " ";
-						fout_multinomial_element << par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_withoutmod_rt[k];
-						fout_multinomial_element << "\n";
+			if (!temp_v_multinomial_frequency.empty()) {
+				if ((temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "UNIPROT")
+					|| (temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "CONT")) {
+					if (temp_v_multinomial_frequency.begin()->multinomial_frequency > 0.2) {
+						for (auto k = 0; k < par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_withoutmod_mz.size(); ++k) {
+							fout_multinomial_element << (std::stod(par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_withoutmod_m[k]) / std::stod(par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_withoutmod_z[k]));
+							fout_multinomial_element << " ";
+							fout_multinomial_element << par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_withoutmod_rt[k];
+							fout_multinomial_element << "\n";
+						}
 					}
 				}
 			}
@@ -372,7 +383,8 @@ namespace fpf_report {
 		}
 		for (const auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if ((par_alloutput) || (itr_protein_analysis.p_protein_data->protein_type == "IG")) {
-				if (itr_protein_analysis.protein_score >= IgFamily::HOMOLOGY_SCORE_THRESHOLD) {
+				if ((itr_protein_analysis.protein_score >= IgFamily::HOMOLOGY_SCORE_THRESHOLD)
+				&& (itr_protein_analysis.protein_density >= IgFamily::REPORT_PROTEIN_DENSITY_THRESHOLD)) {
 					fout_html_report << "\n\n\n<br><br><br> " << itr_protein_analysis.p_protein_data->protein_name;
 					//fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_protein_analysis.protein_score;
 					fout_html_report << "&nbsp&nbsp&nbspDensity: " << std::fixed << std::setprecision(3) << itr_protein_analysis.protein_density;

@@ -1,0 +1,7 @@
+root_directory\Alex_Colella\20160529\AC16_J01_RB_La_M\,
+root_directory\Alex_Colella\20160529\AC16_J02_GA_RTE_M\,
+root_directory\Alex_Colella\20160529\AC16_J03_GA_Ro_M\,
+root_directory\Alex_Colella\20160529\AC16_J04_GA_La_M\,
+root_directory\Alex_Colella\20160529\AC16_J05_KM_Ro_M\,
+root_directory\Alex_Colella\20160529\AC16_J06_BN_Ro_M\,
+root_directory\Alex_Colella\20160529\AC16_J07_BN_La_M\,

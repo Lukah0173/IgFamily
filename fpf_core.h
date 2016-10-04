@@ -168,13 +168,13 @@ namespace fpf_core {
 
 	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n\n producing summary reports...\n";
-		std::cout << " ...generating data reports for " << par_filesystem.filename;
+		std::cout << " ...outputting data reports for " << par_filesystem.filename;
 		std::cout << "\n";
 		fpf_report::fout_v_peptide_data(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_protein_data(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_peptide_analysis(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_protein_analysis(par_filesystem, par_sample_analysis);
-		std::cout << " ...generating multinomial reports for " << par_filesystem.filename;
+		std::cout << " ...outputting multinomial reports for " << par_filesystem.filename;
 		std::cout << "\n ...outputting multinomial data frame for " << par_filesystem.filename;
 		fpf_report::fout_multinomial(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting multinomial peptide list for " << par_filesystem.filename;
@@ -187,7 +187,7 @@ namespace fpf_core {
 		fpf_report::fout_multinomial_contaminants_list(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting protein score comparison for " << par_filesystem.filename;
 		fpf_report::fout_multinomial_comparison(par_filesystem, par_sample_analysis);
-		std::cout << "\n ...generating html report for " << par_filesystem.filename;
+		std::cout << "\n ...outputting html report for " << par_filesystem.filename;
 		std::cout << "\n";
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, true);
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true);
@@ -195,7 +195,7 @@ namespace fpf_core {
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false);
 		std::cout << "\n";
 		fpf_filesystem::fout_filesystem(par_filesystem);
-		IgFamily::HOMOLOGY_SCORE_THRESHOLD = 10;
+		IgFamily::HOMOLOGY_SCORE_THRESHOLD = IgFamily::DEFAULT_HOMOLOGY_SCORE_THRESHOLD;
 		IgFamily::LOGISTIC_CONJUGATION_FACTOR = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_FACTOR;
 		IgFamily::LOGISTIC_CONJUGATION_MIDPOINT = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_MIDPOINT;
 	}

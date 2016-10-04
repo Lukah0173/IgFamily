@@ -37,7 +37,9 @@ namespace fpf_parse {
 		string csv_scan_ID;
 		string csv_sourcefile;
 		string csv_mz;
+		string csv_m;
 		string csv_rt;
+		string csv_z;
 		string csv_spectralcount;
 		string csv_IgP;
 		string csv_peptide;
@@ -235,8 +237,14 @@ namespace fpf_parse {
 					if (csv_count_delimit % csv_count_delimit_width == 7) {
 						temp_csv_data.csv_mz += csv_read;
 					}
+					if (csv_count_delimit % csv_count_delimit_width == 8) {
+						temp_csv_data.csv_z += csv_read;
+					}
 					if (csv_count_delimit % csv_count_delimit_width == 9) {
 						temp_csv_data.csv_rt += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 11) {
+						temp_csv_data.csv_m += csv_read;
 					}
 					if (csv_count_delimit % csv_count_delimit_width == 14) {
 						if (csv_read == ' ') {
@@ -654,7 +662,7 @@ namespace fpf_parse {
 						if (parse_FASTA == "IMGT") {
 							temp_FASTA_data.set_FASTA_type("IG");
 						}
-						if (parse_FASTA == "Contaminant") {
+						if (parse_FASTA == "CONT") {
 							temp_FASTA_data.set_FASTA_type("CONT");
 						}
 						if (parse_FASTA == "UNIPROT") {

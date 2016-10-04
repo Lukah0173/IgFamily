@@ -54,7 +54,9 @@ namespace fpf_data {
 		size_t key_peptide_data;
 		size_t scan_ID;
 		string peptide_mz;
+		string peptide_z;
 		string peptide_rt;
+		string peptide_m;
 		string peptide_withmod;
 		string peptide_withoutmod;
 		string peptide_filtered;
@@ -67,7 +69,9 @@ namespace fpf_data {
 		string peptide_filtered;
 		size_t replicate_count;
 		vector<string> v_peptide_withoutmod_mz;
+		vector<string> v_peptide_withoutmod_z;
 		vector<string> v_peptide_withoutmod_rt;
+		vector<string> v_peptide_withoutmod_m;
 		vector<peptide_data*> v_peptide_data;
 		denovo_peptide* p_denovo_peptide_best_by_averagelocalconfidence;
 		double v_denovo_peptide_averagescore;
@@ -208,7 +212,9 @@ namespace fpf_data {
 				}
 			}
 			temp_peptide_data.peptide_mz = itr_parse_csv_peptide_data.csv_mz;
+			temp_peptide_data.peptide_z = itr_parse_csv_peptide_data.csv_z;
 			temp_peptide_data.peptide_rt = itr_parse_csv_peptide_data.csv_rt;
+			temp_peptide_data.peptide_m = itr_parse_csv_peptide_data.csv_m;
 			temp_peptide_data.peptide_withmod = itr_parse_csv_peptide_data.csv_peptide;
 			temp_peptide_data.peptide_withoutmod = temp_peptide_withoutmod;
 			temp_peptide_data.peptide_filtered = temp_peptide_withoutmod;
