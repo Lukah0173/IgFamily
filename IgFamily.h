@@ -26,7 +26,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA{ 1 };
 	const bool BLASTP_BY_SELECTED_PEPTIDE{ 1 };
 
-	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Thilini-Mendis_20160514.txt" };
+	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Will-Murray-Brown_20160927.txt" };
 	const string DEFAULT_IGFAMILY_DIRECTORY{ "" };
 	const string DEFAULT_FASTA_DIRECTORY{ DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\" };
 	const string DEFAULT_FASTA_MODULE_DIRECTORY{ DEFAULT_FASTA_DIRECTORY + "FASTA_modules\\" };
