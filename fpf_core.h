@@ -188,7 +188,9 @@ namespace fpf_core {
 		std::cout << "\n ...outputting protein score comparison for " << par_filesystem.filename;
 		fpf_report::fout_multinomial_protein_score(par_filesystem, par_sample_analysis);
 		fpf_report::fout_multinomial_protein_density(par_filesystem, par_sample_analysis);
-		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis);
+		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0, "allpeptides_");
+		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0.5, "0.5peptides_");
+		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0.99, "uniquepeptides_");
 		std::cout << "\n ...outputting html report for " << par_filesystem.filename;
 		std::cout << "\n";
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, true);

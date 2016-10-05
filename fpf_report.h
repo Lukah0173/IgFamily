@@ -362,65 +362,44 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_protein_pseudoabundance_score(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		std::string output_protein_pseudoabundance_score_unique = par_filesystem.directory + par_filesystem.filename + "_protein_pseudoabundance_score_unique_" + par_sample_analysis.peptide_assignment_method + ".csv";
-		std::ofstream fout_protein_pseudoabundance_score_unique;
-		fout_protein_pseudoabundance_score_unique.open(output_protein_pseudoabundance_score_unique);
-		std::string output_protein_pseudoabundance_peptides_unique = par_filesystem.directory + par_filesystem.filename + "_protein_pseudoabundance_peptides_unique_" + par_sample_analysis.peptide_assignment_method + ".csv";
-		std::ofstream fout_protein_pseudoabundance_peptides_unique;
-		fout_protein_pseudoabundance_peptides_unique.open(output_protein_pseudoabundance_peptides_unique);
-		double protein_pseudoabundance_score{};
+	void fout_protein_pseudoabundance_score(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis, const double& par_parameter_density_threshold, const string& par_filename_tag) {
+		std::string output_protein_pseudoabundance_score_uniquepeptides = par_filesystem.directory + par_filesystem.filename + "_protein_pseudoabundance_score_" + par_filename_tag + par_sample_analysis.peptide_assignment_method + ".csv";
+		std::ofstream fout_protein_pseudoabundance_score_uniquepeptides;
+		fout_protein_pseudoabundance_score_uniquepeptides.open(output_protein_pseudoabundance_score_uniquepeptides);
+		std::string output_protein_pseudoabundance_peptides_uniquepeptides = par_filesystem.directory + par_filesystem.filename + "_protein_pseudoabundance_peptides_" + par_filename_tag + par_sample_analysis.peptide_assignment_method + ".csv";
+		std::ofstream fout_protein_pseudoabundance_peptides_uniquepeptides;
+		fout_protein_pseudoabundance_peptides_uniquepeptides.open(output_protein_pseudoabundance_peptides_uniquepeptides);
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			double protein_pseudoabundance_score{};
+			size_t protein_pseudoabundance_totalspectra{};
 			for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
-				if (itr_v_homology_data_combined_by_protein.blastp_parameter_density > 0.99) {
+				if (itr_v_homology_data_combined_by_protein.blastp_parameter_density > par_parameter_density_threshold) {
 					for (auto i = 0; i < itr_v_homology_data_combined_by_protein.p_peptide_analysis->v_peptide_data.size(); ++i) {
-						protein_pseudoabundance_score += (itr_v_homology_data_combined_by_protein.blastp_parameter_density_conjugated * itr_v_homology_data_combined_by_protein.p_peptide_analysis[i].v_denovo_peptide_averagescore);
+						protein_pseudoabundance_score += (std::pow(itr_v_homology_data_combined_by_protein.blastp_parameter_density_conjugated, IgFamily::PARAMETER_CONJUGATION_WEIGHT) * itr_v_homology_data_combined_by_protein.p_peptide_analysis[i].v_denovo_peptide_averagescore);
+						++protein_pseudoabundance_totalspectra;
 					}
 				}
 			}
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
-				fout_protein_pseudoabundance_peptides_unique << "\n" << itr_v_protein_analysis.p_protein_data->protein_name;
-				fout_protein_pseudoabundance_peptides_unique << "," << protein_pseudoabundance_score;
-				fout_protein_pseudoabundance_peptides_unique << ",";
+				fout_protein_pseudoabundance_score_uniquepeptides << itr_v_protein_analysis.p_protein_data->protein_name << ",";
+				fout_protein_pseudoabundance_score_uniquepeptides << protein_pseudoabundance_score << ",";
+				fout_protein_pseudoabundance_score_uniquepeptides << protein_pseudoabundance_totalspectra << ",";
+				if (&itr_v_protein_analysis != &par_sample_analysis.v_protein_analysis.back()) {
+					fout_protein_pseudoabundance_score_uniquepeptides << "\n";
+				}
 			}
-			fout_protein_pseudoabundance_peptides_unique << "\n\n\n";
 			for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
-				if (itr_v_homology_data_combined_by_protein.blastp_parameter_density > 0.99) {
+				if (itr_v_homology_data_combined_by_protein.blastp_parameter_density > par_parameter_density_threshold) {
 					for (auto i = 0; i < itr_v_homology_data_combined_by_protein.p_peptide_analysis->v_peptide_data.size(); ++i) {
 						if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
-							fout_protein_pseudoabundance_peptides_unique << "\n" << itr_v_homology_data_combined_by_protein.blastp_query;
+							fout_protein_pseudoabundance_peptides_uniquepeptides << itr_v_homology_data_combined_by_protein.blastp_query << ",";
+							fout_protein_pseudoabundance_peptides_uniquepeptides << itr_v_homology_data_combined_by_protein.blastp_subject_accession << ",";;
+							if (&itr_v_protein_analysis != &par_sample_analysis.v_protein_analysis.back()) {
+								fout_protein_pseudoabundance_peptides_uniquepeptides << "\n";
+							}
 						}
 					}
 				}
-			}
-			protein_pseudoabundance_score = {};
-			std::string output_protein_pseudoabundance_score = par_filesystem.directory + par_filesystem.filename + "_protein_pseudoabundance_score_" + par_sample_analysis.peptide_assignment_method + ".csv";
-			std::ofstream fout_protein_pseudoabundance_score;
-			fout_protein_pseudoabundance_score.open(output_protein_pseudoabundance_score);
-			std::string output_protein_pseudoabundance_peptides = par_filesystem.directory + par_filesystem.filename + "_protein_pseudoabundance_peptides_" + par_sample_analysis.peptide_assignment_method + ".csv";
-			std::ofstream fout_protein_pseudoabundance_peptides;
-			fout_protein_pseudoabundance_peptides.open(output_protein_pseudoabundance_peptides);
-			double protein_pseudoabundance_score{};
-			for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-				for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
-					for (auto i = 0; i < itr_v_homology_data_combined_by_protein.p_peptide_analysis->v_peptide_data.size(); ++i) {
-						protein_pseudoabundance_score += (itr_v_homology_data_combined_by_protein.blastp_parameter_density_conjugated * itr_v_homology_data_combined_by_protein.p_peptide_analysis[i].v_denovo_peptide_averagescore);
-					}
-				}
-				if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
-					fout_protein_pseudoabundance_score << "\n" << itr_v_protein_analysis.p_protein_data->protein_name;
-					fout_protein_pseudoabundance_score << "," << protein_pseudoabundance_score;
-					fout_protein_pseudoabundance_score << ",";
-				}
-				fout_protein_pseudoabundance_score << "\n\n\n";
-				for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
-					for (auto i = 0; i < itr_v_homology_data_combined_by_protein.p_peptide_analysis->v_peptide_data.size(); ++i) {
-						if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
-							fout_protein_pseudoabundance_peptides << "\n" << itr_v_homology_data_combined_by_protein.blastp_query;
-						}
-					}
-				}
-				protein_pseudoabundance_score = {};
 			}
 		}
 	}
