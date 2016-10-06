@@ -193,8 +193,10 @@ namespace fpf_parse {
 		while (fin_input_csv.get(csv_read)) {
 			if (csv_header_parsed) {
 				if (csv_read == ',') {
-					if (csv_count_delimit % csv_count_delimit_width == 0) {					
-						temp_v_csv_data.push_back(temp_csv_data);
+					if (csv_count_delimit % csv_count_delimit_width == 0) {
+						if (!temp_csv_data.csv_scan_ID.empty()) {
+							temp_v_csv_data.push_back(temp_csv_data);
+						}
 						temp_csv_data = {};
 					}
 					++csv_count_delimit;

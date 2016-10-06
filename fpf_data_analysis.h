@@ -27,6 +27,7 @@
 namespace fpf_data_analysis {
 
 	using std::map;
+	using std::multimap;
 	using std::string;
 	using std::vector;
 
