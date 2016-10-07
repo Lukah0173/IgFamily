@@ -156,7 +156,7 @@ namespace fpf_core {
 		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
 		fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
 		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			fpf_data_analysis::sort_v_homology_data_with_spectralcount(itr_v_protein_analysis.v_homology_data_combined_by_protein);
+			fpf_data_analysis::sort_v_homology_data_combined_by_protein(itr_v_protein_analysis.v_homology_data_combined_by_protein);
 		}
 		fpf_data_analysis::sort_v_protein_analysis(par_sample_analysis.v_protein_analysis);
 	}
@@ -200,7 +200,7 @@ namespace fpf_core {
 		std::cout << "\n";
 		fpf_filesystem::fout_filesystem(par_filesystem);
 		IgFamily::PROTEIN_SCORE_THRESHOLD = IgFamily::DEFAULT_PROTEIN_SCORE_THRESHOLD;
-		IgFamily::LOGISTIC_CONJUGATION_FACTOR = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_FACTOR;
+		IgFamily::LOGISTIC_CONJUGATION_RANGE = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_RANGE;
 		IgFamily::LOGISTIC_CONJUGATION_MIDPOINT = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_MIDPOINT;
 	}
 }

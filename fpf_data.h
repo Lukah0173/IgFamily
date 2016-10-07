@@ -111,12 +111,15 @@ namespace fpf_data {
 		string blastp_subject_accession_class;
 		size_t blastp_query_alignment_index;
 		size_t blastp_subject_alignment_index;
+		size_t blastp_mismatch_count;
 		double blastp_score;
 		double blastp_score_transformed;
 		double blastp_score_transformed_conjugated;
 		double blastp_parameter_density;
 		double blastp_parameter_density_conjugated;
 		double blastp_parameter_score;
+		double blastp_parameter_score_density;
+		double blastp_query_alignment_coverage;
 		string query_alignment;
 		size_t denovo_replicate_count;
 		bool is_IG;

@@ -139,6 +139,8 @@ namespace fpf_report {
 		fout_v_homology_data << "query,";
 		fout_v_homology_data << "key_subject_accession,";
 		fout_v_homology_data << "subject_accession,";
+		fout_v_homology_data << "mismatch_count,";
+		fout_v_homology_data << "query_alignment_coverage,";
 		fout_v_homology_data << "score,";
 		fout_v_homology_data << "score_transformed,";
 		fout_v_homology_data << "par_dens,";
@@ -149,6 +151,8 @@ namespace fpf_report {
 			fout_v_homology_data << itr_v_homology_data.blastp_query << ",";
 			fout_v_homology_data << itr_v_homology_data.key_blastp_subject_accession << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_subject_accession << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_mismatch_count << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_query_alignment_coverage << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_score << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_score_transformed_conjugated << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_parameter_density_conjugated << ",";
@@ -414,21 +418,24 @@ namespace fpf_report {
 		std::ofstream fout_protein_pseudoabundance_peptides_uniquepeptides;
 		fout_protein_pseudoabundance_peptides_uniquepeptides.open(output_protein_pseudoabundance_peptides_uniquepeptides);
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			double protein_pseudoabundance_score{};
-			size_t protein_pseudoabundance_totalspectra{};
+			double score_model0{};
+			double score_model1{};
+			double score_model2{};
 			for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
 				if (itr_v_homology_data_combined_by_protein.blastp_parameter_density > par_parameter_density_threshold) {
 					for (auto i = 0; i < itr_v_homology_data_combined_by_protein.p_peptide_analysis->v_peptide_data.size(); ++i) {
-						protein_pseudoabundance_score += (std::pow(itr_v_homology_data_combined_by_protein.blastp_parameter_density_conjugated, IgFamily::PARAMETER_CONJUGATION_WEIGHT) * (itr_v_homology_data_combined_by_protein.p_peptide_analysis[i].v_denovo_peptide_averagescore / 100));
-						++protein_pseudoabundance_totalspectra;
+						score_model0 += double{ 1 };
+						score_model1 += std::pow(itr_v_homology_data_combined_by_protein.blastp_parameter_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT); // 1.65
+						score_model2 += std::pow(itr_v_homology_data_combined_by_protein.blastp_parameter_density_conjugated, double(2.5)); // 2.5
 					}
 				}
 			}
 			if ((itr_v_protein_analysis.p_protein_data->protein_type == "IG")
-				&& (protein_pseudoabundance_score != double(0))) {
+				&& (score_model1 != double(0))) {
 				fout_protein_pseudoabundance_score_uniquepeptides << itr_v_protein_analysis.p_protein_data->protein_name << ",";
-				fout_protein_pseudoabundance_score_uniquepeptides << protein_pseudoabundance_totalspectra << ",";
-				fout_protein_pseudoabundance_score_uniquepeptides << protein_pseudoabundance_score << ",";
+				fout_protein_pseudoabundance_score_uniquepeptides << score_model0 << ",";
+				fout_protein_pseudoabundance_score_uniquepeptides << score_model1 << ",";
+				fout_protein_pseudoabundance_score_uniquepeptides << score_model2 << ",";
 				if (&itr_v_protein_analysis != &par_sample_analysis.v_protein_analysis.back()) {
 					fout_protein_pseudoabundance_score_uniquepeptides << "\n";
 				}
@@ -529,7 +536,7 @@ namespace fpf_report {
 						}
 						++i;
 					}
-					fout_html_report << "&nbsp&nbsp&nbsp" << "Conjugation";
+					fout_html_report << "&nbsp&nbsp&nbsp" << "Density";
 					fout_html_report << "\n\n<br> ";
 					i = size_t();
 					for (const auto& itr_proteinconstruct_from_denovo : itr_v_protein_analysis.proteinconstruct_from_denovo) {
@@ -559,7 +566,7 @@ namespace fpf_report {
 						}
 						++i;
 					}
-					fout_html_report << "&nbsp&nbsp&nbsp" << "Density";
+					fout_html_report << "&nbsp&nbsp&nbsp" << "Conjugation";
 					fout_html_report << "\n\n<br> ";
 					i = size_t();
 					for (const auto& itr_proteinconstruct_from_denovo : itr_v_protein_analysis.proteinconstruct_from_denovo) {
@@ -631,6 +638,8 @@ namespace fpf_report {
 							fout_html_report << "&nbsp";
 						}
 						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+						fout_html_report << "Dens";
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_html_report << "Spec";
 						fout_html_report << "&nbsp&nbsp";
 						fout_html_report << "Homo";
@@ -641,9 +650,8 @@ namespace fpf_report {
 						fout_html_report << "<br>";
 						for (const auto& itr_homology_data : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
 							if ((itr_homology_data.blastp_parameter_density_conjugated >= IgFamily::REPORT_QUERY_PARAMETER_DENSITY_CONJUGATED_THRESHOLD)
-								&& (itr_homology_data.blastp_parameter_score >= IgFamily::REPORT_QUERY_ALIGNMENT_PARAMETER_SCORE_THRESHOLD)
 								&& (itr_homology_data.denovo_replicate_count >= IgFamily::REPORT_QUERY_REPLICATE_COUNT_THRESHOLD)
-								&& ((itr_homology_data.blastp_parameter_score * itr_homology_data.denovo_replicate_count) > IgFamily::REPORT_QUERY_ALIGNMENT_TOTALSCORE_OUTPUT_THRESHOLD)) {
+								&& (itr_homology_data.blastp_parameter_score_density >= IgFamily::REPORT_QUERY_PARAMETER_SCORE_DENSITY_THRESHOLD)) {
 								fout_html_report << "\n<br> ";
 								size_t st_mismatch{};
 								for (auto i = 0; i < itr_homology_data.query_alignment.length(); i) {
@@ -682,6 +690,8 @@ namespace fpf_report {
 								for (auto j = 0; j < (5 - st_mismatch); ++j) {
 									fout_html_report << "&nbsp";
 								}
+								fout_html_report << std::fixed << std::setprecision(3) << itr_homology_data.blastp_parameter_score_density;
+								fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 								fout_html_report << itr_homology_data.denovo_replicate_count;
 								if (itr_homology_data.denovo_replicate_count < 1) {
 									fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
