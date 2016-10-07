@@ -111,9 +111,7 @@ namespace fpf_data_analysis {
 			else {
 				double temp_protein_score{};
 				temp_protein_analysis.p_protein_data = itr_homology_data.p_protein_data;
-				if ((par_refined) && (par_iteration > 10) && (itr_homology_data.blastp_parameter_density_conjugated > IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
-					temp_protein_analysis.v_homology_data_combined_by_protein.push_back(itr_homology_data);
-				}
+				temp_protein_analysis.v_homology_data_combined_by_protein.push_back(itr_homology_data);
 				temp_protein_analysis.protein_score = temp_protein_score;
 				temp_protein_analysis.key_protein_analysis = temp_key_protein_analysis;
 				temp_v_protein_analysis.push_back(temp_protein_analysis);
@@ -160,7 +158,7 @@ namespace fpf_data_analysis {
 		double temp_protein_analysis_score_mean{};
 		size_t count_IG_proteins{};
 		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if ((itr_v_protein_analysis.p_protein_data->protein_type == "IG") && (itr_v_protein_analysis.protein_score >= IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
+			if ((itr_v_protein_analysis.p_protein_data->protein_type == "IG") && (itr_v_protein_analysis.protein_score >= IgFamily::PROTEIN_SCORE_THRESHOLD)) {
 				++count_IG_proteins;
 				temp_protein_analysis_score_mean += itr_v_protein_analysis.protein_score;
 			}
@@ -174,7 +172,7 @@ namespace fpf_data_analysis {
 		size_t count_selected_genefamilies{};
 		size_t count_iterations{};
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score >= IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
+			if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score >= IgFamily::PROTEIN_SCORE_THRESHOLD)) {
 				++count_selected_genefamilies;
 			}
 		}
@@ -193,7 +191,7 @@ namespace fpf_data_analysis {
 			std::cout << count_iterations;
 			count_selected_genefamilies = 0;
 			for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-				if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score > IgFamily::HOMOLOGY_SCORE_THRESHOLD)) {
+				if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score > IgFamily::PROTEIN_SCORE_THRESHOLD)) {
 					++count_selected_genefamilies;
 				}
 			}
@@ -201,7 +199,7 @@ namespace fpf_data_analysis {
 			std::cout << count_selected_genefamilies;
 			std::cout << " gene families\n";
 			fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis, true);
-			IgFamily::HOMOLOGY_SCORE_THRESHOLD = (par_sample_analysis.protein_analysis_score_mean / IgFamily::HOMOLOGY_SCORE_THRESHOLD_FACTOR);
+			IgFamily::PROTEIN_SCORE_THRESHOLD = (par_sample_analysis.protein_analysis_score_mean / IgFamily::HOMOLOGY_SCORE_THRESHOLD_FACTOR);
 			if (count_selected_genefamilies <= IgFamily::TRAIN_SELECTED_GENE_FAMILY_PRECISION_CONDITION) {
 				IgFamily::LOGISTIC_CONJUGATION_FACTOR = 0.9995;
 				IgFamily::LOGISTIC_CONJUGATION_MIDPOINT = 0.001;

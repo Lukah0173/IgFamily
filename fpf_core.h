@@ -199,7 +199,7 @@ namespace fpf_core {
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false);
 		std::cout << "\n";
 		fpf_filesystem::fout_filesystem(par_filesystem);
-		IgFamily::HOMOLOGY_SCORE_THRESHOLD = IgFamily::DEFAULT_HOMOLOGY_SCORE_THRESHOLD;
+		IgFamily::PROTEIN_SCORE_THRESHOLD = IgFamily::DEFAULT_PROTEIN_SCORE_THRESHOLD;
 		IgFamily::LOGISTIC_CONJUGATION_FACTOR = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_FACTOR;
 		IgFamily::LOGISTIC_CONJUGATION_MIDPOINT = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_MIDPOINT;
 	}
