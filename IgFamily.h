@@ -16,7 +16,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.11.6e" };
+	const string version{ "v0.11.6f" };
 
 	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
@@ -26,7 +26,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA{ 1 };
 	const bool BLASTP_BY_SELECTED_PEPTIDE{ 1 };
 
-	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Jing-Jing-Wang_20160913.txt" };
+	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\_filesystem.txt" };
 	const string DEFAULT_IGFAMILY_DIRECTORY{ "" };
 	const string DEFAULT_FASTA_DIRECTORY{ DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\" };
 	const string DEFAULT_FASTA_MODULE_DIRECTORY{ DEFAULT_FASTA_DIRECTORY + "FASTA_modules\\" };
@@ -52,13 +52,13 @@ namespace IgFamily {
 	const double REPORT_PROTEIN_DENSITY_THRESHOLD{ 0.001 };
 	const double REPORT_QUERY_PARAMETER_SCORE_DENSITY_THRESHOLD{ 0.001 };
 
-	const double PARAMETER_HOMOLOGY_WEIGHT{ 3.0 };
-	const double PARAMETER_SCORE_CONJUGATION_WEIGHT{ 1.5 };
-	const double PARAMETER_SCORE_MISMATCH_WEIGHT{ 0.88 };
+	const double PARAMETER_HOMOLOGY_WEIGHT{ 2.5 };
+	const double PARAMETER_SCORE_CONJUGATION_WEIGHT{ 1.3 };
+	const double PARAMETER_SCORE_MISMATCH_WEIGHT{ 0.94 };
 	const double DEFAULT_PROTEIN_SCORE_THRESHOLD{ 3 };
 	double PROTEIN_SCORE_THRESHOLD{ DEFAULT_PROTEIN_SCORE_THRESHOLD };
 	const double HOMOLOGY_SCORE_THRESHOLD_FACTOR{ 50 };
-	const double HOMOLOGY_QUERY_ALIGNMENT_COVERAGE_THRESHOLD{ 90 };
+	const double HOMOLOGY_QUERY_ALIGNMENT_COVERAGE_THRESHOLD{ 99 };
 
 	const double DEFAULT_LOGISTIC_CONJUGATION_RANGE{ 0.9995 };
 	const double DEFAULT_LOGISTIC_CONJUGATION_MIDPOINT{ (double(1) - DEFAULT_LOGISTIC_CONJUGATION_RANGE) * double(2) };

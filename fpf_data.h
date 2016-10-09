@@ -132,7 +132,7 @@ namespace fpf_data {
 	public:
 		char aminoacid;
 		double aminoacid_localconfidence;
-		homology_data* p_homology_data;
+		homology_data proteinconstruct_homology_data;
 	};
 
 	struct multinomial_frequency_type {

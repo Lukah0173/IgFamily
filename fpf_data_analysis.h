@@ -122,7 +122,7 @@ namespace fpf_data_analysis {
 		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			for (auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
 				itr_protein_analysis.protein_score += itr_homology_data.score;
-				itr_protein_analysis.protein_effective_spectral_count += itr_homology_data.blastp_homology_density_conjugated;
+				itr_protein_analysis.protein_effective_spectral_count += (itr_homology_data.blastp_homology_density_conjugated * itr_homology_data.denovo_replicate_count);
 			}
 			for (auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
 				if (itr_protein_analysis.protein_score != 0) {
@@ -196,9 +196,6 @@ namespace fpf_data_analysis {
 					}
 				}
 			}
-			++count_iterations;
-			std::cout << " ...iteration ";
-			std::cout << count_iterations;
 			fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, true);
 			IgFamily::PROTEIN_SCORE_THRESHOLD = (par_sample_analysis.protein_analysis_score_mean / IgFamily::HOMOLOGY_SCORE_THRESHOLD_FACTOR);
 			IgFamily::LOGISTIC_CONJUGATION_RANGE = (IgFamily::LOGISTIC_CONJUGATION_RANGE - (IgFamily::LOGISTIC_ITERATION_FACTOR * std::pow(1.08, count_selected_genefamilies)));
@@ -210,9 +207,21 @@ namespace fpf_data_analysis {
 					++count_selected_genefamilies;
 				}
 			}
-			std::cout << " with ";
-			std::cout << count_selected_genefamilies;
-			std::cout << " gene families\n";
+			++count_iterations;
+			if (count_iterations % 20 == 0) {
+				std::cout << " ...iteration ";
+				std::cout << count_iterations;
+				std::cout << " with ";
+				std::cout << count_selected_genefamilies;
+				std::cout << " gene families\n";
+			}
+			if ((count_selected_genefamilies <= par_select_N_many_gene_families) && (count_iterations % 20 != 0)) {
+				std::cout << " ...iteration ";
+				std::cout << count_iterations;
+				std::cout << " with ";
+				std::cout << count_selected_genefamilies;
+				std::cout << " gene families\n";
+			}
 		}
 	}
 
@@ -222,22 +231,13 @@ namespace fpf_data_analysis {
 			for (size_t i = 0; i < itr_protein_analysis.p_protein_data->protein_protein.length(); ++i) {
 				proteinconstruct_aminoacid temp_proteinconstruct_from_denovo{};
 				temp_proteinconstruct_from_denovo.aminoacid = '.';
-				temp_proteinconstruct_from_denovo.p_homology_data = &temp_homology_data;
+				temp_proteinconstruct_from_denovo.proteinconstruct_homology_data = temp_homology_data;
 				itr_protein_analysis.proteinconstruct.push_back(temp_proteinconstruct_from_denovo);
 			}
 			sort_v_homology_data_combined_by_protein(itr_protein_analysis.v_homology_data_combined_by_protein);
 			vector<homology_data> v_blastp_query_alignment_selected{};
 			vector<homology_data> v_blastp_query_alignment_rejected{};
 			for (const auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
-				//if (itr_homology_data.p_protein_data->protein_type == "IG") {
-					//std::cout << "\n\n\n " << itr_protein_analysis.p_protein_data->protein_name;
-					//std::cout << "\n " << itr_homology_data.blastp_subject_accession;
-					//std::cout << "\n\n " << itr_homology_data.p_protein_data->protein_protein;
-					//std::cout << "\n " << itr_homology_data.alignment;
-					//std::cout << "\n\n " << std::pow(itr_homology_data.blastp_homology, IgFamily::PARAMETER_HOMOLOGY_WEIGHT);
-					//std::cout << "   " << itr_homology_data.blastp_homology_transformed;
-					//std::cout << "   " << itr_homology_data.blastp_mismatch_count;
-				//}
 				const auto find_blastp_query_alignment_rejected = std::find_if(v_blastp_query_alignment_rejected.begin(), v_blastp_query_alignment_rejected.end(),
 					[itr_homology_data](const auto& par_homology_data) {
 					return par_homology_data.alignment == itr_homology_data.alignment;
@@ -258,20 +258,13 @@ namespace fpf_data_analysis {
 				}
 			}
 			for (auto i = 0; i < v_blastp_query_alignment_selected.size(); ++i) {
-				//if (v_blastp_query_alignment_selected[i].p_protein_data->protein_type == "IG") {
-				//	std::cout << "\n " << v_blastp_query_alignment_selected[i].p_protein_data->protein_protein;
-				//	std::cout << "\n " << v_blastp_query_alignment_selected[i].alignment;
-				//	std::cout << "\n\n " << std::pow(v_blastp_query_alignment_selected[i].blastp_homology, IgFamily::PARAMETER_HOMOLOGY_WEIGHT);
-				//	std::cout << "   " << v_blastp_query_alignment_selected[i].blastp_homology_transformed;
-				//	std::cout << "   " << v_blastp_query_alignment_selected[i].blastp_mismatch_count;
-				//}
 				bool skip_blastp_query_alignment{};
 				for (auto j = 0; j < itr_protein_analysis.proteinconstruct.size(); ++j) {
 					if ((itr_protein_analysis.proteinconstruct[j].aminoacid != '.')
 						&& (v_blastp_query_alignment_selected[i].alignment.at(j) != '.')
 						&& (itr_protein_analysis.proteinconstruct[j].aminoacid != v_blastp_query_alignment_selected[i].alignment.at(j))) {
 						if ((v_blastp_query_alignment_selected[i].score) 
-							< itr_protein_analysis.proteinconstruct[j].p_homology_data->score) {
+							< itr_protein_analysis.proteinconstruct[j].proteinconstruct_homology_data.score) {
 							skip_blastp_query_alignment = true;
 							break;
 						}
@@ -288,25 +281,11 @@ namespace fpf_data_analysis {
 									break;
 								}
 								else {
-									if ((v_blastp_query_alignment_selected[i].score >= itr_protein_analysis.proteinconstruct[j].p_homology_data->score)
+									if ((v_blastp_query_alignment_selected[i].score >= itr_protein_analysis.proteinconstruct[j].proteinconstruct_homology_data.score)
 										&& (v_blastp_query_alignment_selected[i].blastp_homology_density_conjugated >= IgFamily::PROTEIN_CONSTRUCT_PARAMETER_DENSITY_CONJUGATED_THRESHOLD)) {
-										if (v_blastp_query_alignment_selected[i].p_protein_data->protein_type == "IG") {
-											//std::cout << "\n\n  " << itr_protein_analysis.p_protein_data->protein_name;
-											//std::cout << "\n  " << v_blastp_query_alignment_selected[i].p_protein_data->protein_name;
-											//std::cout << "\n\n " << v_blastp_query_alignment_selected[i].p_protein_data->protein_protein;
-											//std::cout << "\n " << v_blastp_query_alignment_selected[i].alignment;
-											//std::cout << "\n\n  " << v_blastp_query_alignment_selected[i].alignment.at(j);
-											//std::cout << "   " << v_blastp_query_alignment_selected[i].blastp_homology_density_conjugated;
-											//std::cout << "   " << v_blastp_query_alignment_selected[i].blastp_homology_density;
-											//std::cout << "   " << v_blastp_query_alignment_selected[i].blastp_homology_transformed_conjugated;
-											//std::cout << "   " << v_blastp_query_alignment_selected[i].blastp_homology;
-											//std::cout << "   " << std::pow(v_blastp_query_alignment_selected[i].blastp_homology, IgFamily::PARAMETER_HOMOLOGY_WEIGHT);
-											//std::cout << "   " << v_blastp_query_alignment_selected[i].blastp_homology_transformed;
-											//std::cout << "   " << v_blastp_query_alignment_selected[i].blastp_mismatch_count;
-										}
 										itr_protein_analysis.proteinconstruct[j].aminoacid = v_blastp_query_alignment_selected[i].alignment.at(j);
 										itr_protein_analysis.proteinconstruct[j].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
-										itr_protein_analysis.proteinconstruct[j].p_homology_data = &v_blastp_query_alignment_selected[i];
+										itr_protein_analysis.proteinconstruct[j].proteinconstruct_homology_data = v_blastp_query_alignment_selected[i];
 									}
 									++j;
 								}

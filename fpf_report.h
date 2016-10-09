@@ -512,33 +512,19 @@ namespace fpf_report {
 					size_t i{};
 					for (const auto& itr_proteinconstruct : itr_v_protein_analysis.proteinconstruct) {
 						if (itr_proteinconstruct.aminoacid != '.') {
-							if (itr_proteinconstruct.p_homology_data->p_protein_data->protein_type == "IG") {
-								std::cout << "\n\n  " << itr_proteinconstruct.p_homology_data->alignment;
-								std::cout << "\n  " << itr_proteinconstruct.p_homology_data->p_protein_data->protein_protein;
-								std::cout << "\n\n  " << itr_proteinconstruct.p_homology_data->blastp_subject_accession;
-								std::cout << "   " << itr_proteinconstruct.p_homology_data->p_protein_data->protein_name;
-								std::cout << "\n\n  " << itr_proteinconstruct.aminoacid;
-								std::cout << "   " << itr_proteinconstruct.p_homology_data->blastp_homology_density_conjugated;
-								std::cout << "   " << itr_proteinconstruct.p_homology_data->blastp_homology_density;
-								std::cout << "   " << itr_proteinconstruct.p_homology_data->blastp_homology_transformed_conjugated;
-								std::cout << "   " << itr_proteinconstruct.p_homology_data->blastp_homology;
-								std::cout << "   " << std::pow(itr_proteinconstruct.p_homology_data->blastp_homology, IgFamily::PARAMETER_HOMOLOGY_WEIGHT);
-								std::cout << "   " << itr_proteinconstruct.p_homology_data->blastp_homology_transformed;
-								std::cout << "   " << itr_proteinconstruct.p_homology_data->blastp_mismatch_count;
-							}
 							if ((itr_proteinconstruct.aminoacid != itr_v_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct.aminoacid == 'L') && (itr_v_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 								fout_html_report << "<span class=\"mismatch\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_density_conjugated) >= 0.75) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density_conjugated) >= 0.75) {
 								fout_html_report << "<font color=\"#4c62d6\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_density_conjugated < 0.75) && (itr_proteinconstruct.p_homology_data->blastp_homology_density_conjugated >= 0.50)) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density_conjugated < 0.75) && (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density_conjugated >= 0.50)) {
 								fout_html_report << "<font color=\"#239B56\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_density_conjugated < 0.50) && (itr_proteinconstruct.p_homology_data->blastp_homology_density_conjugated >= 0.25)) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density_conjugated < 0.50) && (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density_conjugated >= 0.25)) {
 								fout_html_report << "<font color=\"#E67E22\">";
 							}
-							if (itr_proteinconstruct.p_homology_data->blastp_homology_density_conjugated < 0.25) {
+							if (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density_conjugated < 0.25) {
 								fout_html_report << "<font color=\"red\">";
 							}
 						}
@@ -559,16 +545,16 @@ namespace fpf_report {
 							if ((itr_proteinconstruct.aminoacid != itr_v_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct.aminoacid == 'L') && (itr_v_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 								fout_html_report << "<span class=\"mismatch\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_density) >= 0.75) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density) >= 0.75) {
 								fout_html_report << "<font color=\"#4c62d6\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_density < 0.75) && (itr_proteinconstruct.p_homology_data->blastp_homology_density >= 0.50)) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density < 0.75) && (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density >= 0.50)) {
 								fout_html_report << "<font color=\"#239B56\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_density < 0.50) && (itr_proteinconstruct.p_homology_data->blastp_homology_density >= 0.25)) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density < 0.50) && (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density >= 0.25)) {
 								fout_html_report << "<font color=\"#E67E22\">";
 							}
-							if (itr_proteinconstruct.p_homology_data->blastp_homology_density < 0.25) {
+							if (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_density < 0.25) {
 								fout_html_report << "<font color=\"red\">";
 							}
 						}
@@ -589,16 +575,16 @@ namespace fpf_report {
 							if ((itr_proteinconstruct.aminoacid != itr_v_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct.aminoacid == 'L') && (itr_v_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 								fout_html_report << "<span class=\"mismatch\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_transformed_conjugated) >= std::pow(40, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed_conjugated) >= std::pow(45, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) {
 								fout_html_report << "<font color=\"#4c62d6\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_transformed_conjugated < std::pow(40, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) && (itr_proteinconstruct.p_homology_data->blastp_homology_transformed_conjugated >= std::pow(30, IgFamily::PARAMETER_HOMOLOGY_WEIGHT))) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed_conjugated < std::pow(45, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) && (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed_conjugated >= std::pow(35, IgFamily::PARAMETER_HOMOLOGY_WEIGHT))) {
 								fout_html_report << "<font color=\"#239B56\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_transformed_conjugated < std::pow(30, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) && (itr_proteinconstruct.p_homology_data->blastp_homology_transformed_conjugated >= std::pow(20, IgFamily::PARAMETER_HOMOLOGY_WEIGHT))) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed_conjugated < std::pow(35, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) && (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed_conjugated >= std::pow(25, IgFamily::PARAMETER_HOMOLOGY_WEIGHT))) {
 								fout_html_report << "<font color=\"#E67E22\">";
 							}
-							if (itr_proteinconstruct.p_homology_data->blastp_homology_transformed_conjugated < std::pow(20, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) {
+							if (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed_conjugated < std::pow(25, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) {
 								fout_html_report << "<font color=\"red\">";
 							}
 						}
@@ -619,16 +605,16 @@ namespace fpf_report {
 							if ((itr_proteinconstruct.aminoacid != itr_v_protein_analysis.p_protein_data->protein_protein.at(i)) && !((itr_proteinconstruct.aminoacid == 'L') && (itr_v_protein_analysis.p_protein_data->protein_protein.at(i) == 'I'))) {
 								fout_html_report << "<span class=\"mismatch\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_transformed) >= std::pow(40, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed) >= std::pow(45, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) {
 								fout_html_report << "<font color=\"#4c62d6\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_transformed < std::pow(40, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) && (itr_proteinconstruct.p_homology_data->blastp_homology_transformed >= std::pow(30, IgFamily::PARAMETER_HOMOLOGY_WEIGHT))) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed < std::pow(45, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) && (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed >= std::pow(35, IgFamily::PARAMETER_HOMOLOGY_WEIGHT))) {
 								fout_html_report << "<font color=\"#239B56\">";
 							}
-							if ((itr_proteinconstruct.p_homology_data->blastp_homology_transformed < std::pow(30, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) && (itr_proteinconstruct.p_homology_data->blastp_homology_transformed >= std::pow(20, IgFamily::PARAMETER_HOMOLOGY_WEIGHT))) {
+							if ((itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed < std::pow(35, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) && (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed >= std::pow(25, IgFamily::PARAMETER_HOMOLOGY_WEIGHT))) {
 								fout_html_report << "<font color=\"#E67E22\">";
 							}
-							if (itr_proteinconstruct.p_homology_data->blastp_homology_transformed < std::pow(20, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) {
+							if (itr_proteinconstruct.proteinconstruct_homology_data.blastp_homology_transformed < std::pow(25, IgFamily::PARAMETER_HOMOLOGY_WEIGHT)) {
 								fout_html_report << "<font color=\"red\">";
 							}
 						}

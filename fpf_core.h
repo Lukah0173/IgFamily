@@ -125,6 +125,20 @@ namespace fpf_core {
 		std::cout << par_filesystem.filename;
 		std::cout << "...\n";
 		fpf_homology_analysis::parse_homology_data(par_filesystem, par_sample_analysis);
+		size_t count_blastp_fail{};
+		while (par_sample_analysis.v_homology_data.empty() && (count_blastp_fail <= size_t(3))) {
+			++count_blastp_fail;
+			std::cout << "\n\n did blastp have a runtime error? ";
+			std::cout << "\n\n trying again... \n\n";
+			std::cout << "\n * * * Calling blastp.exe * * *";
+			fpf_homology_analysis::systemcall_blastp(par_filesystem, par_sample_analysis);
+			std::cout << "\n\n\n * * * Closing blastp.exe * * *";
+			std::cout << "\n\n ...homology analysis complete";
+			std::cout << "\n\n\n creating homology data structures for file ";
+			std::cout << par_filesystem.filename;
+			std::cout << "...\n";
+			fpf_homology_analysis::parse_homology_data(par_filesystem, par_sample_analysis);
+		}
 		fpf_homology_analysis::modify_homology_data(par_sample_analysis);
 		if (!par_refined) {
 			fpf_homology_analysis::associate_homology_data_to_protein_data(par_sample_analysis);
@@ -153,12 +167,12 @@ namespace fpf_core {
 		}
 		else {
 			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES, par_refined);
+			fpf_data_analysis::determine_protein_score_density(par_sample_analysis);
+			fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
+			fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
 		}
-		fpf_data_analysis::determine_protein_score_density(par_sample_analysis);
-		fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
-		fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
 		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			fpf_data_analysis::sort_v_homology_data_combined_by_protein(itr_v_protein_analysis.v_homology_data_combined_by_protein);
+			//fpf_data_analysis::sort_v_homology_data_combined_by_protein(itr_v_protein_analysis.v_homology_data_combined_by_protein);
 		}
 		fpf_data_analysis::sort_v_protein_analysis(par_sample_analysis.v_protein_analysis);
 	}

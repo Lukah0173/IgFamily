@@ -324,7 +324,8 @@ namespace fpf_homology_analysis {
 
 	void transform_homology_data(sample_analysis& par_sample_analysis) {
 		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
-			itr_v_homology_data.blastp_homology_transformed = (std::pow(itr_v_homology_data.blastp_homology, IgFamily::PARAMETER_HOMOLOGY_WEIGHT) * std::pow(IgFamily::PARAMETER_SCORE_MISMATCH_WEIGHT, itr_v_homology_data.blastp_mismatch_count));
+			itr_v_homology_data.blastp_homology = std::floor(itr_v_homology_data.blastp_homology * std::pow(IgFamily::PARAMETER_SCORE_MISMATCH_WEIGHT, itr_v_homology_data.blastp_mismatch_count));
+			itr_v_homology_data.blastp_homology_transformed = std::pow(itr_v_homology_data.blastp_homology, IgFamily::PARAMETER_HOMOLOGY_WEIGHT);
 			itr_v_homology_data.blastp_homology_transformed_conjugated = itr_v_homology_data.blastp_homology_transformed;
 		}
 	}
