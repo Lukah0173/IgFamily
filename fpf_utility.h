@@ -39,6 +39,10 @@ namespace fpf_utility {
 		vector<transcript> sample_v_transcript;
 	};
 
+	inline double log_base(double d, double base) {
+		return (log(d) / log(base));
+	}
+
 	vector<string> parse_transcript_directory() {
 		vector<string> temp_v_transcript_directory{};
 		string temp_transcript_directory{};

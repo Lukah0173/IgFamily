@@ -126,14 +126,16 @@ namespace fpf_core {
 		std::cout << "...\n";
 		fpf_homology_analysis::parse_homology_data(par_filesystem, par_sample_analysis);
 		fpf_homology_analysis::modify_homology_data(par_sample_analysis);
-		fpf_homology_analysis::associate_homology_data_to_v_protein_data(par_sample_analysis);
-		fpf_homology_analysis::associate_homology_data_to_v_peptide_data(par_sample_analysis);
-		if (par_refined) {
-			fpf_homology_analysis::create_protein_construct_from_protein_analysis(par_sample_analysis);
+		if (!par_refined) {
+			fpf_homology_analysis::associate_homology_data_to_protein_data(par_sample_analysis);
 		}
+		else {
+			fpf_homology_analysis::associate_homology_data_to_protein_analysis_refined(par_sample_analysis);
+		}
+		fpf_homology_analysis::associate_homology_data_to_v_peptide_data(par_sample_analysis);
 		fpf_homology_analysis::create_blastp_query_alignment(par_sample_analysis);
 		fpf_homology_analysis::transform_homology_data(par_sample_analysis);
-		fpf_homology_analysis::determine_homology_parameter_density(par_sample_analysis, false);
+		fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, false);
 		std::cout << " ...homology data structures assigned";
 		std::cout << "\n\n outputting homology summary for file ";
 		std::cout << par_filesystem.filename;;

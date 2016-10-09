@@ -40,11 +40,13 @@ namespace fpf_data {
 	struct multinomial;
 
 	struct denovo_peptide {
+	public:
 		vector<denovo_aminoacid> v_denovo_aminoacid;
 		double localconfidence_average;
 	};
 
 	struct denovo_aminoacid {
+	public:
 		char aminoacid;
 		double aminoacid_localconfidence;
 	};
@@ -92,9 +94,10 @@ namespace fpf_data {
 		size_t key_protein_analysis;
 		protein_data* p_protein_data;
 		vector<homology_data> v_homology_data_combined_by_protein;
+		vector<proteinconstruct_aminoacid> proteinconstruct;
 		double protein_score;
 		double protein_density;
-		vector<proteinconstruct_aminoacid> proteinconstruct_from_denovo;
+		double protein_effective_spectral_count;
 		double proteinconstruct_sequencecoverage;
 	};
 
@@ -102,6 +105,8 @@ namespace fpf_data {
 	public:
 		peptide_analysis* p_peptide_analysis;
 		protein_data* p_protein_data;
+		bool is_IG;
+		size_t denovo_replicate_count;
 		size_t key_blastp_query;
 		string blastp_query;
 		string blastp_query_aligned;
@@ -112,29 +117,26 @@ namespace fpf_data {
 		size_t blastp_query_alignment_index;
 		size_t blastp_subject_alignment_index;
 		size_t blastp_mismatch_count;
-		double blastp_score;
-		double blastp_score_transformed;
-		double blastp_score_transformed_conjugated;
-		double blastp_parameter_density;
-		double blastp_parameter_density_conjugated;
-		double blastp_parameter_score;
-		double blastp_parameter_score_density;
-		double blastp_query_alignment_coverage;
-		string query_alignment;
-		size_t denovo_replicate_count;
-		bool is_IG;
+		double blastp_homology;
+		double blastp_homology_transformed;
+		double blastp_homology_transformed_conjugated;
+		double blastp_homology_density;
+		double blastp_homology_density_conjugated;
+		double score;
+		double score_density;
+		string alignment;
+		double alignment_coverage;
 	};
 
 	struct proteinconstruct_aminoacid {
+	public:
 		char aminoacid;
 		double aminoacid_localconfidence;
-		double aminoacid_score;
-		double aminoacid_score_conjugated;
-		double aminoacid_parameter_score;
-		double aminoacid_parameter_density_conjugated;
+		homology_data* p_homology_data;
 	};
 
 	struct multinomial_frequency_type {
+	public:
 		protein_data* p_protein_data;
 		double multinomial_frequency;
 	};

@@ -54,8 +54,8 @@ namespace fpf_multinomial {
 			if ((find_multinomial_element != par_sample_analysis.multinomial_data.v_p_peptide_analysis.end()) && (find_multinomial_protein) != par_sample_analysis.multinomial_data.v_p_protein_data.end()){
 				const size_t i = (find_multinomial_element - par_sample_analysis.multinomial_data.v_p_peptide_analysis.begin());
 				const size_t j = (find_multinomial_protein - par_sample_analysis.multinomial_data.v_p_protein_data.begin());
-				par_sample_analysis.multinomial_data.v2_frequency[i][j] = itr_v_homology_data.blastp_score_transformed;
-				par_sample_analysis.multinomial_data.v_frequency_marginal_sum[i] += itr_v_homology_data.blastp_score_transformed;
+				par_sample_analysis.multinomial_data.v2_frequency[i][j] = itr_v_homology_data.blastp_homology_transformed;
+				par_sample_analysis.multinomial_data.v_frequency_marginal_sum[i] += itr_v_homology_data.blastp_homology_transformed;
 			}
 			else {
 				std::cout << "\n\n ~~~ query / peptide or subject / accession mismatch";
