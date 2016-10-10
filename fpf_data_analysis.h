@@ -177,19 +177,6 @@ namespace fpf_data_analysis {
 			double _13{};
 			for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 				double score_conjugate{ IgFamily::LOGISTIC_CONJUGATION_RANGE + (IgFamily::LOGISTIC_CONJUGATION_MIDPOINT / (1 + std::pow(double(2.718), double(double(-1) * (itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean))))) };
-				//if (itr_protein_analysis.p_protein_data->protein_name == "IGHV1-69") {
-				//	std::cout << "\n  " << itr_protein_analysis.p_protein_data->protein_name;
-				//	std::cout << "   " << itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean;
-				//	std::cout << "   " << score_conjugate;
-				//	_169 = itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean;
-				//}
-				//if (itr_protein_analysis.p_protein_data->protein_name == "IGHV1-3") {
-				//	std::cout << "\n  " << itr_protein_analysis.p_protein_data->protein_name;
-				//	std::cout << "   " << itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean;
-				//	std::cout << "   " << score_conjugate;
-				//	_13 = itr_protein_analysis.protein_score - par_sample_analysis.protein_analysis_score_mean;
-				//	std::cout << "\n    " << _169 - _13;
-				//}
 				for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
 					if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
 						itr_homology_analysis.blastp_homology_transformed_conjugated = std::pow(itr_homology_analysis.blastp_homology_transformed, score_conjugate);
@@ -208,14 +195,14 @@ namespace fpf_data_analysis {
 				}
 			}
 			++count_iterations;
-			if (count_iterations % 20 == 0) {
+			if (count_iterations % 50 == 0) {
 				std::cout << " ...iteration ";
 				std::cout << count_iterations;
 				std::cout << " with ";
 				std::cout << count_selected_genefamilies;
 				std::cout << " gene families\n";
 			}
-			if ((count_selected_genefamilies <= par_select_N_many_gene_families) && (count_iterations % 20 != 0)) {
+			if ((count_selected_genefamilies <= par_select_N_many_gene_families) && (count_iterations % 50 != 0)) {
 				std::cout << " ...iteration ";
 				std::cout << count_iterations;
 				std::cout << " with ";

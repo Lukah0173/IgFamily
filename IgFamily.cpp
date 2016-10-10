@@ -1,4 +1,4 @@
-// * * IgFamily v0.11.6f * * 
+// * * IgFamily v0.12.0 * * 
 //
 // Lukah Dykes - Flinders Proteomics Facility - 2016
 // 
@@ -108,9 +108,11 @@ int main() {
 
 	//for (auto& itr_v_filesystem : v_filesystem) {
 	//	for (auto& itr_v_sample_analysis : itr_v_filesystem.v_sample_analysis) {
-	//		fpf_report::temp_fout_multinomial_contaminants_list(itr_v_filesystem, itr_v_sample_analysis, v_averaged_selected_combined_contaminants_list);
+	//		fpf_report::temp_fout_multinomial_contaminants_list(itr_v_filesystem, itr_v_sample_analysis, v_selected_combined_contaminants_list);
 	//	}
 	//}
+
+
 
 	string farewell;
 	std::cout << "\n\n\n program complete...";

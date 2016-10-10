@@ -198,7 +198,7 @@ namespace fpf_core {
 		std::cout << "\n ...outputting filtered multinomial peptide list for " << par_filesystem.filename;
 		fpf_report::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting contaminants report for " << par_filesystem.filename;
-		fpf_report::fout_multinomial_contaminants_report(par_filesystem, par_sample_analysis);
+		fpf_report::fout_multinomial_contaminants_report(par_filesystem, par_sample_analysis, "peptide_report");
 		std::cout << "\n ...outputting contaminants list for " << par_filesystem.filename;
 		fpf_report::fout_multinomial_contaminants_list(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting protein score comparison for " << par_filesystem.filename;

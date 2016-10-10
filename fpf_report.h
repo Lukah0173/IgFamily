@@ -266,8 +266,8 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_multinomial_contaminants_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		struct contaminants_report {
+	void fout_multinomial_contaminants_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis, const string& par_filename_tag) {
+		struct output_report {
 		public:
 			double peptide_theoretical_mz;
 			double peptide_observed_mz;
@@ -275,11 +275,12 @@ namespace fpf_report {
 			double peptide_rt;
 			string peptide_withmod;
 			string peptide_filtered;
+			string peptide_associated_protein_type;
 			vector<multinomial_frequency_type> v_peptide_associated_proteins;
 		};
-		contaminants_report temp_contaminants_report{};
-		multimap<double, contaminants_report> v_contaminants_report_map{};
-		string output_multinomial_element = par_filesystem.directory + par_filesystem.filename + "_contaminants_report_" + par_sample_analysis.peptide_assignment_method + ".csv";
+		output_report temp_contaminants_report{};
+		multimap<double, output_report> v_contaminants_report_map{};
+		string output_multinomial_element = par_filesystem.directory + par_filesystem.filename + "_" + par_filename_tag + "_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_multinomial_element;
 		fout_multinomial_element.open(output_multinomial_element);
 		for (auto i = 0; i < par_sample_analysis.multinomial_data.v_p_peptide_analysis.size(); ++i) {
@@ -291,21 +292,38 @@ namespace fpf_report {
 				temp_v_multinomial_frequency.push_back(temp_multinomial_frequency);
 			}
 			fpf_multinomial::sort_v_multinomial_frequency(temp_v_multinomial_frequency);
-			if (!temp_v_multinomial_frequency.empty()) {
-				if ((temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "UNIPROT")
-					|| (temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "CONT")) {
-					if (temp_v_multinomial_frequency.begin()->multinomial_frequency > 0.2) {
-						for (const auto& itr_peptide_data : par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_data) {
-							temp_contaminants_report.peptide_theoretical_mz = ((itr_peptide_data->peptide_m + itr_peptide_data->peptide_z) / itr_peptide_data->peptide_z);
-							temp_contaminants_report.peptide_observed_mz = itr_peptide_data->peptide_mz;
-							temp_contaminants_report.peptide_z = itr_peptide_data->peptide_z;
-							temp_contaminants_report.peptide_rt = itr_peptide_data->peptide_rt;
-							temp_contaminants_report.peptide_withmod = itr_peptide_data->peptide_withmod;
-							temp_contaminants_report.peptide_filtered = par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->peptide_filtered;
-							temp_contaminants_report.v_peptide_associated_proteins = temp_v_multinomial_frequency;
-							v_contaminants_report_map.insert(std::make_pair(temp_contaminants_report.peptide_theoretical_mz, temp_contaminants_report));
-						}
+			if ((!temp_v_multinomial_frequency.empty()) && (temp_v_multinomial_frequency.begin()->multinomial_frequency > 0.2)) {
+				//if ((temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "UNIPROT")
+					//|| (temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "CONT")) {
+				for (const auto& itr_peptide_data : par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_data) {
+					temp_contaminants_report.peptide_theoretical_mz = ((itr_peptide_data->peptide_m + itr_peptide_data->peptide_z) / itr_peptide_data->peptide_z);
+					temp_contaminants_report.peptide_observed_mz = itr_peptide_data->peptide_mz;
+					temp_contaminants_report.peptide_z = itr_peptide_data->peptide_z;
+					temp_contaminants_report.peptide_rt = itr_peptide_data->peptide_rt;
+					temp_contaminants_report.peptide_withmod = itr_peptide_data->peptide_withmod;
+					if (temp_v_multinomial_frequency.begin()->p_protein_data->protein_type == "UNIPROT") {
+						temp_contaminants_report.peptide_associated_protein_type = "CONT";
 					}
+					else {
+						temp_contaminants_report.peptide_associated_protein_type = temp_v_multinomial_frequency.begin()->p_protein_data->protein_type;
+					}
+					temp_contaminants_report.peptide_filtered = par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->peptide_filtered;
+					temp_contaminants_report.v_peptide_associated_proteins = temp_v_multinomial_frequency;
+					v_contaminants_report_map.insert(std::make_pair(temp_contaminants_report.peptide_theoretical_mz, temp_contaminants_report));
+				}
+				//}
+			}
+			else {
+				for (const auto& itr_peptide_data : par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->v_peptide_data) {
+					temp_contaminants_report.peptide_theoretical_mz = ((itr_peptide_data->peptide_m + itr_peptide_data->peptide_z) / itr_peptide_data->peptide_z);
+					temp_contaminants_report.peptide_observed_mz = itr_peptide_data->peptide_mz;
+					temp_contaminants_report.peptide_z = itr_peptide_data->peptide_z;
+					temp_contaminants_report.peptide_rt = itr_peptide_data->peptide_rt;
+					temp_contaminants_report.peptide_withmod = itr_peptide_data->peptide_withmod;
+					temp_contaminants_report.peptide_associated_protein_type = "NA";
+					temp_contaminants_report.peptide_filtered = par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->peptide_filtered;
+					temp_contaminants_report.v_peptide_associated_proteins = temp_v_multinomial_frequency;
+					v_contaminants_report_map.insert(std::make_pair(temp_contaminants_report.peptide_theoretical_mz, temp_contaminants_report));
 				}
 			}
 		}
@@ -315,7 +333,8 @@ namespace fpf_report {
 		fout_multinomial_element << "peptide_rt,";
 		fout_multinomial_element << "peptide_withmod,";
 		fout_multinomial_element << "peptide_filtered,";
-		fout_multinomial_element << "protein_name,";
+		fout_multinomial_element << "associated_protein_type,";
+		fout_multinomial_element << "associated_protein_name,";
 		fout_multinomial_element << "\n";
 		for (const auto& itr_contaminants_report_map : v_contaminants_report_map) {
 			fout_multinomial_element << std::fixed << std::setprecision(3) << itr_contaminants_report_map.second.peptide_theoretical_mz << ","; 
@@ -324,10 +343,11 @@ namespace fpf_report {
 			fout_multinomial_element << std::fixed << std::setprecision(2) << itr_contaminants_report_map.second.peptide_rt << ",";
 			fout_multinomial_element << itr_contaminants_report_map.second.peptide_withmod << ",";
 			fout_multinomial_element << itr_contaminants_report_map.second.peptide_filtered << ",";
+			fout_multinomial_element << itr_contaminants_report_map.second.peptide_associated_protein_type << ",";
 			for (const auto& itr_peptide_associated_proteins : itr_contaminants_report_map.second.v_peptide_associated_proteins) {
 				if (itr_peptide_associated_proteins.multinomial_frequency > 0.2) {
 					fout_multinomial_element << itr_peptide_associated_proteins.p_protein_data->protein_name << " (";
-					fout_multinomial_element << itr_peptide_associated_proteins.multinomial_frequency << "), ";
+					fout_multinomial_element << itr_peptide_associated_proteins.multinomial_frequency << ")|";
 				}
 			}
 			fout_multinomial_element << ",\n";
