@@ -153,7 +153,7 @@ namespace fpf_data_analysis {
 		double temp_protein_analysis_score_mean{};
 		size_t count_IG_proteins{};
 		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if ((itr_v_protein_analysis.p_protein_data->protein_type == "IG") && (itr_v_protein_analysis.protein_score >= IgFamily::PROTEIN_SCORE_THRESHOLD)) {
+			if ((itr_v_protein_analysis.p_protein_data->protein_type == "IGV") && (itr_v_protein_analysis.protein_score >= IgFamily::PROTEIN_SCORE_THRESHOLD)) {
 				++count_IG_proteins;
 				temp_protein_analysis_score_mean += itr_v_protein_analysis.protein_score;
 			}
@@ -299,7 +299,7 @@ namespace fpf_data_analysis {
 	void select_protein_analysis_by_score(sample_analysis& par_sample_analysis) {
 		vector<protein_analysis> temp_v_protein_analysis_selected_by_polymorphism{};
 		for (const auto itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
+			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV") {
 				string protein_name_polymorphism_reduced{};
 				bool switch_protein_name_polymorphism = bool();
 				for (const auto& itr_protein_name : itr_v_protein_analysis.p_protein_data->protein_name) {
@@ -334,12 +334,12 @@ namespace fpf_data_analysis {
 	void determine_protein_score_density(sample_analysis& par_sample_analysis) {
 		double temp_protein_score_sum{};
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
+			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV") {
 				temp_protein_score_sum += itr_v_protein_analysis.protein_score;
 			}
 		}
 		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if (itr_v_protein_analysis.p_protein_data->protein_type == "IG") {
+			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV") {
 				itr_v_protein_analysis.protein_density = itr_v_protein_analysis.protein_score / temp_protein_score_sum;
 			}
 		}

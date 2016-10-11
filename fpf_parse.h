@@ -661,8 +661,8 @@ namespace fpf_parse {
 						parse_FASTA.clear();
 					}
 					if (count_FASTA_delimit % count_FASTA_delimit_width == 2) {
-						if (parse_FASTA == "IMGT") {
-							temp_FASTA_data.set_FASTA_type("IG");
+						if (parse_FASTA == "IMGT_V") {
+							temp_FASTA_data.set_FASTA_type("IGV");
 						}
 						if (parse_FASTA == "CONT") {
 							temp_FASTA_data.set_FASTA_type("CONT");
@@ -671,7 +671,7 @@ namespace fpf_parse {
 							temp_FASTA_data.set_FASTA_type("UNIPROT");
 						}
 						if (parse_FASTA == "mAB") {
-							temp_FASTA_data.set_FASTA_type("IG");
+							temp_FASTA_data.set_FASTA_type("IGV");
 						}
 						parse_FASTA.clear();
 					}
@@ -693,7 +693,7 @@ namespace fpf_parse {
 					temp_FASTA_data.set_FASTA_protein(parse_FASTA);
 					parse_FASTA.clear();
 					if (!((temp_FASTA_data.return_FASTA_type() == "UNIPROT")
-						&& ((temp_FASTA_data.return_FASTA_name().find("Ig") != std::string::npos)
+						&& ((temp_FASTA_data.return_FASTA_name().find("IGV") != std::string::npos)
 							|| (temp_FASTA_data.return_FASTA_name().find("Immunoglobulin") != std::string::npos)
 							|| (temp_FASTA_data.return_FASTA_name().find("HLA") != std::string::npos)))) {
 						temp_v_FASTA_data.push_back(temp_FASTA_data);

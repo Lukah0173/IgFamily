@@ -126,6 +126,7 @@ namespace fpf_data {
 		double score_density;
 		string alignment;
 		double alignment_coverage;
+		size_t alignment_coverage_delta;
 	};
 
 	struct proteinconstruct_aminoacid {
