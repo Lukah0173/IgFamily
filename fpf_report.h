@@ -504,6 +504,9 @@ namespace fpf_report {
 							<body>\n\
 							<p><font face=\"Lucida Console\" size=\"3\" color=\"black\">";
 		fout_html_report << "<style> \
+						.menu{ \
+						white-space: nowrap; \
+						} \
 						.mismatch { \
 						color: black; \
 						border-bottom: 2px solid black; \
@@ -523,7 +526,7 @@ namespace fpf_report {
 		}
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if ((par_alloutput) || (itr_v_protein_analysis.p_protein_data->protein_type == "IGV")) {
-				if ((itr_v_protein_analysis.protein_score >= IgFamily::PROTEIN_SCORE_THRESHOLD)
+				if (((itr_v_protein_analysis.protein_score / IgFamily::REPORT_PROTEIN_SCORE_OUTPUT_SCALE) >= IgFamily::REPORT_PROTEIN_SCORE_THRESHOLD)
 				&& (itr_v_protein_analysis.protein_density >= IgFamily::REPORT_PROTEIN_DENSITY_THRESHOLD)) {
 					fout_html_report << "\n\n\n<br><br><br> " << itr_v_protein_analysis.p_protein_data->protein_name;
 					fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << (itr_v_protein_analysis.protein_score / IgFamily::REPORT_PROTEIN_SCORE_OUTPUT_SCALE);
