@@ -127,6 +127,7 @@ namespace fpf_data {
 		string alignment;
 		double alignment_coverage;
 		size_t alignment_coverage_delta;
+		vector<homology_data*> v_homology_data_aggregated_by_homology_distribution;
 	};
 
 	struct proteinconstruct_aminoacid {

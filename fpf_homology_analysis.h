@@ -338,9 +338,9 @@ namespace fpf_homology_analysis {
 	void determine_homology_data_parameters(sample_analysis& par_sample_analysis, bool par_conjugated) {
 		for (auto& itr_homology_data : par_sample_analysis.v_homology_data) {
 			double temp_score_transform_conjugated_sum{};
-			for (const auto& itr_v_homology_data_2 : par_sample_analysis.v_homology_data) {
-				if (itr_homology_data.key_blastp_query == itr_v_homology_data_2.key_blastp_query) {
-					temp_score_transform_conjugated_sum += itr_v_homology_data_2.blastp_homology_transformed_conjugated;
+			for (auto& itr_homology_data_2 : par_sample_analysis.v_homology_data) {
+				if (itr_homology_data.key_blastp_query == itr_homology_data_2.key_blastp_query) {
+					temp_score_transform_conjugated_sum += itr_homology_data_2.blastp_homology_transformed_conjugated;
 				}
 			}
 			itr_homology_data.blastp_homology_density_conjugated = (itr_homology_data.blastp_homology_transformed_conjugated / temp_score_transform_conjugated_sum);
@@ -348,6 +348,34 @@ namespace fpf_homology_analysis {
 				itr_homology_data.blastp_homology_density = itr_homology_data.blastp_homology_density_conjugated;
 			}
 			itr_homology_data.score = (std::pow(itr_homology_data.blastp_homology_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT) * itr_homology_data.blastp_homology_transformed_conjugated * itr_homology_data.denovo_replicate_count);
+		}
+	}
+
+	inline bool predicate_v_homology_data_by_homology_distribution(const homology_data* i, const homology_data* j) {
+		return ((i->blastp_homology_density_conjugated) > (j->blastp_homology_density_conjugated));
+	}
+
+	void sort_v_homology_data_by_homology_distribution(vector<homology_data*>& par_v_homology_data) {
+		std::sort(par_v_homology_data.begin(), par_v_homology_data.end(), predicate_v_homology_data_by_homology_distribution);
+	}
+
+	void aggregate_v_homology_data_by_homology_distribution(sample_analysis& par_sample_analysis) {
+		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			for (auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
+				itr_homology_data.v_homology_data_aggregated_by_homology_distribution.push_back(&itr_homology_data);
+				for (auto& itr_protein_analysis_2 : par_sample_analysis.v_protein_analysis) {
+					for (auto& itr_homology_data_2 : itr_protein_analysis_2.v_homology_data_combined_by_protein) {
+						if (itr_protein_analysis_2.p_protein_data->protein_name != itr_protein_analysis.p_protein_data->protein_name) {
+							if (itr_homology_data.key_blastp_query == itr_homology_data_2.key_blastp_query) {
+								if (itr_homology_data_2.blastp_homology_density_conjugated >= IgFamily::REPORT_V_HOMOLOGY_DATA_AGGREGATED_BY_PROTEIN_COJUGATED_DENSITY_THRESHOLD) {
+									itr_homology_data.v_homology_data_aggregated_by_homology_distribution.push_back(&itr_homology_data_2);
+								}
+							}
+						}
+					}
+				}
+				sort_v_homology_data_by_homology_distribution(itr_homology_data.v_homology_data_aggregated_by_homology_distribution);
+			}			
 		}
 	}
 }

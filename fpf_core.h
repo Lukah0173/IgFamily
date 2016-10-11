@@ -167,6 +167,9 @@ namespace fpf_core {
 		}
 		else {
 			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES, par_refined);
+			if (par_refined) {
+				fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, false);
+			}
 			fpf_data_analysis::determine_protein_score_density(par_sample_analysis);
 			fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
 			fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
@@ -209,6 +212,7 @@ namespace fpf_core {
 		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0.99, "uniquepeptides_");
 		std::cout << "\n ...outputting html report for " << par_filesystem.filename;
 		std::cout << "\n";
+		fpf_homology_analysis::aggregate_v_homology_data_by_homology_distribution(par_sample_analysis);
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, true);
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true);
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, false);
