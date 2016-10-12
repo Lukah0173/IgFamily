@@ -1,0 +1,2 @@
+root_directory\Thilini_Mendis\20160330\TM16_B01_AP_IgG_H_against_ZNT8R\,
+root_directory\Thilini_Mendis\20160330\TM16_B02_AP_IgG_L_against_ZNT8R\,

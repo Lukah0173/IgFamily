@@ -403,19 +403,13 @@ namespace fpf_report {
 	}
 
 	void fout_multinomial_protein_score(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		std::string output_multinomial_comparison = par_filesystem.directory + par_filesystem.filename + "_protein_normalised_score_" + par_sample_analysis.peptide_assignment_method + ".csv";
-		std::ofstream fout_multinomial_protein_density;
-		fout_multinomial_protein_density.open(output_multinomial_comparison);
-		double protein_analysis_score_max{};
-		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if ((itr_v_protein_analysis.p_protein_data->protein_type == "IGV") && (itr_v_protein_analysis.protein_score > protein_analysis_score_max)) {
-				protein_analysis_score_max = itr_v_protein_analysis.protein_score;
-			}
-		}
+		std::string output_multinomial_comparison = par_filesystem.directory + par_filesystem.filename + "_protein_score_" + par_sample_analysis.peptide_assignment_method + ".csv";
+		std::ofstream fout_multinomial_protein_score;
+		fout_multinomial_protein_score.open(output_multinomial_comparison);
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV") {
-				fout_multinomial_protein_density << itr_v_protein_analysis.p_protein_data->protein_name << ",";
-				fout_multinomial_protein_density << (itr_v_protein_analysis.protein_score / protein_analysis_score_max) << "\n";
+				fout_multinomial_protein_score << itr_v_protein_analysis.p_protein_data->protein_name << ",";
+				fout_multinomial_protein_score << (itr_v_protein_analysis.protein_score / IgFamily::REPORT_PROTEIN_SCORE_OUTPUT_SCALE) << "\n";
 			}
 		}
 	}
@@ -447,8 +441,8 @@ namespace fpf_report {
 				if (itr_v_homology_data_combined_by_protein.blastp_homology_density > par_parameter_density_threshold) {
 					for (auto i = 0; i < itr_v_homology_data_combined_by_protein.p_peptide_analysis->v_peptide_data.size(); ++i) {
 						score_model0 += double{ 1 };
-						score_model1 += std::pow(itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT); // 1.65
-						score_model2 += std::pow(itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated, double(2.5)); // 2.5
+						score_model1 += std::pow(itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT);
+						score_model2 += std::pow(itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated, double(2.5));
 					}
 				}
 			}

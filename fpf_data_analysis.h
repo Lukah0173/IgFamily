@@ -197,7 +197,7 @@ namespace fpf_data_analysis {
 			}
 			fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, true);
 			IgFamily::PROTEIN_SCORE_THRESHOLD = (par_sample_analysis.protein_analysis_score_mean / IgFamily::HOMOLOGY_SCORE_THRESHOLD_FACTOR);
-			IgFamily::LOGISTIC_CONJUGATION_RANGE = (IgFamily::LOGISTIC_CONJUGATION_RANGE - (IgFamily::LOGISTIC_ITERATION_FACTOR * std::pow(1.12, (count_selected_genefamilies - par_select_N_many_gene_families))));
+			IgFamily::LOGISTIC_CONJUGATION_RANGE = (IgFamily::LOGISTIC_CONJUGATION_RANGE - (IgFamily::LOGISTIC_ITERATION_FACTOR * std::pow(1.10, (count_selected_genefamilies - par_select_N_many_gene_families))));
 			IgFamily::LOGISTIC_CONJUGATION_MIDPOINT = ((double(1) - IgFamily::LOGISTIC_CONJUGATION_RANGE) * double(2));
 			create_v_protein_analysis(par_sample_analysis, count_iterations, par_refined);
 			count_selected_genefamilies = {};

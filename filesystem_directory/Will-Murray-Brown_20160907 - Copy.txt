@@ -1,5 +1,0 @@
-root_directory\Will_Murray-Brown\20160907\WM16_A01_HAGG_isolated_RF_MJ1_+_WM16_A01a_HAGG_isolated_RF_MJ1\,
-root_directory\Will_Murray-Brown\20160907\WM16_A02_HAGG_isolated_RF_MJ2_+_WM16_A02a_HAGG_isolated_RF_MJ2\,
-root_directory\Will_Murray-Brown\20160907\WM16_A03_HAGG_isolated_RF_MJ3_+_WM16_A03a_HAGG_isolated_RF_MJ3\,
-root_directory\Will_Murray-Brown\20160907\WM16_A04_HAGG_isolated_RF_MJ4_+_WM16_A04a_HAGG_isolated_RF_MJ4\,
-root_directory\Will_Murray-Brown\20160907\WM16_A05_HAGG_isolated_RF_MJ5_+_WM16_A05a_HAGG_isolated_RF_MJ5\,

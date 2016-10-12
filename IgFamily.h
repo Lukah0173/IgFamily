@@ -17,7 +17,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.12.0c" };
+	const string version{ "v0.12.0d" };
 
 	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
@@ -27,7 +27,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA{ 1 };
 	const bool BLASTP_BY_SELECTED_PEPTIDE{ 1 };
 
-	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Penny-Adamson.txt" };
+	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Thilini-Mendis.txt" };
 	const string DEFAULT_IGFAMILY_DIRECTORY{ "" };
 	const string DEFAULT_FASTA_DIRECTORY{ DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\" };
 	const string DEFAULT_FASTA_MODULE_DIRECTORY{ DEFAULT_FASTA_DIRECTORY + "FASTA_modules\\" };
@@ -68,7 +68,6 @@ namespace IgFamily {
 	double LOGISTIC_CONJUGATION_RANGE{ DEFAULT_LOGISTIC_CONJUGATION_RANGE };
 	double LOGISTIC_CONJUGATION_MIDPOINT{ DEFAULT_LOGISTIC_CONJUGATION_MIDPOINT };
 	const double LOGISTIC_ITERATION_FACTOR{ DEFAULT_LOGISTIC_CONJUGATION_RANGE / double(100000) };
-	//const double LOGISTIC_ITERATION_FACTOR{ DEFAULT_LOGISTIC_CONJUGATION_RANGE / double(2000) };
 
 	const double REPORT_PROTEIN_SCORE_OUTPUT_SCALE{ std::pow(50, PARAMETER_HOMOLOGY_WEIGHT) };
 	const double REPORT_PROTEIN_SCORE_THRESHOLD { 1 };
