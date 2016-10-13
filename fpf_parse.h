@@ -694,7 +694,8 @@ namespace fpf_parse {
 					parse_FASTA.clear();
 					if (!((temp_FASTA_data.return_FASTA_type() == "UNIPROT")
 						&& ((temp_FASTA_data.return_FASTA_name().find("Ig") != std::string::npos)
-							|| (temp_FASTA_data.return_FASTA_name().find("Immunoglobulin") != std::string::npos)
+							|| (temp_FASTA_data.return_FASTA_name().find("Immuno") != std::string::npos)
+							|| (temp_FASTA_data.return_FASTA_name().find("immuno") != std::string::npos)
 							|| (temp_FASTA_data.return_FASTA_name().find("HLA") != std::string::npos)))) {
 						temp_v_FASTA_data.push_back(temp_FASTA_data);
 					}

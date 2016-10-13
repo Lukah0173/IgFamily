@@ -112,21 +112,27 @@ namespace fpf_report {
 		std::string output_v_protein_analysis = par_filesystem.directory + par_filesystem.filename + "_protein_analysis_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_v_protein_analysis;
 		fout_v_protein_analysis.open(output_v_protein_analysis);
-		fout_v_protein_analysis << "key,protein_name,protein_protein,protein_score,proteinconstruct_sequencecoverage,\n";
-		for (const auto& itr_v_protein_analysis_map : par_sample_analysis.v_protein_analysis_map) {
-			fout_v_protein_analysis << itr_v_protein_analysis_map.second->key_protein_analysis << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_name << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_class << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_type << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_species << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis_map.second->p_protein_data->protein_protein << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis_map.second->protein_score << ",";
-			fout_v_protein_analysis << itr_v_protein_analysis_map.second->proteinconstruct_sequencecoverage << ",";
-			for (const auto& itr_v_proteinconstruct_from_denovos : itr_v_protein_analysis_map.second->proteinconstruct) {
-				fout_v_protein_analysis << itr_v_proteinconstruct_from_denovos.aminoacid;
-				fout_v_protein_analysis << "[" << itr_v_proteinconstruct_from_denovos.aminoacid_localconfidence << "]";
+		fout_v_protein_analysis << "key,protein_name,protein_score,protein_effective_spectral_count,proteinconstruct_sequencecoverage,protein_type,blastp_query,denovo_replicate_count,score_density,blastp_homology,blastp_homology_density,blastp_homology_density_conjugated,blastp_mismatch_count,alignment_coverage_delta,\n";
+		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
+				if (itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated >= IgFamily::REPORT_QUERY_PARAMETER_DENSITY_CONJUGATED_THRESHOLD) {
+					fout_v_protein_analysis << itr_v_protein_analysis.key_protein_analysis << ",";
+					fout_v_protein_analysis << itr_v_protein_analysis.p_protein_data->protein_name << ",";
+					fout_v_protein_analysis << itr_v_protein_analysis.protein_score << ",";
+					fout_v_protein_analysis << itr_v_protein_analysis.protein_effective_spectral_count << ",";
+					fout_v_protein_analysis << itr_v_protein_analysis.proteinconstruct_sequencecoverage << ",";
+					fout_v_protein_analysis << itr_v_protein_analysis.p_protein_data->protein_type << ",";
+					fout_v_protein_analysis << itr_v_homology_data_combined_by_protein.blastp_query << ",";
+					fout_v_protein_analysis << itr_v_homology_data_combined_by_protein.denovo_replicate_count << ",";
+					fout_v_protein_analysis << itr_v_homology_data_combined_by_protein.score_density << ",";
+					fout_v_protein_analysis << itr_v_homology_data_combined_by_protein.blastp_homology << ",";
+					fout_v_protein_analysis << itr_v_homology_data_combined_by_protein.blastp_homology_density << ",";
+					fout_v_protein_analysis << itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated << ",";
+					fout_v_protein_analysis << itr_v_homology_data_combined_by_protein.blastp_mismatch_count << ",";
+					fout_v_protein_analysis << itr_v_homology_data_combined_by_protein.alignment_coverage_delta << ",";
+					fout_v_protein_analysis << ",\n";
+				}
 			}
-			fout_v_protein_analysis << ",\n";
 		}
 	}
 
@@ -472,19 +478,19 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_html_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_alloutput, bool par_summary) {
+	void fout_html_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_alloutput, bool par_summary, const double& par_protein_score_threshold, const string& par_filename_tag) {
 		std::string output_html_report{};
 		if (par_alloutput && !par_summary) {
-			output_html_report = par_filesystem.directory + par_filesystem.filename + "_report_" + par_sample_analysis.peptide_assignment_method + ".html";
+			output_html_report = par_filesystem.directory + par_filesystem.filename + "_" + par_filename_tag + "_" + par_sample_analysis.peptide_assignment_method + ".html";
 		}
 		if (!par_alloutput && !par_summary) {
-			output_html_report = par_filesystem.directory + par_filesystem.filename + "_report_IG_" + par_sample_analysis.peptide_assignment_method + ".html";
+			output_html_report = par_filesystem.directory + par_filesystem.filename + "_" + par_filename_tag + "_" + par_sample_analysis.peptide_assignment_method + ".html";
 		}
 		if (par_alloutput && par_summary) {
-			output_html_report = par_filesystem.directory + par_filesystem.filename + "_report_summary_" + par_sample_analysis.peptide_assignment_method + ".html";
+			output_html_report = par_filesystem.directory + par_filesystem.filename + "_" + par_filename_tag + "_" + par_sample_analysis.peptide_assignment_method + ".html";
 		}
 		if (!par_alloutput && par_summary) {
-			output_html_report = par_filesystem.directory + par_filesystem.filename + "_report_IG_summary_" + par_sample_analysis.peptide_assignment_method + ".html";
+			output_html_report = par_filesystem.directory + par_filesystem.filename + "_" + par_filename_tag + "_" + par_sample_analysis.peptide_assignment_method + ".html";
 		}
 		std::ofstream fout_html_report;
 		fout_html_report.open(output_html_report);
@@ -520,7 +526,7 @@ namespace fpf_report {
 		}
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if ((par_alloutput) || (itr_v_protein_analysis.p_protein_data->protein_type == "IGV")) {
-				if (((itr_v_protein_analysis.protein_score / IgFamily::REPORT_PROTEIN_SCORE_OUTPUT_SCALE) >= IgFamily::REPORT_PROTEIN_SCORE_THRESHOLD)
+				if (((itr_v_protein_analysis.protein_score / IgFamily::REPORT_PROTEIN_SCORE_OUTPUT_SCALE) >= par_protein_score_threshold)
 				&& (itr_v_protein_analysis.protein_density >= IgFamily::REPORT_PROTEIN_DENSITY_THRESHOLD)) {
 					fout_html_report << "\n\n\n<br><br><br> " << itr_v_protein_analysis.p_protein_data->protein_name;
 					fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << (itr_v_protein_analysis.protein_score / IgFamily::REPORT_PROTEIN_SCORE_OUTPUT_SCALE);

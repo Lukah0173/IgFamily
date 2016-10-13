@@ -213,10 +213,10 @@ namespace fpf_core {
 		std::cout << "\n ...outputting html report for " << par_filesystem.filename;
 		std::cout << "\n";
 		fpf_homology_analysis::aggregate_v_homology_data_by_homology_distribution(par_sample_analysis);
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, true);
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true);
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, false);
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false);
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, true, 0, "report_summary");
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, false, 0, "report");
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true, REPORT_PROTEIN_SCORE_THRESHOLD, "report_IG_summary");
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false, REPORT_PROTEIN_SCORE_THRESHOLD, "report_IG");
 		std::cout << "\n";
 		fpf_filesystem::fout_filesystem(par_filesystem);
 		IgFamily::PROTEIN_SCORE_THRESHOLD = IgFamily::DEFAULT_PROTEIN_SCORE_THRESHOLD;
