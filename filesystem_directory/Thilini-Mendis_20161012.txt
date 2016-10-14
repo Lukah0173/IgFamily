@@ -1,0 +1,2 @@
+root_directory\Thilini_Mendis\20161012\TM16_G01_AP_IgG_H_CD_Control_against_ZnT8R\,
+root_directory\Thilini_Mendis\20161012\TM16_G02_AP_IgG_L_CD_Control_against_ZnT8R\,

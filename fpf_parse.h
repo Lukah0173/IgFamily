@@ -34,8 +34,8 @@ namespace fpf_parse {
 
 	struct csv_data {
 	public:
-		string csv_scan_ID;
 		string csv_sourcefile;
+		string csv_scan_ID;
 		string csv_mz;
 		string csv_m;
 		string csv_rt;
@@ -122,17 +122,7 @@ namespace fpf_parse {
 		bool csv_header_parsed{};
 		while (fin_input_csv.get(csv_read)) {
 			if (csv_header_parsed) {
-				if (csv_read == ',') {
-					if (csv_count_delimit % csv_count_delimit_width == 0) {
-						temp_v_csv_data.push_back(temp_csv_data);
-						temp_csv_data = csv_data();
-					}
-					++csv_count_delimit;
-				}
 				if (csv_read != ',') {
-					if (csv_count_delimit % csv_count_delimit_width == 1) {
-						temp_csv_data.csv_scan_ID += csv_read;
-					}
 					if (csv_count_delimit % csv_count_delimit_width == 3) {
 						if (csv_read == '(') {
 							csv_peptide_parse_condition = 2;
@@ -154,12 +144,42 @@ namespace fpf_parse {
 							csv_peptide_parse_condition = 1;
 						}
 					}
-					if ((csv_count_delimit % csv_count_delimit_width == 5) && (csv_read != ',')) {
+					if (csv_count_delimit % csv_count_delimit_width == 5) {
 						temp_csv_data.csv_IgP += csv_read;
 					}
-					if ((csv_count_delimit % csv_count_delimit_width == 14) && (csv_read != ',')) {
+					if (csv_count_delimit % csv_count_delimit_width == 6) {
+						temp_csv_data.csv_m += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 9) {
+						temp_csv_data.csv_mz += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 10) {
+						temp_csv_data.csv_z += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 11) {
+						temp_csv_data.csv_rt += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 12) {
+						temp_csv_data.csv_scan_ID += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 13) {
+						temp_csv_data.csv_sourcefile += csv_read;
+					}
+					if (csv_count_delimit % csv_count_delimit_width == 14) {
 						temp_csv_data.csv_spectralcount += csv_read;
 					}
+				}
+				if (csv_read == ',') {
+					++csv_count_delimit;
+				}
+				if (csv_read == '\n') {
+					for (const auto& itr_csv_peptide : temp_csv_data.csv_peptide) {
+						temp_csv_data.v_csv_denovo_localconfidence.push_back(100);
+					}
+					for (auto i = 0; i < std::stoi(temp_csv_data.csv_spectralcount); ++i) {
+						temp_v_csv_data.push_back(temp_csv_data);
+					}
+					temp_csv_data = csv_data();
 				}
 			}
 			if (!csv_header_parsed) {

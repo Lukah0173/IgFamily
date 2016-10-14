@@ -115,7 +115,7 @@ namespace fpf_report {
 		fout_v_protein_analysis << "key,protein_name,protein_score,protein_effective_spectral_count,proteinconstruct_sequencecoverage,protein_type,blastp_query,denovo_replicate_count,score_density,blastp_homology,blastp_homology_density,blastp_homology_density_conjugated,blastp_mismatch_count,alignment_coverage_delta,\n";
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
-				if (itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated >= IgFamily::REPORT_QUERY_PARAMETER_DENSITY_CONJUGATED_THRESHOLD) {
+				if (itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated >= 0.001) {
 					fout_v_protein_analysis << itr_v_protein_analysis.key_protein_analysis << ",";
 					fout_v_protein_analysis << itr_v_protein_analysis.p_protein_data->protein_name << ",";
 					fout_v_protein_analysis << itr_v_protein_analysis.protein_score << ",";

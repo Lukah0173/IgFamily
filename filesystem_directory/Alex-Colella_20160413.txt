@@ -1,0 +1,3 @@
+root_directory\Alex_Colella\20160413\AC16_C01_Ro60_PA_P1_75kDa\,
+root_directory\Alex_Colella\20160413\AC16_C05_Ro_PA_P2_75kDa\,
+root_directory\Alex_Colella\20160413\AC16_C08_La_PA_P2_75kDa\,

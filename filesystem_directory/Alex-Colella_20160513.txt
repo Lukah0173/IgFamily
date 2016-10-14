@@ -1,0 +1,3 @@
+root_directory\Alex_Colella\20160513\AC16_F03_NS_RTE_IgM\,
+root_directory\Alex_Colella\20160513\AC16_F09_RB_RTE_IgM\,
+root_directory\Alex_Colella\20160513\AC16_F12_JR_K562_IgM\,
