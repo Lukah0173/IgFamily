@@ -188,7 +188,8 @@ namespace fpf_homology_analysis {
 				if (homology_data_read == '\n') {
 					temp_homology_data.blastp_homology = std::stod(temp_parse_blastp);
 					temp_homology_data.alignment_coverage_delta = temp_homology_data.blastp_query.length() - temp_homology_data.blastp_query_aligned.length();
-					if (temp_homology_data.alignment_coverage >= IgFamily::HOMOLOGY_QUERY_ALIGNMENT_COVERAGE_THRESHOLD) {
+					if (temp_homology_data.alignment_coverage >= IgFamily::HOMOLOGY_QUERY_ALIGNMENT_COVERAGE_THRESHOLD)
+					{
 						temp_v_homology_data.push_back(temp_homology_data);
 					}
 					temp_parse_blastp.clear();
@@ -203,14 +204,17 @@ namespace fpf_homology_analysis {
 		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
 			for (const auto& itr_protein_protein : itr_v_homology_data.p_protein_data->protein_protein) {
 				if (index_match == itr_v_homology_data.blastp_subject_alignment_index) {
-					if (temp_query_alignment.length() >= itr_v_homology_data.blastp_query_alignment_index) {
+					if (temp_query_alignment.length() >= itr_v_homology_data.blastp_query_alignment_index) 
+					{
 						temp_query_alignment.resize(temp_query_alignment.length() - itr_v_homology_data.blastp_query_alignment_index + 1);
 					}
-					else {
+					else 
+					{
 						temp_query_alignment.resize(0);
 					}
 					temp_query_alignment += itr_v_homology_data.blastp_query;
-					for (size_t i = 0; i < (itr_v_homology_data.blastp_query_alignment_index - 1); ++i) {
+					for (size_t i = 0; i < (itr_v_homology_data.blastp_query_alignment_index - 1); ++i) 
+					{
 						temp_query_alignment += ".";
 					}
 				}
@@ -347,7 +351,7 @@ namespace fpf_homology_analysis {
 			if (!par_conjugated) {
 				itr_homology_data.blastp_homology_density = itr_homology_data.blastp_homology_density_conjugated;
 			}
-			itr_homology_data.score = (std::pow(itr_homology_data.blastp_homology_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT) * itr_homology_data.blastp_homology_transformed_conjugated * itr_homology_data.denovo_replicate_count);
+			itr_homology_data.score = (std::pow(itr_homology_data.blastp_homology_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT) * itr_homology_data.denovo_replicate_count);
 		}
 	}
 

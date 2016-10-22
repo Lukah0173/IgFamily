@@ -419,7 +419,7 @@ namespace fpf_report {
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV") {
 				fout_multinomial_protein_score << itr_v_protein_analysis.p_protein_data->protein_name << ",";
-				fout_multinomial_protein_score << (itr_v_protein_analysis.protein_score / IgFamily::REPORT_PROTEIN_SCORE_OUTPUT_SCALE) << "\n";
+				fout_multinomial_protein_score << itr_v_protein_analysis.protein_score << "\n";
 			}
 		}
 	}
@@ -530,10 +530,10 @@ namespace fpf_report {
 		}
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if ((par_alloutput) || (itr_v_protein_analysis.p_protein_data->protein_type == "IGV")) {
-				if (((itr_v_protein_analysis.protein_score / IgFamily::REPORT_PROTEIN_SCORE_OUTPUT_SCALE) >= par_protein_score_threshold)
+				if ((itr_v_protein_analysis.protein_score >= par_protein_score_threshold)
 				&& (itr_v_protein_analysis.protein_density >= IgFamily::REPORT_PROTEIN_DENSITY_THRESHOLD)) {
 					fout_html_report << "\n\n\n<br><br><br> " << itr_v_protein_analysis.p_protein_data->protein_name;
-					fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << (itr_v_protein_analysis.protein_score / IgFamily::REPORT_PROTEIN_SCORE_OUTPUT_SCALE);
+					fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_v_protein_analysis.protein_score;
 					fout_html_report << "&nbsp&nbsp&nbspDensity: " << std::fixed << std::setprecision(3) << itr_v_protein_analysis.protein_density;
 					fout_html_report << "&nbsp&nbsp&nbspEffective SC: " << std::fixed << std::setprecision(2) << itr_v_protein_analysis.protein_effective_spectral_count;
 					fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_v_protein_analysis.proteinconstruct_sequencecoverage << "%";
