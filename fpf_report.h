@@ -152,6 +152,7 @@ namespace fpf_report {
 		fout_v_homology_data << "homology,";
 		fout_v_homology_data << "homology_transformed,";
 		fout_v_homology_data << "homology_transformed_conjugated,";
+		fout_v_homology_data << "homology_density,";
 		fout_v_homology_data << "homology_density_conjugated,";
 		fout_v_homology_data << "score,";
 		fout_v_homology_data << "\n";
@@ -167,6 +168,7 @@ namespace fpf_report {
 			fout_v_homology_data << itr_v_homology_data.blastp_homology << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_homology_transformed << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_homology_transformed_conjugated << ",";
+			fout_v_homology_data << itr_v_homology_data.blastp_homology_density << ",";
 			fout_v_homology_data << itr_v_homology_data.blastp_homology_density_conjugated << ",";
 			fout_v_homology_data << itr_v_homology_data.score << ",";
 			fout_v_homology_data << "\n";

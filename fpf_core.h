@@ -150,12 +150,6 @@ namespace fpf_core {
 		fpf_homology_analysis::create_blastp_query_alignment(par_sample_analysis);
 		fpf_homology_analysis::transform_homology_data(par_sample_analysis);
 		fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, false);
-		std::cout << " ...homology data structures assigned";
-		std::cout << "\n\n outputting homology summary for file ";
-		std::cout << par_filesystem.filename;;
-		std::cout << "...\n";
-		fpf_report::fout_v_homology_data(par_filesystem, par_sample_analysis);
-		std::cout << " ...homology file output\n";
 	}
 
 	void core_data_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_refined) {
@@ -163,7 +157,7 @@ namespace fpf_core {
 		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis, 0, par_refined);
 		std::cout << " ...proteins scored\n";
 		if (!par_refined) {
-			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN, par_refined);
+			//fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN, par_refined);
 		}
 		else {
 			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES, par_refined);
@@ -187,30 +181,45 @@ namespace fpf_core {
 
 	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n\n producing summary reports...\n";
-		std::cout << " ...outputting data reports for " << par_filesystem.filename;
+		std::cout << " ...outputting data reports for ";
+		std::cout << par_filesystem.filename;
 		std::cout << "\n";
 		fpf_report::fout_v_peptide_data(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_protein_data(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_peptide_analysis(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_protein_analysis(par_filesystem, par_sample_analysis);
-		std::cout << " ...outputting multinomial reports for " << par_filesystem.filename;
-		std::cout << "\n ...outputting multinomial data frame for " << par_filesystem.filename;
+		std::cout << " ...homology data structures assigned";
+		std::cout << "\n\n outputting homology summary for file ";
+		std::cout << par_filesystem.filename;;
+		std::cout << "...\n";
+		fpf_report::fout_v_homology_data(par_filesystem, par_sample_analysis);
+		std::cout << " ...homology file output\n";
+		std::cout << " ...outputting multinomial reports for ";
+		std::cout << par_filesystem.filename;
+		std::cout << "\n ...outputting multinomial data frame for ";
+		std::cout << par_filesystem.filename;
 		fpf_report::fout_multinomial(par_filesystem, par_sample_analysis);
-		std::cout << "\n ...outputting multinomial peptide list for " << par_filesystem.filename;
+		std::cout << "\n ...outputting multinomial peptide list for ";
+		std::cout << par_filesystem.filename;
 		fpf_report::fout_multinomial_element(par_filesystem, par_sample_analysis);
-		std::cout << "\n ...outputting filtered multinomial peptide list for " << par_filesystem.filename;
+		std::cout << "\n ...outputting filtered multinomial peptide list for ";
+		std::cout << par_filesystem.filename;
 		fpf_report::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
-		std::cout << "\n ...outputting contaminants report for " << par_filesystem.filename;
+		std::cout << "\n ...outputting contaminants report for ";
+		std::cout << par_filesystem.filename;
 		fpf_report::fout_multinomial_contaminants_report(par_filesystem, par_sample_analysis, "peptide_report");
-		std::cout << "\n ...outputting contaminants list for " << par_filesystem.filename;
+		std::cout << "\n ...outputting contaminants list for ";
+		std::cout << par_filesystem.filename;
 		fpf_report::fout_multinomial_contaminants_list(par_filesystem, par_sample_analysis);
-		std::cout << "\n ...outputting protein score comparison for " << par_filesystem.filename;
+		std::cout << "\n ...outputting protein score comparison for ";
+		std::cout << par_filesystem.filename;
 		fpf_report::fout_multinomial_protein_score(par_filesystem, par_sample_analysis);
 		fpf_report::fout_multinomial_protein_density(par_filesystem, par_sample_analysis);
 		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0, "allpeptides_");
 		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0.5, "0.5peptides_");
 		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0.99, "uniquepeptides_");
-		std::cout << "\n ...outputting html report for " << par_filesystem.filename;
+		std::cout << "\n ...outputting html report for ";
+		std::cout << par_filesystem.filename;
 		std::cout << "\n";
 		fpf_homology_analysis::aggregate_v_homology_data_by_homology_distribution(par_sample_analysis);
 		//fpf_report::fout_html_report(par_filesystem, par_sample_analysis, true, true, 0, "report_summary");

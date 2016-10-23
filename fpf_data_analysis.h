@@ -9,7 +9,9 @@
 #ifndef FPF_DATA_ANALYSIS
 #define	FPF_DATA_ANALYSIS
 
+#include <algorithm>
 #include <cstdlib>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <map>
@@ -122,7 +124,8 @@ namespace fpf_data_analysis {
 		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			for (auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) 
 			{
-				if (itr_homology_data.blastp_homology_density >= IgFamily::HOMOLOGY_DENSITY_THRESHOLD)
+				if ((itr_homology_data.blastp_homology_density >= IgFamily::HOMOLOGY_DENSITY_THRESHOLD)
+					&& (itr_homology_data.blastp_homology_density_conjugated >= IgFamily::HOMOLOGY_DENSITY_CONJUGATED_THRESHOLD))
 				{					
 					itr_protein_analysis.protein_score += itr_homology_data.score;
 					itr_protein_analysis.protein_effective_spectral_count += (itr_homology_data.blastp_homology_density_conjugated * itr_homology_data.denovo_replicate_count);
@@ -153,11 +156,14 @@ namespace fpf_data_analysis {
 		std::sort(par_v_homology_data.begin(), par_v_homology_data.end(), predicate_protein_analysis);
 	}
 
-	void determine_protein_analysis_score_mean(sample_analysis& par_sample_analysis) {
+	void determine_protein_analysis_score_mean(sample_analysis& par_sample_analysis)
+	{
 		double temp_protein_analysis_score_mean{};
 		size_t count_IG_proteins{};
-		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if ((itr_v_protein_analysis.p_protein_data->protein_type == "IGV") && (itr_v_protein_analysis.protein_score >= IgFamily::PROTEIN_SCORE_THRESHOLD)) {
+		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis)
+		{
+			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV")
+			{
 				++count_IG_proteins;
 				temp_protein_analysis_score_mean += itr_v_protein_analysis.protein_score;
 			}
@@ -166,22 +172,45 @@ namespace fpf_data_analysis {
 		par_sample_analysis.protein_analysis_score_mean = temp_protein_analysis_score_mean;
 	}
 
+	size_t determine_countClusterProportion(sample_analysis& par_sample_analysis, double par_ClusterProportion)
+	{
+		vector<double> GenefamiliesScores{};
+		double sum_GenefamilyScore{};
+		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis)
+		{
+			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV")
+			{
+				GenefamiliesScores.push_back(itr_v_protein_analysis.protein_score);
+				sum_GenefamilyScore += itr_v_protein_analysis.protein_score;
+			}
+		}
+		std::sort(GenefamiliesScores.begin(), GenefamiliesScores.end(), std::greater<double>());
+		double proportion_Cluster{};
+		size_t inefficient_countCluster{}; // ugh
+		for (const auto& itr_GenefamiliesScores : GenefamiliesScores)
+		{
+			proportion_Cluster += itr_GenefamiliesScores;
+			++inefficient_countCluster;
+			if ((proportion_Cluster / sum_GenefamilyScore) >= par_ClusterProportion)
+			{
+				return inefficient_countCluster;
+			}
+		}
+		return 0;
+	}
+
 	void train_homology_analysis_parameter_score(filesystem& par_filesystem, sample_analysis& par_sample_analysis, const size_t& par_select_N_many_gene_families, const bool& par_refined) {
 		std::cout << "\n training protein scores...\n\n";
 		size_t count_selected_genefamilies{};
 		size_t count_iterations{};
-		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score >= IgFamily::PROTEIN_SCORE_THRESHOLD)) {
-				++count_selected_genefamilies;
-			}
-		}
-		while (count_selected_genefamilies > par_select_N_many_gene_families) {
+		count_selected_genefamilies = determine_countClusterProportion(par_sample_analysis, IgFamily::CLUSTER_PROPORTION_THRESHOLD);
+		while ((count_selected_genefamilies > par_select_N_many_gene_families) && (count_iterations <= 5000)) {
 			determine_protein_analysis_score_mean(par_sample_analysis);
 			for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 				double score_conjugate{ std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean), IgFamily::LOGISTIC_CONJUGATION_FACTOR) };
 				for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
 					if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
-						itr_homology_analysis.blastp_homology_transformed_conjugated = std::pow(itr_homology_analysis.blastp_homology_transformed, score_conjugate);
+						itr_homology_analysis.blastp_homology_transformed_conjugated = (std::pow(itr_homology_analysis.blastp_homology_transformed, score_conjugate) * std::pow(itr_homology_analysis.blastp_homology_density, double(0.2)));
 					}
 				}
 				//if (itr_protein_analysis.p_protein_data->protein_type == "IGV") {
@@ -200,15 +229,10 @@ namespace fpf_data_analysis {
 				//}
 			}
 			fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, true);
-			IgFamily::PROTEIN_SCORE_THRESHOLD += (IgFamily::PROTEIN_SCORE_THRESHOLD_ITERATOR * count_selected_genefamilies);
 			IgFamily::LOGISTIC_CONJUGATION_FACTOR = (IgFamily::LOGISTIC_CONJUGATION_FACTOR + (IgFamily::LOGISTIC_ITERATION_FACTOR * std::pow(1.01, (count_selected_genefamilies - par_select_N_many_gene_families))));
 			create_v_protein_analysis(par_sample_analysis, count_iterations, par_refined);
 			count_selected_genefamilies = {};
-			for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-				if ((itr_v_protein_analysis.p_protein_data->protein_type == IgFamily::SELECT_TYPE_GENE_FAMILIES) && (itr_v_protein_analysis.protein_score > IgFamily::PROTEIN_SCORE_THRESHOLD)) {
-					++count_selected_genefamilies;
-				}
-			}
+			count_selected_genefamilies = determine_countClusterProportion(par_sample_analysis, IgFamily::CLUSTER_PROPORTION_THRESHOLD);
 			++count_iterations;
 			if (count_iterations % 50 == 0) {
 				std::cout << " ...iteration ";
