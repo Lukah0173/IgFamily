@@ -210,7 +210,7 @@ namespace fpf_data_analysis {
 				double score_conjugate{ std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_mean), IgFamily::LOGISTIC_CONJUGATION_FACTOR) };
 				for (auto& itr_homology_analysis : par_sample_analysis.v_homology_data) {
 					if (itr_homology_analysis.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
-						itr_homology_analysis.blastp_homology_transformed_conjugated = (std::pow(itr_homology_analysis.blastp_homology_transformed, score_conjugate) * std::pow(itr_homology_analysis.blastp_homology_density, double(0.25)));
+						itr_homology_analysis.blastp_homology_transformed_conjugated = (std::pow(itr_homology_analysis.blastp_homology_transformed, score_conjugate) * std::pow(itr_homology_analysis.blastp_homology_density, double(0.5)));
 					}
 				}
 				//if (itr_protein_analysis.p_protein_data->protein_type == "IGV") {
