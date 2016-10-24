@@ -371,7 +371,7 @@ namespace fpf_homology_analysis {
 					for (auto& itr_homology_data_2 : itr_protein_analysis_2.v_homology_data_combined_by_protein) {
 						if (itr_protein_analysis_2.p_protein_data->protein_name != itr_protein_analysis.p_protein_data->protein_name) {
 							if (itr_homology_data.key_blastp_query == itr_homology_data_2.key_blastp_query) {
-								if (itr_homology_data_2.blastp_homology_density_conjugated >= IgFamily::REPORT_V_HOMOLOGY_DATA_AGGREGATED_BY_PROTEIN_COJUGATED_DENSITY_THRESHOLD) {
+								if (itr_homology_data_2.blastp_homology_density_conjugated >= IgFamily::REPORT_V_HOMOLOGY_DATA_AGGREGATED_BY_PROTEIN_CONJUGATED_DENSITY_THRESHOLD) {
 									itr_homology_data.v_homology_data_aggregated_by_homology_distribution.push_back(&itr_homology_data_2);
 								}
 							}

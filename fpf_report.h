@@ -512,6 +512,7 @@ namespace fpf_report {
 		fout_html_report << "<style> \
 						.menu{ \
 						white-space: nowrap; \
+						overflow: scroll; \
 						} \
 						.mismatch { \
 						color: black; \
@@ -519,7 +520,7 @@ namespace fpf_report {
 						} \
 						</style>";
 		fout_html_report << "\n<br>" << par_filesystem.filename;
-		fout_html_report << "\n\n<br><br>" << par_filesystem.fileversion;
+		fout_html_report << "\n\n<br><br>" << IgFamily::version;
 		if (IgFamily::FILESYSTEM_MODE) {
 			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.enzyme;
 			fout_html_report << "&nbsp&nbsp&nbsp" << par_filesystem.denono_deltamass << "&nbspDa";
@@ -699,7 +700,8 @@ namespace fpf_report {
 					if (!par_summary) {
 						for (const auto& itr_proteinconstruct : itr_v_protein_analysis.proteinconstruct) {
 							fout_html_report << "&nbsp";
-						}						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+						}						
+						fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 						//fout_html_report << "Score ";
 						//fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_html_report << "Sc dens";
@@ -751,6 +753,9 @@ namespace fpf_report {
 								}
 								st_mismatch = (st_mismatch - itr_homology_data.alignment.length());
 								for (auto j = 0; j < (5 - st_mismatch); ++j) {
+									if (st_mismatch > 5) {
+										break;
+									}
 									fout_html_report << "&nbsp";
 								}
 								fout_html_report << std::fixed << std::setprecision(3) << itr_homology_data.score_density;
@@ -806,7 +811,7 @@ namespace fpf_report {
 								fout_html_report << "</font>";
 								fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 								for (const auto& itr_homology_data_aggregated_by_homology_distribution : itr_homology_data.v_homology_data_aggregated_by_homology_distribution) {
-									if (itr_homology_data_aggregated_by_homology_distribution->blastp_homology_density_conjugated >= IgFamily::REPORT_V_HOMOLOGY_DATA_AGGREGATED_BY_PROTEIN_COJUGATED_DENSITY_THRESHOLD) {
+									if (itr_homology_data_aggregated_by_homology_distribution->blastp_homology_density_conjugated >= IgFamily::REPORT_V_HOMOLOGY_DATA_AGGREGATED_BY_PROTEIN_CONJUGATED_DENSITY_THRESHOLD) {
 										fout_html_report << "&nbsp&nbsp";
 										fout_html_report << itr_homology_data_aggregated_by_homology_distribution->blastp_subject_accession;
 										fout_html_report << "(";
