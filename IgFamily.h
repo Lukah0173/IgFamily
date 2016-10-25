@@ -17,7 +17,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.12.1b" };
+	const string version{ "v0.12.1c" };
 
 	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
@@ -58,7 +58,7 @@ namespace IgFamily {
 	const double PARAMETER_SCORE_COVERAGE_DELTA_WEIGHT{ 0.85 };
 	const double DEFAULT_PROTEIN_SCORE_THRESHOLD{ 10 };
 	double PROTEIN_SCORE_THRESHOLD{ DEFAULT_PROTEIN_SCORE_THRESHOLD };
-	const double HOMOLOGY_DENSITY_THRESHOLD { 0.0 };
+	const double HOMOLOGY_DENSITY_THRESHOLD { 0.9 };
 	const double HOMOLOGY_DENSITY_CONJUGATED_THRESHOLD{ 0.05 };
 	const double HOMOLOGY_QUERY_ALIGNMENT_COVERAGE_THRESHOLD{ 0 };
 	const double CLUSTER_PROPORTION_THRESHOLD{ 0.80 };
