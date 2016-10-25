@@ -17,7 +17,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.12.1c" };
+	const string version{ "v0.12.1d" };
 
 	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
@@ -25,7 +25,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA{ 1 };
 	const bool BLASTP_BY_SELECTED_PEPTIDE{ 1 };
 
-	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Jing-Jing-Wang_20161012.txt" };
+	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Penny-Adamson.txt" };
 	const string DEFAULT_IGFAMILY_DIRECTORY{ "" };
 	const string DEFAULT_FASTA_DIRECTORY{ DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\" };
 	const string DEFAULT_FASTA_MODULE_DIRECTORY{ DEFAULT_FASTA_DIRECTORY + "FASTA_modules\\" };
@@ -58,7 +58,7 @@ namespace IgFamily {
 	const double PARAMETER_SCORE_COVERAGE_DELTA_WEIGHT{ 0.85 };
 	const double DEFAULT_PROTEIN_SCORE_THRESHOLD{ 10 };
 	double PROTEIN_SCORE_THRESHOLD{ DEFAULT_PROTEIN_SCORE_THRESHOLD };
-	const double HOMOLOGY_DENSITY_THRESHOLD { 0.9 };
+	const double HOMOLOGY_DENSITY_THRESHOLD { 0.05 };
 	const double HOMOLOGY_DENSITY_CONJUGATED_THRESHOLD{ 0.05 };
 	const double HOMOLOGY_QUERY_ALIGNMENT_COVERAGE_THRESHOLD{ 0 };
 	const double CLUSTER_PROPORTION_THRESHOLD{ 0.80 };
