@@ -438,7 +438,7 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_protein_pseudoabundance_score(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis, const double& par_parameter_density_threshold, const string& par_filename_tag) {
+	void fout_protein_pseudoabundance_score(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis, const size_t& par_sharedidentical_threshold, const double& par_parameter_density_threshold, const string& par_filename_tag) {
 		std::string output_protein_pseudoabundance_score_uniquepeptides = par_filesystem.directory + par_filesystem.filename + "_protein_pseudoabundance_score_" + par_filename_tag + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_protein_pseudoabundance_score_uniquepeptides;
 		fout_protein_pseudoabundance_score_uniquepeptides.open(output_protein_pseudoabundance_score_uniquepeptides);
@@ -450,7 +450,9 @@ namespace fpf_report {
 			double score_model1{};
 			double score_model2{};
 			for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
-				if (itr_v_homology_data_combined_by_protein.blastp_homology_density > par_parameter_density_threshold) {
+				if ((itr_v_homology_data_combined_by_protein.blastp_homology_density > par_parameter_density_threshold)
+					&& (itr_v_homology_data_combined_by_protein.blastp_homology_density > par_parameter_density_threshold)
+					&& (itr_v_homology_data_combined_by_protein.blastp_sharedidentical_count == par_sharedidentical_threshold)) {
 					for (auto i = 0; i < itr_v_homology_data_combined_by_protein.p_peptide_analysis->v_peptide_data.size(); ++i) {
 						score_model0 += double{ 1 };
 						score_model1 += std::pow(itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT);
@@ -469,7 +471,8 @@ namespace fpf_report {
 				}
 			}
 			for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
-				if (itr_v_homology_data_combined_by_protein.blastp_homology_density > par_parameter_density_threshold) {
+				if ((itr_v_homology_data_combined_by_protein.blastp_homology_density > par_parameter_density_threshold)
+				&& (itr_v_homology_data_combined_by_protein.blastp_sharedidentical_count == par_sharedidentical_threshold)) {
 					for (auto i = 0; i < itr_v_homology_data_combined_by_protein.p_peptide_analysis->v_peptide_data.size(); ++i) {
 						if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV") {
 							fout_protein_pseudoabundance_peptides_uniquepeptides << itr_v_homology_data_combined_by_protein.blastp_query << ",";
@@ -538,7 +541,6 @@ namespace fpf_report {
 					fout_html_report << "\n\n\n<br><br><br> " << itr_v_protein_analysis.p_protein_data->protein_name;
 					fout_html_report << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_v_protein_analysis.protein_score;
 					fout_html_report << "&nbsp&nbsp&nbspDensity: " << std::fixed << std::setprecision(3) << itr_v_protein_analysis.protein_density;
-					fout_html_report << "&nbsp&nbsp&nbspEffective SC: " << std::fixed << std::setprecision(2) << itr_v_protein_analysis.protein_effective_spectral_count;
 					fout_html_report << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_v_protein_analysis.proteinconstruct_sequencecoverage << "%";
 					fout_html_report << "\n\n<br><br> " << itr_v_protein_analysis.p_protein_data->protein_protein;
 					fout_html_report << "\n\n<br> ";

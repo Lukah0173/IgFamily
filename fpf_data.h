@@ -117,6 +117,7 @@ namespace fpf_data {
 		size_t blastp_query_alignment_index;
 		size_t blastp_subject_alignment_index;
 		size_t blastp_mismatch_count;
+		size_t blastp_sharedidentical_count;
 		double blastp_homology;
 		double blastp_homology_transformed;
 		double blastp_homology_transformed_conjugated;

@@ -253,6 +253,21 @@ namespace fpf_homology_analysis {
 		}
 	}
 
+	void determine_homology_data_uniquenesss(sample_analysis& par_sample_analysis)
+	{
+		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data)
+		{
+			for (auto& itr_v_homology_data_2 : par_sample_analysis.v_homology_data)
+			{
+				if ((itr_v_homology_data.blastp_query == itr_v_homology_data_2.blastp_query)
+					&& (itr_v_homology_data.blastp_mismatch_count == 0))
+				{
+					++itr_v_homology_data.blastp_sharedidentical_count;
+				}
+			}
+		}
+	}
+
 	void associate_homology_data_to_protein_data(sample_analysis& par_sample_analysis) {
 		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
 			auto& find_protein_data = std::find_if(par_sample_analysis.v_protein_data.begin(), par_sample_analysis.v_protein_data.end(),

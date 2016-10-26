@@ -147,6 +147,7 @@ namespace fpf_core {
 			fpf_homology_analysis::associate_homology_data_to_protein_analysis_refined(par_sample_analysis);
 		}
 		fpf_homology_analysis::associate_homology_data_to_v_peptide_data(par_sample_analysis);
+		fpf_homology_analysis::determine_homology_data_uniquenesss(par_sample_analysis);
 		fpf_homology_analysis::create_blastp_query_alignment(par_sample_analysis);
 		fpf_homology_analysis::transform_homology_data(par_sample_analysis);
 		fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, false);
@@ -215,9 +216,9 @@ namespace fpf_core {
 		std::cout << par_filesystem.filename;
 		fpf_report::fout_multinomial_protein_score(par_filesystem, par_sample_analysis);
 		fpf_report::fout_multinomial_protein_density(par_filesystem, par_sample_analysis);
-		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0, "allpeptides_");
-		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0.5, "0.5peptides_");
-		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 0.99, "uniquepeptides_");
+		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 1, 0, "allpeptides_");
+		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 20, 0.5, "0.5peptides_");
+		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 20, 0.99, "uniquepeptides_");
 		std::cout << "\n ...outputting html report for ";
 		std::cout << par_filesystem.filename;
 		std::cout << "\n";
