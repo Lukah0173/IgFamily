@@ -366,14 +366,15 @@ namespace fpf_homology_analysis {
 			if (!par_conjugated) {
 				itr_homology_data.blastp_homology_density = itr_homology_data.blastp_homology_density_conjugated;
 			}
-			itr_homology_data.score = (std::pow(itr_homology_data.blastp_homology_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT) * itr_homology_data.denovo_replicate_count);
+			itr_homology_data.blastp_homology_density_conjugated *= std::pow(itr_homology_data.blastp_homology_density, double(IgFamily::PRIOR_DISTRIBUTION_WEIGHT));
+			itr_homology_data.score = ((std::pow(itr_homology_data.blastp_homology_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT) + (double(0.10) * itr_homology_data.blastp_homology)) * itr_homology_data.denovo_replicate_count);
 		}
 	}
 
 	inline bool predicate_v_homology_data_by_homology_distribution(const homology_data* i, const homology_data* j) {
 		return ((i->blastp_homology_density_conjugated) > (j->blastp_homology_density_conjugated));
 	}
-
+	 
 	void sort_v_homology_data_by_homology_distribution(vector<homology_data*>& par_v_homology_data) {
 		std::sort(par_v_homology_data.begin(), par_v_homology_data.end(), predicate_v_homology_data_by_homology_distribution);
 	}

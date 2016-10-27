@@ -155,7 +155,7 @@ namespace fpf_core {
 
 	void core_data_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_refined) {
 		std::cout << "\n\n scoring proteins...\n";
-		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis, 0, par_refined);
+		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis, 0, par_refined, false);
 		std::cout << " ...proteins scored\n";
 		if (!par_refined) {
 			//fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN, par_refined);
@@ -225,8 +225,8 @@ namespace fpf_core {
 		fpf_homology_analysis::aggregate_v_homology_data_by_homology_distribution(par_sample_analysis);
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true, 0, "report_allIG_summary");
 		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false, 0, "report_allIG");
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true, IgFamily::PROTEIN_SCORE_THRESHOLD, "report_topIG_summary");
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false, IgFamily::PROTEIN_SCORE_THRESHOLD, "report_topIG");
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true, IgFamily::REPORT_PROTEIN_SCORE_THRESHOLD, "report_topIG_summary");
+		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false, IgFamily::REPORT_PROTEIN_SCORE_THRESHOLD, "report_topIG");
 		std::cout << "\n";
 		fpf_filesystem::fout_filesystem(par_filesystem);
 		IgFamily::PROTEIN_SCORE_THRESHOLD = IgFamily::DEFAULT_PROTEIN_SCORE_THRESHOLD;
