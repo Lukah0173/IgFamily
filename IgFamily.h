@@ -17,7 +17,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.12.1g" };
+	const string version{ "v0.12.1h" };
 
 	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
@@ -63,7 +63,7 @@ namespace IgFamily {
 	const double HOMOLOGY_DENSITY_CONJUGATED_THRESHOLD{ 0.05 };
 	const double HOMOLOGY_QUERY_ALIGNMENT_COVERAGE_THRESHOLD{ 0 };
 	const double CLUSTER_PROPORTION_THRESHOLD{ 0.70 };
-	const double PRIOR_DISTRIBUTION_WEIGHT{ 0.3 };
+	const double PRIOR_DISTRIBUTION_WEIGHT{ 0.02 };
 
 	const double DEFAULT_LOGISTIC_CONJUGATION_FACTOR{ 1 };
 	double LOGISTIC_CONJUGATION_FACTOR{ DEFAULT_LOGISTIC_CONJUGATION_FACTOR };

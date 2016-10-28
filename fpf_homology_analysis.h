@@ -186,7 +186,7 @@ namespace fpf_homology_analysis {
 					++homology_data_count_delimit;
 				}
 				if (homology_data_read == '\n') {
-					temp_homology_data.blastp_homology = std::stod(temp_parse_blastp);
+					temp_homology_data.blastp_homology = (double(100) * std::stod(temp_parse_blastp));
 					temp_homology_data.alignment_coverage_delta = temp_homology_data.blastp_query.length() - temp_homology_data.blastp_query_aligned.length();
 					if (temp_homology_data.alignment_coverage >= IgFamily::HOMOLOGY_QUERY_ALIGNMENT_COVERAGE_THRESHOLD)
 					{
@@ -344,8 +344,8 @@ namespace fpf_homology_analysis {
 
 	void transform_homology_data(sample_analysis& par_sample_analysis) {
 		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
-			itr_v_homology_data.blastp_homology = std::floor(itr_v_homology_data.blastp_homology * std::pow(IgFamily::PARAMETER_SCORE_COVERAGE_DELTA_WEIGHT, itr_v_homology_data.alignment_coverage_delta));
-			itr_v_homology_data.blastp_homology = std::floor(itr_v_homology_data.blastp_homology * std::pow(IgFamily::PARAMETER_SCORE_MISMATCH_WEIGHT, itr_v_homology_data.blastp_mismatch_count));
+			itr_v_homology_data.blastp_homology = itr_v_homology_data.blastp_homology * std::pow(IgFamily::PARAMETER_SCORE_COVERAGE_DELTA_WEIGHT, itr_v_homology_data.alignment_coverage_delta);
+			itr_v_homology_data.blastp_homology = itr_v_homology_data.blastp_homology * std::pow(IgFamily::PARAMETER_SCORE_MISMATCH_WEIGHT, itr_v_homology_data.blastp_mismatch_count);
 			if (itr_v_homology_data.blastp_homology == 0) {
 				itr_v_homology_data.blastp_homology = double(1);
 			}
@@ -355,6 +355,11 @@ namespace fpf_homology_analysis {
 	}
 
 	void determine_homology_data_parameters(sample_analysis& par_sample_analysis, bool par_conjugated) {
+		if (par_conjugated) {
+			for (auto& itr_homology_data : par_sample_analysis.v_homology_data) {
+				itr_homology_data.blastp_homology_transformed_conjugated *= std::pow(itr_homology_data.blastp_homology_transformed, double(IgFamily::PRIOR_DISTRIBUTION_WEIGHT));
+			}
+		}
 		for (auto& itr_homology_data : par_sample_analysis.v_homology_data) {
 			double temp_score_transform_conjugated_sum{};
 			for (auto& itr_homology_data_2 : par_sample_analysis.v_homology_data) {
@@ -366,12 +371,12 @@ namespace fpf_homology_analysis {
 			if (!par_conjugated) {
 				itr_homology_data.blastp_homology_density = itr_homology_data.blastp_homology_density_conjugated;
 			}
-			itr_homology_data.blastp_homology_density_conjugated *= std::pow(itr_homology_data.blastp_homology_density, double(IgFamily::PRIOR_DISTRIBUTION_WEIGHT));
-			itr_homology_data.score = ((std::pow(itr_homology_data.blastp_homology_density_conjugated, IgFamily::PARAMETER_SCORE_CONJUGATION_WEIGHT) + (double(0.10) * itr_homology_data.blastp_homology)) * itr_homology_data.denovo_replicate_count);
+			itr_homology_data.score = ((itr_homology_data.blastp_homology_density_conjugated + (double(0.10) * itr_homology_data.blastp_homology)) * itr_homology_data.denovo_replicate_count);
 		}
 	}
 
-	inline bool predicate_v_homology_data_by_homology_distribution(const homology_data* i, const homology_data* j) {
+	inline bool predicate_v_homology_data_by_homology_distribution(const homology_data* i, const homology_data* j)
+	{
 		return ((i->blastp_homology_density_conjugated) > (j->blastp_homology_density_conjugated));
 	}
 	 

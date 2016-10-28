@@ -760,7 +760,7 @@ namespace fpf_report {
 									}
 									fout_html_report << "&nbsp";
 								}
-								fout_html_report << std::fixed << std::setprecision(5) << itr_homology_data.score_density;
+								fout_html_report << std::fixed << std::setprecision(3) << itr_homology_data.score_density;
 								fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 								//fout_html_report << std::fixed << std::setprecision(0) << (itr_homology_data.score / std::pow(itr_homology_data.score, (IgFamily::PARAMETER_HOMOLOGY_WEIGHT - 1)));
 								//fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -773,7 +773,7 @@ namespace fpf_report {
 										fout_html_report << "&nbsp";
 									}
 								}
-								fout_html_report << std::fixed << std::setprecision(2) << itr_homology_data.blastp_homology;
+								fout_html_report << std::fixed << std::setprecision(0) << itr_homology_data.blastp_homology;
 								if (itr_homology_data.blastp_homology_transformed < 1) {
 									fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 								}

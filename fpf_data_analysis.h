@@ -128,13 +128,9 @@ namespace fpf_data_analysis {
 		for (auto& itr_protein_analysis : temp_v_protein_analysis)
 		{
 			for (auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) 
-			{
-				if ((itr_homology_data.blastp_homology_density >= IgFamily::HOMOLOGY_DENSITY_THRESHOLD)
-					&& (itr_homology_data.blastp_homology_density_conjugated >= IgFamily::HOMOLOGY_DENSITY_CONJUGATED_THRESHOLD))
-				{					
-					itr_protein_analysis.protein_score += itr_homology_data.score;
-					itr_protein_analysis.protein_effective_spectral_count += (itr_homology_data.blastp_homology_density_conjugated * itr_homology_data.denovo_replicate_count);
-				}
+			{					
+				itr_protein_analysis.protein_score += itr_homology_data.score;
+				itr_protein_analysis.protein_effective_spectral_count += (itr_homology_data.blastp_homology_density_conjugated * itr_homology_data.denovo_replicate_count);
 			}
 			for (auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein)
 			{
