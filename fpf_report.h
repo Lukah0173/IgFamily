@@ -762,8 +762,6 @@ namespace fpf_report {
 								}
 								fout_html_report << std::fixed << std::setprecision(3) << itr_homology_data.score_density;
 								fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-								//fout_html_report << std::fixed << std::setprecision(0) << (itr_homology_data.score / std::pow(itr_homology_data.score, (IgFamily::PARAMETER_HOMOLOGY_WEIGHT - 1)));
-								//fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 								fout_html_report << itr_homology_data.denovo_replicate_count;
 								if (itr_homology_data.denovo_replicate_count < 1) {
 									fout_html_report << "&nbsp&nbsp&nbsp&nbsp&nbsp";
