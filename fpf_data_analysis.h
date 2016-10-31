@@ -208,7 +208,7 @@ namespace fpf_data_analysis {
 		return 0;
 	}
 
-	void train_homology_analysis_parameter_score(filesystem& par_filesystem, sample_analysis& par_sample_analysis, const size_t& par_select_N_many_gene_families, const bool& par_refined) {
+	void conjugate_homology(filesystem& par_filesystem, sample_analysis& par_sample_analysis, const size_t& par_select_N_many_gene_families, const bool& par_refined) {
 		std::cout << "\n training protein scores...\n\n";
 		size_t count_selected_genefamilies{};
 		size_t count_iterations{};
@@ -237,7 +237,7 @@ namespace fpf_data_analysis {
 				//	}
 				//}
 			}
-			fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, true);
+			fpf_homology_analysis::determine_HomologyDataParameters(par_sample_analysis, true);
 			IgFamily::LOGISTIC_CONJUGATION_FACTOR = (IgFamily::LOGISTIC_CONJUGATION_FACTOR + (IgFamily::LOGISTIC_ITERATION_FACTOR * std::pow(1.01, (count_selected_genefamilies - par_select_N_many_gene_families))));
 			create_v_protein_analysis(par_sample_analysis, count_iterations, par_refined, true);
 			count_selected_genefamilies = {};
@@ -267,7 +267,7 @@ namespace fpf_data_analysis {
 		}
 	}
 
-	void create_proteinconstruct_from_denovo(sample_analysis& par_sample_analysis) {
+	void create_ProteinConstruct(sample_analysis& par_sample_analysis) {
 		static homology_data temp_homology_data{};
 		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			for (size_t i = 0; i < itr_protein_analysis.p_protein_data->protein_protein.length(); ++i) {
@@ -339,7 +339,7 @@ namespace fpf_data_analysis {
 		}
 	}
 
-	void determine_sequence_coverage(sample_analysis& par_sample_analysis) {
+	void determine_SequenceCoverage(sample_analysis& par_sample_analysis) {
 		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			size_t temp_sequencetrue{};
 			for (const auto& itr_v_proteinconstruct : itr_protein_analysis.proteinconstruct) {
@@ -386,7 +386,7 @@ namespace fpf_data_analysis {
 		par_sample_analysis.v_protein_analysis_selected_by_polymorphism = temp_v_protein_analysis_selected_by_polymorphism;
 	}
 
-	void determine_protein_score_density(sample_analysis& par_sample_analysis) {
+	void determine_ProteinScoreDensity(sample_analysis& par_sample_analysis) {
 		double temp_protein_score_sum{};
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV") {

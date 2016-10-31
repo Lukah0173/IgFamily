@@ -354,7 +354,7 @@ namespace fpf_homology_analysis {
 		}
 	}
 
-	void determine_homology_data_parameters(sample_analysis& par_sample_analysis, bool par_conjugated) {
+	void determine_HomologyDataParameters(sample_analysis& par_sample_analysis, bool par_conjugated) {
 		if (par_conjugated) {
 			for (auto& itr_homology_data : par_sample_analysis.v_homology_data) {
 				itr_homology_data.blastp_homology_transformed_conjugated *= std::pow(itr_homology_data.blastp_homology_transformed, double(IgFamily::PRIOR_DISTRIBUTION_WEIGHT));

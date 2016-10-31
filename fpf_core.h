@@ -150,7 +150,7 @@ namespace fpf_core {
 		fpf_homology_analysis::determine_homology_data_uniquenesss(par_sample_analysis);
 		fpf_homology_analysis::create_blastp_query_alignment(par_sample_analysis);
 		fpf_homology_analysis::transform_homology_data(par_sample_analysis);
-		fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, false);
+		fpf_homology_analysis::determine_HomologyDataParameters(par_sample_analysis, false);
 	}
 
 	void core_data_analysis(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_refined) {
@@ -158,26 +158,23 @@ namespace fpf_core {
 		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis, 0, par_refined, false);
 		std::cout << " ...proteins scored\n";
 		if (!par_refined) {
-			//fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN, par_refined);
+			//fpf_data_analysis::conjugate_homology(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN, par_refined);
 		}
 		else {
-			fpf_data_analysis::train_homology_analysis_parameter_score(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES, par_refined);
+			fpf_data_analysis::conjugate_homology(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES, par_refined);
 			if (par_refined) {
-				fpf_homology_analysis::determine_homology_data_parameters(par_sample_analysis, true);
+				fpf_homology_analysis::determine_HomologyDataParameters(par_sample_analysis, true);
 			}
-			fpf_data_analysis::determine_protein_score_density(par_sample_analysis);
-			fpf_data_analysis::create_proteinconstruct_from_denovo(par_sample_analysis);
-			fpf_data_analysis::determine_sequence_coverage(par_sample_analysis);
-		}
-		for (auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
-			//fpf_data_analysis::sort_v_homology_data_combined_by_protein(itr_v_protein_analysis.v_homology_data_combined_by_protein);
+			fpf_data_analysis::determine_ProteinScoreDensity(par_sample_analysis);
+			fpf_data_analysis::create_ProteinConstruct(par_sample_analysis);
+			fpf_data_analysis::determine_SequenceCoverage(par_sample_analysis);
 		}
 		fpf_data_analysis::sort_v_protein_analysis(par_sample_analysis.v_protein_analysis);
 	}
 
 	void core_multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::cout << "\n\n creating multinomial data frames...\n";
-		fpf_multinomial::create_multinomial_data(par_sample_analysis);
+		fpf_multinomial::create_MultinomialData(par_sample_analysis);
 	}
 
 	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
@@ -185,50 +182,50 @@ namespace fpf_core {
 		std::cout << " ...outputting data reports for ";
 		std::cout << par_filesystem.filename;
 		std::cout << "\n";
-		fpf_report::fout_v_peptide_data(par_filesystem, par_sample_analysis);
-		fpf_report::fout_v_protein_data(par_filesystem, par_sample_analysis);
-		fpf_report::fout_v_peptide_analysis(par_filesystem, par_sample_analysis);
-		fpf_report::fout_v_protein_analysis(par_filesystem, par_sample_analysis);
+		fpf_report::fout_v_PeptideData(par_filesystem, par_sample_analysis);
+		fpf_report::fout_v_ProteinData(par_filesystem, par_sample_analysis);
+		fpf_report::fout_v_PeptideAnalysis(par_filesystem, par_sample_analysis);
+		fpf_report::fout_v_ProteinAnalysis(par_filesystem, par_sample_analysis);
 		std::cout << " ...homology data structures assigned";
 		std::cout << "\n\n outputting homology summary for file ";
 		std::cout << par_filesystem.filename;;
 		std::cout << "...\n";
-		fpf_report::fout_v_homology_data(par_filesystem, par_sample_analysis);
+		fpf_report::fout_v_HomologyData(par_filesystem, par_sample_analysis);
 		std::cout << " ...homology file output\n";
 		std::cout << " ...outputting multinomial reports for ";
 		std::cout << par_filesystem.filename;
 		std::cout << "\n ...outputting multinomial data frame for ";
 		std::cout << par_filesystem.filename;
-		fpf_report::fout_multinomial(par_filesystem, par_sample_analysis);
+		fpf_report::fout_Multinomial(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting multinomial peptide list for ";
 		std::cout << par_filesystem.filename;
-		fpf_report::fout_multinomial_element(par_filesystem, par_sample_analysis);
+		fpf_report::fout_MultinomialElement(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting filtered multinomial peptide list for ";
 		std::cout << par_filesystem.filename;
-		fpf_report::fout_multinomial_element_nomatch(par_filesystem, par_sample_analysis);
+		fpf_report::fout_MultinomialElementNoMatch(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting contaminants report for ";
 		std::cout << par_filesystem.filename;
-		fpf_report::fout_multinomial_contaminants_report(par_filesystem, par_sample_analysis, "peptide_report");
+		fpf_report::fout_MultinomialContaminantsReport(par_filesystem, par_sample_analysis, "peptide_report");
 		std::cout << "\n ...outputting contaminants list for ";
 		std::cout << par_filesystem.filename;
-		fpf_report::fout_multinomial_contaminants_list(par_filesystem, par_sample_analysis);
+		fpf_report::fout_MultinomialContaminantsList(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting protein score comparison for ";
 		std::cout << par_filesystem.filename;
-		fpf_report::fout_multinomial_protein_score(par_filesystem, par_sample_analysis);
-		fpf_report::fout_multinomial_protein_density(par_filesystem, par_sample_analysis);
-		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 1, 0, "allpeptides_");
-		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 20, 0.5, "0.5peptides_");
-		fpf_report::fout_protein_pseudoabundance_score(par_filesystem, par_sample_analysis, 20, 0.99, "uniquepeptides_");
+		fpf_report::fout_MultinomialProteinScore(par_filesystem, par_sample_analysis);
+		fpf_report::fout_MultinomialProteinDensity(par_filesystem, par_sample_analysis);
+		fpf_report::fout_ProteinPseudoabundanceScore(par_filesystem, par_sample_analysis, 1, 0, "allpeptides_");
+		fpf_report::fout_ProteinPseudoabundanceScore(par_filesystem, par_sample_analysis, 20, 0.5, "0.5peptides_");
+		fpf_report::fout_ProteinPseudoabundanceScore(par_filesystem, par_sample_analysis, 20, 0.99, "uniquepeptides_");
 		std::cout << "\n ...outputting html report for ";
 		std::cout << par_filesystem.filename;
 		std::cout << "\n";
 		fpf_homology_analysis::aggregate_v_homology_data_by_homology_distribution(par_sample_analysis);
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true, 0, "report_allIG_summary");
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false, 0, "report_allIG");
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, true, IgFamily::REPORT_PROTEIN_SCORE_THRESHOLD, "report_topIG_summary");
-		fpf_report::fout_html_report(par_filesystem, par_sample_analysis, false, false, IgFamily::REPORT_PROTEIN_SCORE_THRESHOLD, "report_topIG");
+		fpf_report::fout_HTMLReport(par_filesystem, par_sample_analysis, false, true, 0, "report_allIG_summary");
+		fpf_report::fout_HTMLReport(par_filesystem, par_sample_analysis, false, false, 0, "report_allIG");
+		fpf_report::fout_HTMLReport(par_filesystem, par_sample_analysis, false, true, IgFamily::REPORT_PROTEIN_SCORE_THRESHOLD, "report_topIG_summary");
+		fpf_report::fout_HTMLReport(par_filesystem, par_sample_analysis, false, false, IgFamily::REPORT_PROTEIN_SCORE_THRESHOLD, "report_topIG");
 		std::cout << "\n";
-		fpf_filesystem::fout_filesystem(par_filesystem);
+		fpf_filesystem::fout_Filesystem(par_filesystem);
 		IgFamily::PROTEIN_SCORE_THRESHOLD = IgFamily::DEFAULT_PROTEIN_SCORE_THRESHOLD;
 		IgFamily::LOGISTIC_CONJUGATION_FACTOR = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_FACTOR;
 	}

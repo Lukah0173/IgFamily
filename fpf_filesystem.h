@@ -280,24 +280,24 @@ namespace fpf_filesystem {
 		return temp_csv_NOVOR_denovo_peptides;
 	}
 
-	void fout_filesystem(filesystem& par_filesystem) {
+	void fout_Filesystem(filesystem& par_filesystem) {
 		if (IgFamily::FILESYSTEM_MODE) {
 			string output_filesystem{ par_filesystem.directory + "filesystem.data" };
-			std::ofstream fout_filesystem;
-			fout_filesystem.open(output_filesystem);
-			fout_filesystem << "ID: " << std::get<0>(par_filesystem.filesystem_id) << "," << std::get<1>(par_filesystem.filesystem_id) << ";\n";
-			fout_filesystem << "FILE: " << par_filesystem.filename << ";\n";
-			fout_filesystem << "VERSION: " << IgFamily::version << ";\n";
+			std::ofstream fout_Filesystem;
+			fout_Filesystem.open(output_filesystem);
+			fout_Filesystem << "ID: " << std::get<0>(par_filesystem.filesystem_id) << "," << std::get<1>(par_filesystem.filesystem_id) << ";\n";
+			fout_Filesystem << "FILE: " << par_filesystem.filename << ";\n";
+			fout_Filesystem << "VERSION: " << IgFamily::version << ";\n";
 			par_filesystem.fileversion = IgFamily::version;
-			fout_filesystem << "REPLICATES: ";
+			fout_Filesystem << "REPLICATES: ";
 			for (const auto& itr_v_p_replicates : par_filesystem.v_filesystem_replicates) {
-				fout_filesystem << std::get<0>(itr_v_p_replicates) << ",";
-				fout_filesystem << std::get<1>(itr_v_p_replicates) << ";";
+				fout_Filesystem << std::get<0>(itr_v_p_replicates) << ",";
+				fout_Filesystem << std::get<1>(itr_v_p_replicates) << ";";
 			}
-			fout_filesystem << "\n";
-			fout_filesystem << "STATUS: " << par_filesystem.patientstatus << ";\n";
-			fout_filesystem << "ENZYME: " << par_filesystem.enzyme << ";\n";
-			fout_filesystem << "DENOVO_DELTAMASS: " << par_filesystem.denono_deltamass << ";\n";
+			fout_Filesystem << "\n";
+			fout_Filesystem << "STATUS: " << par_filesystem.patientstatus << ";\n";
+			fout_Filesystem << "ENZYME: " << par_filesystem.enzyme << ";\n";
+			fout_Filesystem << "DENOVO_DELTAMASS: " << par_filesystem.denono_deltamass << ";\n";
 		}
 	}
 }
