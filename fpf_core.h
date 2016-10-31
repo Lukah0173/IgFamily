@@ -53,7 +53,7 @@ namespace fpf_core {
 				if (itr_v_select_peptide_assignment_method == "PEAKS de novo") {
 					vector<csv_data> main_v_csv_PEAKS_denovo_peptides = fpf_filesystem::parse_filesystem_PEAKS_denovo_peptides(fpf_filesystem::read_filesystem_PEAKS_denovo_peptides(par_filesystem.directory));
 					temp_sample_analysis.file_found = fpf_parse::check_csv_PEAKS_denovo_peptides_empty(main_v_csv_PEAKS_denovo_peptides);
-					temp_sample_analysis.peptide_assignment_method = "PEAKS_denono";
+					temp_sample_analysis.peptide_assignment_method = "PEAKS_denovo";
 					std::cout << "\n\n\n * parsing " << par_filesystem.filename << " PEAKS de novo peptides...";
 					temp_sample_analysis.v_csv_data = std::move(main_v_csv_PEAKS_denovo_peptides);
 					if (!IgFamily::FILESYSTEM_MODE) {
