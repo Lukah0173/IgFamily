@@ -227,7 +227,7 @@ namespace fpf_core {
 		std::cout << "\n";
 		fpf_filesystem::fout_Filesystem(par_filesystem);
 		IgFamily::PROTEIN_SCORE_THRESHOLD = IgFamily::DEFAULT_PROTEIN_SCORE_THRESHOLD;
-		IgFamily::LOGISTIC_CONJUGATION_FACTOR = IgFamily::DEFAULT_LOGISTIC_CONJUGATION_FACTOR;
+		IgFamily::PARAMETER_LOGISTIC_CONJUGATION_FACTOR = IgFamily::PARAMETER_DEFAULT_LOGISTIC_CONJUGATION_FACTOR;
 	}
 }
 #endif

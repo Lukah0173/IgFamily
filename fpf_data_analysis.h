@@ -216,7 +216,7 @@ namespace fpf_data_analysis {
 		while ((count_selected_genefamilies > par_select_N_many_gene_families) && (count_iterations <= 5000)) {
 			determine_protein_analysis_score_mean(par_sample_analysis);
 			for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
-				double score_conjugate{ std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_max), IgFamily::LOGISTIC_CONJUGATION_FACTOR) };
+				double score_conjugate{ std::pow((itr_protein_analysis.protein_score / par_sample_analysis.protein_analysis_score_max), IgFamily::PARAMETER_LOGISTIC_CONJUGATION_FACTOR) };
 				for (auto& itr_homology_data : par_sample_analysis.v_homology_data) {
 					if (itr_homology_data.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
 						itr_homology_data.blastp_homology_transformed_conjugated = (itr_homology_data.blastp_homology_transformed * score_conjugate);
@@ -238,7 +238,7 @@ namespace fpf_data_analysis {
 				//}
 			}
 			fpf_homology_analysis::determine_HomologyDataParameters(par_sample_analysis, true);
-			IgFamily::LOGISTIC_CONJUGATION_FACTOR = (IgFamily::LOGISTIC_CONJUGATION_FACTOR + (IgFamily::LOGISTIC_ITERATION_FACTOR * std::pow(1.01, (count_selected_genefamilies - par_select_N_many_gene_families))));
+			IgFamily::PARAMETER_LOGISTIC_CONJUGATION_FACTOR = (IgFamily::PARAMETER_LOGISTIC_CONJUGATION_FACTOR + (IgFamily::PARAMETER_LOGISTIC_ITERATION_FACTOR * std::pow(1.01, (count_selected_genefamilies - par_select_N_many_gene_families))));
 			create_v_protein_analysis(par_sample_analysis, count_iterations, par_refined, true);
 			count_selected_genefamilies = {};
 			count_selected_genefamilies = determine_countClusterProportion(par_sample_analysis, IgFamily::CLUSTER_PROPORTION_THRESHOLD);
