@@ -100,10 +100,10 @@ namespace fpf_data_analysis {
 
 	void create_v_protein_analysis(sample_analysis& par_sample_analysis, const size_t& par_iteration, const bool& par_refined, const bool& par_filter_by_score) {
 		vector<protein_analysis> temp_v_protein_analysis{};
+		size_t temp_key_protein_analysis{};
 		for (const auto& itr_homology_data : par_sample_analysis.v_homology_data)
 		{
 			protein_analysis temp_protein_analysis{};
-			size_t temp_key_protein_analysis{};
 			auto find_protein_analysis = std::find_if(temp_v_protein_analysis.begin(), temp_v_protein_analysis.end(),
 				[itr_homology_data](const protein_analysis& par_protein_analysis)
 			{
@@ -222,20 +222,6 @@ namespace fpf_data_analysis {
 						itr_homology_data.blastp_homology_transformed_conjugated = (itr_homology_data.blastp_homology_transformed * score_conjugate);
 					}
 				}
-				//if (itr_protein_analysis.p_protein_data->protein_type == "IGV") {
-				//	std::cout << "\n " << itr_protein_analysis.p_protein_data->protein_name;
-				//	std::cout << "\n\n";
-				//	size_t i{};
-				//	for (auto& itr_homology_data : par_sample_analysis.v_homology_data) {
-				//		if (i == 10) {
-				//			break;
-				//		}
-				//		std::cout << " " << itr_homology_data.blastp_homology;
-				//		std::cout << "   " << itr_homology_data.blastp_homology_density_conjugated;
-				//		std::cout << "   " << score_conjugate;
-				//		++i;
-				//	}
-				//}
 			}
 			fpf_homology_analysis::determine_HomologyDataParameters(par_sample_analysis, true);
 			IgFamily::PARAMETER_LOGISTIC_CONJUGATION_FACTOR = (IgFamily::PARAMETER_LOGISTIC_CONJUGATION_FACTOR + (IgFamily::PARAMETER_LOGISTIC_ITERATION_FACTOR * std::pow(1.01, (count_selected_genefamilies - par_select_N_many_gene_families))));

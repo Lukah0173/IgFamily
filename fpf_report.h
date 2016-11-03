@@ -112,24 +112,27 @@ namespace fpf_report {
 		std::string output_v_protein_analysis = par_filesystem.directory + par_filesystem.filename + "_protein_analysis_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_v_ProteinAnalysis;
 		fout_v_ProteinAnalysis.open(output_v_protein_analysis);
-		fout_v_ProteinAnalysis << "key,protein_name,protein_score,protein_effective_spectral_count,proteinconstruct_sequencecoverage,protein_type,blastp_query,denovo_replicate_count,score_density,blastp_homology,blastp_homology_density,blastp_homology_density_conjugated,blastp_mismatch_count,alignment_coverage_delta,\n";
+		fout_v_ProteinAnalysis << "key,protein_name,protein_score,proteinconstruct_sequencecoverage,protein_type,blastp_query,blastp_subject,denovo_replicate_count,score_density,blastp_mismatch_count,alignment_coverage_delta,blastp_homology,blastp_homology_transformed,blastp_homology_transformed_conjugated,blastp_homology_density,blastp_homology_density_conjugated,\n";
 		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			for (const auto& itr_v_homology_data_combined_by_protein : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
 				if (itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated >= 0.001) {
 					fout_v_ProteinAnalysis << itr_v_protein_analysis.key_protein_analysis << ",";
 					fout_v_ProteinAnalysis << itr_v_protein_analysis.p_protein_data->protein_name << ",";
 					fout_v_ProteinAnalysis << itr_v_protein_analysis.protein_score << ",";
-					fout_v_ProteinAnalysis << itr_v_protein_analysis.protein_effective_spectral_count << ",";
+					//fout_v_ProteinAnalysis << itr_v_protein_analysis.protein_effective_spectral_count << ",";
 					fout_v_ProteinAnalysis << itr_v_protein_analysis.proteinconstruct_sequencecoverage << ",";
 					fout_v_ProteinAnalysis << itr_v_protein_analysis.p_protein_data->protein_type << ",";
 					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_query << ",";
+					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_subject << ",";
 					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.denovo_replicate_count << ",";
 					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.score_density << ",";
-					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_homology << ",";
-					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_homology_density << ",";
-					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated << ",";
 					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_mismatch_count << ",";
 					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.alignment_coverage_delta << ",";
+					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_homology << ",";
+					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_homology_transformed << ",";
+					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_homology_transformed_conjugated << ",";
+					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_homology_density << ",";
+					fout_v_ProteinAnalysis << itr_v_homology_data_combined_by_protein.blastp_homology_density_conjugated << ",";
 					fout_v_ProteinAnalysis << ",\n";
 				}
 			}
@@ -138,7 +141,7 @@ namespace fpf_report {
 
 	void fout_v_HomologyData(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis) {
 		string output_blastp_summary = par_filesystem.directory + par_filesystem.filename;
-		output_blastp_summary += "_blastp_summary.csv";
+		output_blastp_summary += "_homology_data.csv";
 		std::ofstream fout_v_HomologyData;
 		fout_v_HomologyData.open(output_blastp_summary);
 		fout_v_HomologyData << "key_query,";
@@ -147,8 +150,8 @@ namespace fpf_report {
 		fout_v_HomologyData << "key_subject_accession,";
 		fout_v_HomologyData << "subject_accession,";
 		fout_v_HomologyData << "mismatch_count,";
-		fout_v_HomologyData << "query_alignment_coverage,";
 		fout_v_HomologyData << "query_alignment_coverage_delta,";
+		fout_v_HomologyData << "query_alignment_coverage,";
 		fout_v_HomologyData << "homology,";
 		fout_v_HomologyData << "homology_transformed,";
 		fout_v_HomologyData << "homology_transformed_conjugated,";
@@ -163,8 +166,8 @@ namespace fpf_report {
 			fout_v_HomologyData << itr_v_homology_data.key_blastp_subject_accession << ",";
 			fout_v_HomologyData << itr_v_homology_data.blastp_subject_accession << ",";
 			fout_v_HomologyData << itr_v_homology_data.blastp_mismatch_count << ",";
-			fout_v_HomologyData << itr_v_homology_data.alignment_coverage << ",";
 			fout_v_HomologyData << itr_v_homology_data.alignment_coverage_delta << ",";
+			fout_v_HomologyData << itr_v_homology_data.alignment_coverage << ",";
 			fout_v_HomologyData << itr_v_homology_data.blastp_homology << ",";
 			fout_v_HomologyData << itr_v_homology_data.blastp_homology_transformed << ",";
 			fout_v_HomologyData << itr_v_homology_data.blastp_homology_transformed_conjugated << ",";
