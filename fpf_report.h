@@ -541,7 +541,8 @@ namespace fpf_report {
 			if ((par_alloutput) || (itr_v_protein_analysis.p_protein_data->protein_type == "IGV")) {
 				if ((itr_v_protein_analysis.protein_score >= par_protein_score_threshold)
 				&& (itr_v_protein_analysis.protein_density >= IgFamily::REPORT_PROTEIN_DENSITY_THRESHOLD)) {
-					fout_HTMLReport << "\n\n\n<br><br><br> " << itr_v_protein_analysis.p_protein_data->protein_name;
+					fout_HTMLReport << "\n\n\n<br><br><br>Protein: " << itr_v_protein_analysis.p_protein_data->protein_name;
+					fout_HTMLReport << "&nbsp[" << itr_v_protein_analysis.p_protein_data->protein_nonreduced_name << "]";
 					fout_HTMLReport << "&nbsp&nbsp&nbspScore: " << std::fixed << std::setprecision(2) << itr_v_protein_analysis.protein_score;
 					fout_HTMLReport << "&nbsp&nbsp&nbspDensity: " << std::fixed << std::setprecision(3) << itr_v_protein_analysis.protein_density;
 					fout_HTMLReport << "&nbsp&nbsp&nbspCoverage: " << std::fixed << std::setprecision(0) << itr_v_protein_analysis.proteinconstruct_sequencecoverage << "%";
@@ -707,21 +708,21 @@ namespace fpf_report {
 							fout_HTMLReport << "&nbsp";
 						}						
 						fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-						//fout_HTMLReport << "Score ";
-						//fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-						fout_HTMLReport << "Sc dens";
+						fout_HTMLReport << "Score ";
 						fout_HTMLReport << "&nbsp&nbsp&nbsp";
-						fout_HTMLReport << "Spec";
-						fout_HTMLReport << "&nbsp&nbsp";
-						fout_HTMLReport << "Homo";
-						fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+						//fout_HTMLReport << "Sc dens";
+						//fout_HTMLReport << "&nbsp&nbsp&nbsp";
+						fout_HTMLReport << "SC";
+						fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp";
+						//fout_HTMLReport << "Homo";
+						//fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_HTMLReport << "Conj";
-						fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+						fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 						fout_HTMLReport << "Dens";
 						fout_HTMLReport << "<br>";
 						for (const auto& itr_homology_data : itr_v_protein_analysis.v_homology_data_combined_by_protein) {
 							if ((itr_homology_data.blastp_homology_density_conjugated >= IgFamily::REPORT_QUERY_PARAMETER_DENSITY_CONJUGATED_THRESHOLD)
-								&& (itr_homology_data.score_density >= IgFamily::REPORT_QUERY_PARAMETER_SCORE_DENSITY_THRESHOLD)) {
+								&& (itr_homology_data.score >= IgFamily::REPORT_QUERY_SCORE_THRESHOLD)) {
 								fout_HTMLReport << "\n<br> ";
 								size_t st_mismatch{};
 								for (auto i = 0; i < itr_homology_data.alignment.length(); i) {
@@ -763,8 +764,17 @@ namespace fpf_report {
 									}
 									fout_HTMLReport << "&nbsp";
 								}
-								fout_HTMLReport << std::fixed << std::setprecision(3) << itr_homology_data.score_density;
-								fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+								fout_HTMLReport << std::fixed << std::setprecision(2) << itr_homology_data.score;
+								if (itr_homology_data.score < 1) {
+									fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+								}
+								else {
+									for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.score))); ++j) {
+										fout_HTMLReport << "&nbsp";
+									}
+								}
+								//fout_HTMLReport << std::fixed << std::setprecision(3) << itr_homology_data.score_density;
+								//fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
 								fout_HTMLReport << itr_homology_data.denovo_replicate_count;
 								if (itr_homology_data.denovo_replicate_count < 1) {
 									fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
@@ -774,15 +784,15 @@ namespace fpf_report {
 										fout_HTMLReport << "&nbsp";
 									}
 								}
-								fout_HTMLReport << std::fixed << std::setprecision(0) << itr_homology_data.blastp_homology;
-								if (itr_homology_data.blastp_homology_transformed < 1) {
-									fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-								}
-								else {
-									for (auto j = 0; j < (5 - std::floor(std::log10(itr_homology_data.blastp_homology))); ++j) {
-										fout_HTMLReport << "&nbsp";
-									}
-								}
+								//fout_HTMLReport << std::fixed << std::setprecision(0) << itr_homology_data.blastp_homology;
+								//if (itr_homology_data.blastp_homology < 1) {
+								//	fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+								//}
+								//else {
+								//	for (auto j = 0; j < (8 - std::floor(std::log10(itr_homology_data.blastp_homology))); ++j) {
+								//		fout_HTMLReport << "&nbsp";
+								//	}
+								//}
 								if ((itr_homology_data.blastp_homology_density_conjugated) >= 0.80) {
 									fout_HTMLReport << "<font color=\"#4c62d6\">";
 								}
@@ -797,7 +807,7 @@ namespace fpf_report {
 								}
 								fout_HTMLReport << std::fixed << std::setprecision(3) << itr_homology_data.blastp_homology_density_conjugated;
 								fout_HTMLReport << "</font>";
-								fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
+								fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp";
 								if ((itr_homology_data.blastp_homology_density) >= 0.80) {
 									fout_HTMLReport << "<font color=\"#4c62d6\">";
 								}
@@ -812,14 +822,22 @@ namespace fpf_report {
 								}
 								fout_HTMLReport << std::fixed << std::setprecision(3) << itr_homology_data.blastp_homology_density;
 								fout_HTMLReport << "</font>";
-								fout_HTMLReport << "&nbsp&nbsp&nbsp&nbsp&nbsp";
-								for (const auto& itr_homology_data_aggregated_by_homology_distribution : itr_homology_data.v_homology_data_aggregated_by_homology_distribution) {
-									if (itr_homology_data_aggregated_by_homology_distribution->blastp_homology_density_conjugated >= IgFamily::REPORT_V_HOMOLOGY_DATA_AGGREGATED_BY_PROTEIN_CONJUGATED_DENSITY_THRESHOLD) {
+								fout_HTMLReport << "&nbsp&nbsp&nbsp";
+								size_t count_HomologyAggregates{};
+								for (auto itr = 0; itr < itr_homology_data.v_homology_data_aggregated_by_homology_distribution.size(); ++itr) {
+									if (itr_homology_data.v_homology_data_aggregated_by_homology_distribution[itr]->blastp_homology_density_conjugated >= IgFamily::REPORT_V_HOMOLOGY_DATA_AGGREGATED_BY_PROTEIN_CONJUGATED_DENSITY_THRESHOLD) {
 										fout_HTMLReport << "&nbsp&nbsp";
-										fout_HTMLReport << itr_homology_data_aggregated_by_homology_distribution->blastp_subject_accession;
-										fout_HTMLReport << "(";
-										fout_HTMLReport << std::setprecision(2) << itr_homology_data_aggregated_by_homology_distribution->blastp_homology_density_conjugated;
-										fout_HTMLReport << "),";
+										fout_HTMLReport << itr_homology_data.v_homology_data_aggregated_by_homology_distribution[itr]->blastp_subject_accession;
+										fout_HTMLReport << " (";
+										fout_HTMLReport << std::setprecision(2) << itr_homology_data.v_homology_data_aggregated_by_homology_distribution[itr]->blastp_homology_density_conjugated;
+										fout_HTMLReport << ")";
+										if (!((count_HomologyAggregates == 2) || ((itr + 1) == itr_homology_data.v_homology_data_aggregated_by_homology_distribution.size()))) {
+											fout_HTMLReport << ",";
+										}
+									}
+									++count_HomologyAggregates;
+									if (count_HomologyAggregates == 3) {
+										break;
 									}
 								}
 							}

@@ -368,7 +368,7 @@ namespace fpf_homology_analysis {
 			if (!par_conjugated) {
 				itr_homology_data.blastp_homology_density = itr_homology_data.blastp_homology_density_conjugated;
 			}
-			itr_homology_data.score = ((itr_homology_data.blastp_homology_density_conjugated + ((itr_homology_data.blastp_homology_density_conjugated * itr_homology_data.blastp_homology) / (IgFamily::HOMOLOGY_SCALING_FACTOR * double(10)))) * itr_homology_data.denovo_replicate_count);
+			itr_homology_data.score = (itr_homology_data.blastp_homology_density_conjugated * itr_homology_data.denovo_replicate_count);
 		}
 	}
 

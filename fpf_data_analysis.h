@@ -310,7 +310,8 @@ namespace fpf_data_analysis {
 								}
 								else {
 									if ((v_blastp_query_alignment_selected[i].score >= itr_protein_analysis.proteinconstruct[j].proteinconstruct_homology_data.score)
-										&& (v_blastp_query_alignment_selected[i].blastp_homology_density_conjugated >= IgFamily::PROTEIN_CONSTRUCT_PARAMETER_DENSITY_CONJUGATED_THRESHOLD)) {
+										&& (v_blastp_query_alignment_selected[i].blastp_homology_density_conjugated >= IgFamily::PROTEIN_CONSTRUCT_PARAMETER_DENSITY_CONJUGATED_THRESHOLD)
+										&& (v_blastp_query_alignment_selected[i].score >= IgFamily::PROTEIN_CONSTRUCT_SCORE_THRESHOLD)) {
 										itr_protein_analysis.proteinconstruct[j].aminoacid = v_blastp_query_alignment_selected[i].alignment.at(j);
 										itr_protein_analysis.proteinconstruct[j].aminoacid_localconfidence = itr_v_denovo_aminoacid.aminoacid_localconfidence;
 										itr_protein_analysis.proteinconstruct[j].proteinconstruct_homology_data = v_blastp_query_alignment_selected[i];
@@ -362,6 +363,7 @@ namespace fpf_data_analysis {
 				}
 				else {
 					temp_v_protein_analysis_selected_by_polymorphism.push_back(itr_v_protein_analysis);
+					temp_v_protein_analysis_selected_by_polymorphism.back().p_protein_data->protein_nonreduced_name = temp_v_protein_analysis_selected_by_polymorphism.back().p_protein_data->protein_name;
 					temp_v_protein_analysis_selected_by_polymorphism.back().p_protein_data->protein_name = protein_name_polymorphism_reduced;
 				}
 			}

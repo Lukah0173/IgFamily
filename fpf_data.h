@@ -87,6 +87,8 @@ namespace fpf_data {
 		string protein_type;
 		string protein_species;
 		string protein_protein;
+		//
+		string protein_nonreduced_name;
 	};
 
 	struct protein_analysis {
