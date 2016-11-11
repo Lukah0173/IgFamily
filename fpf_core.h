@@ -94,7 +94,7 @@ namespace fpf_core {
 
 	bool core_create_FASTA_data_structures(filesystem& par_filesystem, const string& par_select_FASTA) {		
 		fpf_parse::custom_FASTA_output(par_select_FASTA);
-		std::cout << "\n\n\n * parsing FASTA file... \n";
+		std::cout << "\n\n\n * parsing FASTA file... ";
 		par_filesystem.v_FASTA_data = fpf_parse::parse_FASTA(par_select_FASTA);
 		if (check_FASTA_file_exists(par_filesystem.v_FASTA_data)) { return false; }
 		fpf_parse::output_v_FASTA_data(par_filesystem.v_FASTA_data);
@@ -178,21 +178,17 @@ namespace fpf_core {
 	}
 
 	void core_report(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		std::cout << "\n\n\n producing summary reports...\n";
-		std::cout << " ...outputting data reports for ";
+		std::cout << "\n\n\n producing summary reports...";
+		std::cout << "\n ...outputting data reports for ";
 		std::cout << par_filesystem.filename;
-		std::cout << "\n";
 		fpf_report::fout_v_PeptideData(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_ProteinData(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_PeptideAnalysis(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_ProteinAnalysis(par_filesystem, par_sample_analysis);
-		std::cout << " ...homology data structures assigned";
-		std::cout << "\n\n outputting homology summary for file ";
-		std::cout << par_filesystem.filename;;
-		std::cout << "...\n";
 		fpf_report::fout_v_HomologyData(par_filesystem, par_sample_analysis);
-		std::cout << " ...homology file output\n";
-		std::cout << " ...outputting multinomial reports for ";
+		std::cout << "\n ...outputting homology data report for ";
+		std::cout << par_filesystem.filename;
+		std::cout << "\n ...outputting multinomial reports for ";
 		std::cout << par_filesystem.filename;
 		std::cout << "\n ...outputting multinomial data frame for ";
 		std::cout << par_filesystem.filename;
