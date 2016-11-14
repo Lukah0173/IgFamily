@@ -162,9 +162,8 @@ namespace fpf_core {
 		}
 		else {
 			fpf_data_analysis::conjugate_homology(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES, par_refined);
-			if (par_refined) {
-				fpf_homology_analysis::determine_HomologyDataParameters(par_sample_analysis, true);
-			}
+			fpf_homology_analysis::determine_HomologyDataParameters(par_sample_analysis, true);
+			//fpf_homology_analysis::normalise_v_HomologyData(par_sample_analysis);
 			fpf_data_analysis::determine_ProteinScoreDensity(par_sample_analysis);
 			fpf_data_analysis::create_ProteinConstruct(par_sample_analysis);
 			fpf_data_analysis::determine_SequenceCoverage(par_sample_analysis);

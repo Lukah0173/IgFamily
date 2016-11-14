@@ -400,6 +400,19 @@ namespace fpf_homology_analysis {
 			}			
 		}
 	}
+
+	void normalise_v_HomologyData(sample_analysis& par_sample_analysis) {
+		for (auto& itr_homology_data : par_sample_analysis.v_homology_data) {
+			itr_homology_data.blastp_homology_transformed = std::pow(itr_homology_data.blastp_homology_transformed, (double(1) / IgFamily::PARAMETER_HOMOLOGY_WEIGHT));
+			itr_homology_data.blastp_homology_transformed_conjugated = std::pow(itr_homology_data.blastp_homology_transformed_conjugated, (double(1) / IgFamily::PARAMETER_HOMOLOGY_WEIGHT));
+		}
+		for (auto& itr_protein_analysis : par_sample_analysis.v_protein_analysis) {
+			for (auto& itr_homology_data : itr_protein_analysis.v_homology_data_combined_by_protein) {
+				itr_homology_data.blastp_homology_transformed = std::pow(itr_homology_data.blastp_homology_transformed, (double(1) / IgFamily::PARAMETER_HOMOLOGY_WEIGHT));
+				itr_homology_data.blastp_homology_transformed_conjugated = std::pow(itr_homology_data.blastp_homology_transformed_conjugated, (double(1) / IgFamily::PARAMETER_HOMOLOGY_WEIGHT));
+			}
+		}
+	}
 }
 
 #endif
