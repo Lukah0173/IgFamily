@@ -126,7 +126,7 @@ namespace fpf_core {
 		std::cout << "...\n";
 		fpf_homology_analysis::parse_homology_data(par_filesystem, par_sample_analysis);
 		size_t count_blastp_fail{};
-		while (par_sample_analysis.v_homology_data.empty() && (count_blastp_fail <= size_t(3))) {
+		while (par_sample_analysis.v_homology_data.empty() && (count_blastp_fail <= size_t(5))) {
 			++count_blastp_fail;
 			std::cout << "\n\n did blastp have a runtime error? ";
 			std::cout << "\n\n trying again... \n\n";
