@@ -147,39 +147,39 @@ namespace fpf_report {
 		fout_v_HomologyData << "key_query,";
 		fout_v_HomologyData << "query,";
 		fout_v_HomologyData << "subject,";
-		//fout_v_HomologyData << "key_subject_accession,";
+		fout_v_HomologyData << "key_subject_accession,";
 		fout_v_HomologyData << "subject_accession,";
 		fout_v_HomologyData << "denovo_replicate_count,";
 		fout_v_HomologyData << "mismatch_count,";
-		//fout_v_HomologyData << "query_alignment_coverage_delta,";
-		//fout_v_HomologyData << "query_alignment_coverage,";
-		//fout_v_HomologyData << "homology,";
-		//fout_v_HomologyData << "homology_transformed,";
-		//fout_v_HomologyData << "homology_transformed_conjugated,";
+		fout_v_HomologyData << "query_alignment_coverage_delta,";
+		fout_v_HomologyData << "query_alignment_coverage,";
+		fout_v_HomologyData << "homology,";
+		fout_v_HomologyData << "homology_transformed,";
+		fout_v_HomologyData << "homology_transformed_conjugated,";
 		fout_v_HomologyData << "homology_density,";
 		fout_v_HomologyData << "homology_density_conjugated,";
 		fout_v_HomologyData << "score,";
 		fout_v_HomologyData << "\n";
 		for (auto itr_v_homology_data : par_sample_analysis.v_homology_data) {
-			if ((itr_v_homology_data.blastp_subject_accession == "IGHV3-7")
-				|| (itr_v_homology_data.blastp_subject_accession == "IGHV3-69-1")) {
+			//if ((itr_v_homology_data.blastp_subject_accession == "IGHV3-7")
+				//|| (itr_v_homology_data.blastp_subject_accession == "IGHV3-69-1")) {
 				fout_v_HomologyData << itr_v_homology_data.key_blastp_query << ",";
 				fout_v_HomologyData << itr_v_homology_data.blastp_query << ",";
 				fout_v_HomologyData << itr_v_homology_data.blastp_subject << ",";
-				//fout_v_HomologyData << itr_v_homology_data.key_blastp_subject_accession << ",";
+				fout_v_HomologyData << itr_v_homology_data.key_blastp_subject_accession << ",";
 				fout_v_HomologyData << itr_v_homology_data.blastp_subject_accession << ",";
 				fout_v_HomologyData << itr_v_homology_data.denovo_replicate_count << ",";
 				fout_v_HomologyData << itr_v_homology_data.blastp_mismatch_count << ",";
-				//fout_v_HomologyData << itr_v_homology_data.alignment_coverage_delta << ",";
-				//fout_v_HomologyData << itr_v_homology_data.alignment_coverage << ",";
-				//fout_v_HomologyData << itr_v_homology_data.blastp_homology << ",";
-				//fout_v_HomologyData << itr_v_homology_data.blastp_homology_transformed << ",";
-				//fout_v_HomologyData << itr_v_homology_data.blastp_homology_transformed_conjugated << ",";
+				fout_v_HomologyData << itr_v_homology_data.alignment_coverage_delta << ",";
+				fout_v_HomologyData << itr_v_homology_data.alignment_coverage << ",";
+				fout_v_HomologyData << itr_v_homology_data.blastp_homology << ",";
+				fout_v_HomologyData << itr_v_homology_data.blastp_homology_transformed << ",";
+				fout_v_HomologyData << itr_v_homology_data.blastp_homology_transformed_conjugated << ",";
 				fout_v_HomologyData << itr_v_homology_data.blastp_homology_density << ",";
 				fout_v_HomologyData << itr_v_homology_data.blastp_homology_density_conjugated << ",";
 				fout_v_HomologyData << itr_v_homology_data.score << ",";
 				fout_v_HomologyData << "\n";
-			}
+			//}
 		}
 	}
 

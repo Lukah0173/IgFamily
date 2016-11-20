@@ -16,6 +16,7 @@
 #include <iostream>
 #include <map>
 #include <math.h>
+#include <cmath>
 #include <string>
 #include <utility>
 #include <vector>
@@ -220,6 +221,10 @@ namespace fpf_data_analysis {
 				for (auto& itr_homology_data : par_sample_analysis.v_homology_data) {
 					if (itr_homology_data.blastp_subject_accession == itr_protein_analysis.p_protein_data->protein_name) {
 						itr_homology_data.blastp_homology_transformed_conjugated = (itr_homology_data.blastp_homology_transformed * score_conjugate);
+						if (itr_homology_data.blastp_homology_transformed_conjugated != itr_homology_data.blastp_homology_transformed_conjugated) {
+							std::cout << "\n\n" << itr_protein_analysis.protein_score;
+							std::cout << "!ping";
+						}
 					}
 				}
 			}

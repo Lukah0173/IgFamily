@@ -364,7 +364,9 @@ namespace fpf_homology_analysis {
 					temp_score_transform_conjugated_sum += itr_homology_data_2.blastp_homology_transformed_conjugated;
 				}
 			}
-			itr_homology_data.blastp_homology_density_conjugated = (itr_homology_data.blastp_homology_transformed_conjugated / temp_score_transform_conjugated_sum);
+			if (temp_score_transform_conjugated_sum != double(0)) {
+				itr_homology_data.blastp_homology_density_conjugated = (itr_homology_data.blastp_homology_transformed_conjugated / temp_score_transform_conjugated_sum);
+			}
 			if (!par_conjugated) {
 				itr_homology_data.blastp_homology_density = itr_homology_data.blastp_homology_density_conjugated;
 			}
