@@ -56,7 +56,8 @@ namespace fpf_filesystem {
 		vector<homology_data> v_homology_data;
 		vector<protein_analysis> v_protein_analysis;
 		map<string, protein_analysis*> v_protein_analysis_map;
-		vector<protein_analysis> v_protein_analysis_selected_by_polymorphism;
+		vector<vector<protein_analysis>> v2_protein_analysis_grouped_by_polymorphism;
+		vector<protein_analysis> v_protein_analysis_with_selected_polymorphism;
 		multinomial multinomial_data;
 		double protein_analysis_score_max;
 		double protein_analysis_score_mean;

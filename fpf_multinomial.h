@@ -32,7 +32,7 @@ namespace fpf_multinomial {
 	using fpf_filesystem::sample_analysis;
 
 	void create_MultinomialData(sample_analysis& par_sample_analysis) {
-		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
+		for (const auto& itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_with_selected_polymorphism) {
 			par_sample_analysis.multinomial_data.v_p_protein_data.push_back(itr_v_protein_analysis.p_protein_data);
 		}
 		for (const auto& itr_v_peptide_analysis_map : par_sample_analysis.v_peptide_analysis_map) {

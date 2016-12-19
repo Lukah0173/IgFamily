@@ -362,8 +362,9 @@ namespace fpf_data_analysis {
 	}
 
 	void select_protein_analysis_by_score(sample_analysis& par_sample_analysis) {
-		vector<protein_analysis> temp_v_protein_analysis_selected_by_polymorphism{};
-		for (const auto itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
+		vector<vector<protein_analysis>> temp_v2_protein_analysis_grouped_by_polymorphism{};
+		vector<protein_analysis> temp_v_protein_analysis_with_selected_polymorphism{};
+		for (const auto itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_with_selected_polymorphism) {
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV") {
 				string protein_name_polymorphism_reduced{};
 				bool switch_protein_name_polymorphism = bool();
@@ -375,26 +376,29 @@ namespace fpf_data_analysis {
 						protein_name_polymorphism_reduced += itr_protein_name;
 					}
 				}
-				auto& find_protein_analysis = std::find_if(temp_v_protein_analysis_selected_by_polymorphism.begin(), temp_v_protein_analysis_selected_by_polymorphism.end(),
+				auto& find_protein_analysis = std::find_if(temp_v_protein_analysis_with_selected_polymorphism.begin(), temp_v_protein_analysis_with_selected_polymorphism.end(),
 					[protein_name_polymorphism_reduced](const protein_analysis par_protein_analysis) {
 					return par_protein_analysis.p_protein_data->protein_name == protein_name_polymorphism_reduced;
 				});
-				if (find_protein_analysis != temp_v_protein_analysis_selected_by_polymorphism.end()) {
+				if (find_protein_analysis != temp_v_protein_analysis_with_selected_polymorphism.end()) {
 					if (itr_v_protein_analysis.protein_score > find_protein_analysis->protein_score) {
 						*find_protein_analysis = itr_v_protein_analysis;
 					}
 				}
 				else {
-					temp_v_protein_analysis_selected_by_polymorphism.push_back(itr_v_protein_analysis);
-					temp_v_protein_analysis_selected_by_polymorphism.back().p_protein_data->protein_nonreduced_name = temp_v_protein_analysis_selected_by_polymorphism.back().p_protein_data->protein_name;
-					temp_v_protein_analysis_selected_by_polymorphism.back().p_protein_data->protein_name = protein_name_polymorphism_reduced;
+					temp_v2_protein_analysis_grouped_by_polymorphism.push_back(itr_v_protein_analysis);
+					temp_v_protein_analysis_with_selected_polymorphism.push_back(itr_v_protein_analysis);
+					temp_v_protein_analysis_with_selected_polymorphism.back().p_protein_data->protein_nonreduced_name = temp_v_protein_analysis_with_selected_polymorphism.back().p_protein_data->protein_name;
+					temp_v_protein_analysis_with_selected_polymorphism.back().p_protein_data->protein_name = protein_name_polymorphism_reduced;
 				}
+				
 			}
 			else {
-				temp_v_protein_analysis_selected_by_polymorphism.push_back(itr_v_protein_analysis);
+				temp_v_protein_analysis_with_selected_polymorphism.push_back(itr_v_protein_analysis);
 			}
 		}
-		par_sample_analysis.v_protein_analysis_selected_by_polymorphism = temp_v_protein_analysis_selected_by_polymorphism;
+		par_sample_analysis.v2_protein_analysis_grouped_by_polymorphism = temp_v2_protein_analysis_grouped_by_polymorphism;
+		par_sample_analysis.v_protein_analysis_with_selected_polymorphism = temp_v_protein_analysis_with_selected_polymorphism;
 	}
 
 	void determine_ProteinScoreDensity(sample_analysis& par_sample_analysis) {

@@ -80,7 +80,7 @@ namespace fpf_homology_analysis {
 		string output_homology_database_FASTA = DEFAULT_BLASTP_DIRECTORY + "blastp_database.fasta";
 		std::ofstream fout_homology_database_FASTA;
 		fout_homology_database_FASTA.open(output_homology_database_FASTA);
-		for (auto itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_selected_by_polymorphism) {
+		for (auto itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_with_selected_polymorphism) {
 			fout_homology_database_FASTA << ">" << itr_v_protein_analysis.p_protein_data->key_protein_data;
 			fout_homology_database_FASTA << "|" << itr_v_protein_analysis.p_protein_data->protein_name;
 			fout_homology_database_FASTA << "\n";
@@ -304,11 +304,11 @@ namespace fpf_homology_analysis {
 
 	void associate_homology_data_to_protein_analysis_refined(sample_analysis& par_sample_analysis) {
 		for (auto& itr_v_homology_data : par_sample_analysis.v_homology_data) {
-			auto find_protein_data = std::find_if(par_sample_analysis.v_protein_analysis_selected_by_polymorphism.begin(), par_sample_analysis.v_protein_analysis_selected_by_polymorphism.end(),
+			auto find_protein_data = std::find_if(par_sample_analysis.v_protein_analysis_with_selected_polymorphism.begin(), par_sample_analysis.v_protein_analysis_with_selected_polymorphism.end(),
 				[itr_v_homology_data](const protein_analysis& par_protein_analysis) {
 				return par_protein_analysis.p_protein_data->protein_name == itr_v_homology_data.blastp_subject_accession;
 			});
-			if (find_protein_data == par_sample_analysis.v_protein_analysis_selected_by_polymorphism.end()) {
+			if (find_protein_data == par_sample_analysis.v_protein_analysis_with_selected_polymorphism.end()) {
 				std::cout << "\n\n error - std::find_if returns nullptr";
 				std::cout << "\n\n" << itr_v_homology_data.blastp_subject_accession;
 				string catch_error{};
