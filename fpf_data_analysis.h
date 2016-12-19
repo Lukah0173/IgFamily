@@ -162,10 +162,19 @@ namespace fpf_data_analysis {
 
 	void determine_peptide_sequence_identity(sample_analysis& par_sample_analysis)
 	{
-		size_t temp_peptide_sequence_identity{};
 		for (auto& itr_peptide_analysis : par_sample_analysis.v_peptide_analysis)
 		{
-			
+			for (const auto& itr_protein_data : par_sample_analysis.v_protein_data)
+			{
+				if (itr_protein_data.protein_type == "IGV")
+				{
+					if ((itr_protein_data.protein_name.find("*") == std::string::npos) && (itr_protein_data.protein_protein.find(itr_peptide_analysis.peptide_filtered) != std::string::npos))
+					{
+						++itr_peptide_analysis.sequence_identity_count;
+						itr_peptide_analysis.v_sequence_identity_matches.push_back(itr_protein_data.protein_name);
+					}
+				}
+			}
 		}
 	}
 

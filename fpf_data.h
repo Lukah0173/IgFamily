@@ -65,12 +65,13 @@ namespace fpf_data {
 		denovo_peptide denovo_peptide_data;
 		denovo_peptide denovo_peptide_data_filtered;
 	};
-	
+
 	struct peptide_analysis {
 		size_t key_peptide_analysis;
 		string peptide_filtered;
 		size_t replicate_count;
 		size_t sequence_identity_count;
+		vector<string> v_sequence_identity_matches;
 		vector<double> v_peptide_withoutmod_mz;
 		vector<double> v_peptide_withoutmod_z;
 		vector<double> v_peptide_withoutmod_rt;

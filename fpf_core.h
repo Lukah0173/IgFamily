@@ -157,10 +157,11 @@ namespace fpf_core {
 		std::cout << "\n\n scoring proteins...\n";
 		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis, 0, par_refined, false);
 		std::cout << " ...proteins scored\n";
-		if (!par_refined) {
+		if (!par_refined) {			
 			//fpf_data_analysis::conjugate_homology(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN, par_refined);
 		}
 		else {
+			fpf_data_analysis::determine_peptide_sequence_identity(par_sample_analysis);
 			fpf_data_analysis::conjugate_homology(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES, par_refined);
 			//fpf_homology_analysis::determine_HomologyDataParameters(par_sample_analysis, true);
 			//fpf_homology_analysis::normalise_v_HomologyData(par_sample_analysis);
@@ -208,9 +209,12 @@ namespace fpf_core {
 		std::cout << par_filesystem.filename;
 		fpf_report::fout_MultinomialProteinScore(par_filesystem, par_sample_analysis);
 		fpf_report::fout_MultinomialProteinDensity(par_filesystem, par_sample_analysis);
-		fpf_report::fout_ProteinPseudoabundanceScore(par_filesystem, par_sample_analysis, 1, 0, "allpeptides_");
-		fpf_report::fout_ProteinPseudoabundanceScore(par_filesystem, par_sample_analysis, 20, 0.5, "0.5peptides_");
-		fpf_report::fout_ProteinPseudoabundanceScore(par_filesystem, par_sample_analysis, 20, 0.99, "uniquepeptides_");
+		//fpf_report::fout_ProteinPseudoabundanceScore(par_filesystem, par_sample_analysis, 1, 0, "allpeptides_");
+		//fpf_report::fout_ProteinPseudoabundanceScore(par_filesystem, par_sample_analysis, 20, 0.5, "0.5peptides_");
+		//fpf_report::fout_ProteinPseudoabundanceScore(par_filesystem, par_sample_analysis, 20, 0.99, "uniquepeptides_");
+		std::cout << "\n ...outputting peptide sequence identity report for ";
+		std::cout << par_filesystem.filename;
+		fpf_report::fout_v_peptide_by_sequence_identity(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting html report for ";
 		std::cout << par_filesystem.filename;
 		std::cout << "\n";

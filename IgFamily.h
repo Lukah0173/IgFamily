@@ -17,7 +17,7 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.12.3f" };
+	const string version{ "v0.12.4" };
 
 	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
@@ -25,7 +25,7 @@ namespace IgFamily {
 	const bool OUTPUT_FASTA{ 1 };
 	const bool BLASTP_BY_SELECTED_PEPTIDE{ 1 };
 
-	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Will-Murray-Brown_20161111.txt" };
+	const string IGFAMILY_ROOT_DIR{ "filesystem_directory\\Will-Murray-Brown_20160927.txt" };
 	const string DEFAULT_IGFAMILY_DIRECTORY{ "" };
 	const string DEFAULT_FASTA_DIRECTORY{ DEFAULT_IGFAMILY_DIRECTORY + "FASTA\\" };
 	const string DEFAULT_FASTA_MODULE_DIRECTORY{ DEFAULT_FASTA_DIRECTORY + "FASTA_modules\\" };
@@ -55,15 +55,15 @@ namespace IgFamily {
 	const double REPORT_QUERY_PARAMETER_SCORE_DENSITY_THRESHOLD{ 0.001 };
 	const double REPORT_V_HOMOLOGY_DATA_AGGREGATED_BY_PROTEIN_CONJUGATED_DENSITY_THRESHOLD{ 0.1 };
 
-	const double HOMOLOGY_SCALING_FACTOR{ 100 };
-	const double PARAMETER_HOMOLOGY_WEIGHT{ 3.5 }; // >= 1
-	const double PARAMETER_HOMOLOGY_MISMATCH_WEIGHT{ 0.30 };
-	const double PARAMETER_HOMOLOGY_DELTA_ALIGNMENT_WEIGHT{ 0.95 };
-	const double PARAMETER_SCORE_CONJUGATION_WEIGHT{ 1.0 };
-	const double PARAMETER_PRIOR_DISTRIBUTION_WEIGHT{ 0.005 };
-	const double PARAMETER_DEFAULT_LOGISTIC_CONJUGATION_FACTOR{ 1 };
+	const double HOMOLOGY_SCALING_FACTOR{ 100 }; // Default: 100
+	const double PARAMETER_HOMOLOGY_WEIGHT{ 3.5 }; // >= 1 ~ Default: 3.5
+	const double PARAMETER_HOMOLOGY_MISMATCH_WEIGHT{ 0.30 }; // Default: 0.30
+	const double PARAMETER_HOMOLOGY_DELTA_ALIGNMENT_WEIGHT{ 0.95 }; // Default: 0.95
+	const double PARAMETER_SCORE_CONJUGATION_WEIGHT{ 1.0 }; // Default: 1.0
+	const double PARAMETER_PRIOR_DISTRIBUTION_WEIGHT{ 0.005 }; // Default: 0.005
+	const double PARAMETER_DEFAULT_LOGISTIC_CONJUGATION_FACTOR{ 1.0 }; // Default: 1.0
 	double PARAMETER_LOGISTIC_CONJUGATION_FACTOR{ PARAMETER_DEFAULT_LOGISTIC_CONJUGATION_FACTOR };
-	const double PARAMETER_LOGISTIC_ITERATION_FACTOR{ 0.001 };
+	const double PARAMETER_LOGISTIC_ITERATION_FACTOR{ 0.001 };  // Default: 0.001
 
 	const double DEFAULT_PROTEIN_SCORE_THRESHOLD{ 3 };
 	double PROTEIN_SCORE_THRESHOLD{ DEFAULT_PROTEIN_SCORE_THRESHOLD };

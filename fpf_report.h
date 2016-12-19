@@ -495,6 +495,52 @@ namespace fpf_report {
 		}
 	}
 
+	struct sort_sequence_identity
+	{
+		string peptide_filtered;
+		size_t sequence_identity_count;
+		vector<string> v_sequence_identity_matches;
+	};
+
+	inline bool predicate_peptide_by_sequence_identity(const sort_sequence_identity& i, const sort_sequence_identity& j) {
+		return (i.sequence_identity_count < j.sequence_identity_count);
+	}
+
+	inline void sort_v_peptide_by_sequence_identity(vector<sort_sequence_identity>& par_v_peptide_by_sequence_identity) {
+		std::sort(par_v_peptide_by_sequence_identity.begin(), par_v_peptide_by_sequence_identity.end(), predicate_peptide_by_sequence_identity);
+	}
+
+
+	void fout_v_peptide_by_sequence_identity(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis)
+	{
+		std::string output_v_peptide_by_sequence_identity{ par_filesystem.directory + par_filesystem.filename + "_peptides_by_sequence_identity_" + par_sample_analysis.peptide_assignment_method + ".csv" };
+		std::ofstream fout_v_peptide_by_sequence_identity;
+		fout_v_peptide_by_sequence_identity.open(output_v_peptide_by_sequence_identity);
+		vector<sort_sequence_identity> v_sort_sequence_identity{};
+		for (auto& itr_v_peptide_analysis : par_sample_analysis.v_peptide_analysis)
+		{
+			if (itr_v_peptide_analysis.sequence_identity_count != 0)
+			{
+				sort_sequence_identity temp_sort_sequence_identity{ itr_v_peptide_analysis.peptide_filtered, itr_v_peptide_analysis.sequence_identity_count, itr_v_peptide_analysis.v_sequence_identity_matches };
+				v_sort_sequence_identity.push_back(temp_sort_sequence_identity);
+			}
+		}
+		sort_v_peptide_by_sequence_identity(v_sort_sequence_identity);
+		for (const auto& itr_sort_sequence_identity : v_sort_sequence_identity)
+		{
+			if (itr_sort_sequence_identity.sequence_identity_count != 0)
+			{
+				fout_v_peptide_by_sequence_identity << "\n" << itr_sort_sequence_identity.peptide_filtered;
+				fout_v_peptide_by_sequence_identity << "," << itr_sort_sequence_identity.sequence_identity_count;
+				fout_v_peptide_by_sequence_identity << ",";
+				for (const auto& itr_sequence_identity_matches : itr_sort_sequence_identity.v_sequence_identity_matches)
+				{
+					fout_v_peptide_by_sequence_identity << "; " << itr_sequence_identity_matches;
+				}
+			}
+		}
+	}
+
 	void fout_HTMLReport(filesystem& par_filesystem, sample_analysis& par_sample_analysis, bool par_alloutput, bool par_summary, const double& par_protein_score_threshold, const string& par_filename_tag) {
 		std::string output_html_report{};
 		if (par_alloutput && !par_summary) {
