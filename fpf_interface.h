@@ -195,32 +195,38 @@ namespace fpf_interface {
 		return perform_peptide_method_selection(par_peptide_method_setting_current);
 	}
 
-	string perform_peptide_method_selection(string par_spectra_method_setting) {
+	string perform_peptide_method_selection(string par_spectra_method_setting)
+	{
 		string menu_selection{};
 		while ((menu_selection != ("0"))
 			&& (menu_selection != ("1"))
 			&& (menu_selection != ("2"))
-			&& (menu_selection != ("X"))) {
+			&& (menu_selection != ("X")))
+		{
 			menu_selection.clear();
 			std::cout << "\n\n --> ";
 			std::cin >> menu_selection;
 		}
-		if (menu_selection == "0") {
+		if (menu_selection == "0")
+		{
 			return "PEAKS database match";
 		}
-		if (menu_selection == "1") {
+		if (menu_selection == "1")
+		{
 			return "PEAKS de novo";
 		}
-		if (menu_selection == "2") {
+		if (menu_selection == "2")
+		{
 			return "NOVOR de novo";
 		}
-		if (menu_selection == "X") {
+		if (menu_selection == "X")
+		{
 			return par_spectra_method_setting;
 		}
 		return par_spectra_method_setting;
 	}
 
-	void select_settings(string& par_select_fasta, vector<string> par_v_select_peptide_assignment) {
+	void select_settings(string& par_select_fasta, vector<string>& par_v_select_peptide_assignment) {
 		string menu_selection{ display_menu() };
 		bool menu_continue{};
 		while (!menu_continue) {
@@ -232,6 +238,7 @@ namespace fpf_interface {
 			if (menu_selection == "P") {
 				*par_v_select_peptide_assignment.begin() = display_peptide_assignment_menu(*par_v_select_peptide_assignment.begin());
 				display_settings(par_select_fasta, par_v_select_peptide_assignment);
+				menu_selection = display_menu();
 
 			}
 			if (menu_selection == "X") {

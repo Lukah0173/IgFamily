@@ -9,6 +9,8 @@
 #ifndef FPF_CORE
 #define	FPF_CORE
 
+#include <windows.h>
+
 #include "IgFamily.h"
 #include "fpf_convert.h"
 #include "fpf_data_analysis.h"
@@ -49,6 +51,12 @@ namespace fpf_core {
 					temp_sample_analysis.peptide_assignment_method = "PEAKS_database";
 					std::cout << "\n\n\n * parsing " << par_filesystem.filename << " PEAKS database matched peptides...";
 					temp_sample_analysis.v_csv_data = std::move(main_v_csv_PEAKS_database_peptides);
+					if (!IgFamily::FILESYSTEM_MODE) {
+						CreateDirectory((temp_sample_analysis.v_csv_data.begin()->csv_sourcefile + "_" + temp_sample_analysis.peptide_assignment_method).c_str(), NULL);
+						par_filesystem.directory = temp_sample_analysis.v_csv_data.begin()->csv_sourcefile + "_" + temp_sample_analysis.peptide_assignment_method + "\\";
+						par_filesystem.filename = temp_sample_analysis.v_csv_data.begin()->csv_sourcefile;
+						std::cout << temp_sample_analysis.v_csv_data.begin()->csv_sourcefile;
+					}
 				}
 				if (itr_v_select_peptide_assignment_method == "PEAKS de novo") {
 					vector<csv_data> main_v_csv_PEAKS_denovo_peptides = fpf_filesystem::parse_filesystem_PEAKS_denovo_peptides(fpf_filesystem::read_filesystem_PEAKS_denovo_peptides(par_filesystem.directory));
@@ -57,8 +65,11 @@ namespace fpf_core {
 					std::cout << "\n\n\n * parsing " << par_filesystem.filename << " PEAKS de novo peptides...";
 					temp_sample_analysis.v_csv_data = std::move(main_v_csv_PEAKS_denovo_peptides);
 					if (!IgFamily::FILESYSTEM_MODE) {
+						CreateDirectory((temp_sample_analysis.v_csv_data.begin()->csv_sourcefile + "_" + temp_sample_analysis.peptide_assignment_method).c_str(), NULL);
+						par_filesystem.directory = temp_sample_analysis.v_csv_data.begin()->csv_sourcefile + "_" + temp_sample_analysis.peptide_assignment_method + "\\";
 						par_filesystem.filename = temp_sample_analysis.v_csv_data.begin()->csv_sourcefile;
 						std::cout << temp_sample_analysis.v_csv_data.begin()->csv_sourcefile;
+
 					}
 				}
 				if (itr_v_select_peptide_assignment_method == "NOVOR de novo") {
@@ -67,6 +78,12 @@ namespace fpf_core {
 					temp_sample_analysis.peptide_assignment_method = "NOVOR_denono";
 					std::cout << "\n\n\n * parsing " << par_filesystem.filename << " NOVOR de novo matched peptides...";
 					temp_sample_analysis.v_csv_data = std::move(main_v_csv_NOVOR_denovo_peptides);
+					if (!IgFamily::FILESYSTEM_MODE) {
+						CreateDirectory((temp_sample_analysis.v_csv_data.begin()->csv_sourcefile + "_" + temp_sample_analysis.peptide_assignment_method).c_str(), NULL);
+						par_filesystem.directory = temp_sample_analysis.v_csv_data.begin()->csv_sourcefile + "_" + temp_sample_analysis.peptide_assignment_method + "\\";
+						par_filesystem.filename = temp_sample_analysis.v_csv_data.begin()->csv_sourcefile;
+						std::cout << temp_sample_analysis.v_csv_data.begin()->csv_sourcefile;
+					}
 				}
 				if (temp_sample_analysis.file_found) {
 					std::cout << "\n\n peptides parsed - " << temp_sample_analysis.v_csv_data.size();
@@ -184,6 +201,7 @@ namespace fpf_core {
 		fpf_report::fout_v_PeptideData(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_ProteinData(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_PeptideAnalysis(par_filesystem, par_sample_analysis);
+		fpf_report::fout_PeptideReport(par_filesystem, par_sample_analysis, "peptide_report");
 		fpf_report::fout_v_ProteinAnalysis(par_filesystem, par_sample_analysis);
 		fpf_report::fout_v_HomologyData(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting homology data report for ";
@@ -193,18 +211,15 @@ namespace fpf_core {
 		std::cout << "\n ...outputting multinomial data frame for ";
 		std::cout << par_filesystem.filename;
 		fpf_report::fout_Multinomial(par_filesystem, par_sample_analysis);
-		std::cout << "\n ...outputting multinomial peptide list for ";
-		std::cout << par_filesystem.filename;
-		fpf_report::fout_MultinomialElement(par_filesystem, par_sample_analysis);
-		std::cout << "\n ...outputting filtered multinomial peptide list for ";
-		std::cout << par_filesystem.filename;
-		fpf_report::fout_MultinomialElementNoMatch(par_filesystem, par_sample_analysis);
-		std::cout << "\n ...outputting contaminants report for ";
-		std::cout << par_filesystem.filename;
-		fpf_report::fout_MultinomialContaminantsReport(par_filesystem, par_sample_analysis, "peptide_report");
-		std::cout << "\n ...outputting contaminants list for ";
-		std::cout << par_filesystem.filename;
-		fpf_report::fout_MultinomialContaminantsList(par_filesystem, par_sample_analysis);
+		//std::cout << "\n ...outputting multinomial peptide list for ";
+		//std::cout << par_filesystem.filename;
+		//fpf_report::fout_MultinomialElement(par_filesystem, par_sample_analysis);
+		//std::cout << "\n ...outputting filtered multinomial peptide list for ";
+		//std::cout << par_filesystem.filename;
+		//fpf_report::fout_MultinomialElementNoMatch(par_filesystem, par_sample_analysis);
+		//std::cout << "\n ...outputting contaminants list for ";
+		//std::cout << par_filesystem.filename;
+		//fpf_report::fout_MultinomialContaminantsList(par_filesystem, par_sample_analysis);
 		std::cout << "\n ...outputting protein score comparison for ";
 		std::cout << par_filesystem.filename;
 		fpf_report::fout_MultinomialProteinScore(par_filesystem, par_sample_analysis);

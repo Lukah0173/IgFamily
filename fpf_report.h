@@ -37,6 +37,11 @@ namespace fpf_report {
 	using fpf_filesystem::filesystem;
 	using fpf_filesystem::sample_analysis;
 
+	void createDirectory(filesystem& par_filesystem, sample_analysis& par_sample_analysis)
+	{
+		
+	}
+	
 	void fout_v_PeptideData(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
 		std::string output_v_peptide_data = par_filesystem.directory + par_filesystem.filename + "_peptide_data_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_v_PeptideData;
@@ -141,7 +146,7 @@ namespace fpf_report {
 
 	void fout_v_HomologyData(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis) {
 		string output_blastp_summary = par_filesystem.directory + par_filesystem.filename;
-		output_blastp_summary += "_homology_data.csv";
+		output_blastp_summary += "_homology_data_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_v_HomologyData;
 		fout_v_HomologyData.open(output_blastp_summary);
 		fout_v_HomologyData << "key_query,";
@@ -184,7 +189,7 @@ namespace fpf_report {
 	}
 
 	void fout_Multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		string output_multinomial = par_filesystem.directory + par_filesystem.filename + "_multinomial_" + par_sample_analysis.peptide_assignment_method + ".csv";
+		string output_multinomial = par_filesystem.directory + par_filesystem.filename + "_multinomial_data_frame" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_Multinomial;
 		fout_Multinomial.open(output_multinomial);
 		fout_Multinomial << ",";
@@ -288,7 +293,7 @@ namespace fpf_report {
 		}
 	}
 
-	void fout_MultinomialContaminantsReport(filesystem& par_filesystem, sample_analysis& par_sample_analysis, const string& par_filename_tag) {
+	void fout_PeptideReport(filesystem& par_filesystem, sample_analysis& par_sample_analysis, const string& par_filename_tag) {
 		struct output_report {
 		public:
 			double peptide_theoretical_mz;
@@ -526,16 +531,34 @@ namespace fpf_report {
 			}
 		}
 		sort_v_peptide_by_sequence_identity(v_sort_sequence_identity);
+		bool first_itr{ true };
 		for (const auto& itr_sort_sequence_identity : v_sort_sequence_identity)
 		{
 			if (itr_sort_sequence_identity.sequence_identity_count != 0)
 			{
-				fout_v_peptide_by_sequence_identity << "\n" << itr_sort_sequence_identity.peptide_filtered;
+				if (!first_itr)
+				{
+					fout_v_peptide_by_sequence_identity << "\n";
+				}
+				else
+				{
+					fout_v_peptide_by_sequence_identity << "peptide_filtered" << ",";
+					fout_v_peptide_by_sequence_identity << "sequence_identity_count" << ",";
+					fout_v_peptide_by_sequence_identity << "v_sequence_identity_matches" << "\n";
+				}
+				first_itr = false;
+				fout_v_peptide_by_sequence_identity << itr_sort_sequence_identity.peptide_filtered;
 				fout_v_peptide_by_sequence_identity << "," << itr_sort_sequence_identity.sequence_identity_count;
 				fout_v_peptide_by_sequence_identity << ",";
+				bool first_itr_2{ true };
 				for (const auto& itr_sequence_identity_matches : itr_sort_sequence_identity.v_sequence_identity_matches)
 				{
-					fout_v_peptide_by_sequence_identity << "; " << itr_sequence_identity_matches;
+					if (!first_itr_2)
+					{
+						fout_v_peptide_by_sequence_identity << "; ";
+					}
+					first_itr_2 = false;
+					fout_v_peptide_by_sequence_identity << itr_sequence_identity_matches;
 				}
 			}
 		}
