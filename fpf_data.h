@@ -70,6 +70,7 @@ namespace fpf_data {
 		size_t key_peptide_analysis;
 		string peptide_filtered;
 		size_t replicate_count;
+		size_t sequence_identity_count;
 		vector<double> v_peptide_withoutmod_mz;
 		vector<double> v_peptide_withoutmod_z;
 		vector<double> v_peptide_withoutmod_rt;

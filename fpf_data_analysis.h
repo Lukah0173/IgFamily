@@ -160,6 +160,15 @@ namespace fpf_data_analysis {
 		std::sort(par_v_homology_data.begin(), par_v_homology_data.end(), predicate_protein_analysis);
 	}
 
+	void determine_peptide_sequence_identity(sample_analysis& par_sample_analysis)
+	{
+		size_t temp_peptide_sequence_identity{};
+		for (auto& itr_peptide_analysis : par_sample_analysis.v_peptide_analysis)
+		{
+			
+		}
+	}
+
 	void determine_protein_analysis_score_mean(sample_analysis& par_sample_analysis)
 	{
 		double temp_protein_analysis_score_max{};
