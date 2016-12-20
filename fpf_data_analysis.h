@@ -164,14 +164,16 @@ namespace fpf_data_analysis {
 	{
 		for (auto& itr_peptide_analysis : par_sample_analysis.v_peptide_analysis)
 		{
-			for (const auto& itr_protein_data : par_sample_analysis.v_protein_data)
+			for (auto& itr_v_protein_analysis_grouped_by_polymorphism : par_sample_analysis.v2_protein_analysis_grouped_by_polymorphism)
 			{
-				if (itr_protein_data.protein_type == "IGV")
+				for (auto& itr_protein_analysis_grouped_by_polymorphism : itr_v_protein_analysis_grouped_by_polymorphism)
+				if (itr_protein_analysis_grouped_by_polymorphism.p_protein_data->protein_type == "IGV")
 				{
-					if ((itr_protein_data.protein_name.find("*") == std::string::npos) && (itr_protein_data.protein_protein.find(itr_peptide_analysis.peptide_filtered) != std::string::npos))
+					if (itr_protein_analysis_grouped_by_polymorphism.p_protein_data->protein_protein.find(itr_peptide_analysis.peptide_filtered) != std::string::npos)
 					{
 						++itr_peptide_analysis.sequence_identity_count;
-						itr_peptide_analysis.v_sequence_identity_matches.push_back(itr_protein_data.protein_name);
+						itr_peptide_analysis.v_sequence_identity_matches.push_back(itr_protein_analysis_grouped_by_polymorphism.p_protein_data);
+						break;
 					}
 				}
 			}
@@ -364,7 +366,7 @@ namespace fpf_data_analysis {
 	void select_protein_analysis_by_score(sample_analysis& par_sample_analysis) {
 		vector<vector<protein_analysis>> temp_v2_protein_analysis_grouped_by_polymorphism{};
 		vector<protein_analysis> temp_v_protein_analysis_with_selected_polymorphism{};
-		for (const auto itr_v_protein_analysis : par_sample_analysis.v_protein_analysis_with_selected_polymorphism) {
+		for (auto itr_v_protein_analysis : par_sample_analysis.v_protein_analysis) {
 			if (itr_v_protein_analysis.p_protein_data->protein_type == "IGV") {
 				string protein_name_polymorphism_reduced{};
 				bool switch_protein_name_polymorphism = bool();
@@ -377,21 +379,41 @@ namespace fpf_data_analysis {
 					}
 				}
 				auto& find_protein_analysis = std::find_if(temp_v_protein_analysis_with_selected_polymorphism.begin(), temp_v_protein_analysis_with_selected_polymorphism.end(),
-					[protein_name_polymorphism_reduced](const protein_analysis par_protein_analysis) {
+					[protein_name_polymorphism_reduced](const protein_analysis par_protein_analysis)
+				{
 					return par_protein_analysis.p_protein_data->protein_name == protein_name_polymorphism_reduced;
 				});
-				if (find_protein_analysis != temp_v_protein_analysis_with_selected_polymorphism.end()) {
-					if (itr_v_protein_analysis.protein_score > find_protein_analysis->protein_score) {
+				if (find_protein_analysis != temp_v_protein_analysis_with_selected_polymorphism.end())
+				{
+					if (itr_v_protein_analysis.protein_score > find_protein_analysis->protein_score)
+					{
 						*find_protein_analysis = itr_v_protein_analysis;
 					}
 				}
-				else {
-					temp_v2_protein_analysis_grouped_by_polymorphism.push_back(itr_v_protein_analysis);
+				else
+				{
 					temp_v_protein_analysis_with_selected_polymorphism.push_back(itr_v_protein_analysis);
 					temp_v_protein_analysis_with_selected_polymorphism.back().p_protein_data->protein_nonreduced_name = temp_v_protein_analysis_with_selected_polymorphism.back().p_protein_data->protein_name;
 					temp_v_protein_analysis_with_selected_polymorphism.back().p_protein_data->protein_name = protein_name_polymorphism_reduced;
 				}
-				
+				auto& find_protein_analysis_grouped_by_polymorphism = std::find_if(temp_v2_protein_analysis_grouped_by_polymorphism.begin(), temp_v2_protein_analysis_grouped_by_polymorphism.end(),
+					[protein_name_polymorphism_reduced](const vector<protein_analysis> par_v_protein_analysis)
+				{
+					return par_v_protein_analysis.begin()->p_protein_data->protein_name == protein_name_polymorphism_reduced;
+				});
+				if (find_protein_analysis_grouped_by_polymorphism != temp_v2_protein_analysis_grouped_by_polymorphism.end())
+				{
+					protein_analysis temp_protein_analysis = itr_v_protein_analysis;
+					temp_protein_analysis.p_protein_data->protein_nonreduced_name = temp_protein_analysis.p_protein_data->protein_name;
+					temp_protein_analysis.p_protein_data->protein_name = protein_name_polymorphism_reduced;
+					find_protein_analysis_grouped_by_polymorphism->push_back(itr_v_protein_analysis);
+				}
+				else
+				{
+					vector<protein_analysis> temp_v_protein_analysis{};
+					temp_v_protein_analysis.push_back(itr_v_protein_analysis);
+					temp_v2_protein_analysis_grouped_by_polymorphism.push_back(temp_v_protein_analysis);
+				}
 			}
 			else {
 				temp_v_protein_analysis_with_selected_polymorphism.push_back(itr_v_protein_analysis);

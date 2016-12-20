@@ -34,6 +34,7 @@ namespace fpf_report {
 	using fpf_data::multinomial;
 	using fpf_data::multinomial_frequency_type;
 	using fpf_data::peptide_analysis;
+	using fpf_data::protein_data;
 	using fpf_filesystem::filesystem;
 	using fpf_filesystem::sample_analysis;
 
@@ -503,18 +504,20 @@ namespace fpf_report {
 	struct sort_sequence_identity
 	{
 		string peptide_filtered;
+		size_t peptide_replicate_count;
 		size_t sequence_identity_count;
-		vector<string> v_sequence_identity_matches;
+		vector<protein_data*> v_sequence_identity_matches;
 	};
 
 	inline bool predicate_peptide_by_sequence_identity(const sort_sequence_identity& i, const sort_sequence_identity& j) {
-		return (i.sequence_identity_count < j.sequence_identity_count);
+		return (i.sequence_identity_count < j.sequence_identity_count) || 
+			((i.sequence_identity_count == j.sequence_identity_count) && (i.peptide_replicate_count > j.peptide_replicate_count)) ||
+			((i.sequence_identity_count == j.sequence_identity_count) && (i.peptide_replicate_count == j.peptide_replicate_count) && (i.peptide_filtered < j.peptide_filtered));
 	}
 
 	inline void sort_v_peptide_by_sequence_identity(vector<sort_sequence_identity>& par_v_peptide_by_sequence_identity) {
 		std::sort(par_v_peptide_by_sequence_identity.begin(), par_v_peptide_by_sequence_identity.end(), predicate_peptide_by_sequence_identity);
 	}
-
 
 	void fout_v_peptide_by_sequence_identity(const filesystem& par_filesystem, const sample_analysis& par_sample_analysis)
 	{
@@ -526,7 +529,7 @@ namespace fpf_report {
 		{
 			if (itr_v_peptide_analysis.sequence_identity_count != 0)
 			{
-				sort_sequence_identity temp_sort_sequence_identity{ itr_v_peptide_analysis.peptide_filtered, itr_v_peptide_analysis.sequence_identity_count, itr_v_peptide_analysis.v_sequence_identity_matches };
+				sort_sequence_identity temp_sort_sequence_identity{ itr_v_peptide_analysis.peptide_filtered, itr_v_peptide_analysis.replicate_count, itr_v_peptide_analysis.sequence_identity_count, itr_v_peptide_analysis.v_sequence_identity_matches };
 				v_sort_sequence_identity.push_back(temp_sort_sequence_identity);
 			}
 		}
@@ -543,11 +546,13 @@ namespace fpf_report {
 				else
 				{
 					fout_v_peptide_by_sequence_identity << "peptide_filtered" << ",";
+					fout_v_peptide_by_sequence_identity << "peptide_replicate_count" << ",";
 					fout_v_peptide_by_sequence_identity << "sequence_identity_count" << ",";
 					fout_v_peptide_by_sequence_identity << "v_sequence_identity_matches" << "\n";
 				}
 				first_itr = false;
 				fout_v_peptide_by_sequence_identity << itr_sort_sequence_identity.peptide_filtered;
+				fout_v_peptide_by_sequence_identity << "," << itr_sort_sequence_identity.peptide_replicate_count;
 				fout_v_peptide_by_sequence_identity << "," << itr_sort_sequence_identity.sequence_identity_count;
 				fout_v_peptide_by_sequence_identity << ",";
 				bool first_itr_2{ true };
@@ -558,7 +563,7 @@ namespace fpf_report {
 						fout_v_peptide_by_sequence_identity << "; ";
 					}
 					first_itr_2 = false;
-					fout_v_peptide_by_sequence_identity << itr_sequence_identity_matches;
+					fout_v_peptide_by_sequence_identity << itr_sequence_identity_matches->protein_name;
 				}
 			}
 		}

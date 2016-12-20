@@ -17,9 +17,9 @@ namespace IgFamily {
 
 	using std::string;
 
-	const string version{ "v0.12.4b" };
+	const string version{ "v0.12.4c" };
 
-	const bool FILESYSTEM_MODE{ 0 };
+	const bool FILESYSTEM_MODE{ 1 };
 	const bool FILESYSTEM_UPDATE_ALL{ 1 };
 	const bool MAP_FOUT_BY_SCORE{ 1 };
 	const bool OUTPUT_FASTA{ 1 };
