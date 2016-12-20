@@ -164,12 +164,25 @@ namespace fpf_data_analysis {
 	{
 		for (auto& itr_peptide_analysis : par_sample_analysis.v_peptide_analysis)
 		{
+			string temp_leucine_to_isoleucine_peptide{};
+			for (const auto& itr_peptide_filtered : itr_peptide_analysis.peptide_filtered)
+			{
+				if (itr_peptide_filtered != 'L')
+				{
+					temp_leucine_to_isoleucine_peptide += itr_peptide_filtered;
+				}
+				else
+				{
+					temp_leucine_to_isoleucine_peptide += 'I';
+				}
+			}
 			for (auto& itr_v_protein_analysis_grouped_by_polymorphism : par_sample_analysis.v2_protein_analysis_grouped_by_polymorphism)
 			{
 				for (auto& itr_protein_analysis_grouped_by_polymorphism : itr_v_protein_analysis_grouped_by_polymorphism)
 				if (itr_protein_analysis_grouped_by_polymorphism.p_protein_data->protein_type == "IGV")
 				{
-					if (itr_protein_analysis_grouped_by_polymorphism.p_protein_data->protein_protein.find(itr_peptide_analysis.peptide_filtered) != std::string::npos)
+					if ((itr_protein_analysis_grouped_by_polymorphism.p_protein_data->protein_protein.find(itr_peptide_analysis.peptide_filtered) != std::string::npos) ||
+						(itr_protein_analysis_grouped_by_polymorphism.p_protein_data->protein_protein.find(temp_leucine_to_isoleucine_peptide)) != std::string::npos)
 					{
 						++itr_peptide_analysis.sequence_identity_count;
 						itr_peptide_analysis.v_sequence_identity_matches.push_back(itr_protein_analysis_grouped_by_polymorphism.p_protein_data);
