@@ -205,7 +205,7 @@ namespace fpf_report {
 		}
 		fout_Multinomial << "\n";
 		for (auto i = 0; i < par_sample_analysis.multinomial_data.v_p_peptide_analysis.size(); ++i) {
-			fout_Multinomial << par_sample_analysis.multinomial_data.v_p_peptide_analysis[i] << ",";
+			fout_Multinomial << par_sample_analysis.multinomial_data.v_p_peptide_analysis[i]->peptide_filtered << ",";
 			fout_Multinomial << par_sample_analysis.multinomial_data.v_frequency_marginal_sum[i] << ",";
 			for (auto j = 0; j < par_sample_analysis.multinomial_data.v_p_protein_data.size(); ++j) {
 				fout_Multinomial << par_sample_analysis.multinomial_data.v2_frequency[i][j] << ",";

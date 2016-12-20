@@ -188,7 +188,7 @@ namespace fpf_interface {
 	string display_peptide_assignment_menu(string par_peptide_method_setting_current) {
 		std::cout << "\n\n Current setting - " << par_peptide_method_setting_current;
 		std::cout << "\n";
-		std::cout << "\n [0] PEAKS database match";
+		std::cout << "\n [0] PEAKS SPIDER protein-peptides";
 		std::cout << "\n [1] PEAKS de novo";
 		std::cout << "\n [2] NOVOR de novo";
 		std::cout << "\n [X] Use current setting";
