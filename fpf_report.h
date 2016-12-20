@@ -190,7 +190,7 @@ namespace fpf_report {
 	}
 
 	void fout_Multinomial(filesystem& par_filesystem, sample_analysis& par_sample_analysis) {
-		string output_multinomial = par_filesystem.directory + par_filesystem.filename + "_multinomial_data_frame" + par_sample_analysis.peptide_assignment_method + ".csv";
+		string output_multinomial = par_filesystem.directory + par_filesystem.filename + "_multinomial_data_frame_" + par_sample_analysis.peptide_assignment_method + ".csv";
 		std::ofstream fout_Multinomial;
 		fout_Multinomial.open(output_multinomial);
 		fout_Multinomial << ",";
