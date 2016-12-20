@@ -186,7 +186,7 @@ namespace fpf_homology_analysis {
 					++homology_data_count_delimit;
 				}
 				if (homology_data_read == '\n') {
-					temp_homology_data.blastp_homology = (IgFamily::HOMOLOGY_SCALING_FACTOR * std::stod(temp_parse_blastp));
+					temp_homology_data.blastp_homology = (IgFamily::PARAMETER_HOMOLOGY_SCALING_FACTOR * std::stod(temp_parse_blastp));
 					temp_homology_data.alignment_coverage_delta = temp_homology_data.blastp_query.length() - temp_homology_data.blastp_query_aligned.length();
 					temp_v_homology_data.push_back(temp_homology_data);
 					temp_parse_blastp.clear();

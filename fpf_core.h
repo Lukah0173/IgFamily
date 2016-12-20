@@ -18,6 +18,7 @@
 #include "fpf_filesystem.h"
 #include "fpf_homology_analysis.h"
 #include "fpf_multinomial.h"
+#include "fpf_parameters.h"
 #include "fpf_report.h"
 
 
@@ -40,6 +41,9 @@ namespace fpf_core {
 
 	void core_parse_data(filesystem& par_filesystem, vector<string>& par_v_select_peptide_assignment_method) {
 		if ((IgFamily::FILESYSTEM_UPDATE_ALL) || (par_filesystem.fileversion != IgFamily::version)) {
+			std::cout << "\n\n\n\n parsing parameters file...\n";
+			fpf_parameters::read_parameters_file();
+			std::cout << "\n ...parameters assigned";
 			std::cout << "\n\n\n\n parsing data for file ";
 			std::cout << par_filesystem.filename;
 			std::cout << "...\n";
@@ -175,7 +179,7 @@ namespace fpf_core {
 		fpf_data_analysis::create_v_protein_analysis(par_sample_analysis, 0, par_refined, false);
 		std::cout << " ...proteins scored\n";
 		if (!par_refined) {			
-			//fpf_data_analysis::conjugate_homology(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_GENE_FAMILIES_INITIAL_TRAIN, par_refined);
+			//fpf_data_analysis::conjugate_homology(par_filesystem, par_sample_analysis, IgFamily::SELECT_N_MANY_INITIAL_TRAIN_GENE_FAMILIES, par_refined);
 		}
 		else {
 			fpf_data_analysis::determine_peptide_sequence_identity(par_sample_analysis);
